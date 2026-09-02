@@ -242,6 +242,51 @@
     line-height: 1.6;
   }
 
+  .summary-panel {
+    margin-top: 18px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 18px;
+  }
+  .summary-panel h3 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-faint);
+    font-weight: 500;
+    margin: 0 0 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .summary-block + .summary-block { margin-top: 20px; }
+  .summary-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 0;
+    font-size: 12.5px;
+  }
+  .summary-row .label { flex: 0 0 auto; min-width: 92px; color: var(--text-dim); }
+  .summary-row .bar-track {
+    flex: 1 1 auto; height: 6px; background: var(--panel-alt); border-radius: 3px; overflow: hidden;
+  }
+  .summary-row .bar-fill { height: 100%; background: var(--amber); }
+  .summary-row .val { flex: 0 0 auto; font-family: 'IBM Plex Mono', monospace; color: var(--text-faint); width: 20px; text-align: right; }
+  .summary-stats {
+    display: flex; flex-wrap: wrap; gap: 22px; margin-bottom: 20px;
+  }
+  .summary-stat .num { font-family: 'IBM Plex Mono', monospace; font-size: 22px; color: var(--text); }
+  .summary-stat .lbl { font-size: 11px; color: var(--text-faint); margin-top: 2px; }
+
+  @media (max-width: 680px) {
+    .summary-grid { grid-template-columns: 1fr; gap: 4px; }
+  }
+
   @media (max-width: 680px) {
     .wrap { padding: 20px 14px 60px; }
     h1 { font-size: 22px; }
@@ -302,6 +347,8 @@
     </div>
     <div id="tableHost"></div>
   </div>
+
+  <div id="summaryHost"></div>
 
   <footer class="note">
     Poängsättningen är ett grovt, regelbaserat filter baserat på P/E, SMA50/200,
@@ -408,6 +455,7 @@ function render() {
   document.getElementById('buyCount').textContent = rows.length ? `[${rows.length}]` : '';
   const sellRows = rows.filter(r => r.is_holding);
   document.getElementById('sellCount').textContent = sellRows.length ? `[${sellRows.length}]` : '';
+  renderSummary(sellRows);
 
   const host = document.getElementById('tableHost');
   const activeRows = state.tab === 'sell' ? sellRows : rows;
@@ -499,6 +547,57 @@ function openDrawer(ticker) {
 }
 function closeDrawer() { document.getElementById('overlay').classList.remove('show'); }
 document.getElementById('overlay').addEventListener('click', e => { if (e.target.id === 'overlay') closeDrawer(); });
+
+function groupCount(rows, key) {
+  const counts = {};
+  for (const r of rows) {
+    const k = r[key] || 'Okänd';
+    counts[k] = (counts[k] || 0) + 1;
+  }
+  return Object.entries(counts).sort((a, b) => b[1] - a[1]);
+}
+
+function renderSummary(sellRows) {
+  const el = document.getElementById('summaryHost');
+  if (state.tab !== 'sell' || !sellRows.length) {
+    el.innerHTML = '';
+    return;
+  }
+
+  const total = sellRows.length;
+  const sectors = groupCount(sellRows, 'sector');
+  const countries = groupCount(sellRows, 'country');
+  const avgSell = Math.round(sellRows.reduce((s, r) => s + (r.sell_score || 0), 0) / total);
+  const highSell = sellRows.filter(r => (r.sell_score || 0) >= 50).length;
+
+  const barRows = (list) => list.map(([label, count]) => `
+    <div class="summary-row">
+      <span class="label">${label}</span>
+      <span class="bar-track"><span class="bar-fill" style="width:${Math.round(count/total*100)}%"></span></span>
+      <span class="val">${count}</span>
+    </div>`).join('');
+
+  el.innerHTML = `
+    <div class="summary-panel">
+      <div class="summary-stats">
+        <div class="summary-stat"><div class="num">${total}</div><div class="lbl">INNEHAV I BEVAKNINGEN</div></div>
+        <div class="summary-stat"><div class="num">${sectors.length}</div><div class="lbl">SEKTORER</div></div>
+        <div class="summary-stat"><div class="num">${countries.length}</div><div class="lbl">LÄNDER</div></div>
+        <div class="summary-stat"><div class="num">${avgSell}</div><div class="lbl">SNITTSÄLJPOÄNG</div></div>
+        <div class="summary-stat"><div class="num">${highSell}</div><div class="lbl">MED SÄLJSIGNAL (≥50)</div></div>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-block">
+          <h3>Fördelning per sektor</h3>
+          ${barRows(sectors)}
+        </div>
+        <div class="summary-block">
+          <h3>Fördelning per land</h3>
+          ${barRows(countries)}
+        </div>
+      </div>
+    </div>`;
+}
 
 load();
 </script>

@@ -1,0 +1,38 @@
+# Geopolitiska/makroekonomiska riskfaktorer.
+#
+# Detta är INTE en automatiskt uppdaterad fil. Claude uppdaterar den bara när
+# du ber om en avstämning ("kolla geopolitiska läget"), söker aktuella
+# nyheter, föreslår ändringar här, och pushar sedan filen först efter att du
+# godkänt förslaget i chatten.
+#
+# Varje faktor har en vikt per sektor (-20 till +20):
+#   positiv vikt  = medvind för sektorn (höjer köppoäng, sänker säljpoäng)
+#   negativ vikt  = motvind för sektorn (sänker köppoäng, höjer säljpoäng)
+#
+# Sektorer som används i watchlist.yml: Industrials, Technology, Consumer,
+# Financials, RealEstate, Semiconductors. Lägg till fler vid behov (t.ex.
+# Energy, Defense, Shipping) om bevakningslistan utökas dit.
+
+factors:
+  - name: "Iran-konflikten / Hormuzsundet"
+    updated: 2026-09-02
+    summary: "Fortsatt konflikt i Mellanöstern stör oljeflöden genom Hormuzsundet och driver upp priser på kritiska material (t.ex. volfram) som halvledarindustrin är beroende av, vilket ökar kostnader och osäkerhet i chiptillverkningskedjan."
+    sectors:
+      Semiconductors: -10
+    source_url: "https://sourceability.com/post/geopolitics-are-reshaping-semiconductor-supply-chain-risk-in-2026"
+  - name: "USA-Kina teknikrivalitet / exportkontroller"
+    updated: 2026-09-02
+    summary: "Fortsatta amerikanska exportrestriktioner mot Kina och osäkerhet kring handelspolitik skapar press på halvledarbolag, enligt bl.a. Deloittes och BlackRocks 2026-analyser."
+    sectors:
+      Semiconductors: -10
+    source_url: "https://www.deloitte.com/us/en/insights/industry/technology/technology-media-telecom-outlooks/semiconductor-industry-outlook.html"
+
+# Exempel (inaktivt, bara för referens):
+# factors:
+#   - name: "Exempel: handelskonflikt USA-Kina"
+#     updated: 2026-09-02
+#     summary: "Kort sammanfattning av läget och varför sektorerna påverkas."
+#     sectors:
+#       Semiconductors: -15
+#       Technology: -5
+#     source_url: "https://exempel.se/artikel"

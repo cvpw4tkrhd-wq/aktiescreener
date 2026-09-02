@@ -403,6 +403,9 @@ function openDrawer(ticker) {
       <div><div class="stat-label">SMA50</div><div class="stat-val">${r.sma50 !== null ? fmtNum(r.sma50) : '–'}</div></div>
       <div><div class="stat-label">SMA200</div><div class="stat-val">${r.sma200 !== null ? fmtNum(r.sma200) : '–'}</div></div>
       <div><div class="stat-label">VOLYM</div><div class="stat-val">${fmtVol(r.volume_ratio)}</div></div>
+      <div><div class="stat-label">ANALYTIKER</div><div class="stat-val">${r.recommendation_key ? r.recommendation_key.replace('_',' ').toUpperCase() : '–'}</div></div>
+      <div><div class="stat-label">KURSMÅL</div><div class="stat-val">${r.target_mean_price ? fmtNum(r.target_mean_price) + ' ('+ (r.analyst_upside_pct>0?'+':'') + fmtNum(r.analyst_upside_pct,0) + '%)' : '–'}</div></div>
+      <div><div class="stat-label">ANTAL ANALYTIKER</div><div class="stat-val">${r.num_analysts ?? '–'}</div></div>
     </div>
     <ul class="reasons">${reasons.length ? reasons.map(x => `<li>${x}</li>`).join('') : '<li>Inga särskilda signaler.</li>'}</ul>
   `;

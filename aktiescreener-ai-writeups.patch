@@ -1,0 +1,375 @@
+From d00f887b370bbf0c3026bd3465b1e27d2e073004 Mon Sep 17 00:00:00 2001
+From: Claude <claude@users.noreply.github.com>
+Date: Wed, 2 Sep 2026 13:04:05 +0000
+Subject: [PATCH] Add AI qualitative writeups for top buy candidates via Claude
+ API
+
+---
+ .github/workflows/screener.yml |  11 ++
+ README.md                      |  32 +++++
+ docs/index.html                |  35 ++++++
+ scripts/qualitative_writeup.py | 223 +++++++++++++++++++++++++++++++++
+ 4 files changed, 301 insertions(+)
+ create mode 100644 scripts/qualitative_writeup.py
+
+diff --git a/.github/workflows/screener.yml b/.github/workflows/screener.yml
+index 6034561..592c197 100644
+--- a/.github/workflows/screener.yml
++++ b/.github/workflows/screener.yml
+@@ -39,10 +39,21 @@ jobs:
+       - name: Kör screener
+         run: python scripts/screener.py
+ 
++      - name: Generera AI-kvalitetsanalyser för toppkandidater
++        env:
++          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
++        run: |
++          if [ -n "$ANTHROPIC_API_KEY" ]; then
++            python scripts/qualitative_writeup.py
++          else
++            echo "Ingen ANTHROPIC_API_KEY secret satt, hoppar över AI-analyser."
++          fi
++
+       - name: Committa resultat
+         run: |
+           git config user.name "screener-bot"
+           git config user.email "actions@users.noreply.github.com"
+           git add docs/results.json data/previously_held.yml
++          [ -f data/writeups.json ] && git add data/writeups.json
+           git diff --cached --quiet && echo "Inga förändringar" || git commit -m "Uppdatera screenerresultat $(date -u +'%Y-%m-%d %H:%M UTC')"
+           git push
+diff --git a/README.md b/README.md
+index a94d3a3..337dfbc 100644
+--- a/README.md
++++ b/README.md
+@@ -56,6 +56,38 @@ python scripts/screener.py
+ python -m http.server -d docs 8000
+ ```
+ 
++## AI-kvalitetsanalyser (valfritt)
++
++Utöver nyckeltalspoängen kan screenern be Claude göra en kort kvalitativ
++"5-minutersgranskning" (moat, ROIC-rimlighet, största riskerna, exekverings-
++kontra strukturell fördel) för de högst poängsatta köpkandidaterna, med hjälp
++av webbsökning. Detta körs av `scripts/qualitative_writeup.py` efter
++screenern, och resultatet visas längst ner i varje akties detaljvy på
++dashboarden.
++
++Så aktiverar du det:
++
++```bash
++gh secret set ANTHROPIC_API_KEY
++```
++
++eller manuellt i Settings → Secrets and variables → Actions. Utan secreten
++hoppas steget bara över och allt annat funkar som vanligt.
++
++Detaljer att känna till:
++
++- Max 5 nya/omgenererade analyser per körning, och en ticker skrivs inte om
++  förrän 7 dagar gått (styrs av `TOP_N` / `WRITEUP_MAX_AGE_DAYS` i
++  `scripts/qualitative_writeup.py`) — håller kostnaden nere.
++- Bara köpkandidater (inte befintliga innehav) med köppoäng ≥ 65 behandlas
++  just nu (`MIN_BUY_SCORE`).
++- Detta är **inte** samma sak som att ladda upp en hel årsredovisning och
++  köra den fullständiga analysprompt-svitan manuellt i Claude — det är ett
++  billigt, automatiskt första filter baserat på vad Claude hittar via
++  webbsökning. Se det som ett tips om vilka kandidater som är värda en
++  djupare manuell granskning, inte ett färdigt investeringsbeslut.
++- Historiken sparas i `data/writeups.json` (committas av workflown).
++
+ ## Hur poängen räknas
+ 
+ Se `scripts/screener.py` → `score_buy_candidate()` och `score_sell_signal()`.
+diff --git a/docs/index.html b/docs/index.html
+index 796d6eb..7f95f1c 100644
+--- a/docs/index.html
++++ b/docs/index.html
+@@ -205,6 +205,24 @@
+     background: none; border: none; color: var(--text-faint);
+     font-family: 'IBM Plex Mono', monospace; cursor: pointer; font-size: 13px;
+   }
++  .ai-writeup {
++    margin-top: 18px;
++    padding-top: 14px;
++    border-top: 1px solid var(--border);
++  }
++  .ai-writeup-date { color: var(--text-faint); font-weight: normal; }
++  .ai-writeup-text {
++    font-size: 13px;
++    line-height: 1.55;
++    color: var(--text);
++    margin: 8px 0;
++  }
++  .ai-writeup-disclaimer {
++    font-size: 11px;
++    color: var(--text-faint);
++    font-style: italic;
++    margin-top: 6px;
++  }
+ 
+   footer.note {
+     margin-top: 26px;
+@@ -300,6 +318,17 @@ function fmtVol(ratio) {
+   if (!ratio) return '–';
+   return ratio.toFixed(1) + '×';
+ }
++function fmtDate(iso) {
++  if (!iso) return '–';
++  const d = new Date(iso);
++  return d.toLocaleDateString('sv-SE');
++}
++function escapeHtml(s) {
++  if (!s) return '';
++  const div = document.createElement('div');
++  div.textContent = s;
++  return div.innerHTML;
++}
+ function timeAgo(iso) {
+   const d = new Date(iso);
+   const mins = Math.round((Date.now() - d.getTime()) / 60000);
+@@ -429,6 +458,12 @@ function openDrawer(ticker) {
+       <div><div class="stat-label">ANTAL ANALYTIKER</div><div class="stat-val">${r.num_analysts ?? '–'}</div></div>
+     </div>
+     <ul class="reasons">${reasons.length ? reasons.map(x => `<li>${x}</li>`).join('') : '<li>Inga särskilda signaler.</li>'}</ul>
++    ${r.ai_writeup ? `
++    <div class="ai-writeup">
++      <div class="stat-label">AI-KVALITETSANALYS <span class="ai-writeup-date">(${fmtDate(r.ai_writeup.generated_at)})</span></div>
++      <p class="ai-writeup-text">${escapeHtml(r.ai_writeup.text).replace(/\n\n+/g, '</p><p class="ai-writeup-text">')}</p>
++      <div class="ai-writeup-disclaimer">Genererad av Claude utifrån webbsökning, inte en fullständig analys av årsredovisningen. Verifiera själv innan beslut.</div>
++    </div>` : ''}
+   `;
+   document.getElementById('overlay').classList.add('show');
+   document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+diff --git a/scripts/qualitative_writeup.py b/scripts/qualitative_writeup.py
+new file mode 100644
+index 0000000..38d8c43
+--- /dev/null
++++ b/scripts/qualitative_writeup.py
+@@ -0,0 +1,223 @@
++#!/usr/bin/env python3
++"""
++Genererar korta kvalitativa AI-analyser ("5-min quality screen") för de
++högst poängsatta köpkandidaterna från screener.py, med hjälp av Claude API.
++
++Detta ersätter INTE en djupanalys av en årsredovisning (för det, ladda upp
++rapporten till Claude själv och kör de större analysprompterna manuellt).
++Detta är ett automatiskt, billigt första kvalitetsfilter ovanpå de rena
++nyckeltalssignalerna: moat, ROIC-rimlighet och de största riskerna, baserat
++på vad Claude kan hitta via webbsökning.
++
++Körs efter screener.py, antingen manuellt eller i GitHub Actions. Kräver
++miljövariabeln ANTHROPIC_API_KEY.
++
++Cache: skriver till data/writeups.json. En ticker skrivs inte om på nytt
++förrän WRITEUP_MAX_AGE_DAYS har gått, för att hålla antalet API-anrop och
++kostnaden nere.
++"""
++
++import json
++import os
++import sys
++import time
++from datetime import datetime, timezone
++from pathlib import Path
++
++import urllib.request
++import urllib.error
++
++ROOT = Path(__file__).resolve().parent.parent
++DOCS_DIR = ROOT / "docs"
++DATA_DIR = ROOT / "data"
++RESULTS_FILE = DOCS_DIR / "results.json"
++WRITEUPS_FILE = DATA_DIR / "writeups.json"
++
++ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages"
++MODEL = "claude-sonnet-4-6"
++
++TOP_N = 5              # max antal nya/omgenererade skriv-ups per körning
++MIN_BUY_SCORE = 65      # hoppa över kandidater under denna poäng
++WRITEUP_MAX_AGE_DAYS = 7  # generera inte om en ticker som skrevs nyligen
++
++INVESTOR_IDENTITY = """Du är min personliga investeringsanalytiker. Tillämpa
++detta ramverk:
++
++FILOSOFI: Långsiktig kvalitetstillväxt-investerare, 5-10 års horisont.
++Fokus på hållbara konkurrensfördelar (moats) och hög avkastning på investerat
++kapital (ROIC helst över 15%). Föredrar bolag som kan återinvestera stora
++delar av vinsten till hög avkastning (compounders). Kapitalallokering och
++ägartänkande hos ledningen är viktigt. Villig att betala rimligt pris för ett
++exceptionellt bolag, men prismedveten.
++
++VAD JAG VILL HA: Balanserad, ärlig analys - inte översäljande. Konkreta
++belägg, inte vaga påståenden. Tydlig markering när något är osäkert eller
++saknar stöd i informationen du hittar.
++
++VAD JAG INTE VILL HA: Ytliga sammanfattningar. Överdrivet positiv vinkling.
++Finansiella prognoser framställda som fakta."""
++
++
++def load_results():
++    with open(RESULTS_FILE, "r", encoding="utf-8") as f:
++        return json.load(f)
++
++
++def load_writeups():
++    if WRITEUPS_FILE.exists():
++        with open(WRITEUPS_FILE, "r", encoding="utf-8") as f:
++            return json.load(f)
++    return {}
++
++
++def save_writeups(writeups):
++    DATA_DIR.mkdir(exist_ok=True)
++    with open(WRITEUPS_FILE, "w", encoding="utf-8") as f:
++        json.dump(writeups, f, ensure_ascii=False, indent=2)
++
++
++def is_stale(entry):
++    if not entry:
++        return True
++    try:
++        generated_at = datetime.fromisoformat(entry["generated_at"])
++    except (KeyError, ValueError):
++        return True
++    age_days = (datetime.now(timezone.utc) - generated_at).total_seconds() / 86400
++    return age_days >= WRITEUP_MAX_AGE_DAYS
++
++
++def build_prompt(d):
++    signals = {
++        "namn": d.get("name") or d.get("watchlist_name"),
++        "ticker": d.get("ticker"),
++        "sektor": d.get("sector"),
++        "pris": d.get("price"),
++        "valuta": d.get("currency"),
++        "pe": d.get("pe"),
++        "pb": d.get("pb"),
++        "utdelning_pct": d.get("dividend_yield_pct"),
++        "skuldsattning_de": d.get("debt_to_equity"),
++        "rsi14": d.get("rsi14"),
++        "trend_signal": d.get("cross_signal"),
++        "analytikerrek": d.get("recommendation_key"),
++        "antal_analytiker": d.get("num_analysts"),
++        "analytiker_uppsida_pct": d.get("analyst_upside_pct"),
++        "screener_koppoang": d.get("buy_score"),
++        "screener_skal": d.get("buy_reasons"),
++    }
++    return f"""Screenern har flaggat följande bolag som en köpkandidat baserat
++på rena nyckeltal och teknisk analys (P/E, RSI, glidande medelvärden,
++analytikerkonsensus). Din uppgift är INTE att upprepa dessa siffror, utan att
++lägga till det de inte fångar: en snabb kvalitetsbedömning av själva
++verksamheten.
++
++Nyckeltal från screenern (JSON):
++{json.dumps(signals, ensure_ascii=False, indent=2)}
++
++Sök på webben vid behov för att svara på:
++
++1. Vilken verksamhet bedriver bolaget, och vad är den påstådda
++   konkurrensfördelen?
++2. Finns det offentligt tillgängliga belägg för att bolaget har hög
++   avkastning på kapital (ROIC/ROE) över tid, eller är det osäkert utifrån
++   vad du hittar?
++3. Vilka är de 2-3 största skälen till att detta INTE skulle vara ett
++   kvalitetsbolag värt att äga långsiktigt?
++4. Är detta ett bolag som kräver kvartalsvis bevakning (hög exekveringsrisk)
++   eller ett där fördelen är strukturell och varaktig?
++
++Avsluta med en rak slutsats: är detta värt en djupare granskning (läsa
++årsredovisning m.m.), eller finns det uppenbara strukturella problem som gör
++det osannolikt att det håller måttet? Max ca 200 ord totalt. Var ärlig och
++balanserad, inte översäljande."""
++
++
++def call_claude(prompt: str) -> str:
++    api_key = os.environ.get("ANTHROPIC_API_KEY")
++    if not api_key:
++        raise RuntimeError("ANTHROPIC_API_KEY saknas i miljön.")
++
++    body = json.dumps({
++        "model": MODEL,
++        "max_tokens": 700,
++        "system": INVESTOR_IDENTITY,
++        "messages": [{"role": "user", "content": prompt}],
++        "tools": [{"type": "web_search_20250305", "name": "web_search"}],
++    }).encode("utf-8")
++
++    req = urllib.request.Request(
++        ANTHROPIC_API_URL,
++        data=body,
++        method="POST",
++        headers={
++            "Content-Type": "application/json",
++            "x-api-key": api_key,
++            "anthropic-version": "2023-06-01",
++        },
++    )
++    with urllib.request.urlopen(req, timeout=120) as resp:
++        data = json.loads(resp.read().decode("utf-8"))
++
++    text_parts = [block["text"] for block in data.get("content", []) if block.get("type") == "text"]
++    return "\n\n".join(text_parts).strip()
++
++
++def main():
++    if not RESULTS_FILE.exists():
++        print(f"Hittar inte {RESULTS_FILE} - kör screener.py först.", file=sys.stderr)
++        sys.exit(1)
++
++    output = load_results()
++    results = output.get("results", [])
++    writeups = load_writeups()
++
++    candidates = [
++        d for d in results
++        if not d.get("is_holding") and (d.get("buy_score") or 0) >= MIN_BUY_SCORE
++    ]
++    candidates.sort(key=lambda d: d.get("buy_score", 0), reverse=True)
++
++    to_process = [d for d in candidates if is_stale(writeups.get(d["ticker"]))][:TOP_N]
++
++    if not to_process:
++        print("Inga kandidater behöver en (ny) AI-analys just nu.", file=sys.stderr)
++    else:
++        print(f"Genererar AI-analys för {len(to_process)} kandidat(er)...", file=sys.stderr)
++
++    for d in to_process:
++        ticker = d["ticker"]
++        print(f"  {ticker}...", file=sys.stderr)
++        try:
++            prompt = build_prompt(d)
++            text = call_claude(prompt)
++            writeups[ticker] = {
++                "generated_at": datetime.now(timezone.utc).isoformat(),
++                "buy_score_at_generation": d.get("buy_score"),
++                "model": MODEL,
++                "text": text,
++            }
++        except (urllib.error.URLError, RuntimeError, ValueError) as e:
++            print(f"    Fel för {ticker}: {e}", file=sys.stderr)
++        time.sleep(1)
++
++    save_writeups(writeups)
++
++    # Skriv in senaste writeup i results.json så dashboarden kan visa den
++    # direkt utan ett extra fetch-anrop.
++    for d in results:
++        w = writeups.get(d["ticker"])
++        if w:
++            d["ai_writeup"] = {
++                "text": w["text"],
++                "generated_at": w["generated_at"],
++            }
++
++    with open(RESULTS_FILE, "w", encoding="utf-8") as f:
++        json.dump(output, f, ensure_ascii=False, indent=2)
++
++    print("Klart.", file=sys.stderr)
++
++
++if __name__ == "__main__":
++    main()
+-- 
+2.43.0
+

@@ -198,6 +198,47 @@ def score_buy_candidate(d):
     return max(0, min(100, score)), reasons
 
 
+def _normalize_ticker(s: str) -> str:
+    """Normaliserar ett tickernamn för lös matchning: versaler, inga
+    mellanslag/bindestreck, inga marknadssuffix (.ST/.L/.DE osv)."""
+    if not s:
+        return ""
+    s = s.strip().upper().replace(" ", "").replace("-", "")
+    for suffix in (".ST", ".L", ".DE", ".US", ".OL", ".CO", ".HE"):
+        if s.endswith(suffix.replace(".", "")):
+            s = s[: -len(suffix.replace(".", ""))]
+    return s
+
+
+def find_holding_match(entry_ticker: str, entry_name: str, holdings: dict):
+    """Matchar en watchlist-post mot inlästa innehav. Provar (i ordning):
+    exakt ticker, normaliserad ticker (hanterar t.ex. 'ADDT B' vs 'ADDT-B.ST'),
+    sedan skiplistat namn (case-insensitive)."""
+    if entry_ticker in holdings:
+        return holdings[entry_ticker]
+    if entry_name in holdings:
+        return holdings[entry_name]
+
+    norm_entry_ticker = _normalize_ticker(entry_ticker.split(".")[0] if "." in entry_ticker else entry_ticker)
+    # strip known suffixes fully (handles multi-part like .ST)
+    base_ticker = entry_ticker
+    for suffix in (".ST", ".L", ".DE", ".US", ".OL", ".CO", ".HE"):
+        if base_ticker.endswith(suffix):
+            base_ticker = base_ticker[: -len(suffix)]
+            break
+    norm_entry_ticker = _normalize_ticker(base_ticker)
+    norm_entry_name = entry_name.strip().casefold() if entry_name else ""
+
+    for hd in holdings.values():
+        raw_ticker = hd.get("raw_ticker") or ""
+        raw_name = hd.get("raw_name") or ""
+        if norm_entry_ticker and _normalize_ticker(raw_ticker) == norm_entry_ticker:
+            return hd
+        if norm_entry_name and raw_name.strip().casefold() == norm_entry_name:
+            return hd
+    return None
+
+
 def score_sell_signal(d):
     """Poäng (0-100) för säljvarning på ett befintligt innehav. Högre = starkare säljsignal."""
     score = 0
@@ -246,11 +287,11 @@ def main():
         d["market"] = entry["market"]
         d["watchlist_name"] = entry["name"]
 
-        is_holding = ticker in holdings or entry["name"] in holdings
+        hd = find_holding_match(ticker, entry["name"], holdings)
+        is_holding = hd is not None
         d["is_holding"] = is_holding
         if is_holding:
-            hd = holdings.get(ticker) or holdings.get(entry["name"])
-            d["quantity"] = hd.get("quantity") if hd else None
+            d["quantity"] = hd.get("quantity")
 
         buy_score, buy_reasons = score_buy_candidate(d)
         d["buy_score"] = buy_score

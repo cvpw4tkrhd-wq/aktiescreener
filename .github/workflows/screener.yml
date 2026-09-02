@@ -1,0 +1,41 @@
+name: Aktiescreener
+
+on:
+  schedule:
+    # Vardagar 18:15 svensk tid (efter både Stockholmsbörsen och US-öppning),
+    # cron körs i UTC så 16:15 UTC ≈ 18:15 CEST (17:15 CET på vintern)
+    - cron: "15 16 * * 1-5"
+  workflow_dispatch: {}  # gör att du kan trycka "Run workflow" manuellt i GitHub UI
+
+permissions:
+  contents: write
+
+jobs:
+  run-screener:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checka ut repot
+        uses: actions/checkout@v4
+
+      - name: Sätt upp Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Installera beroenden
+        run: pip install -r requirements.txt
+
+      - name: Återskapa holdings.csv från secret (om satt)
+        if: ${{ secrets.HOLDINGS_CSV_B64 != '' }}
+        run: echo "${{ secrets.HOLDINGS_CSV_B64 }}" | base64 -d > data/holdings.csv
+
+      - name: Kör screener
+        run: python scripts/screener.py
+
+      - name: Committa resultat
+        run: |
+          git config user.name "screener-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add docs/results.json
+          git diff --cached --quiet && echo "Inga förändringar" || git commit -m "Uppdatera screenerresultat $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push

@@ -205,6 +205,24 @@
     background: none; border: none; color: var(--text-faint);
     font-family: 'IBM Plex Mono', monospace; cursor: pointer; font-size: 13px;
   }
+    .ai-writeup {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .ai-writeup-date { color: var(--text-faint); font-weight: normal; }
+  .ai-writeup-text {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--text);
+    margin: 8px 0;
+  }
+  .ai-writeup-disclaimer {
+    font-size: 11px;
+    color: var(--text-faint);
+    font-style: italic;
+    margin-top: 6px;
+  }
 
   footer.note {
     margin-top: 26px;
@@ -299,6 +317,17 @@ function fmtNum(n, digits=2) {
 function fmtVol(ratio) {
   if (!ratio) return '–';
   return ratio.toFixed(1) + '×';
+}
+  function fmtDate(iso) {
+  if (!iso) return '–';
+  const d = new Date(iso);
+  return d.toLocaleDateString('sv-SE');
+}
+function escapeHtml(s) {
+  if (!s) return '';
+  const div = document.createElement('div');
+  div.textContent = s;
+  return div.innerHTML;
 }
 function timeAgo(iso) {
   const d = new Date(iso);
@@ -428,7 +457,14 @@ function openDrawer(ticker) {
       <div><div class="stat-label">KURSMÅL</div><div class="stat-val">${r.target_mean_price ? fmtNum(r.target_mean_price) + ' ('+ (r.analyst_upside_pct>0?'+':'') + fmtNum(r.analyst_upside_pct,0) + '%)' : '–'}</div></div>
       <div><div class="stat-label">ANTAL ANALYTIKER</div><div class="stat-val">${r.num_analysts ?? '–'}</div></div>
     </div>
-    <ul class="reasons">${reasons.length ? reasons.map(x => `<li>${x}</li>`).join('') : '<li>Inga särskilda signaler.</li>'}</ul>
+        <ul class="reasons">${reasons.length ? reasons.map(x => `<li>${x}</li>`).join('') : '<li>Inga särskilda signaler.</li>'}</ul>
+    ${r.ai_writeup ? `
+    <div class="ai-writeup">
+      <div class="stat-label">AI-KVALITETSANALYS <span class="ai-writeup-date">(${fmtDate(r.ai_writeup.generated_at)})</span></div>
+      <p class="ai-writeup-text">${escapeHtml(r.ai_writeup.text).replace(/\n\n+/g, '</p><p class="ai-writeup-text">')}</p>
+      <div class="ai-writeup-disclaimer">Genererad av Claude utifrån webbsökning, inte en fullständig analys av årsredovisningen. Verifiera själv innan beslut.</div>
+    </div>` : ''}
+  `;
   `;
   document.getElementById('overlay').classList.add('show');
   document.getElementById('drawerClose').addEventListener('click', closeDrawer);

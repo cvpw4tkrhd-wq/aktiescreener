@@ -235,6 +235,9 @@ def analyze_ticker(ticker: str):
     if isinstance(target_mean, (int, float)) and last_close:
         analyst_upside = (target_mean - last_close) / last_close * 100
 
+    market_cap = info.get("marketCap")
+    avg_dollar_volume = (last_avg_volume * last_close) if (last_avg_volume and last_close) else None
+
     return {
         "ticker": ticker,
         "name": long_name,
@@ -258,6 +261,8 @@ def analyze_ticker(ticker: str):
         "pb": round(pb, 2) if isinstance(pb, (int, float)) else None,
         "dividend_yield_pct": round(dividend_yield_pct, 2) if dividend_yield_pct is not None else None,
         "debt_to_equity": round(debt_to_equity, 1) if debt_to_equity is not None else None,
+        "market_cap": int(market_cap) if isinstance(market_cap, (int, float)) else None,
+        "avg_dollar_volume": round(avg_dollar_volume, 0) if avg_dollar_volume else None,
     }
 
 
@@ -327,7 +332,10 @@ def score_buy_candidate(d):
             reasons.append(f"Analytikernas kursmål {upside:+.0f}% under dagens pris")
 
     if d.get("pb") is not None:
-        if 0 < d["pb"] < 1.5:
+        if d["pb"] < 0:
+            score -= 25
+            reasons.append(f"Negativt P/B ({d['pb']}) – bolaget har negativt eget kapital, allvarlig varningssignal")
+        elif 0 < d["pb"] < 1.5:
             score += 10
             reasons.append(f"Lågt P/B ({d['pb']}) – handlas nära/under bokfört värde")
         elif d["pb"] > 6:
@@ -345,6 +353,20 @@ def score_buy_candidate(d):
         elif d["debt_to_equity"] > 150:
             score -= 10
             reasons.append(f"Hög skuldsättning (D/E {d['debt_to_equity']})")
+
+    # Kvalitetsspärrar: mikro-cap och illikvida aktier ger opålitliga
+    # tekniska signaler (SMA/RSI blir brus vid tunn handel) och extra risk.
+    if d.get("market_cap") is not None:
+        if d["market_cap"] < 50_000_000:
+            score -= 25
+            reasons.append("Mikro-cap (<50M i börsvärde) – hög risk, tunn handel gör tekniska signaler opålitliga")
+        elif d["market_cap"] < 300_000_000:
+            score -= 10
+            reasons.append("Litet börsvärde (<300M) – högre risk och volatilitet än genomsnittet")
+
+    if d.get("avg_dollar_volume") is not None and d["avg_dollar_volume"] < 100_000:
+        score -= 20
+        reasons.append("Extremt låg likviditet (<100k i daglig omsättning) – svårt att handla utan att flytta kursen")
 
     return max(0, min(100, score)), reasons
 
@@ -438,6 +460,18 @@ def score_sell_signal(d):
     if d.get("pb") is not None and d["pb"] > 8:
         score += 10
         reasons.append(f"Mycket högt P/B ({d['pb']})")
+
+    if d.get("pb") is not None and d["pb"] < 0:
+        score += 25
+        reasons.append(f"Negativt P/B ({d['pb']}) – bolaget har negativt eget kapital, allvarlig varningssignal")
+
+    if d.get("market_cap") is not None and d["market_cap"] < 50_000_000:
+        score += 15
+        reasons.append("Mikro-cap (<50M i börsvärde) – hög risk, tunn handel gör tekniska signaler opålitliga")
+
+    if d.get("avg_dollar_volume") is not None and d["avg_dollar_volume"] < 100_000:
+        score += 10
+        reasons.append("Extremt låg likviditet (<100k i daglig omsättning) – svårt att komma ur positionen utan att flytta kursen")
 
     return max(0, min(100, score)), reasons
 

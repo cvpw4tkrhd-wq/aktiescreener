@@ -26,6 +26,7 @@ DATA_DIR = ROOT / "data"
 DOCS_DIR = ROOT / "docs"
 WATCHLIST_FILE = DATA_DIR / "watchlist.yml"
 HOLDINGS_FILE = DATA_DIR / "holdings.csv"
+PREVIOUSLY_HELD_FILE = DATA_DIR / "previously_held.yml"
 OUTPUT_FILE = DOCS_DIR / "results.json"
 
 RSI_PERIOD = 14
@@ -67,6 +68,59 @@ def load_risk_factors():
             sector_weights[sector] = sector_weights.get(sector, 0) + weight
             sector_factor_names.setdefault(sector, []).append(f"{factor.get('name','?')} ({weight:+d})")
     return sector_weights, sector_factor_names
+
+
+def load_previously_held():
+    """Läser historik över tidigare/nuvarande innehav (bara ticker/namn/datum,
+    aldrig belopp eller antal). Returnerar {ticker: {..}}."""
+    if not PREVIOUSLY_HELD_FILE.exists():
+        return {}
+    with open(PREVIOUSLY_HELD_FILE, "r", encoding="utf-8") as f:
+        data = yaml.safe_load(f) or {}
+    return data.get("positions") or {}
+
+
+def save_previously_held(positions: dict):
+    today = datetime.now(timezone.utc).date().isoformat()
+    header = (
+        "# Auto-uppdaterad av screener.py — spårar vilka tickers du någon\n"
+        "# gång ägt (enligt holdings.csv) så de kan flaggas som möjliga\n"
+        "# återköpskandidater i köplistan om du säljer och de senare ser\n"
+        "# köpvärda ut igen. Innehåller BARA ticker, bolagsnamn, sektor och\n"
+        "# datum — aldrig belopp eller antal aktier.\n"
+        f"# Senast uppdaterad: {today}\n\n"
+    )
+    body = yaml.safe_dump({"positions": positions}, allow_unicode=True, sort_keys=True)
+    with open(PREVIOUSLY_HELD_FILE, "w", encoding="utf-8") as f:
+        f.write(header + body)
+
+
+def update_previously_held(positions: dict, current_holding_entries: list, holdings_loaded: int):
+    """Uppdaterar historikfilen utifrån dagens körning. Rör INGET om
+    holdings.csv inte fanns med i körningen (holdings_loaded == 0), för att
+    inte av misstag markera allt som sålt bara för att secreten saknades."""
+    if holdings_loaded == 0:
+        return positions, False
+
+    today = datetime.now(timezone.utc).date().isoformat()
+    current_tickers = {e["ticker"] for e in current_holding_entries}
+
+    for e in current_holding_entries:
+        rec = positions.get(e["ticker"], {})
+        rec["name"] = e["name"]
+        rec["sector"] = e.get("sector")
+        rec["status"] = "held"
+        rec.setdefault("first_seen", today)
+        rec["last_held"] = today
+        rec["sold_detected"] = None
+        positions[e["ticker"]] = rec
+
+    for ticker, rec in positions.items():
+        if rec.get("status") == "held" and ticker not in current_tickers:
+            rec["status"] = "sold"
+            rec["sold_detected"] = today
+
+    return positions, True
 
 
 def load_holdings():
@@ -158,6 +212,19 @@ def analyze_ticker(ticker: str):
     currency = info.get("currency")
     long_name = info.get("longName") or info.get("shortName")
 
+    # Fler nyckeltal
+    pb = info.get("priceToBook")
+    div_yield_raw = info.get("dividendYield")
+    dividend_yield_pct = None
+    if isinstance(div_yield_raw, (int, float)):
+        # yfinance växlar ibland mellan andel (0.024) och procent (2.4) beroende på version
+        dividend_yield_pct = div_yield_raw * 100 if div_yield_raw < 1 else div_yield_raw
+    debt_to_equity_raw = info.get("debtToEquity")
+    debt_to_equity = None
+    if isinstance(debt_to_equity_raw, (int, float)):
+        # yfinance ger normalt debtToEquity som procent (t.ex. 45.2 = 45.2%)
+        debt_to_equity = debt_to_equity_raw
+
     # Analytikerkonsensus (betrodda tredjepartsinstanser via Yahoo Finance-aggregering)
     recommendation_key = info.get("recommendationKey")  # t.ex. 'strong_buy','buy','hold','sell','strong_sell','none'
     num_analysts = info.get("numberOfAnalystOpinions")
@@ -186,6 +253,9 @@ def analyze_ticker(ticker: str):
         "num_analysts": num_analysts if isinstance(num_analysts, int) else None,
         "target_mean_price": round(target_mean, 2) if isinstance(target_mean, (int, float)) else None,
         "analyst_upside_pct": round(analyst_upside, 1) if analyst_upside is not None else None,
+        "pb": round(pb, 2) if isinstance(pb, (int, float)) else None,
+        "dividend_yield_pct": round(dividend_yield_pct, 2) if dividend_yield_pct is not None else None,
+        "debt_to_equity": round(debt_to_equity, 1) if debt_to_equity is not None else None,
     }
 
 
@@ -253,6 +323,26 @@ def score_buy_candidate(d):
         elif upside < -10:
             score -= 10
             reasons.append(f"Analytikernas kursmål {upside:+.0f}% under dagens pris")
+
+    if d.get("pb") is not None:
+        if 0 < d["pb"] < 1.5:
+            score += 10
+            reasons.append(f"Lågt P/B ({d['pb']}) – handlas nära/under bokfört värde")
+        elif d["pb"] > 6:
+            score -= 10
+            reasons.append(f"Högt P/B ({d['pb']})")
+
+    if d.get("dividend_yield_pct") is not None and d["dividend_yield_pct"] > 3:
+        score += 5
+        reasons.append(f"Utdelning {d['dividend_yield_pct']}%")
+
+    if d.get("debt_to_equity") is not None:
+        if d["debt_to_equity"] < 50:
+            score += 5
+            reasons.append(f"Låg skuldsättning (D/E {d['debt_to_equity']})")
+        elif d["debt_to_equity"] > 150:
+            score -= 10
+            reasons.append(f"Hög skuldsättning (D/E {d['debt_to_equity']})")
 
     return max(0, min(100, score)), reasons
 
@@ -339,6 +429,14 @@ def score_sell_signal(d):
         score += 15
         reasons.append(f"Analytikernas kursmål {upside:+.0f}% under dagens pris")
 
+    if d.get("debt_to_equity") is not None and d["debt_to_equity"] > 150:
+        score += 10
+        reasons.append(f"Hög skuldsättning (D/E {d['debt_to_equity']})")
+
+    if d.get("pb") is not None and d["pb"] > 8:
+        score += 10
+        reasons.append(f"Mycket högt P/B ({d['pb']})")
+
     return max(0, min(100, score)), reasons
 
 
@@ -346,8 +444,10 @@ def main():
     watchlist = load_watchlist()
     holdings = load_holdings()
     sector_weights, sector_factor_names = load_risk_factors()
+    previously_held = load_previously_held()
 
     results = []
+    current_holding_entries = []
     for entry in watchlist:
         ticker = entry["ticker"]
         print(f"Hämtar {ticker}...", file=sys.stderr)
@@ -369,11 +469,19 @@ def main():
         d["is_holding"] = is_holding
         if is_holding:
             d["quantity"] = hd.get("quantity")
+            current_holding_entries.append({"ticker": ticker, "name": entry["name"], "sector": entry.get("sector")})
 
         buy_score, buy_reasons = score_buy_candidate(d)
         sell_score, sell_reasons = (None, [])
         if is_holding:
             sell_score, sell_reasons = score_sell_signal(d)
+
+        was_previously_held = (not is_holding) and ticker in previously_held
+        d["previously_held"] = was_previously_held
+        if was_previously_held:
+            buy_score = min(100, buy_score + 5)
+            last_held = previously_held[ticker].get("last_held", "?")
+            buy_reasons.append(f"Tidigare ägd av dig (senast {last_held}) – möjlig återköpskandidat")
 
         sector = entry.get("sector")
         sector_weight = sector_weights.get(sector, 0) if sector else 0
@@ -393,6 +501,13 @@ def main():
 
         results.append(d)
         time.sleep(0.3)  # snäll mot Yahoo Finance
+
+    updated_positions, did_update = update_previously_held(previously_held, current_holding_entries, len(holdings))
+    if did_update:
+        save_previously_held(updated_positions)
+        print(f"Innehavshistorik uppdaterad ({len(updated_positions)} tickers totalt).", file=sys.stderr)
+    else:
+        print("Inga innehav laddade denna körning — innehavshistorik lämnas orörd.", file=sys.stderr)
 
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),

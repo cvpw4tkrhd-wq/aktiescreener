@@ -43,6 +43,6 @@ jobs:
         run: |
           git config user.name "screener-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add docs/results.json
+          git add docs/results.json data/previously_held.yml
           git diff --cached --quiet && echo "Inga förändringar" || git commit -m "Uppdatera screenerresultat $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push

@@ -26,8 +26,15 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Återskapa holdings.csv från secret (om satt)
-        if: ${{ secrets.HOLDINGS_CSV_B64 != '' }}
-        run: echo "${{ secrets.HOLDINGS_CSV_B64 }}" | base64 -d > data/holdings.csv
+        env:
+          HOLDINGS_CSV_B64: ${{ secrets.HOLDINGS_CSV_B64 }}
+        run: |
+          if [ -n "$HOLDINGS_CSV_B64" ]; then
+            echo "$HOLDINGS_CSV_B64" | base64 -d > data/holdings.csv
+            echo "holdings.csv återskapad från secret."
+          else
+            echo "Ingen HOLDINGS_CSV_B64 secret satt, hoppar över."
+          fi
 
       - name: Kör screener
         run: python scripts/screener.py

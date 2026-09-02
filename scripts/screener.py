@@ -12,6 +12,7 @@ eller schemalagt via GitHub Actions (.github/workflows/screener.yml)
 
 import csv
 import json
+import subprocess
 import sys
 import time
 from datetime import datetime, timezone
@@ -440,6 +441,20 @@ def score_sell_signal(d):
     return max(0, min(100, score)), reasons
 
 
+def get_git_version() -> str:
+    """Kort commit-hash för koden som körde denna screening, för visning i
+    dashboardens versionsindikator. Faller tillbaka till 'okänd' om git
+    saknas eller något går fel (t.ex. lokal körning utan git-repo)."""
+    try:
+        out = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            cwd=ROOT, capture_output=True, text=True, timeout=5, check=True,
+        )
+        return out.stdout.strip()
+    except Exception:
+        return "okänd"
+
+
 def main():
     watchlist = load_watchlist()
     holdings = load_holdings()
@@ -511,6 +526,7 @@ def main():
 
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
+        "version": get_git_version(),
         "count": len(results),
         "holdings_loaded": len(holdings),
         "results": results,

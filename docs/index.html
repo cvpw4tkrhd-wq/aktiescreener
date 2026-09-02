@@ -184,6 +184,8 @@
     position: fixed; inset: 0; background: rgba(0,0,0,.5);
     display: none; align-items: flex-start; justify-content: center;
     padding: 60px 16px; z-index: 10;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .overlay.show { display: flex; }
   .drawer {
@@ -192,6 +194,9 @@
     border-radius: var(--radius);
     max-width: 480px; width: 100%;
     padding: 24px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .drawer h2 { font-family: 'Fraunces', serif; font-weight: 600; margin: 0 0 2px; font-size: 22px; }
   .drawer .tkr-line { font-family: 'IBM Plex Mono', monospace; color: var(--text-faint); font-size: 12px; margin-bottom: 18px; }
@@ -256,7 +261,8 @@
   }
 
   @media (max-width: 400px) {
-    .drawer { padding: 18px; }
+    .overlay { padding: 24px 10px; }
+    .drawer { padding: 18px; max-height: calc(100vh - 48px); }
     .stat-grid { gap: 10px; }
     thead th:nth-child(2), td:nth-child(2) { display: none; } /* Pris döljs på riktigt smala skärmar, finns i detaljvyn */
   }

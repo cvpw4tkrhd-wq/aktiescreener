@@ -186,6 +186,15 @@ def analyze_ticker(ticker: str):
     rsi = compute_rsi(close)
     avg_volume = volume.rolling(VOLUME_LOOKBACK).mean()
 
+    # Historisk volatilitet: annualiserad std-avvikelse på dagliga
+    # avkastningar (senaste ~60 handelsdagarna), i procent. Högre = större
+    # och mer oregelbundna kurssvängningar.
+    daily_returns = close.pct_change().dropna()
+    volatility_pct = None
+    if len(daily_returns) >= 20:
+        window = daily_returns.tail(60)
+        volatility_pct = float(window.std() * (252 ** 0.5) * 100)
+
     last_close = float(close.iloc[-1])
     last_sma50 = float(sma50.iloc[-1]) if not pd.isna(sma50.iloc[-1]) else None
     last_sma200 = float(sma200.iloc[-1]) if len(sma200) and not pd.isna(sma200.iloc[-1]) else None
@@ -236,6 +245,7 @@ def analyze_ticker(ticker: str):
         analyst_upside = (target_mean - last_close) / last_close * 100
 
     market_cap = info.get("marketCap")
+    beta = info.get("beta")
     avg_dollar_volume = (last_avg_volume * last_close) if (last_avg_volume and last_close) else None
 
     return {
@@ -263,6 +273,8 @@ def analyze_ticker(ticker: str):
         "debt_to_equity": round(debt_to_equity, 1) if debt_to_equity is not None else None,
         "market_cap": int(market_cap) if isinstance(market_cap, (int, float)) else None,
         "avg_dollar_volume": round(avg_dollar_volume, 0) if avg_dollar_volume else None,
+        "volatility_pct": round(volatility_pct, 1) if volatility_pct is not None else None,
+        "beta": round(beta, 2) if isinstance(beta, (int, float)) else None,
     }
 
 
@@ -367,6 +379,17 @@ def score_buy_candidate(d):
     if d.get("avg_dollar_volume") is not None and d["avg_dollar_volume"] < 100_000:
         score -= 20
         reasons.append("Extremt låg likviditet (<100k i daglig omsättning) – svårt att handla utan att flytta kursen")
+
+    if d.get("volatility_pct") is not None:
+        if d["volatility_pct"] > 80:
+            score -= 15
+            reasons.append(f"Mycket hög volatilitet ({d['volatility_pct']}% årstakt) – stora, oregelbundna kurssvängningar")
+        elif d["volatility_pct"] > 45:
+            score -= 5
+            reasons.append(f"Förhöjd volatilitet ({d['volatility_pct']}% årstakt)")
+        elif d["volatility_pct"] < 20:
+            score += 5
+            reasons.append(f"Låg volatilitet ({d['volatility_pct']}% årstakt) – stabil kursutveckling")
 
     return max(0, min(100, score)), reasons
 
@@ -473,6 +496,10 @@ def score_sell_signal(d):
         score += 10
         reasons.append("Extremt låg likviditet (<100k i daglig omsättning) – svårt att komma ur positionen utan att flytta kursen")
 
+    if d.get("volatility_pct") is not None and d["volatility_pct"] > 80:
+        score += 10
+        reasons.append(f"Mycket hög volatilitet ({d['volatility_pct']}% årstakt) – ovanligt stora kurssvängningar")
+
     return max(0, min(100, score)), reasons
 
 
@@ -530,9 +557,10 @@ def main():
         was_previously_held = (not is_holding) and ticker in previously_held
         d["previously_held"] = was_previously_held
         if was_previously_held:
-            buy_score = min(100, buy_score + 5)
+            # Rent informativt — påverkar INTE köppoängen. Att du ägt en
+            # aktie förut säger inget om att den är köpvärd nu.
             last_held = previously_held[ticker].get("last_held", "?")
-            buy_reasons.append(f"Tidigare ägd av dig (senast {last_held}) – möjlig återköpskandidat")
+            buy_reasons.append(f"Tidigare ägd av dig (senast {last_held}) – återköpskandidat (påverkar inte poängen)")
 
         sector = entry.get("sector")
         sector_weight = sector_weights.get(sector, 0) if sector else 0

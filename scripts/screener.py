@@ -134,6 +134,14 @@ def analyze_ticker(ticker: str):
     currency = info.get("currency")
     long_name = info.get("longName") or info.get("shortName")
 
+    # Analytikerkonsensus (betrodda tredjepartsinstanser via Yahoo Finance-aggregering)
+    recommendation_key = info.get("recommendationKey")  # t.ex. 'strong_buy','buy','hold','sell','strong_sell','none'
+    num_analysts = info.get("numberOfAnalystOpinions")
+    target_mean = info.get("targetMeanPrice")
+    analyst_upside = None
+    if isinstance(target_mean, (int, float)) and last_close:
+        analyst_upside = (target_mean - last_close) / last_close * 100
+
     return {
         "ticker": ticker,
         "name": long_name,
@@ -150,6 +158,10 @@ def analyze_ticker(ticker: str):
         "cross_signal": cross_signal,
         "above_sma50": (last_close > last_sma50) if last_sma50 else None,
         "above_sma200": (last_close > last_sma200) if last_sma200 else None,
+        "recommendation_key": recommendation_key if recommendation_key not in (None, "none") else None,
+        "num_analysts": num_analysts if isinstance(num_analysts, int) else None,
+        "target_mean_price": round(target_mean, 2) if isinstance(target_mean, (int, float)) else None,
+        "analyst_upside_pct": round(analyst_upside, 1) if analyst_upside is not None else None,
     }
 
 
@@ -194,6 +206,29 @@ def score_buy_candidate(d):
     if d["volume_ratio"] and d["volume_ratio"] > 2:
         score += 10
         reasons.append(f"Kraftigt förhöjd volym ({d['volume_ratio']}x snitt) – möjlig större rörelse")
+
+    rec = d.get("recommendation_key")
+    if rec == "strong_buy":
+        score += 15
+        reasons.append(f"Analytikerkonsensus: starkt köp ({d.get('num_analysts') or '?'} analytiker)")
+    elif rec == "buy":
+        score += 10
+        reasons.append(f"Analytikerkonsensus: köp ({d.get('num_analysts') or '?'} analytiker)")
+    elif rec == "sell":
+        score -= 10
+        reasons.append(f"Analytikerkonsensus: sälj ({d.get('num_analysts') or '?'} analytiker)")
+    elif rec == "strong_sell":
+        score -= 15
+        reasons.append(f"Analytikerkonsensus: starkt sälj ({d.get('num_analysts') or '?'} analytiker)")
+
+    upside = d.get("analyst_upside_pct")
+    if upside is not None:
+        if upside > 15:
+            score += 10
+            reasons.append(f"Analytikernas kursmål {upside:+.0f}% över dagens pris")
+        elif upside < -10:
+            score -= 10
+            reasons.append(f"Analytikernas kursmål {upside:+.0f}% under dagens pris")
 
     return max(0, min(100, score)), reasons
 
@@ -263,6 +298,22 @@ def score_sell_signal(d):
     if d["volume_ratio"] and d["volume_ratio"] > 2 and d["above_sma50"] is False:
         score += 15
         reasons.append(f"Förhöjd säljvolym ({d['volume_ratio']}x snitt) i nedgång")
+
+    rec = d.get("recommendation_key")
+    if rec == "strong_sell":
+        score += 25
+        reasons.append(f"Analytikerkonsensus: starkt sälj ({d.get('num_analysts') or '?'} analytiker)")
+    elif rec == "sell":
+        score += 15
+        reasons.append(f"Analytikerkonsensus: sälj ({d.get('num_analysts') or '?'} analytiker)")
+    elif rec == "strong_buy":
+        score -= 10
+        reasons.append(f"Analytikerkonsensus: starkt köp ({d.get('num_analysts') or '?'} analytiker) — talar emot att sälja")
+
+    upside = d.get("analyst_upside_pct")
+    if upside is not None and upside < -10:
+        score += 15
+        reasons.append(f"Analytikernas kursmål {upside:+.0f}% under dagens pris")
 
     return max(0, min(100, score)), reasons
 

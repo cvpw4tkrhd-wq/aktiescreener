@@ -26,6 +26,20 @@ se:
     name: Evolution
   - ticker: SBB-B.ST
     name: SBB B
+  - ticker: ADDT-B.ST
+    name: Addtech B
+  - ticker: ASMDEE-B.ST
+    name: Asmodee
+  - ticker: LAGR-B.ST
+    name: Lagercrantz Group B
+  - ticker: LATO-B.ST
+    name: Latour B
+  - ticker: MIPS.ST
+    name: Mips
+  - ticker: PACT.ST
+    name: Proact IT Group
+  - ticker: NWG.L
+    name: NatWest Group Plc
 
 us:
   - ticker: AAPL
@@ -42,3 +56,11 @@ us:
     name: Meta Platforms
   - ticker: TSLA
     name: Tesla
+  - ticker: GLW
+    name: Corning
+  - ticker: INTC
+    name: Intel
+  - ticker: MU
+    name: Micron Technology
+  - ticker: CUEN
+    name: Cuentas

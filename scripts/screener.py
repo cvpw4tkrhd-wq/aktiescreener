@@ -48,6 +48,7 @@ def load_watchlist():
                 "name": entry.get("name", entry["ticker"]),
                 "market": market.upper(),
                 "sector": entry.get("sector"),
+                "country": entry.get("country"),
             })
     return tickers
 
@@ -478,6 +479,7 @@ def main():
         d["market"] = entry["market"]
         d["watchlist_name"] = entry["name"]
         d["sector"] = entry.get("sector")
+        d["country"] = entry.get("country")
 
         hd = find_holding_match(ticker, entry["name"], holdings)
         is_holding = hd is not None

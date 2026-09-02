@@ -4,91 +4,121 @@
 #
 # Lägg till/ta bort rader efter eget tycke. "name" är bara för visning
 # och för att matcha mot innehav om ticker saknas i CSV-exporten.
+# "country" används för landssammanfattningen i dashboarden (faktiskt
+# noterings-/hemland, inte samma sak som se/us-indelningen ovan — t.ex.
+# NWG.L ligger under se: av bevakningsskäl men har country: Storbritannien).
 
 se:
-  - ticker: VOLV-B.ST
-    name: Volvo B
-    sector: Industrials
-  - ticker: ERIC-B.ST
-    name: Ericsson B
-    sector: Technology
-  - ticker: HM-B.ST
-    name: H&M B
-    sector: Consumer
-  - ticker: ATCO-A.ST
-    name: Atlas Copco A
-    sector: Industrials
-  - ticker: INVE-B.ST
-    name: Investor B
-    sector: Financials
-  - ticker: SAND.ST
-    name: Sandvik
-    sector: Industrials
-  - ticker: SEB-A.ST
-    name: SEB A
-    sector: Financials
-  - ticker: SWED-A.ST
-    name: Swedbank A
-    sector: Financials
-  - ticker: EVO.ST
-    name: Evolution
-    sector: Consumer
-  - ticker: SBB-B.ST
-    name: SBB B
-    sector: RealEstate
-  - ticker: ADDT-B.ST
-    name: Addtech B
-    sector: Industrials
-  - ticker: ASMDEE-B.ST
-    name: Asmodee
-    sector: Consumer
-  - ticker: LAGR-B.ST
-    name: Lagercrantz Group B
-    sector: Industrials
-  - ticker: LATO-B.ST
-    name: Latour B
-    sector: Financials
-  - ticker: MIPS.ST
-    name: Mips
-    sector: Industrials
-  - ticker: PACT.ST
-    name: Proact IT Group
-    sector: Technology
-  - ticker: NWG.L
-    name: NatWest Group Plc
-    sector: Financials
-
+- ticker: VOLV-B.ST
+  name: Volvo B
+  sector: Industrials
+  country: Sverige
+- ticker: ERIC-B.ST
+  name: Ericsson B
+  sector: Technology
+  country: Sverige
+- ticker: HM-B.ST
+  name: H&M B
+  sector: Consumer
+  country: Sverige
+- ticker: ATCO-A.ST
+  name: Atlas Copco A
+  sector: Industrials
+  country: Sverige
+- ticker: INVE-B.ST
+  name: Investor B
+  sector: Financials
+  country: Sverige
+- ticker: SAND.ST
+  name: Sandvik
+  sector: Industrials
+  country: Sverige
+- ticker: SEB-A.ST
+  name: SEB A
+  sector: Financials
+  country: Sverige
+- ticker: SWED-A.ST
+  name: Swedbank A
+  sector: Financials
+  country: Sverige
+- ticker: EVO.ST
+  name: Evolution
+  sector: Consumer
+  country: Sverige
+- ticker: SBB-B.ST
+  name: SBB B
+  sector: RealEstate
+  country: Sverige
+- ticker: ADDT-B.ST
+  name: Addtech B
+  sector: Industrials
+  country: Sverige
+- ticker: ASMDEE-B.ST
+  name: Asmodee
+  sector: Consumer
+  country: Sverige
+- ticker: LAGR-B.ST
+  name: Lagercrantz Group B
+  sector: Industrials
+  country: Sverige
+- ticker: LATO-B.ST
+  name: Latour B
+  sector: Financials
+  country: Sverige
+- ticker: MIPS.ST
+  name: Mips
+  sector: Industrials
+  country: Sverige
+- ticker: PACT.ST
+  name: Proact IT Group
+  sector: Technology
+  country: Sverige
+- ticker: NWG.L
+  name: NatWest Group Plc
+  sector: Financials
+  country: Storbritannien
 us:
-  - ticker: AAPL
-    name: Apple
-    sector: Technology
-  - ticker: MSFT
-    name: Microsoft
-    sector: Technology
-  - ticker: GOOGL
-    name: Alphabet
-    sector: Technology
-  - ticker: AMZN
-    name: Amazon
-    sector: Consumer
-  - ticker: NVDA
-    name: Nvidia
-    sector: Semiconductors
-  - ticker: META
-    name: Meta Platforms
-    sector: Technology
-  - ticker: TSLA
-    name: Tesla
-    sector: Consumer
-  - ticker: GLW
-    name: Corning
-    sector: Industrials
-  - ticker: INTC
-    name: Intel
-    sector: Semiconductors
-  - ticker: MU
-    name: Micron Technology
-    sector: Semiconductors
-  - ticker: CUEN
-    name: Cuentas
-    sector: Technology
+- ticker: AAPL
+  name: Apple
+  sector: Technology
+  country: USA
+- ticker: MSFT
+  name: Microsoft
+  sector: Technology
+  country: USA
+- ticker: GOOGL
+  name: Alphabet
+  sector: Technology
+  country: USA
+- ticker: AMZN
+  name: Amazon
+  sector: Consumer
+  country: USA
+- ticker: NVDA
+  name: Nvidia
+  sector: Semiconductors
+  country: USA
+- ticker: META
+  name: Meta Platforms
+  sector: Technology
+  country: USA
+- ticker: TSLA
+  name: Tesla
+  sector: Consumer
+  country: USA
+- ticker: GLW
+  name: Corning
+  sector: Industrials
+  country: USA
+- ticker: INTC
+  name: Intel
+  sector: Semiconductors
+  country: USA
+- ticker: MU
+  name: Micron Technology
+  sector: Semiconductors
+  country: USA
+- ticker: CUEN
+  name: Cuentas
+  sector: Technology
+  country: USA

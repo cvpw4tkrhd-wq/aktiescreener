@@ -41,8 +41,32 @@ def load_watchlist():
     tickers = []
     for market in ("se", "us"):
         for entry in wl.get(market, []):
-            tickers.append({"ticker": entry["ticker"], "name": entry.get("name", entry["ticker"]), "market": market.upper()})
+            tickers.append({
+                "ticker": entry["ticker"],
+                "name": entry.get("name", entry["ticker"]),
+                "market": market.upper(),
+                "sector": entry.get("sector"),
+            })
     return tickers
+
+
+RISK_FACTORS_FILE = DATA_DIR / "risk_factors.yml"
+
+
+def load_risk_factors():
+    """Läser redigerbara geopolitiska/makro-riskfaktorer och summerar vikt per
+    sektor. Returnerar (sector_weights: dict, active_factor_names: dict sector->[namn])."""
+    if not RISK_FACTORS_FILE.exists():
+        return {}, {}
+    with open(RISK_FACTORS_FILE, "r", encoding="utf-8") as f:
+        data = yaml.safe_load(f) or {}
+    sector_weights = {}
+    sector_factor_names = {}
+    for factor in data.get("factors") or []:
+        for sector, weight in (factor.get("sectors") or {}).items():
+            sector_weights[sector] = sector_weights.get(sector, 0) + weight
+            sector_factor_names.setdefault(sector, []).append(f"{factor.get('name','?')} ({weight:+d})")
+    return sector_weights, sector_factor_names
 
 
 def load_holdings():
@@ -321,6 +345,7 @@ def score_sell_signal(d):
 def main():
     watchlist = load_watchlist()
     holdings = load_holdings()
+    sector_weights, sector_factor_names = load_risk_factors()
 
     results = []
     for entry in watchlist:
@@ -337,6 +362,7 @@ def main():
 
         d["market"] = entry["market"]
         d["watchlist_name"] = entry["name"]
+        d["sector"] = entry.get("sector")
 
         hd = find_holding_match(ticker, entry["name"], holdings)
         is_holding = hd is not None
@@ -345,11 +371,23 @@ def main():
             d["quantity"] = hd.get("quantity")
 
         buy_score, buy_reasons = score_buy_candidate(d)
-        d["buy_score"] = buy_score
-        d["buy_reasons"] = buy_reasons
-
+        sell_score, sell_reasons = (None, [])
         if is_holding:
             sell_score, sell_reasons = score_sell_signal(d)
+
+        sector = entry.get("sector")
+        sector_weight = sector_weights.get(sector, 0) if sector else 0
+        if sector_weight:
+            buy_score = max(0, min(100, buy_score + sector_weight))
+            names = ", ".join(sector_factor_names.get(sector, []))
+            buy_reasons.append(f"Geopolitik/makro ({sector}): {names}")
+            if is_holding:
+                sell_score = max(0, min(100, sell_score - sector_weight))
+                sell_reasons.append(f"Geopolitik/makro ({sector}): {names}")
+
+        d["buy_score"] = buy_score
+        d["buy_reasons"] = buy_reasons
+        if is_holding:
             d["sell_score"] = sell_score
             d["sell_reasons"] = sell_reasons
 

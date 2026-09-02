@@ -39,10 +39,21 @@ jobs:
       - name: Kör screener
         run: python scripts/screener.py
 
+      - name: Generera AI-kvalitetsanalyser för toppkandidater
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -n "$ANTHROPIC_API_KEY" ]; then
+            python scripts/qualitative_writeup.py
+          else
+            echo "Ingen ANTHROPIC_API_KEY secret satt, hoppar över AI-analyser."
+          fi
+
       - name: Committa resultat
         run: |
           git config user.name "screener-bot"
           git config user.email "actions@users.noreply.github.com"
           git add docs/results.json data/previously_held.yml
+          [ -f data/writeups.json ] && git add data/writeups.json
           git diff --cached --quiet && echo "Inga förändringar" || git commit -m "Uppdatera screenerresultat $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push

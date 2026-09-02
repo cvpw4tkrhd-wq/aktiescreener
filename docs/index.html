@@ -81,6 +81,8 @@
     cursor: pointer;
   }
   button.iconbtn:hover { border-color: var(--text-dim); color: var(--text); }
+  a.version-badge { text-decoration: none; color: var(--text-faint); }
+  a.version-badge:hover { color: var(--text-dim); border-color: var(--text-dim); }
 
   .tabs {
     display: flex;
@@ -145,15 +147,14 @@
   td.num { font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--text-dim); }
   td.name { max-width: 220px; }
   .tkr { color: var(--text-faint); font-family: 'IBM Plex Mono', monospace; font-size: 11px; display: block; margin-top: 1px; }
-  .mkt-badge {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 10px;
-    color: var(--text-faint);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 1px 5px;
-    margin-left: 6px;
+  .mkt-badge { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-faint); border: 1px solid var(--border); border-radius: 2px; padding: 1px 5px; margin-left: 6px; }
+  .mkt-badge.prev-held { display: block; width: fit-content; margin: 2px 0 0; color: var(--amber); border-color: var(--amber-dim); }
+  .info-btn {
+    background: none; border: 1px solid var(--border); color: var(--text-faint);
+    border-radius: var(--radius); width: 24px; height: 24px; cursor: pointer; font-size: 13px;
+    line-height: 1;
   }
+  .info-btn:hover { color: var(--text); border-color: var(--text-dim); }
   .score-bar-wrap { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
   .score-bar { width: 46px; height: 4px; background: var(--panel-alt); border-radius: 2px; overflow: hidden; }
   .score-bar > div { height: 100%; }
@@ -228,6 +229,7 @@
       <div class="meta-line" id="metaLine">laddar…</div>
     </div>
     <div class="controls">
+      <a class="iconbtn version-badge" id="versionBadge" href="#" target="_blank" rel="noopener">v –</a>
       <button class="iconbtn" id="themeToggle">LJUST LÄGE</button>
     </div>
   </header>
@@ -314,8 +316,16 @@ async function load() {
     state.data = await res.json();
     document.getElementById('metaLine').textContent =
       `${state.data.count} tickers analyserade · uppdaterad ${timeAgo(state.data.generated_at)}`;
+    const vb = document.getElementById('versionBadge');
+    if (state.data.version) {
+      vb.textContent = 'v ' + state.data.version;
+      vb.href = `https://github.com/cvpw4tkrhd-wq/aktiescreener/commit/${state.data.version}`;
+    } else {
+      vb.textContent = '';
+    }
   } catch (e) {
     document.getElementById('metaLine').textContent = 'Ingen data hittades ännu — kör workflowen i GitHub Actions.';
+    document.getElementById('versionBadge').textContent = '';
     state.data = { results: [] };
   }
   render();
@@ -357,7 +367,7 @@ function render() {
     const cls = state.tab === 'sell' ? 'sell' : 'buy';
     const trend = r.above_sma50 && r.above_sma200 ? 'up-txt' : (r.above_sma50 === false && r.above_sma200 === false ? 'down-txt' : 'dim');
     return `<tr data-ticker="${r.ticker}">
-      <td class="name">${r.name || r.watchlist_name}<span class="tkr">${r.ticker}<span class="mkt-badge">${r.market}</span></span></td>
+      <td class="name">${r.name || r.watchlist_name}${r.previously_held ? '<span class="mkt-badge prev-held">TIDIGARE ÄGD</span>' : ''}<span class="tkr">${r.ticker}<span class="mkt-badge">${r.market}</span></span></td>
       <td class="num">${fmtNum(r.price)} ${r.currency || ''}</td>
       <td class="num">${r.pe !== null ? fmtNum(r.pe,1) : '–'}</td>
       <td class="num ${trend === 'up-txt' ? 'up-txt' : trend === 'down-txt' ? 'down-txt' : ''}">${r.rsi14 !== null ? fmtNum(r.rsi14,0) : '–'}</td>
@@ -368,6 +378,7 @@ function render() {
           <span class="score-num">${score ?? '–'}</span>
         </div>
       </td>
+      <td class="num"><button class="info-btn" data-ticker="${r.ticker}" title="Visa alla nyckeltal" aria-label="Visa alla nyckeltal">ⓘ</button></td>
     </tr>`;
   }).join('');
 
@@ -379,12 +390,19 @@ function render() {
       <th class="num">RSI14</th>
       <th class="num">Volym</th>
       <th class="num">${state.tab === 'sell' ? 'Säljpoäng' : 'Köppoäng'}</th>
+      <th class="num"></th>
     </tr></thead>
     <tbody>${rowsHtml}</tbody>
   </table>`;
 
   host.querySelectorAll('tbody tr').forEach(tr => {
     tr.addEventListener('click', () => openDrawer(tr.dataset.ticker));
+  });
+  host.querySelectorAll('.info-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openDrawer(btn.dataset.ticker);
+    });
   });
 }
 
@@ -403,6 +421,9 @@ function openDrawer(ticker) {
       <div><div class="stat-label">SMA50</div><div class="stat-val">${r.sma50 !== null ? fmtNum(r.sma50) : '–'}</div></div>
       <div><div class="stat-label">SMA200</div><div class="stat-val">${r.sma200 !== null ? fmtNum(r.sma200) : '–'}</div></div>
       <div><div class="stat-label">VOLYM</div><div class="stat-val">${fmtVol(r.volume_ratio)}</div></div>
+      <div><div class="stat-label">P/B</div><div class="stat-val">${r.pb !== null ? fmtNum(r.pb,2) : '–'}</div></div>
+      <div><div class="stat-label">UTDELNING</div><div class="stat-val">${r.dividend_yield_pct !== null ? fmtNum(r.dividend_yield_pct,1) + '%' : '–'}</div></div>
+      <div><div class="stat-label">SKULDSÄTTNING (D/E)</div><div class="stat-val">${r.debt_to_equity !== null ? fmtNum(r.debt_to_equity,0) : '–'}</div></div>
       <div><div class="stat-label">ANALYTIKER</div><div class="stat-val">${r.recommendation_key ? r.recommendation_key.replace('_',' ').toUpperCase() : '–'}</div></div>
       <div><div class="stat-label">KURSMÅL</div><div class="stat-val">${r.target_mean_price ? fmtNum(r.target_mean_price) + ' ('+ (r.analyst_upside_pct>0?'+':'') + fmtNum(r.analyst_upside_pct,0) + '%)' : '–'}</div></div>
       <div><div class="stat-label">ANTAL ANALYTIKER</div><div class="stat-val">${r.num_analysts ?? '–'}</div></div>

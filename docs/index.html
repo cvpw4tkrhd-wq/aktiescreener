@@ -154,6 +154,20 @@
   .tkr { color: var(--text-faint); font-family: 'IBM Plex Mono', monospace; font-size: 11px; display: block; margin-top: 1px; }
   .mkt-badge { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-faint); border: 1px solid var(--border); border-radius: 2px; padding: 1px 5px; margin-left: 6px; }
   .mkt-badge.prev-held { display: block; width: fit-content; margin: 2px 0 0; color: var(--amber); border-color: var(--amber-dim); }
+  .signal-flag {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    border-radius: 2px;
+    padding: 1px 6px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .signal-flag.flag-buy { color: var(--up); border: 1px solid var(--up); }
+  .signal-flag.flag-sell { color: var(--down); border: 1px solid var(--down); }
+  .signal-flag.flag-hold { color: var(--text-faint); border: 1px solid var(--border); }
   .info-btn {
     background: none; border: 1px solid var(--border); color: var(--text-faint);
     border-radius: var(--radius); width: 24px; height: 24px; cursor: pointer; font-size: 13px;
@@ -452,13 +466,14 @@ function render() {
   let rows = state.data.results || [];
   if (state.market !== 'ALL') rows = rows.filter(r => r.market === state.market);
 
-  document.getElementById('buyCount').textContent = rows.length ? `[${rows.length}]` : '';
+  const buyRows = rows.filter(r => !r.is_holding);
+  document.getElementById('buyCount').textContent = buyRows.length ? `[${buyRows.length}]` : '';
   const sellRows = rows.filter(r => r.is_holding);
   document.getElementById('sellCount').textContent = sellRows.length ? `[${sellRows.length}]` : '';
   renderSummary(sellRows);
 
   const host = document.getElementById('tableHost');
-  const activeRows = state.tab === 'sell' ? sellRows : rows;
+  const activeRows = state.tab === 'sell' ? sellRows : buyRows;
   const sorted = sortRows(activeRows, state.sort);
 
   if (!sorted.length) {
@@ -472,8 +487,9 @@ function render() {
     const score = state.tab === 'sell' ? r.sell_score : r.buy_score;
     const cls = state.tab === 'sell' ? 'sell' : 'buy';
     const trend = r.above_sma50 && r.above_sma200 ? 'up-txt' : (r.above_sma50 === false && r.above_sma200 === false ? 'down-txt' : 'dim');
+    const flag = state.tab === 'sell' ? signalFlag(r) : null;
     return `<tr data-ticker="${r.ticker}">
-      <td class="name">${r.name || r.watchlist_name}${r.previously_held ? '<span class="mkt-badge prev-held">TIDIGARE ÄGD</span>' : ''}<span class="tkr">${r.ticker}<span class="mkt-badge">${r.market}</span></span></td>
+      <td class="name">${r.name || r.watchlist_name}${flag ? `<span class="signal-flag ${flag.cls}">${flag.label}</span>` : ''}${r.previously_held ? '<span class="mkt-badge prev-held">TIDIGARE ÄGD</span>' : ''}<span class="tkr">${r.ticker}<span class="mkt-badge">${r.market}</span></span></td>
       <td class="num">${fmtNum(r.price)} ${r.currency || ''}</td>
       <td class="num">${r.pe !== null ? fmtNum(r.pe,1) : '–'}</td>
       <td class="num ${trend === 'up-txt' ? 'up-txt' : trend === 'down-txt' ? 'down-txt' : ''}">${r.rsi14 !== null ? fmtNum(r.rsi14,0) : '–'}</td>
@@ -547,6 +563,12 @@ function openDrawer(ticker) {
 }
 function closeDrawer() { document.getElementById('overlay').classList.remove('show'); }
 document.getElementById('overlay').addEventListener('click', e => { if (e.target.id === 'overlay') closeDrawer(); });
+
+function signalFlag(r) {
+  if ((r.sell_score || 0) >= 50) return { label: 'SÄLJ', cls: 'flag-sell' };
+  if ((r.buy_score || 0) >= 65) return { label: 'KÖP', cls: 'flag-buy' };
+  return { label: 'HÅLL', cls: 'flag-hold' };
+}
 
 function groupCount(rows, key) {
   const counts = {};

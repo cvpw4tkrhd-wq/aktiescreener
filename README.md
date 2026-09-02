@@ -64,6 +64,35 @@ golden/death cross mellan SMA50 och SMA200, samt volymavvikelse mot
 20-dagarssnitt. Inte finansiell rådgivning — tänkt som ett första filter att
 själv gräva vidare i, inte en färdig rekommendation.
 
+## AI-kvalitetsanalys (valfritt tillägg)
+
+`scripts/qualitative_writeup.py` kör en kort kvalitativ "5-min quality
+screen" via Claude API för de högst poängsatta köpkandidaterna — ovanpå
+nyckeltalsscreeningen, inte istället för den. Ersätter inte en djupanalys av
+en årsredovisning.
+
+- Tar de topp 5 köpkandidaterna med poäng ≥ 65, som inte redan är innehav
+  och inte fått en analys de senaste 7 dagarna
+- Anropar `claude-sonnet-4-6` med webbsökning aktiverat, och en
+  investerarprofil (kvalitetstillväxt, lång horisont, moat/ROIC-fokus) som
+  systemprompt — redigera `INVESTOR_IDENTITY` i skriptet för att ändra
+  profilen
+- Svarar på: verksamhet + konkurrensfördel, belägg för hög avkastning på
+  kapital, 2–3 största skälen till att INTE äga bolaget, samt om det är en
+  strukturell fördel eller kräver löpande bevakning
+- Cachar resultat i `data/writeups.json`, skriver in senaste analysen i
+  `docs/results.json` som fältet `ai_writeup` så dashboarden slipper ett
+  extra anrop
+- Visas i dashboardens detaljvy under "AI-KVALITETSANALYS" när en analys
+  finns
+
+**Aktivering:** lägg till en repository secret `ANTHROPIC_API_KEY` (skaffas
+via console.anthropic.com). Workflown kör steget automatiskt efter
+screenern om secreten finns — saknas den hoppas steget bara över, inget går
+sönder. Notera att varje körning med nya kandidater innebär API-anrop och
+därmed en kostnad; `TOP_N`, `MIN_BUY_SCORE` och `WRITEUP_MAX_AGE_DAYS`
+längst upp i skriptet styr hur ofta/mycket som genereras.
+
 ## Utöka
 
 - Fler nyckeltal: lägg till i `analyze_ticker()` (yfinance `get_info()` ger

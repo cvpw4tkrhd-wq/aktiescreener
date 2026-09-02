@@ -1,0 +1,44 @@
+# Bevakningslista för screenern.
+# Svenska tickers behöver .ST-suffix (Yahoo Finance-format), t.ex. VOLV-B.ST
+# Amerikanska tickers skrivs som vanligt, t.ex. AAPL
+#
+# Lägg till/ta bort rader efter eget tycke. "name" är bara för visning
+# och för att matcha mot innehav om ticker saknas i CSV-exporten.
+
+se:
+  - ticker: VOLV-B.ST
+    name: Volvo B
+  - ticker: ERIC-B.ST
+    name: Ericsson B
+  - ticker: HM-B.ST
+    name: H&M B
+  - ticker: ATCO-A.ST
+    name: Atlas Copco A
+  - ticker: INVE-B.ST
+    name: Investor B
+  - ticker: SAND.ST
+    name: Sandvik
+  - ticker: SEB-A.ST
+    name: SEB A
+  - ticker: SWED-A.ST
+    name: Swedbank A
+  - ticker: EVO.ST
+    name: Evolution
+  - ticker: SBB-B.ST
+    name: SBB B
+
+us:
+  - ticker: AAPL
+    name: Apple
+  - ticker: MSFT
+    name: Microsoft
+  - ticker: GOOGL
+    name: Alphabet
+  - ticker: AMZN
+    name: Amazon
+  - ticker: NVDA
+    name: Nvidia
+  - ticker: META
+    name: Meta Platforms
+  - ticker: TSLA
+    name: Tesla

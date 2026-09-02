@@ -1,0 +1,282 @@
+#!/usr/bin/env python3
+"""
+Aktiescreener för svenska och amerikanska börsen.
+
+Hämtar kursdata via yfinance, beräknar P/E, SMA50/200, RSI14 och
+volymavvikelser, och genererar köpkandidater samt säljsignaler för
+befintliga innehav (importerade från Avanza/Nordnet-CSV).
+
+Körs antingen manuellt: python scripts/screener.py
+eller schemalagt via GitHub Actions (.github/workflows/screener.yml)
+"""
+
+import csv
+import json
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+import pandas as pd
+import yfinance as yf
+import yaml
+
+ROOT = Path(__file__).resolve().parent.parent
+DATA_DIR = ROOT / "data"
+DOCS_DIR = ROOT / "docs"
+WATCHLIST_FILE = DATA_DIR / "watchlist.yml"
+HOLDINGS_FILE = DATA_DIR / "holdings.csv"
+OUTPUT_FILE = DOCS_DIR / "results.json"
+
+RSI_PERIOD = 14
+SMA_SHORT = 50
+SMA_LONG = 200
+VOLUME_LOOKBACK = 20
+HISTORY_PERIOD = "1y"  # needs to cover SMA200 comfortably
+
+
+def load_watchlist():
+    with open(WATCHLIST_FILE, "r", encoding="utf-8") as f:
+        wl = yaml.safe_load(f)
+    tickers = []
+    for market in ("se", "us"):
+        for entry in wl.get(market, []):
+            tickers.append({"ticker": entry["ticker"], "name": entry.get("name", entry["ticker"]), "market": market.upper()})
+    return tickers
+
+
+def load_holdings():
+    """Läser en Avanza- eller Nordnet-CSV-export och returnerar en dict {ticker: antal}.
+
+    Avanza-export har kolumnen 'Namn' + 'Volym' (eller 'Antal').
+    Nordnet-export har 'Verdipapir'/'Værdipapir' + 'Antal'.
+    Vi matchar löst på ticker-symbol där det går; annars på namn mot watchlist.
+    """
+    if not HOLDINGS_FILE.exists():
+        return {}
+
+    holdings = {}
+    with open(HOLDINGS_FILE, "r", encoding="utf-8-sig") as f:
+        # Avanza/Nordnet exports are often semicolon-separated
+        sample = f.read(2048)
+        f.seek(0)
+        delimiter = ";" if sample.count(";") > sample.count(",") else ","
+        reader = csv.DictReader(f, delimiter=delimiter)
+        for row in reader:
+            # normalize keys (strip whitespace / BOM)
+            row = {k.strip().lower(): v for k, v in row.items() if k}
+            name = row.get("namn") or row.get("verdipapir") or row.get("värdipapir") or row.get("name")
+            qty_raw = row.get("volym") or row.get("antal") or row.get("quantity")
+            ticker = row.get("kortnamn") or row.get("ticker") or row.get("symbol")
+            if not name and not ticker:
+                continue
+            try:
+                qty = float(str(qty_raw).replace(",", ".").replace(" ", "")) if qty_raw else None
+            except ValueError:
+                qty = None
+            key = (ticker or name).strip()
+            holdings[key] = {"raw_name": name, "raw_ticker": ticker, "quantity": qty}
+    return holdings
+
+
+def compute_rsi(close: pd.Series, period: int = RSI_PERIOD) -> pd.Series:
+    delta = close.diff()
+    gain = delta.clip(lower=0)
+    loss = -delta.clip(upper=0)
+    # Wilder's smoothing
+    avg_gain = gain.ewm(alpha=1 / period, min_periods=period, adjust=False).mean()
+    avg_loss = loss.ewm(alpha=1 / period, min_periods=period, adjust=False).mean()
+    rs = avg_gain / avg_loss.replace(0, pd.NA)
+    rsi = 100 - (100 / (1 + rs))
+    rsi = rsi.fillna(100)  # if avg_loss is 0, RSI = 100
+    return rsi
+
+
+def analyze_ticker(ticker: str):
+    tk = yf.Ticker(ticker)
+    hist = tk.history(period=HISTORY_PERIOD, auto_adjust=True)
+    if hist.empty or len(hist) < 30:
+        return None
+
+    close = hist["Close"]
+    volume = hist["Volume"]
+
+    sma50 = close.rolling(SMA_SHORT).mean()
+    sma200 = close.rolling(SMA_LONG).mean() if len(close) >= SMA_LONG else pd.Series([None] * len(close))
+    rsi = compute_rsi(close)
+    avg_volume = volume.rolling(VOLUME_LOOKBACK).mean()
+
+    last_close = float(close.iloc[-1])
+    last_sma50 = float(sma50.iloc[-1]) if not pd.isna(sma50.iloc[-1]) else None
+    last_sma200 = float(sma200.iloc[-1]) if len(sma200) and not pd.isna(sma200.iloc[-1]) else None
+    last_rsi = float(rsi.iloc[-1]) if not pd.isna(rsi.iloc[-1]) else None
+    last_volume = float(volume.iloc[-1])
+    last_avg_volume = float(avg_volume.iloc[-1]) if not pd.isna(avg_volume.iloc[-1]) else None
+    volume_ratio = (last_volume / last_avg_volume) if last_avg_volume else None
+
+    # golden/death cross detection: did SMA50 cross SMA200 in the last 5 sessions?
+    cross_signal = None
+    if last_sma200 is not None and len(sma50.dropna()) > 5 and len(sma200.dropna()) > 5:
+        diff_now = sma50.iloc[-1] - sma200.iloc[-1]
+        diff_prev = sma50.iloc[-6] - sma200.iloc[-6]
+        if diff_prev < 0 and diff_now > 0:
+            cross_signal = "golden_cross"
+        elif diff_prev > 0 and diff_now < 0:
+            cross_signal = "death_cross"
+
+    info = {}
+    try:
+        info = tk.get_info()
+    except Exception:
+        pass
+    pe = info.get("trailingPE")
+    forward_pe = info.get("forwardPE")
+    currency = info.get("currency")
+    long_name = info.get("longName") or info.get("shortName")
+
+    return {
+        "ticker": ticker,
+        "name": long_name,
+        "currency": currency,
+        "price": round(last_close, 2),
+        "pe": round(pe, 2) if isinstance(pe, (int, float)) else None,
+        "forward_pe": round(forward_pe, 2) if isinstance(forward_pe, (int, float)) else None,
+        "sma50": round(last_sma50, 2) if last_sma50 else None,
+        "sma200": round(last_sma200, 2) if last_sma200 else None,
+        "rsi14": round(last_rsi, 1) if last_rsi is not None else None,
+        "volume": int(last_volume),
+        "avg_volume_20d": int(last_avg_volume) if last_avg_volume else None,
+        "volume_ratio": round(volume_ratio, 2) if volume_ratio else None,
+        "cross_signal": cross_signal,
+        "above_sma50": (last_close > last_sma50) if last_sma50 else None,
+        "above_sma200": (last_close > last_sma200) if last_sma200 else None,
+    }
+
+
+def score_buy_candidate(d):
+    """Enkel poängmodell (0-100) för köpvärdhet. Inte finansiell rådgivning -
+    tänkt som ett första filter, inte en slutgiltig sanning."""
+    score = 50
+    reasons = []
+
+    if d["pe"] is not None:
+        if 0 < d["pe"] < 15:
+            score += 15
+            reasons.append(f"Lågt P/E ({d['pe']})")
+        elif d["pe"] > 40:
+            score -= 15
+            reasons.append(f"Högt P/E ({d['pe']})")
+    else:
+        reasons.append("P/E saknas (t.ex. förlust eller ej rapporterat)")
+
+    if d["rsi14"] is not None:
+        if d["rsi14"] < 35:
+            score += 15
+            reasons.append(f"RSI lågt/översålt ({d['rsi14']})")
+        elif d["rsi14"] > 70:
+            score -= 20
+            reasons.append(f"RSI högt/överköpt ({d['rsi14']})")
+
+    if d["cross_signal"] == "golden_cross":
+        score += 20
+        reasons.append("Golden cross (SMA50 korsade upp genom SMA200)")
+    elif d["cross_signal"] == "death_cross":
+        score -= 20
+        reasons.append("Death cross (SMA50 korsade ner genom SMA200)")
+
+    if d["above_sma50"] and d["above_sma200"]:
+        score += 10
+        reasons.append("Pris över både SMA50 och SMA200 (uppåttrend)")
+    elif d["above_sma50"] is False and d["above_sma200"] is False:
+        score -= 10
+        reasons.append("Pris under både SMA50 och SMA200 (nedåttrend)")
+
+    if d["volume_ratio"] and d["volume_ratio"] > 2:
+        score += 10
+        reasons.append(f"Kraftigt förhöjd volym ({d['volume_ratio']}x snitt) – möjlig större rörelse")
+
+    return max(0, min(100, score)), reasons
+
+
+def score_sell_signal(d):
+    """Poäng (0-100) för säljvarning på ett befintligt innehav. Högre = starkare säljsignal."""
+    score = 0
+    reasons = []
+
+    if d["rsi14"] is not None and d["rsi14"] > 70:
+        score += 30
+        reasons.append(f"RSI överköpt ({d['rsi14']})")
+
+    if d["cross_signal"] == "death_cross":
+        score += 35
+        reasons.append("Death cross (SMA50 under SMA200)")
+
+    if d["above_sma50"] is False:
+        score += 15
+        reasons.append("Pris under SMA50")
+
+    if d["pe"] is not None and d["pe"] > 40:
+        score += 15
+        reasons.append(f"Högt P/E ({d['pe']}) – dyrt relativt vinst")
+
+    if d["volume_ratio"] and d["volume_ratio"] > 2 and d["above_sma50"] is False:
+        score += 15
+        reasons.append(f"Förhöjd säljvolym ({d['volume_ratio']}x snitt) i nedgång")
+
+    return max(0, min(100, score)), reasons
+
+
+def main():
+    watchlist = load_watchlist()
+    holdings = load_holdings()
+
+    results = []
+    for entry in watchlist:
+        ticker = entry["ticker"]
+        print(f"Hämtar {ticker}...", file=sys.stderr)
+        try:
+            d = analyze_ticker(ticker)
+        except Exception as e:
+            print(f"  Fel vid hämtning av {ticker}: {e}", file=sys.stderr)
+            d = None
+
+        if d is None:
+            continue
+
+        d["market"] = entry["market"]
+        d["watchlist_name"] = entry["name"]
+
+        is_holding = ticker in holdings or entry["name"] in holdings
+        d["is_holding"] = is_holding
+        if is_holding:
+            hd = holdings.get(ticker) or holdings.get(entry["name"])
+            d["quantity"] = hd.get("quantity") if hd else None
+
+        buy_score, buy_reasons = score_buy_candidate(d)
+        d["buy_score"] = buy_score
+        d["buy_reasons"] = buy_reasons
+
+        if is_holding:
+            sell_score, sell_reasons = score_sell_signal(d)
+            d["sell_score"] = sell_score
+            d["sell_reasons"] = sell_reasons
+
+        results.append(d)
+        time.sleep(0.3)  # snäll mot Yahoo Finance
+
+    output = {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "count": len(results),
+        "holdings_loaded": len(holdings),
+        "results": results,
+    }
+
+    DOCS_DIR.mkdir(exist_ok=True)
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+        json.dump(output, f, ensure_ascii=False, indent=2)
+
+    print(f"Klar: {len(results)} tickers analyserade, skrivet till {OUTPUT_FILE}", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()

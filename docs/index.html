@@ -546,6 +546,8 @@ function openDrawer(ticker) {
       <div><div class="stat-label">P/B</div><div class="stat-val">${r.pb !== null ? fmtNum(r.pb,2) : '–'}</div></div>
       <div><div class="stat-label">UTDELNING</div><div class="stat-val">${r.dividend_yield_pct !== null ? fmtNum(r.dividend_yield_pct,1) + '%' : '–'}</div></div>
       <div><div class="stat-label">SKULDSÄTTNING (D/E)</div><div class="stat-val">${r.debt_to_equity !== null ? fmtNum(r.debt_to_equity,0) : '–'}</div></div>
+      <div><div class="stat-label">VOLATILITET (ÅR)</div><div class="stat-val">${r.volatility_pct !== null ? fmtNum(r.volatility_pct,0) + '%' : '–'}</div></div>
+      <div><div class="stat-label">BETA</div><div class="stat-val">${r.beta !== null ? fmtNum(r.beta,2) : '–'}</div></div>
       <div><div class="stat-label">ANALYTIKER</div><div class="stat-val">${r.recommendation_key ? r.recommendation_key.replace('_',' ').toUpperCase() : '–'}</div></div>
       <div><div class="stat-label">KURSMÅL</div><div class="stat-val">${r.target_mean_price ? fmtNum(r.target_mean_price) + ' ('+ (r.analyst_upside_pct>0?'+':'') + fmtNum(r.analyst_upside_pct,0) + '%)' : '–'}</div></div>
       <div><div class="stat-label">ANTAL ANALYTIKER</div><div class="stat-val">${r.num_analysts ?? '–'}</div></div>

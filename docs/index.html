@@ -51,6 +51,8 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
     border-bottom: 1px solid var(--border);
     padding-bottom: 18px;
     margin-bottom: 6px;
@@ -122,11 +124,14 @@
     color: var(--text);
     font-family: 'IBM Plex Mono', monospace;
     font-size: 12px;
-    padding: 6px 9px;
+    padding: 7px 9px;
     border-radius: var(--radius);
+    flex: 1 1 150px;
+    min-width: 0;
   }
 
   table { width: 100%; border-collapse: collapse; }
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   thead th {
     text-align: left;
     font-family: 'IBM Plex Mono', monospace;
@@ -232,10 +237,28 @@
     line-height: 1.6;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 680px) {
+    .wrap { padding: 20px 14px 60px; }
+    h1 { font-size: 22px; }
+    .meta-line { font-size: 11px; }
+    .controls { gap: 8px; }
+    button.iconbtn { padding: 8px 10px; }
+    .tab { padding: 8px 11px; font-size: 11.5px; }
     .stat-grid { grid-template-columns: 1fr 1fr; }
-    thead th:nth-child(4), td:nth-child(4) { display: none; } /* hide P/E col on small screens in buy table if needed */
-    h1 { font-size: 24px; }
+    td, thead th { padding: 10px 8px; }
+    td.name { max-width: 140px; }
+    /* P/E, Volym och info-knappen ryms i detaljvyn — döljs i tabellen för
+       att ge Namn, Pris, RSI och Poäng plats. Hela raden går fortfarande
+       att trycka på för att öppna detaljvyn. */
+    thead th:nth-child(3), td:nth-child(3),
+    thead th:nth-child(5), td:nth-child(5),
+    thead th:nth-child(7), td:nth-child(7) { display: none; }
+  }
+
+  @media (max-width: 400px) {
+    .drawer { padding: 18px; }
+    .stat-grid { gap: 10px; }
+    thead th:nth-child(2), td:nth-child(2) { display: none; } /* Pris döljs på riktigt smala skärmar, finns i detaljvyn */
   }
 </style>
 </head>
@@ -411,7 +434,7 @@ function render() {
     </tr>`;
   }).join('');
 
-  host.innerHTML = `<table>
+  host.innerHTML = `<div class="table-scroll"><table>
     <thead><tr>
       <th>Aktie</th>
       <th class="num">Pris</th>
@@ -422,7 +445,7 @@ function render() {
       <th class="num"></th>
     </tr></thead>
     <tbody>${rowsHtml}</tbody>
-  </table>`;
+  </table></div>`;
 
   host.querySelectorAll('tbody tr').forEach(tr => {
     tr.addEventListener('click', () => openDrawer(tr.dataset.ticker));

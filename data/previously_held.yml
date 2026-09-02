@@ -39,8 +39,8 @@ positions:
     last_held: '2026-09-02'
     name: Intel
     sector: Semiconductors
-    sold_detected: null
-    status: held
+    sold_detected: '2026-09-02'
+    status: sold
   LAGR-B.ST:
     first_seen: '2026-09-02'
     last_held: '2026-09-02'
@@ -60,6 +60,13 @@ positions:
     last_held: '2026-09-02'
     name: Mips
     sector: Industrials
+    sold_detected: null
+    status: held
+  MSFT:
+    first_seen: '2026-09-02'
+    last_held: '2026-09-02'
+    name: Microsoft
+    sector: Technology
     sold_detected: null
     status: held
   MU:

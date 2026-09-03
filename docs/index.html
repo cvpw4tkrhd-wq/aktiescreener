@@ -43,12 +43,13 @@
     --amber-dim: #D8C89A;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; }
+  html, body { margin: 0; padding: 0; max-width: 100%; overflow-x: hidden; }
   body {
     background: var(--bg);
     color: var(--text);
     font-family: 'Inter', sans-serif;
     min-height: 100vh;
+    width: 100%;
     transition: background .2s, color .2s;
   }
   .wrap { max-width: 980px; margin: 0 auto; padding: 28px 20px 80px; }
@@ -191,6 +192,7 @@
   .score-num { font-family: 'IBM Plex Mono', monospace; width: 24px; text-align: right; }
   .buy .score-bar > div { background: var(--up); }
   .sell .score-bar > div { background: var(--down); }
+  .hold .score-bar > div { background: var(--amber); }
 
   .up-txt { color: var(--up); }
   .down-txt { color: var(--down); }
@@ -621,9 +623,10 @@ function render() {
     const score = state.tab === 'sell' ? r.sell_score : r.buy_score;
     const delta = state.tab === 'sell' ? r.sell_score_delta : r.buy_score_delta;
     const days = state.tab === 'sell' ? r.sell_days_on_list : r.buy_days_on_list;
-    const cls = state.tab === 'sell' ? 'sell' : 'buy';
-    const trend = r.above_sma50 && r.above_sma200 ? 'up-txt' : (r.above_sma50 === false && r.above_sma200 === false ? 'down-txt' : 'dim');
     const flag = state.tab === 'sell' ? signalFlag(r) : null;
+    const barClsMap = { 'flag-buy': 'buy', 'flag-hold': 'hold', 'flag-sell': 'sell' };
+    const cls = state.tab === 'sell' ? barClsMap[flag.cls] : 'buy';
+    const trend = r.above_sma50 && r.above_sma200 ? 'up-txt' : (r.above_sma50 === false && r.above_sma200 === false ? 'down-txt' : 'dim');
     return `<tr data-ticker="${r.ticker}">
       <td class="name">${r.name || r.watchlist_name}${flag ? `<span class="signal-flag ${flag.cls}">${flag.label}</span>` : ''}${r.previously_held ? '<span class="mkt-badge prev-held">TIDIGARE ÄGD</span>' : ''}${days >= 3 ? `<span class="mkt-badge days-badge" title="${days} körningar i rad med aktiv signal">${days}D</span>` : ''}<span class="tkr">${r.ticker}<span class="mkt-badge">${r.market}</span></span></td>
       <td class="num">${fmtNum(r.price)} ${r.currency || ''}</td>

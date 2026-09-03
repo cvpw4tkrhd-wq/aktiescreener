@@ -190,6 +190,12 @@
   .score-bar { width: 46px; height: 4px; background: var(--panel-alt); border-radius: 2px; overflow: hidden; }
   .score-bar > div { height: 100%; }
   .score-num { font-family: 'IBM Plex Mono', monospace; width: 24px; text-align: right; }
+  .score-num-secondary {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-faint);
+    margin-left: 4px;
+  }
   .buy .score-bar > div { background: var(--up); }
   .sell .score-bar > div { background: var(--down); }
   .hold .score-bar > div { background: var(--amber); }
@@ -637,7 +643,7 @@ function render() {
         <div class="score-bar-wrap ${cls}">
           ${deltaHtml(delta)}
           <div class="score-bar"><div style="width:${score ?? 0}%"></div></div>
-          <span class="score-num">${score ?? '–'}</span>
+          <span class="score-num">${score ?? '–'}</span>${state.tab === 'sell' ? `<span class="score-num-secondary" title="Köppoäng för samma aktie">K${r.buy_score ?? '–'}</span>` : ''}
         </div>
       </td>
       <td class="num"><button class="info-btn" data-ticker="${r.ticker}" title="Visa alla nyckeltal" aria-label="Visa alla nyckeltal">ⓘ</button></td>
@@ -651,7 +657,7 @@ function render() {
       <th class="num">P/E</th>
       <th class="num">RSI14</th>
       <th class="num">Volym</th>
-      <th class="num">${state.tab === 'sell' ? 'Säljpoäng' : 'Köppoäng'}</th>
+      <th class="num">${state.tab === 'sell' ? 'Sälj · Köp' : 'Köppoäng'}</th>
       <th class="num"></th>
     </tr></thead>
     <tbody>${rowsHtml}</tbody>

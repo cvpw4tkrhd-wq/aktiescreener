@@ -211,6 +211,7 @@
     display: none; align-items: flex-start; justify-content: center;
     padding: 60px 16px; z-index: 10;
     overflow-y: auto;
+    overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
   }
   .overlay.show { display: flex; }
@@ -222,6 +223,7 @@
     padding: 24px;
     max-height: calc(100vh - 120px);
     overflow-y: auto;
+    overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
   }
   .drawer h2 { font-family: 'Fraunces', serif; font-weight: 600; margin: 0 0 2px; font-size: 22px; }
@@ -260,6 +262,41 @@
     color: var(--text-faint);
     font-style: italic;
     margin-top: 6px;
+  }
+  .aiw-heading {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin: 14px 0 4px;
+  }
+  .aiw-heading:first-child { margin-top: 0; }
+  .aiw-hr {
+    border: none;
+    border-top: 1px solid var(--amber-dim);
+    margin: 14px 0;
+  }
+  .aiw-list {
+    margin: 6px 0;
+    padding-left: 18px;
+  }
+  .aiw-list li {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .ai-verdict {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0 4px;
+  }
+  .ai-verdict-note {
+    font-size: 12.5px;
+    color: var(--text-dim);
   }
 
   footer.note {
@@ -439,6 +476,89 @@ function escapeHtml(s) {
   div.textContent = s;
   return div.innerHTML;
 }
+
+function inlineMd(s) {
+  s = escapeHtml(s);
+  s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  return s;
+}
+
+function renderMarkdown(md) {
+  if (!md) return '';
+  const lines = md.replace(/\r\n/g, '\n').split('\n');
+  let out = '';
+  let para = [];
+  let listItems = [];
+
+  function flushPara() {
+    if (para.length) {
+      out += `<p class="ai-writeup-text">${inlineMd(para.join(' '))}</p>`;
+      para = [];
+    }
+  }
+  function flushList() {
+    if (listItems.length) {
+      out += '<ul class="aiw-list">' + listItems.map(t => `<li>${inlineMd(t)}</li>`).join('') + '</ul>';
+      listItems = [];
+    }
+  }
+
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (line === '') { flushPara(); flushList(); continue; }
+
+    if (/^(-{3,}|\*{3,}|_{3,})$/.test(line)) {
+      flushPara(); flushList();
+      out += '<hr class="aiw-hr">';
+      continue;
+    }
+    const heading = line.match(/^#{1,4}\s+(.*)$/);
+    if (heading) {
+      flushPara(); flushList();
+      out += `<div class="aiw-heading">${inlineMd(heading[1])}</div>`;
+      continue;
+    }
+    const listItem = line.match(/^([-*]|\d+\.)\s+(.*)$/);
+    if (listItem) {
+      flushPara();
+      listItems.push(listItem[2]);
+      continue;
+    }
+    flushList();
+    para.push(line);
+  }
+  flushPara();
+  flushList();
+  return out;
+}
+
+const VERDICT_RE = /^HELHETSBILD:\s*(Positiv|Blandad|Försiktig)\s*[–-]?\s*(.*)$/im;
+
+function stripVerdictLine(text) {
+  if (!text) return text;
+  return text.replace(VERDICT_RE, '').trim();
+}
+
+function aiVerdictBadgeHtml(text) {
+  if (!text) return '';
+  const m = text.match(VERDICT_RE);
+  if (!m) return '';
+  const verdict = m[1];
+  const note = m[2] || '';
+  const clsMap = { 'Positiv': 'flag-buy', 'Blandad': 'flag-hold', 'Försiktig': 'flag-sell' };
+  const cls = clsMap[verdict] || 'flag-hold';
+  return `<div class="ai-verdict"><span class="signal-flag ${cls}">${verdict.toUpperCase()}</span>${note ? `<span class="ai-verdict-note">${escapeHtml(note)}</span>` : ''}</div>`;
+}
+
+function targetHtml(r) {
+  if (!r.target_mean_price) return '–';
+  const upside = r.analyst_upside_pct;
+  const symbol = upside > 0 ? '▲' : (upside < 0 ? '▼' : '–');
+  const cls = upside > 0 ? 'up-txt' : (upside < 0 ? 'down-txt' : 'dim');
+  const sign = upside > 0 ? '+' : '';
+  return `${fmtNum(r.target_mean_price)} <span class="sma-trend ${cls}">${symbol}</span> (${sign}${fmtNum(upside,0)}%)`;
+}
+
 function timeAgo(iso) {
   const d = new Date(iso);
   const mins = Math.round((Date.now() - d.getTime()) / 60000);
@@ -571,7 +691,7 @@ function openDrawer(ticker) {
       <div><div class="stat-label">VOLATILITET (ÅR)</div><div class="stat-val">${r.volatility_pct !== null ? fmtNum(r.volatility_pct,0) + '%' : '–'}</div></div>
       <div><div class="stat-label">BETA</div><div class="stat-val">${r.beta !== null ? fmtNum(r.beta,2) : '–'}</div></div>
       <div><div class="stat-label">ANALYTIKER</div><div class="stat-val">${r.recommendation_key ? r.recommendation_key.replace('_',' ').toUpperCase() : '–'}</div></div>
-      <div><div class="stat-label">KURSMÅL</div><div class="stat-val">${r.target_mean_price ? fmtNum(r.target_mean_price) + ' ('+ (r.analyst_upside_pct>0?'+':'') + fmtNum(r.analyst_upside_pct,0) + '%)' : '–'}</div></div>
+      <div><div class="stat-label">KURSMÅL</div><div class="stat-val">${targetHtml(r)}</div></div>
       <div><div class="stat-label">ANTAL ANALYTIKER</div><div class="stat-val">${r.num_analysts ?? '–'}</div></div>
       <div><div class="stat-label">DAGAR MED SIGNAL</div><div class="stat-val">${state.tab === 'sell' ? (r.sell_days_on_list ?? 0) : (r.buy_days_on_list ?? 0)}</div></div>
       <div><div class="stat-label">FÖRÄNDRING SEDAN SENAST</div><div class="stat-val">${(() => { const d = state.tab === 'sell' ? r.sell_score_delta : r.buy_score_delta; return d === null || d === undefined ? '–' : (d > 0 ? '+' : '') + d; })()}</div></div>
@@ -580,14 +700,19 @@ function openDrawer(ticker) {
     ${r.ai_writeup ? `
     <div class="ai-writeup">
       <div class="stat-label">AI-KVALITETSANALYS <span class="ai-writeup-date">(${fmtDate(r.ai_writeup.generated_at)})</span></div>
-      <p class="ai-writeup-text">${escapeHtml(r.ai_writeup.text).replace(/\n\n+/g, '</p><p class="ai-writeup-text">')}</p>
+      ${aiVerdictBadgeHtml(r.ai_writeup.text)}
+      ${renderMarkdown(stripVerdictLine(r.ai_writeup.text))}
       <div class="ai-writeup-disclaimer">Genererad av Claude utifrån webbsökning, inte en fullständig analys av årsredovisningen. Verifiera själv innan beslut.</div>
     </div>` : ''}
   `;
   document.getElementById('overlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
   document.getElementById('drawerClose').addEventListener('click', closeDrawer);
 }
-function closeDrawer() { document.getElementById('overlay').classList.remove('show'); }
+function closeDrawer() {
+  document.getElementById('overlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
 document.getElementById('overlay').addEventListener('click', e => { if (e.target.id === 'overlay') closeDrawer(); });
 
 function smaTrendHtml(r) {

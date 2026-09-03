@@ -223,6 +223,8 @@
   .stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 18px; }
   .stat-grid .stat-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-faint); }
   .stat-grid .stat-val { font-family: 'IBM Plex Mono', monospace; font-size: 16px; margin-top: 3px; text-transform: uppercase; }
+  .stat-wide { grid-column: 1 / -1; }
+  .sma-trend { display: inline-block; margin: 0 2px; font-size: 13px; }
   .reasons { list-style: none; margin: 0; padding: 0; }
   .reasons li {
     font-size: 13px;
@@ -549,8 +551,7 @@ function openDrawer(ticker) {
       <div><div class="stat-label">PRIS</div><div class="stat-val">${fmtNum(r.price)} ${r.currency||''}</div></div>
       <div><div class="stat-label">P/E</div><div class="stat-val">${r.pe !== null ? fmtNum(r.pe,1) : '–'}</div></div>
       <div><div class="stat-label">RSI14</div><div class="stat-val">${r.rsi14 !== null ? fmtNum(r.rsi14,0) : '–'}</div></div>
-      <div><div class="stat-label">SMA50</div><div class="stat-val">${r.sma50 !== null ? fmtNum(r.sma50) : '–'}</div></div>
-      <div><div class="stat-label">SMA200</div><div class="stat-val">${r.sma200 !== null ? fmtNum(r.sma200) : '–'}</div></div>
+      <div class="stat-wide"><div class="stat-label">SMA50 / SMA200</div><div class="stat-val">${smaTrendHtml(r)}</div></div>
       <div><div class="stat-label">VOLYM</div><div class="stat-val">${fmtVol(r.volume_ratio)}</div></div>
       <div><div class="stat-label">P/B</div><div class="stat-val">${r.pb !== null ? fmtNum(r.pb,2) : '–'}</div></div>
       <div><div class="stat-label">UTDELNING</div><div class="stat-val">${r.dividend_yield_pct !== null ? fmtNum(r.dividend_yield_pct,1) + '%' : '–'}</div></div>
@@ -576,6 +577,17 @@ function openDrawer(ticker) {
 }
 function closeDrawer() { document.getElementById('overlay').classList.remove('show'); }
 document.getElementById('overlay').addEventListener('click', e => { if (e.target.id === 'overlay') closeDrawer(); });
+
+function smaTrendHtml(r) {
+  if (r.sma50 === null || r.sma200 === null) {
+    return `${r.sma50 !== null ? fmtNum(r.sma50) : '–'} / ${r.sma200 !== null ? fmtNum(r.sma200) : '–'}`;
+  }
+  const bullish = r.sma50 > r.sma200;
+  const symbol = bullish ? '▲' : (r.sma50 < r.sma200 ? '▼' : '–');
+  const cls = bullish ? 'up-txt' : (r.sma50 < r.sma200 ? 'down-txt' : 'dim');
+  const title = bullish ? 'SMA50 över SMA200 (uppåttrend)' : (r.sma50 < r.sma200 ? 'SMA50 under SMA200 (nedåttrend)' : 'SMA50 = SMA200');
+  return `${fmtNum(r.sma50)} <span class="sma-trend ${cls}" title="${title}">${symbol}</span> ${fmtNum(r.sma200)}`;
+}
 
 function deltaHtml(delta) {
   if (delta === null || delta === undefined || delta === 0) return '';

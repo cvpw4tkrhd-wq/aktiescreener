@@ -225,6 +225,9 @@ def analyze_ticker(ticker: str):
     close = hist["Close"]
     volume = hist["Volume"]
 
+    # Kort prisserie (~3 månader / 63 handelsdagar) för minigraf i dashboarden.
+    price_history_3m = [round(float(v), 4) for v in close.tail(63)]
+
     sma50 = close.rolling(SMA_SHORT).mean()
     sma200 = close.rolling(SMA_LONG).mean() if len(close) >= SMA_LONG else pd.Series([None] * len(close))
     rsi = compute_rsi(close)
@@ -319,6 +322,7 @@ def analyze_ticker(ticker: str):
         "avg_dollar_volume": round(avg_dollar_volume, 0) if avg_dollar_volume else None,
         "volatility_pct": round(volatility_pct, 1) if volatility_pct is not None else None,
         "beta": round(beta, 2) if isinstance(beta, (int, float)) else None,
+        "price_history_3m": price_history_3m,
     }
 
 

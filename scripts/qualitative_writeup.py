@@ -54,6 +54,11 @@ VAD JAG VILL HA: Balanserad, ärlig analys - inte översäljande. Konkreta
 belägg, inte vaga påståenden. Tydlig markering när något är osäkert eller
 saknar stöd i informationen du hittar.
 
+SPRÅK: Skriv för någon som INTE är insatt i finansjargong. Om du använder ett
+fackuttryck (t.ex. "moat", "ROIC", "marginal", "utspädning") - förklara det
+kort i samma mening, i vardagliga ord. Undvik onödigt komplicerade
+formuleringar. Korta meningar.
+
 VAD JAG INTE VILL HA: Ytliga sammanfattningar. Överdrivet positiv vinkling.
 Finansiella prognoser framställda som fakta."""
 
@@ -110,7 +115,7 @@ def build_prompt(d):
 på rena nyckeltal och teknisk analys (P/E, RSI, glidande medelvärden,
 analytikerkonsensus). Din uppgift är INTE att upprepa dessa siffror, utan att
 lägga till det de inte fångar: en snabb kvalitetsbedömning av själva
-verksamheten.
+verksamheten, skriven så att någon utan finansbakgrund förstår den.
 
 Nyckeltal från screenern (JSON):
 {json.dumps(signals, ensure_ascii=False, indent=2)}
@@ -118,19 +123,33 @@ Nyckeltal från screenern (JSON):
 Sök på webben vid behov för att svara på:
 
 1. Vilken verksamhet bedriver bolaget, och vad är den påstådda
-   konkurrensfördelen?
-2. Finns det offentligt tillgängliga belägg för att bolaget har hög
-   avkastning på kapital (ROIC/ROE) över tid, eller är det osäkert utifrån
-   vad du hittar?
+   konkurrensfördelen? (Förklara enkelt vad som gör det svårt för
+   konkurrenter att ta marknadsandelar.)
+2. Finns det offentligt tillgängliga belägg för att bolaget är lönsamt och
+   ger god avkastning på det kapital som satsas i verksamheten, eller är det
+   osäkert utifrån vad du hittar?
 3. Vilka är de 2-3 största skälen till att detta INTE skulle vara ett
    kvalitetsbolag värt att äga långsiktigt?
-4. Är detta ett bolag som kräver kvartalsvis bevakning (hög exekveringsrisk)
-   eller ett där fördelen är strukturell och varaktig?
+4. Är detta ett bolag som kräver kvartalsvis bevakning (risken ligger i att
+   den dagliga driften/exekveringen måste fungera) eller ett där fördelen är
+   strukturell och varaktig (svår att rubba oavsett kvartal)?
 
-Avsluta med en rak slutsats: är detta värt en djupare granskning (läsa
-årsredovisning m.m.), eller finns det uppenbara strukturella problem som gör
-det osannolikt att det håller måttet? Max ca 200 ord totalt. Var ärlig och
-balanserad, inte översäljande."""
+FORMAT (viktigt, följ exakt):
+- Skriv i korta stycken med en **fet etikett** i början av varje stycke
+  (t.ex. "**Verksamhet:** ...", "**Lönsamhet:** ...", "**Risker:** ...").
+  Använd INTE rubriker med #, ## eller ### och INTE avskiljare som "---".
+- Använd punktlistor (- eller 1. 2. 3.) för uppräkningar, inte långa
+  meningar med semikolon.
+- Avsluta med EXAKT en rad i detta format (ingen extra text efter):
+  HELHETSBILD: <Positiv|Blandad|Försiktig> – <en kort mening som sammanfattar
+  varför, i vardagsspråk>
+  Använd "Positiv" om helhetsbilden talar för bolaget som kvalitetsinvestering,
+  "Försiktig" om de stora riskerna/varningstecknen väger tyngre än fördelarna,
+  annars "Blandad".
+
+Max ca 280 ord totalt (exklusive HELHETSBILD-raden). Var ärlig och
+balanserad, inte översäljande. Skriv för en nybörjare - förklara alla
+fackuttryck du använder."""
 
 
 def call_claude(prompt: str) -> str:
@@ -140,7 +159,7 @@ def call_claude(prompt: str) -> str:
 
     body = json.dumps({
         "model": MODEL,
-        "max_tokens": 700,
+        "max_tokens": 1600,
         "system": INVESTOR_IDENTITY,
         "messages": [{"role": "user", "content": prompt}],
         "tools": [{"type": "web_search_20250305", "name": "web_search"}],

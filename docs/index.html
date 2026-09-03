@@ -89,8 +89,7 @@
     cursor: pointer;
   }
   button.iconbtn:hover { border-color: var(--text-dim); color: var(--text); }
-  a.version-badge { text-decoration: none; color: var(--text-faint); }
-  a.version-badge:hover { color: var(--text-dim); border-color: var(--text-dim); }
+  .version-badge { color: var(--text-faint); cursor: default; }
 
   .tabs {
     display: flex;
@@ -386,8 +385,8 @@
       <div class="meta-line" id="metaLine">laddar…</div>
     </div>
     <div class="controls">
-      <a class="iconbtn version-badge" id="versionBadge" href="#" target="_blank" rel="noopener">v –</a>
       <button class="iconbtn" id="themeToggle">LJUST LÄGE</button>
+      <span class="iconbtn version-badge" id="versionBadge">version –</span>
     </div>
   </header>
 
@@ -576,12 +575,7 @@ async function load() {
     document.getElementById('metaLine').textContent =
       `${state.data.count} tickers analyserade · uppdaterad ${timeAgo(state.data.generated_at)}`;
     const vb = document.getElementById('versionBadge');
-    if (state.data.version) {
-      vb.textContent = 'v ' + state.data.version;
-      vb.href = `https://github.com/cvpw4tkrhd-wq/aktiescreener/commit/${state.data.version}`;
-    } else {
-      vb.textContent = '';
-    }
+    vb.textContent = state.data.version ? `version ${state.data.version}` : '';
   } catch (e) {
     document.getElementById('metaLine').textContent = 'Ingen data hittades ännu — kör workflowen i GitHub Actions.';
     document.getElementById('versionBadge').textContent = '';

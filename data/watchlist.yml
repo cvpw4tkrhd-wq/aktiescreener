@@ -1,124 +1,287 @@
-# Bevakningslista för screenern.
-# Svenska tickers behöver .ST-suffix (Yahoo Finance-format), t.ex. VOLV-B.ST
-# Amerikanska tickers skrivs som vanligt, t.ex. AAPL
+# Bevakningslista för screenern. Platt lista, ett objekt per aktie.
 #
-# Lägg till/ta bort rader efter eget tycke. "name" är bara för visning
-# och för att matcha mot innehav om ticker saknas i CSV-exporten.
-# "country" används för landssammanfattningen i dashboarden (faktiskt
-# noterings-/hemland, inte samma sak som se/us-indelningen ovan — t.ex.
-# NWG.L ligger under se: av bevakningsskäl men har country: Storbritannien).
+# ticker:  Yahoo Finance-format. Suffix per marknad:
+#          Sverige .ST, Tyskland .DE, Japan .T, Kina .SS (Shanghai)/.SZ (Shenzhen),
+#          Hongkong .HK, Nederländerna .AS, Storbritannien .L, USA inget suffix.
+# name:    visningsnamn, används även som fallback vid matchning mot innehav.
+# sector:  används för geopolitik/makro-riskfaktorer (risk_factors.yml) och
+#          sammanfattningen på Mina innehav-fliken.
+# country: används för landssammanfattningen på Mina innehav-fliken.
+# market:  kort marknadskod, styr filtret i dashboarden (SE/US/DE/JP/CN/HK/NL/GB).
 
-se:
+stocks:
 - ticker: VOLV-B.ST
   name: Volvo B
   sector: Industrials
   country: Sverige
+  market: SE
 - ticker: ERIC-B.ST
   name: Ericsson B
   sector: Technology
   country: Sverige
+  market: SE
 - ticker: HM-B.ST
   name: H&M B
   sector: Consumer
   country: Sverige
+  market: SE
 - ticker: ATCO-A.ST
   name: Atlas Copco A
   sector: Industrials
   country: Sverige
+  market: SE
 - ticker: INVE-B.ST
   name: Investor B
   sector: Financials
   country: Sverige
+  market: SE
 - ticker: SAND.ST
   name: Sandvik
   sector: Industrials
   country: Sverige
+  market: SE
 - ticker: SEB-A.ST
   name: SEB A
   sector: Financials
   country: Sverige
+  market: SE
 - ticker: SWED-A.ST
   name: Swedbank A
   sector: Financials
   country: Sverige
+  market: SE
 - ticker: EVO.ST
   name: Evolution
   sector: Consumer
   country: Sverige
+  market: SE
 - ticker: SBB-B.ST
   name: SBB B
   sector: RealEstate
   country: Sverige
+  market: SE
 - ticker: ADDT-B.ST
   name: Addtech B
   sector: Industrials
   country: Sverige
+  market: SE
 - ticker: ASMDEE-B.ST
   name: Asmodee
   sector: Consumer
   country: Sverige
+  market: SE
 - ticker: LAGR-B.ST
   name: Lagercrantz Group B
   sector: Industrials
   country: Sverige
+  market: SE
 - ticker: LATO-B.ST
   name: Latour B
   sector: Financials
   country: Sverige
+  market: SE
 - ticker: MIPS.ST
   name: Mips
   sector: Industrials
   country: Sverige
+  market: SE
 - ticker: PACT.ST
   name: Proact IT Group
   sector: Technology
   country: Sverige
+  market: SE
 - ticker: NWG.L
   name: NatWest Group Plc
   sector: Financials
   country: Storbritannien
-us:
+  market: GB
 - ticker: AAPL
   name: Apple
   sector: Technology
   country: USA
+  market: US
 - ticker: MSFT
   name: Microsoft
   sector: Technology
   country: USA
+  market: US
 - ticker: GOOGL
   name: Alphabet
   sector: Technology
   country: USA
+  market: US
 - ticker: AMZN
   name: Amazon
   sector: Consumer
   country: USA
+  market: US
 - ticker: NVDA
   name: Nvidia
   sector: Semiconductors
   country: USA
+  market: US
 - ticker: META
   name: Meta Platforms
   sector: Technology
   country: USA
+  market: US
 - ticker: TSLA
   name: Tesla
   sector: Consumer
   country: USA
+  market: US
 - ticker: GLW
   name: Corning
   sector: Industrials
   country: USA
+  market: US
 - ticker: INTC
   name: Intel
   sector: Semiconductors
   country: USA
+  market: US
 - ticker: MU
   name: Micron Technology
   sector: Semiconductors
   country: USA
+  market: US
 - ticker: CUEN
   name: Cuentas
   sector: Technology
   country: USA
+  market: US
+- ticker: SAP.DE
+  name: SAP
+  sector: Technology
+  country: Tyskland
+  market: DE
+- ticker: SIE.DE
+  name: Siemens
+  sector: Industrials
+  country: Tyskland
+  market: DE
+- ticker: ALV.DE
+  name: Allianz
+  sector: Financials
+  country: Tyskland
+  market: DE
+- ticker: BAS.DE
+  name: BASF
+  sector: Materials
+  country: Tyskland
+  market: DE
+- ticker: BMW.DE
+  name: BMW
+  sector: Consumer
+  country: Tyskland
+  market: DE
+- ticker: DTE.DE
+  name: Deutsche Telekom
+  sector: Telecom
+  country: Tyskland
+  market: DE
+- ticker: 7203.T
+  name: Toyota Motor
+  sector: Consumer
+  country: Japan
+  market: JP
+- ticker: 6758.T
+  name: Sony Group
+  sector: Technology
+  country: Japan
+  market: JP
+- ticker: 9984.T
+  name: SoftBank Group
+  sector: Technology
+  country: Japan
+  market: JP
+- ticker: 8306.T
+  name: Mitsubishi UFJ Financial
+  sector: Financials
+  country: Japan
+  market: JP
+- ticker: 6501.T
+  name: Hitachi
+  sector: Industrials
+  country: Japan
+  market: JP
+- ticker: 600519.SS
+  name: Kweichow Moutai
+  sector: Consumer
+  country: Kina
+  market: CN
+- ticker: 601398.SS
+  name: ICBC
+  sector: Financials
+  country: Kina
+  market: CN
+- ticker: 000858.SZ
+  name: Wuliangye Yibin
+  sector: Consumer
+  country: Kina
+  market: CN
+- ticker: 0700.HK
+  name: Tencent Holdings
+  sector: Technology
+  country: Hongkong
+  market: HK
+- ticker: 9988.HK
+  name: Alibaba Group
+  sector: Technology
+  country: Hongkong
+  market: HK
+- ticker: 0941.HK
+  name: China Mobile
+  sector: Telecom
+  country: Hongkong
+  market: HK
+- ticker: 1299.HK
+  name: AIA Group
+  sector: Financials
+  country: Hongkong
+  market: HK
+- ticker: ASML.AS
+  name: ASML Holding
+  sector: Semiconductors
+  country: Nederländerna
+  market: NL
+- ticker: HEIA.AS
+  name: Heineken
+  sector: Consumer
+  country: Nederländerna
+  market: NL
+- ticker: INGA.AS
+  name: ING Group
+  sector: Financials
+  country: Nederländerna
+  market: NL
+- ticker: AD.AS
+  name: Ahold Delhaize
+  sector: Consumer
+  country: Nederländerna
+  market: NL
+- ticker: SHEL.L
+  name: Shell
+  sector: Energy
+  country: Storbritannien
+  market: GB
+- ticker: AZN.L
+  name: AstraZeneca
+  sector: Healthcare
+  country: Storbritannien
+  market: GB
+- ticker: HSBA.L
+  name: HSBC Holdings
+  sector: Financials
+  country: Storbritannien
+  market: GB
+- ticker: BP.L
+  name: BP
+  sector: Energy
+  country: Storbritannien
+  market: GB
+- ticker: GSK.L
+  name: GSK
+  sector: Healthcare
+  country: Storbritannien
+  market: GB

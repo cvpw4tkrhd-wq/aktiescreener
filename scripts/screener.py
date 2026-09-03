@@ -394,8 +394,12 @@ def score_buy_candidate(d):
             score -= 25
             reasons.append(f"Negativt P/B ({d['pb']}) – bolaget har negativt eget kapital, allvarlig varningssignal")
         elif 0 < d["pb"] < 1.5:
-            score += 10
-            reasons.append(f"Lågt P/B ({d['pb']}) – handlas nära/under bokfört värde")
+            high_leverage = d.get("debt_to_equity") is not None and d["debt_to_equity"] > 100
+            if high_leverage:
+                reasons.append(f"Lågt P/B ({d['pb']}) men hög skuldsättning – kan vara en värdefälla snarare än ett fynd, ingen poängbonus")
+            else:
+                score += 10
+                reasons.append(f"Lågt P/B ({d['pb']}) – handlas nära/under bokfört värde")
         elif d["pb"] > 6:
             score -= 10
             reasons.append(f"Högt P/B ({d['pb']})")
@@ -411,6 +415,17 @@ def score_buy_candidate(d):
         elif d["debt_to_equity"] > 150:
             score -= 10
             reasons.append(f"Hög skuldsättning (D/E {d['debt_to_equity']})")
+
+    # Kombinationssignal för finansiell stress: ingen vinst + hög
+    # skuldsättning + nedåttrend samtidigt är ett starkare varningstecken
+    # än vad de tre faktorerna signalerar var för sig.
+    if (
+        d["pe"] is None
+        and d.get("debt_to_equity") is not None and d["debt_to_equity"] > 120
+        and d["above_sma50"] is False
+    ):
+        score -= 15
+        reasons.append("Kombination av utebliven vinst, hög skuldsättning och nedåttrend – tecken på finansiell stress")
 
     # Kvalitetsspärrar: mikro-cap och illikvida aktier ger opålitliga
     # tekniska signaler (SMA/RSI blir brus vid tunn handel) och extra risk.
@@ -514,13 +529,20 @@ def score_sell_signal(d):
         score += 15
         reasons.append(f"Analytikerkonsensus: sälj ({d.get('num_analysts') or '?'} analytiker)")
     elif rec == "strong_buy":
-        score -= 10
-        reasons.append(f"Analytikerkonsensus: starkt köp ({d.get('num_analysts') or '?'} analytiker) — talar emot att sälja")
+        score -= 20
+        reasons.append(f"Analytikerkonsensus: starkt köp ({d.get('num_analysts') or '?'} analytiker) — talar tydligt emot att sälja")
+    elif rec == "buy":
+        score -= 8
+        reasons.append(f"Analytikerkonsensus: köp ({d.get('num_analysts') or '?'} analytiker) — talar emot att sälja")
 
     upside = d.get("analyst_upside_pct")
-    if upside is not None and upside < -10:
-        score += 15
-        reasons.append(f"Analytikernas kursmål {upside:+.0f}% under dagens pris")
+    if upside is not None:
+        if upside < -10:
+            score += 15
+            reasons.append(f"Analytikernas kursmål {upside:+.0f}% under dagens pris")
+        elif upside > 20:
+            score -= 10
+            reasons.append(f"Analytikernas kursmål {upside:+.0f}% över dagens pris — talar emot att sälja nu")
 
     if d.get("debt_to_equity") is not None and d["debt_to_equity"] > 150:
         score += 10

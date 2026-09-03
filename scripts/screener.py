@@ -171,7 +171,7 @@ def update_score_history(history: dict, ticker: str, kind: str, score, today_str
     return days, delta
 
 
-
+def load_holdings():
     """Läser en Avanza- eller Nordnet-CSV-export och returnerar en dict {ticker: antal}.
 
     Avanza-export har kolumnen 'Namn' + 'Volym' (eller 'Antal').

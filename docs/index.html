@@ -160,6 +160,7 @@
   .name-line { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; row-gap: 3px; }
   .tkr { color: var(--text-faint); font-family: 'IBM Plex Mono', monospace; font-size: 11px; display: block; margin-top: 1px; }
   .mkt-badge { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-faint); border: 1px solid var(--border); border-radius: 2px; padding: 1px 5px; margin-left: 6px; }
+  .mkt-flag { font-size: 12px; margin-left: 6px; }
   .mkt-badge.prev-held { color: var(--amber); border-color: var(--amber-dim); }
   .signal-flag {
     display: inline-block;
@@ -665,7 +666,7 @@ function render() {
     const cls = state.tab === 'sell' ? barClsMap[flag.cls] : 'buy';
     const trend = r.above_sma50 && r.above_sma200 ? 'up-txt' : (r.above_sma50 === false && r.above_sma200 === false ? 'down-txt' : 'dim');
     return `<tr data-ticker="${r.ticker}">
-      <td class="name"><div class="name-line">${r.name || r.watchlist_name}${flag ? `<span class="signal-flag ${flag.cls}">${flag.label}</span>` : ''}${r.previously_held ? '<span class="mkt-badge prev-held">TIDIGARE ÄGD</span>' : ''}${days >= 3 ? `<span class="mkt-badge days-badge" title="${days} körningar i rad med aktiv signal">${days}D</span>` : ''}</div><span class="tkr">${r.ticker}<span class="mkt-badge">${r.market}</span></span></td>
+      <td class="name"><div class="name-line">${r.name || r.watchlist_name}${flag ? `<span class="signal-flag ${flag.cls}">${flag.label}</span>` : ''}${r.previously_held ? '<span class="mkt-badge prev-held">TIDIGARE ÄGD</span>' : ''}${days >= 3 ? `<span class="mkt-badge days-badge" title="${days} körningar i rad med aktiv signal">${days}D</span>` : ''}</div><span class="tkr">${r.ticker}<span class="mkt-flag" title="${r.market}">${marketFlag(r.market)}</span></span></td>
       <td class="num">${fmtNum(r.price)} <span class="ccy">${r.currency || ''}</span></td>
       <td class="num">${r.pe !== null ? fmtNum(r.pe,1) : '–'}</td>
       <td class="num ${trend === 'up-txt' ? 'up-txt' : trend === 'down-txt' ? 'down-txt' : ''}">${r.rsi14 !== null ? fmtNum(r.rsi14,0) : '–'}</td>
@@ -749,7 +750,7 @@ function openDrawer(ticker) {
   document.getElementById('drawer').innerHTML = `
     <button class="drawer-close" id="drawerClose">STÄNG ✕</button>
     <h2>${r.name || r.watchlist_name}</h2>
-    <div class="tkr-line">${r.ticker} · ${r.market}${r.is_holding ? ' · INNEHAV' : ''}</div>
+    <div class="tkr-line">${r.ticker} · ${marketFlag(r.market)} ${r.market}${r.is_holding ? ' · INNEHAV' : ''}</div>
     ${sparklineHtml(r)}
     <div class="stat-grid">
       <div><div class="stat-label">PRIS</div><div class="stat-val">${fmtNum(r.price)} ${r.currency||''}</div></div>
@@ -811,6 +812,13 @@ function signalFlag(r) {
   if ((r.sell_score || 0) >= 50) return { label: 'SÄLJ', cls: 'flag-sell' };
   if ((r.buy_score || 0) >= 65) return { label: 'KÖP', cls: 'flag-buy' };
   return { label: 'HÅLL', cls: 'flag-hold' };
+}
+
+const MARKET_FLAGS = {
+  SE: '🇸🇪', US: '🇺🇸', DE: '🇩🇪', GB: '🇬🇧', NL: '🇳🇱',
+};
+function marketFlag(market) {
+  return MARKET_FLAGS[market] || '🏳️';
 }
 
 function groupCount(rows, key) {

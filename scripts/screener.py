@@ -46,15 +46,14 @@ def load_watchlist():
     with open(WATCHLIST_FILE, "r", encoding="utf-8") as f:
         wl = yaml.safe_load(f)
     tickers = []
-    for market in ("se", "us"):
-        for entry in wl.get(market, []):
-            tickers.append({
-                "ticker": entry["ticker"],
-                "name": entry.get("name", entry["ticker"]),
-                "market": market.upper(),
-                "sector": entry.get("sector"),
-                "country": entry.get("country"),
-            })
+    for entry in wl.get("stocks", []):
+        tickers.append({
+            "ticker": entry["ticker"],
+            "name": entry.get("name", entry["ticker"]),
+            "market": entry.get("market", "?"),
+            "sector": entry.get("sector"),
+            "country": entry.get("country"),
+        })
     return tickers
 
 
@@ -461,7 +460,7 @@ def _normalize_ticker(s: str) -> str:
     if not s:
         return ""
     s = s.strip().upper().replace(" ", "").replace("-", "")
-    for suffix in (".ST", ".L", ".DE", ".US", ".OL", ".CO", ".HE"):
+    for suffix in (".ST", ".L", ".DE", ".US", ".OL", ".CO", ".HE", ".T", ".SS", ".SZ", ".HK", ".AS"):
         if s.endswith(suffix.replace(".", "")):
             s = s[: -len(suffix.replace(".", ""))]
     return s
@@ -479,7 +478,7 @@ def find_holding_match(entry_ticker: str, entry_name: str, holdings: dict):
     norm_entry_ticker = _normalize_ticker(entry_ticker.split(".")[0] if "." in entry_ticker else entry_ticker)
     # strip known suffixes fully (handles multi-part like .ST)
     base_ticker = entry_ticker
-    for suffix in (".ST", ".L", ".DE", ".US", ".OL", ".CO", ".HE"):
+    for suffix in (".ST", ".L", ".DE", ".US", ".OL", ".CO", ".HE", ".T", ".SS", ".SZ", ".HK", ".AS"):
         if base_ticker.endswith(suffix):
             base_ticker = base_ticker[: -len(suffix)]
             break

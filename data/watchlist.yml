@@ -1,13 +1,12 @@
 # Bevakningslista för screenern. Platt lista, ett objekt per aktie.
 #
 # ticker:  Yahoo Finance-format. Suffix per marknad:
-#          Sverige .ST, Tyskland .DE, Japan .T, Kina .SS (Shanghai)/.SZ (Shenzhen),
-#          Hongkong .HK, Nederländerna .AS, Storbritannien .L, USA inget suffix.
+#          Sverige .ST, Tyskland .DE, Nederländerna .AS, Storbritannien .L, USA inget suffix.
 # name:    visningsnamn, används även som fallback vid matchning mot innehav.
 # sector:  används för geopolitik/makro-riskfaktorer (risk_factors.yml) och
 #          sammanfattningen på Mina innehav-fliken.
 # country: används för landssammanfattningen på Mina innehav-fliken.
-# market:  kort marknadskod, styr filtret i dashboarden (SE/US/DE/JP/CN/HK/NL/GB).
+# market:  kort marknadskod, styr filtret i dashboarden (SE/US/DE/NL/GB).
 
 stocks:
 - ticker: VOLV-B.ST
@@ -180,66 +179,6 @@ stocks:
   sector: Telecom
   country: Tyskland
   market: DE
-- ticker: 7203.T
-  name: Toyota Motor
-  sector: Consumer
-  country: Japan
-  market: JP
-- ticker: 6758.T
-  name: Sony Group
-  sector: Technology
-  country: Japan
-  market: JP
-- ticker: 9984.T
-  name: SoftBank Group
-  sector: Technology
-  country: Japan
-  market: JP
-- ticker: 8306.T
-  name: Mitsubishi UFJ Financial
-  sector: Financials
-  country: Japan
-  market: JP
-- ticker: 6501.T
-  name: Hitachi
-  sector: Industrials
-  country: Japan
-  market: JP
-- ticker: 600519.SS
-  name: Kweichow Moutai
-  sector: Consumer
-  country: Kina
-  market: CN
-- ticker: 601398.SS
-  name: ICBC
-  sector: Financials
-  country: Kina
-  market: CN
-- ticker: 000858.SZ
-  name: Wuliangye Yibin
-  sector: Consumer
-  country: Kina
-  market: CN
-- ticker: 0700.HK
-  name: Tencent Holdings
-  sector: Technology
-  country: Hongkong
-  market: HK
-- ticker: 9988.HK
-  name: Alibaba Group
-  sector: Technology
-  country: Hongkong
-  market: HK
-- ticker: 0941.HK
-  name: China Mobile
-  sector: Telecom
-  country: Hongkong
-  market: HK
-- ticker: 1299.HK
-  name: AIA Group
-  sector: Financials
-  country: Hongkong
-  market: HK
 - ticker: ASML.AS
   name: ASML Holding
   sector: Semiconductors

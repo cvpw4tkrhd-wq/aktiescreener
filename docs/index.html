@@ -4,7 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Screener</title>
-<link rel="icon" href="data:,">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Screener">
+<meta name="theme-color" content="#0B0E13">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -167,7 +173,7 @@
   }
   .signal-flag.flag-buy { color: var(--up); border: 1px solid var(--up); }
   .signal-flag.flag-sell { color: var(--down); border: 1px solid var(--down); }
-  .signal-flag.flag-hold { color: var(--text-faint); border: 1px solid var(--border); }
+  .signal-flag.flag-hold { color: var(--amber); border: 1px solid var(--amber); }
   .score-delta {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 10px;
@@ -319,10 +325,10 @@
     .stat-grid { grid-template-columns: 1fr 1fr; }
     td, thead th { padding: 10px 8px; }
     td.name { max-width: 140px; }
-    /* P/E, Volym och info-knappen ryms i detaljvyn — döljs i tabellen för
-       att ge Namn, Pris, RSI och Poäng plats. Hela raden går fortfarande
+    /* RSI14, Volym och info-knappen ryms i detaljvyn — döljs i tabellen för
+       att ge Namn, Pris, P/E och Poäng plats. Hela raden går fortfarande
        att trycka på för att öppna detaljvyn. */
-    thead th:nth-child(3), td:nth-child(3),
+    thead th:nth-child(4), td:nth-child(4),
     thead th:nth-child(5), td:nth-child(5),
     thead th:nth-child(7), td:nth-child(7) { display: none; }
   }
@@ -359,6 +365,12 @@
         <option value="ALL">Alla marknader</option>
         <option value="SE">Stockholm</option>
         <option value="US">USA</option>
+        <option value="DE">Tyskland</option>
+        <option value="JP">Japan</option>
+        <option value="CN">Kina</option>
+        <option value="HK">Hongkong</option>
+        <option value="NL">Nederländerna</option>
+        <option value="GB">Storbritannien</option>
       </select>
       <select id="sortSelect">
         <option value="score_desc">Sortera: poäng (hög→låg)</option>

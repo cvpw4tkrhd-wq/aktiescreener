@@ -219,7 +219,16 @@ def compute_rsi(close: pd.Series, period: int = RSI_PERIOD) -> pd.Series:
 def analyze_ticker(ticker: str):
     tk = yf.Ticker(ticker)
     hist = tk.history(period=HISTORY_PERIOD, auto_adjust=True)
-    if hist.empty or len(hist) < 30:
+    if hist.empty:
+        return None
+
+    # Yahoo Finance lägger ibland till en ofärdig "dagens datum"-rad utan
+    # stängningskurs för marknader som inte hunnit öppna/stänga än när
+    # workflowen körs (t.ex. asiatiska börser, som körs mitt i natten deras
+    # tid). Ta bort sådana rader innan vi räknar på något - annars blir
+    # priset NaN, vilket i sin tur gör hela results.json ogiltig JSON.
+    hist = hist.dropna(subset=["Close"])
+    if len(hist) < 30:
         return None
 
     close = hist["Close"]
@@ -584,6 +593,20 @@ def get_app_version() -> str:
         return "okänd"
 
 
+def sanitize_for_json(obj):
+    """Rekursiv säkerhetsspärr: ersätter NaN/Infinity (giltiga Python-flyttal
+    men INTE giltig JSON enligt spec) med None, så att resultatfilen aldrig
+    kan bli trasig JSON som kraschar JSON.parse() i webbläsaren - oavsett
+    var i koden ett sådant värde skulle uppstå."""
+    if isinstance(obj, dict):
+        return {k: sanitize_for_json(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [sanitize_for_json(v) for v in obj]
+    if isinstance(obj, float) and (obj != obj or obj in (float("inf"), float("-inf"))):
+        return None
+    return obj
+
+
 def main():
     watchlist = load_watchlist()
     holdings = load_holdings()
@@ -674,6 +697,7 @@ def main():
     }
 
     DOCS_DIR.mkdir(exist_ok=True)
+    output = sanitize_for_json(output)
     with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
 

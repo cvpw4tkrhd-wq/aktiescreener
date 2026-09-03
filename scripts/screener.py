@@ -12,7 +12,6 @@ eller schemalagt via GitHub Actions (.github/workflows/screener.yml)
 
 import csv
 import json
-import subprocess
 import sys
 import time
 from datetime import datetime, timezone
@@ -570,16 +569,13 @@ def score_sell_signal(d):
     return max(0, min(100, score)), reasons
 
 
-def get_git_version() -> str:
-    """Kort commit-hash för koden som körde denna screening, för visning i
-    dashboardens versionsindikator. Faller tillbaka till 'okänd' om git
-    saknas eller något går fel (t.ex. lokal körning utan git-repo)."""
+def get_app_version() -> str:
+    """Läser det klassiska löpnumret från VERSION-filen (t.ex. '1.0') för
+    visning i dashboardens versionsindikator. Filen uppdateras manuellt när
+    en ny funktion/version släpps - inte per körning."""
+    version_file = ROOT / "VERSION"
     try:
-        out = subprocess.run(
-            ["git", "rev-parse", "--short", "HEAD"],
-            cwd=ROOT, capture_output=True, text=True, timeout=5, check=True,
-        )
-        return out.stdout.strip()
+        return version_file.read_text(encoding="utf-8").strip()
     except Exception:
         return "okänd"
 
@@ -667,7 +663,7 @@ def main():
 
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
-        "version": get_git_version(),
+        "version": get_app_version(),
         "count": len(results),
         "holdings_loaded": len(holdings),
         "results": results,

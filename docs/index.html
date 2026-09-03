@@ -396,11 +396,16 @@
     button.iconbtn { padding: 8px 10px; }
     .tab { padding: 8px 11px; font-size: 11.5px; }
     .stat-grid { grid-template-columns: 1fr 1fr; }
-    td, thead th { padding: 10px 8px; }
-    td.name { max-width: 140px; }
-    /* RSI14, Volym och info-knappen ryms i detaljvyn — döljs i tabellen för
-       att ge Namn, Pris, P/E och Poäng plats. Hela raden går fortfarande
-       att trycka på för att öppna detaljvyn. */
+    td, thead th { padding: 9px 6px; }
+    td.name { max-width: 128px; }
+    .score-bar { width: 32px; }
+    .score-bar-wrap { gap: 4px; }
+    .score-num-secondary { margin-left: 2px; }
+    .ccy { display: none; }
+    /* P/E, RSI14, Volym och info-knappen ryms i detaljvyn — döljs i
+       tabellen för att ge Namn, Pris och Poäng plats utan avklippning.
+       Hela raden går fortfarande att trycka på för att öppna detaljvyn. */
+    thead th:nth-child(3), td:nth-child(3),
     thead th:nth-child(4), td:nth-child(4),
     thead th:nth-child(5), td:nth-child(5),
     thead th:nth-child(7), td:nth-child(7) { display: none; }
@@ -664,7 +669,7 @@ function render() {
     const trend = r.above_sma50 && r.above_sma200 ? 'up-txt' : (r.above_sma50 === false && r.above_sma200 === false ? 'down-txt' : 'dim');
     return `<tr data-ticker="${r.ticker}">
       <td class="name"><div class="name-line">${r.name || r.watchlist_name}${flag ? `<span class="signal-flag ${flag.cls}">${flag.label}</span>` : ''}${r.previously_held ? '<span class="mkt-badge prev-held">TIDIGARE ÄGD</span>' : ''}${days >= 3 ? `<span class="mkt-badge days-badge" title="${days} körningar i rad med aktiv signal">${days}D</span>` : ''}</div><span class="tkr">${r.ticker}<span class="mkt-badge">${r.market}</span></span></td>
-      <td class="num">${fmtNum(r.price)} ${r.currency || ''}</td>
+      <td class="num">${fmtNum(r.price)} <span class="ccy">${r.currency || ''}</span></td>
       <td class="num">${r.pe !== null ? fmtNum(r.pe,1) : '–'}</td>
       <td class="num ${trend === 'up-txt' ? 'up-txt' : trend === 'down-txt' ? 'down-txt' : ''}">${r.rsi14 !== null ? fmtNum(r.rsi14,0) : '–'}</td>
       <td class="num dim">${fmtVol(r.volume_ratio)}</td>

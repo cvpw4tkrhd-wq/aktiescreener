@@ -28,7 +28,12 @@ DOCS_DIR = ROOT / "docs"
 WATCHLIST_FILE = DATA_DIR / "watchlist.yml"
 HOLDINGS_FILE = DATA_DIR / "holdings.csv"
 PREVIOUSLY_HELD_FILE = DATA_DIR / "previously_held.yml"
+SCORE_HISTORY_FILE = DATA_DIR / "score_history.json"
 OUTPUT_FILE = DOCS_DIR / "results.json"
+
+BUY_SIGNAL_THRESHOLD = 65   # köppoäng för att räknas som "aktiv köpsignal" i dagräkningen
+SELL_SIGNAL_THRESHOLD = 50  # säljpoäng för att räknas som "aktiv säljsignal" i dagräkningen
+MAX_HISTORY_ENTRIES = 90    # ca 4 månaders vardagskörningar per ticker/typ
 
 RSI_PERIOD = 14
 SMA_SHORT = 50
@@ -125,7 +130,48 @@ def update_previously_held(positions: dict, current_holding_entries: list, holdi
     return positions, True
 
 
-def load_holdings():
+def load_score_history():
+    if not SCORE_HISTORY_FILE.exists():
+        return {}
+    with open(SCORE_HISTORY_FILE, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def save_score_history(history: dict):
+    DATA_DIR.mkdir(exist_ok=True)
+    with open(SCORE_HISTORY_FILE, "w", encoding="utf-8") as f:
+        json.dump(history, f, ensure_ascii=False, indent=2, sort_keys=True)
+
+
+def update_score_history(history: dict, ticker: str, kind: str, score, today_str: str):
+    """Lägger till dagens poäng i historiken för en ticker (buy/sell) och
+    returnerar (dagar_i_rad_med_aktiv_signal, poängförändring_sedan_föregående_körning).
+    Kör man screenern flera gånger samma dag skrivs den dagens post över
+    istället för att dubbleras."""
+    if score is None:
+        return None, None
+
+    threshold = BUY_SIGNAL_THRESHOLD if kind == "buy" else SELL_SIGNAL_THRESHOLD
+    series = history.setdefault(ticker, {}).setdefault(kind, [])
+    series[:] = [e for e in series if e["date"] != today_str]
+    series.append({"date": today_str, "score": score})
+    series.sort(key=lambda e: e["date"])
+    if len(series) > MAX_HISTORY_ENTRIES:
+        del series[: -MAX_HISTORY_ENTRIES]
+
+    delta = series[-1]["score"] - series[-2]["score"] if len(series) >= 2 else None
+
+    days = 0
+    for entry in reversed(series):
+        if entry["score"] >= threshold:
+            days += 1
+        else:
+            break
+
+    return days, delta
+
+
+
     """Läser en Avanza- eller Nordnet-CSV-export och returnerar en dict {ticker: antal}.
 
     Avanza-export har kolumnen 'Namn' + 'Volym' (eller 'Antal').
@@ -522,6 +568,8 @@ def main():
     holdings = load_holdings()
     sector_weights, sector_factor_names = load_risk_factors()
     previously_held = load_previously_held()
+    score_history = load_score_history()
+    today_str = datetime.now(timezone.utc).date().isoformat()
 
     results = []
     current_holding_entries = []
@@ -574,9 +622,15 @@ def main():
 
         d["buy_score"] = buy_score
         d["buy_reasons"] = buy_reasons
+        d["buy_days_on_list"], d["buy_score_delta"] = update_score_history(
+            score_history, ticker, "buy", buy_score, today_str
+        )
         if is_holding:
             d["sell_score"] = sell_score
             d["sell_reasons"] = sell_reasons
+            d["sell_days_on_list"], d["sell_score_delta"] = update_score_history(
+                score_history, ticker, "sell", sell_score, today_str
+            )
 
         results.append(d)
         time.sleep(0.3)  # snäll mot Yahoo Finance
@@ -587,6 +641,8 @@ def main():
         print(f"Innehavshistorik uppdaterad ({len(updated_positions)} tickers totalt).", file=sys.stderr)
     else:
         print("Inga innehav laddade denna körning — innehavshistorik lämnas orörd.", file=sys.stderr)
+
+    save_score_history(score_history)
 
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),

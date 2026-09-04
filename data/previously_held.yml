@@ -3,33 +3,33 @@
 # återköpskandidater i köplistan om du säljer och de senare ser
 # köpvärda ut igen. Innehåller BARA ticker, bolagsnamn, sektor och
 # datum — aldrig belopp eller antal aktier.
-# Senast uppdaterad: 2026-09-03
+# Senast uppdaterad: 2026-09-04
 
 positions:
   ADDT-B.ST:
     first_seen: '2026-09-02'
-    last_held: '2026-09-03'
+    last_held: '2026-09-04'
     name: Addtech B
     sector: Industrials
     sold_detected: null
     status: held
   ASMDEE-B.ST:
     first_seen: '2026-09-02'
-    last_held: '2026-09-03'
+    last_held: '2026-09-04'
     name: Asmodee
     sector: Consumer
     sold_detected: null
     status: held
   CUEN:
     first_seen: '2026-09-02'
-    last_held: '2026-09-03'
+    last_held: '2026-09-04'
     name: Cuentas
     sector: Technology
     sold_detected: null
     status: held
   GLW:
     first_seen: '2026-09-02'
-    last_held: '2026-09-03'
+    last_held: '2026-09-04'
     name: Corning
     sector: Industrials
     sold_detected: null
@@ -43,49 +43,49 @@ positions:
     status: sold
   LAGR-B.ST:
     first_seen: '2026-09-02'
-    last_held: '2026-09-03'
+    last_held: '2026-09-04'
     name: Lagercrantz Group B
     sector: Industrials
     sold_detected: null
     status: held
   LATO-B.ST:
     first_seen: '2026-09-02'
-    last_held: '2026-09-03'
+    last_held: '2026-09-04'
     name: Latour B
     sector: Financials
     sold_detected: null
     status: held
   MIPS.ST:
     first_seen: '2026-09-02'
-    last_held: '2026-09-03'
+    last_held: '2026-09-04'
     name: Mips
     sector: Industrials
     sold_detected: null
     status: held
   MSFT:
     first_seen: '2026-09-02'
-    last_held: '2026-09-03'
+    last_held: '2026-09-04'
     name: Microsoft
     sector: Technology
     sold_detected: null
     status: held
   MU:
     first_seen: '2026-09-02'
-    last_held: '2026-09-03'
+    last_held: '2026-09-04'
     name: Micron Technology
     sector: Semiconductors
     sold_detected: null
     status: held
   NWG.L:
     first_seen: '2026-09-02'
-    last_held: '2026-09-03'
+    last_held: '2026-09-04'
     name: NatWest Group Plc
     sector: Financials
     sold_detected: null
     status: held
   PACT.ST:
     first_seen: '2026-09-02'
-    last_held: '2026-09-03'
+    last_held: '2026-09-04'
     name: Proact IT Group
     sector: Technology
     sold_detected: null

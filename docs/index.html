@@ -403,20 +403,20 @@
     .score-bar-wrap { gap: 4px; }
     .score-num-secondary { margin-left: 2px; }
     .ccy { display: none; }
-    /* P/E, RSI14, Volym och info-knappen ryms i detaljvyn — döljs i
-       tabellen för att ge Namn, Pris och Poäng plats utan avklippning.
+    /* Pris, P/E, RSI14, Volym och info-knappen ryms i detaljvyn — döljs i
+       tabellen för att ge Namn, Kursmål och Poäng plats utan avklippning.
        Hela raden går fortfarande att trycka på för att öppna detaljvyn. */
+    thead th:nth-child(2), td:nth-child(2),
     thead th:nth-child(3), td:nth-child(3),
     thead th:nth-child(4), td:nth-child(4),
     thead th:nth-child(5), td:nth-child(5),
-    thead th:nth-child(7), td:nth-child(7) { display: none; }
+    thead th:nth-child(8), td:nth-child(8) { display: none; }
   }
 
   @media (max-width: 400px) {
     .overlay { padding: 24px 10px; }
     .drawer { padding: 18px; max-height: calc(100vh - 48px); }
     .stat-grid { gap: 10px; }
-    thead th:nth-child(2), td:nth-child(2) { display: none; } /* Pris döljs på riktigt smala skärmar, finns i detaljvyn */
   }
 </style>
 </head>
@@ -589,6 +589,15 @@ function aiVerdictBadgeHtml(text) {
   return `<div class="ai-verdict"><span class="signal-flag ${cls}">${verdict.toUpperCase()}</span>${note ? `<span class="ai-verdict-note">${escapeHtml(note)}</span>` : ''}</div>`;
 }
 
+function targetCompactHtml(r) {
+  const upside = r.analyst_upside_pct;
+  if (upside === null || upside === undefined) return '–';
+  const symbol = upside > 0 ? '▲' : (upside < 0 ? '▼' : '–');
+  const cls = upside > 0 ? 'up-txt' : (upside < 0 ? 'down-txt' : 'dim');
+  const sign = upside > 0 ? '+' : '';
+  return `<span class="${cls}">${symbol} ${sign}${fmtNum(upside,0)}%</span>`;
+}
+
 function targetHtml(r) {
   if (!r.target_mean_price) return '–';
   const upside = r.analyst_upside_pct;
@@ -671,6 +680,7 @@ function render() {
       <td class="num">${r.pe !== null ? fmtNum(r.pe,1) : '–'}</td>
       <td class="num ${trend === 'up-txt' ? 'up-txt' : trend === 'down-txt' ? 'down-txt' : ''}">${r.rsi14 !== null ? fmtNum(r.rsi14,0) : '–'}</td>
       <td class="num dim">${fmtVol(r.volume_ratio)}</td>
+      <td class="num">${targetCompactHtml(r)}</td>
       <td class="num">
         <div class="score-bar-wrap ${cls}">
           ${deltaHtml(delta)}
@@ -689,6 +699,7 @@ function render() {
       <th class="num">P/E</th>
       <th class="num">RSI14</th>
       <th class="num">Volym</th>
+      <th class="num">Kursmål</th>
       <th class="num">${state.tab === 'sell' ? 'Sälj · Köp' : 'Köppoäng'}</th>
       <th class="num"></th>
     </tr></thead>

@@ -301,6 +301,14 @@
     margin-top: 4px;
     line-height: 1.4;
   }
+  .pe-compare-footnote {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    color: var(--text-faint);
+    opacity: 0.75;
+    font-style: italic;
+    margin-top: 2px;
+  }
   .stat-wide { grid-column: 1 / -1; }
   .sma-trend { display: inline-block; margin: 0 2px; font-size: 13px; }
   .reasons { list-style: none; margin: 0; padding: 0; }
@@ -906,11 +914,15 @@ function peComparisonHtml(r) {
 
   const ext = state.externalPE && state.externalPE.sectors && state.externalPE.sectors[r.sector];
   if (ext) {
-    const diffPct = ((r.pe - ext.avg_pe) / ext.avg_pe) * 100;
+    const mult = (state.externalPE.country_multipliers && state.externalPE.country_multipliers[r.market]) || 1.0;
+    const adjustedPE = ext.avg_pe * mult;
+    const diffPct = ((r.pe - adjustedPE) / adjustedPE) * 100;
     const cls = diffPct < 0 ? 'up-txt' : 'down-txt';
     const sign = diffPct > 0 ? '+' : '';
     const label = diffPct < 0 ? 'billigare' : 'dyrare';
-    html += `<div class="pe-compare" title="Källa: Damodaran/NYU Stern, ${ext.num_firms} bolag">Branschsnitt (${ext.num_firms} bolag globalt): ${fmtNum(ext.avg_pe,1)} — <span class="${cls}">${sign}${fmtNum(diffPct,0)}% ${label}</span></div>`;
+    const countryNote = mult !== 1.0 ? `, landsjusterat ${mult > 1 ? '+' : ''}${fmtNum((mult-1)*100,0)}%` : '';
+    html += `<div class="pe-compare" title="Källa: Damodaran/NYU Stern, ${ext.num_firms} bolag${countryNote}">Branschsnitt (${ext.num_firms} bolag${countryNote}): ${fmtNum(adjustedPE,1)} — <span class="${cls}">${sign}${fmtNum(diffPct,0)}% ${label}</span></div>`;
+    html += `<div class="pe-compare-footnote">Branschdata: jan 2026 (Damodaran/NYU Stern) — inte realtid.</div>`;
   }
 
   return html;

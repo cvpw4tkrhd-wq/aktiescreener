@@ -1,0 +1,40 @@
+name: Lägg till ticker från issue
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  add-ticker:
+    if: startsWith(github.event.issue.title, 'Lägg till ticker:')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checka ut repot
+        uses: actions/checkout@v4
+
+      - name: Sätt upp Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Installera beroenden
+        run: pip install yfinance pyyaml
+
+      - name: Bearbeta förfrågan
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/process_ticker_request.py
+
+      - name: Committa
+        run: |
+          git config user.name "screener-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/watchlist.yml
+          git diff --cached --quiet && echo "Inga ändringar" || git commit -m "Lägg till ticker från issue #${{ github.event.issue.number }}"
+          git push

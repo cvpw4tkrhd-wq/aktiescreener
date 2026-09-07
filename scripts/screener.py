@@ -252,8 +252,8 @@ def analyze_ticker(ticker: str):
         _debug_cashflow_error = (
             f"capex={capex is not None} da={da is not None} fcf={fcf is not None} "
             f"sbc={sbc is not None} revenue={revenue is not None} | "
-            f"income_rows={list(income.index[:15]) if income is not None and not income.empty else 'TOM/NONE'}"
-        )[:400]
+            f"cashflow_rows={list(cashflow.index) if cashflow is not None and not cashflow.empty else 'TOM/NONE'}"
+        )[:600]
     except Exception as e:
         print(f"  Kassaflödesdata saknas/fel för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)
         _debug_cashflow_error = f"EXCEPTION {type(e).__name__}: {e}"[:400]

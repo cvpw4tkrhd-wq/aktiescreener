@@ -198,6 +198,16 @@
     white-space: nowrap;
   }
   .pending-btn:hover { border-color: var(--amber); }
+
+  .diag-row {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--text-dim);
+    padding: 4px 0;
+    border-top: 1px solid var(--border);
+  }
+  .diag-row:first-child { border-top: none; }
+  .diag-ticker { color: var(--text-faint); }
   select, input[type=text] {
     background: var(--panel-alt);
     border: 1px solid var(--border);
@@ -1132,6 +1142,9 @@ function renderUploadPanel() {
   if (state.tab !== 'sell') { el.innerHTML = ''; return; }
 
   const hasHoldings = state.holdingsUploadedAt && Object.keys(state.holdings).length > 0;
+  const diagRows = hasHoldings
+    ? Object.values(state.holdings).map(h => `<div class="diag-row">${escapeHtml(h.raw_name || '')} <span class="diag-ticker">${escapeHtml(h.raw_ticker || '(inget kortnamn)')}</span></div>`).join('')
+    : '';
   el.innerHTML = `
     <div class="upload-panel">
       <div class="upload-row">
@@ -1144,11 +1157,19 @@ function renderUploadPanel() {
           ? `Uppladdad ${fmtDateTime(state.holdingsUploadedAt)} — bearbetas och sparas bara i den här webbläsaren, skickas aldrig till någon server och syns inte för andra som besöker sidan.`
           : 'CSV- eller Excel-export (.csv/.xlsx) från Avanza eller Nordnet. Bearbetas helt i din egen webbläsare — filen skickas aldrig till någon server och sparas bara lokalt på den här enheten.'}
       </div>
+      ${hasHoldings ? `
+      <button class="iconbtn" id="diagToggleBtn" style="margin-top:10px;">VISA VAD SOM FAKTISKT LÄSTES IN (${Object.keys(state.holdings).length} rader)</button>
+      <div id="diagList" style="display:none; margin-top:10px;">${diagRows}</div>` : ''}
     </div>`;
 
   document.getElementById('csvUpload').addEventListener('change', handleCsvUpload);
   const clearBtn = document.getElementById('clearHoldingsBtn');
   if (clearBtn) clearBtn.addEventListener('click', handleClearHoldings);
+  const diagBtn = document.getElementById('diagToggleBtn');
+  if (diagBtn) diagBtn.addEventListener('click', () => {
+    const list = document.getElementById('diagList');
+    list.style.display = list.style.display === 'none' ? 'block' : 'none';
+  });
 }
 
 function handleCsvUpload(e) {

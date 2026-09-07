@@ -191,9 +191,13 @@ def main():
     results = output.get("results", [])
     writeups = load_writeups()
 
+    # OBS: exkluderar inte längre befintliga innehav - servern känner inte
+    # längre till dina innehav (de hanteras numera helt klientsidan i
+    # webbläsaren för integritet). Kan därför ibland skriva en analys för
+    # en aktie du redan äger; ofarligt, bara lite överflödigt för den aktien.
     candidates = [
         d for d in results
-        if not d.get("is_holding") and (d.get("buy_score") or 0) >= MIN_BUY_SCORE
+        if (d.get("buy_score") or 0) >= MIN_BUY_SCORE
     ]
     candidates.sort(key=lambda d: d.get("buy_score", 0), reverse=True)
 

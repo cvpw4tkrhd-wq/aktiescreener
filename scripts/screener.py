@@ -249,8 +249,8 @@ def analyze_ticker(ticker: str):
             fcf_margin_pct = (fcf / revenue) * 100
         if sbc is not None and revenue:
             sbc_to_revenue_pct = (abs(sbc) / revenue) * 100
-    except Exception:
-        pass
+    except Exception as e:
+        print(f"  Kassaflödesdata saknas/fel för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)
 
     return {
         "ticker": ticker,

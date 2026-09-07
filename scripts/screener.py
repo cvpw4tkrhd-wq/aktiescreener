@@ -3,14 +3,16 @@
 Aktiescreener för svenska och amerikanska börsen.
 
 Hämtar kursdata via yfinance, beräknar P/E, SMA50/200, RSI14 och
-volymavvikelser, och genererar köpkandidater samt säljsignaler för
-befintliga innehav (importerade från Avanza/Nordnet-CSV).
+volymavvikelser, och genererar köpkandidater för alla bevakade aktier.
+
+Innehav/säljsignaler hanteras INTE här längre - det sker helt klientsidan
+i webbläsaren (docs/index.html) för att innehavsuppgifter aldrig ska
+lämna användarens enhet. Servern vet inte vilka aktier någon äger.
 
 Körs antingen manuellt: python scripts/screener.py
 eller schemalagt via GitHub Actions (.github/workflows/screener.yml)
 """
 
-import csv
 import json
 import sys
 import time
@@ -25,14 +27,11 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT / "data"
 DOCS_DIR = ROOT / "docs"
 WATCHLIST_FILE = DATA_DIR / "watchlist.yml"
-HOLDINGS_FILE = DATA_DIR / "holdings.csv"
-PREVIOUSLY_HELD_FILE = DATA_DIR / "previously_held.yml"
 SCORE_HISTORY_FILE = DATA_DIR / "score_history.json"
 OUTPUT_FILE = DOCS_DIR / "results.json"
 
 BUY_SIGNAL_THRESHOLD = 65   # köppoäng för att räknas som "aktiv köpsignal" i dagräkningen
-SELL_SIGNAL_THRESHOLD = 50  # säljpoäng för att räknas som "aktiv säljsignal" i dagräkningen
-MAX_HISTORY_ENTRIES = 90    # ca 4 månaders vardagskörningar per ticker/typ
+MAX_HISTORY_ENTRIES = 90    # ca 4 månaders vardagskörningar per ticker
 
 RSI_PERIOD = 14
 SMA_SHORT = 50
@@ -75,59 +74,6 @@ def load_risk_factors():
     return sector_weights, sector_factor_names
 
 
-def load_previously_held():
-    """Läser historik över tidigare/nuvarande innehav (bara ticker/namn/datum,
-    aldrig belopp eller antal). Returnerar {ticker: {..}}."""
-    if not PREVIOUSLY_HELD_FILE.exists():
-        return {}
-    with open(PREVIOUSLY_HELD_FILE, "r", encoding="utf-8") as f:
-        data = yaml.safe_load(f) or {}
-    return data.get("positions") or {}
-
-
-def save_previously_held(positions: dict):
-    today = datetime.now(timezone.utc).date().isoformat()
-    header = (
-        "# Auto-uppdaterad av screener.py — spårar vilka tickers du någon\n"
-        "# gång ägt (enligt holdings.csv) så de kan flaggas som möjliga\n"
-        "# återköpskandidater i köplistan om du säljer och de senare ser\n"
-        "# köpvärda ut igen. Innehåller BARA ticker, bolagsnamn, sektor och\n"
-        "# datum — aldrig belopp eller antal aktier.\n"
-        f"# Senast uppdaterad: {today}\n\n"
-    )
-    body = yaml.safe_dump({"positions": positions}, allow_unicode=True, sort_keys=True)
-    with open(PREVIOUSLY_HELD_FILE, "w", encoding="utf-8") as f:
-        f.write(header + body)
-
-
-def update_previously_held(positions: dict, current_holding_entries: list, holdings_loaded: int):
-    """Uppdaterar historikfilen utifrån dagens körning. Rör INGET om
-    holdings.csv inte fanns med i körningen (holdings_loaded == 0), för att
-    inte av misstag markera allt som sålt bara för att secreten saknades."""
-    if holdings_loaded == 0:
-        return positions, False
-
-    today = datetime.now(timezone.utc).date().isoformat()
-    current_tickers = {e["ticker"] for e in current_holding_entries}
-
-    for e in current_holding_entries:
-        rec = positions.get(e["ticker"], {})
-        rec["name"] = e["name"]
-        rec["sector"] = e.get("sector")
-        rec["status"] = "held"
-        rec.setdefault("first_seen", today)
-        rec["last_held"] = today
-        rec["sold_detected"] = None
-        positions[e["ticker"]] = rec
-
-    for ticker, rec in positions.items():
-        if rec.get("status") == "held" and ticker not in current_tickers:
-            rec["status"] = "sold"
-            rec["sold_detected"] = today
-
-    return positions, True
-
-
 def load_score_history():
     if not SCORE_HISTORY_FILE.exists():
         return {}
@@ -141,16 +87,16 @@ def save_score_history(history: dict):
         json.dump(history, f, ensure_ascii=False, indent=2, sort_keys=True)
 
 
-def update_score_history(history: dict, ticker: str, kind: str, score, today_str: str):
-    """Lägger till dagens poäng i historiken för en ticker (buy/sell) och
-    returnerar (dagar_i_rad_med_aktiv_signal, poängförändring_sedan_föregående_körning).
+def update_score_history(history: dict, ticker: str, score, today_str: str):
+    """Lägger till dagens köppoäng i historiken för en ticker och returnerar
+    (dagar_i_rad_med_aktiv_köpsignal, poängförändring_sedan_föregående_körning).
     Kör man screenern flera gånger samma dag skrivs den dagens post över
-    istället för att dubbleras."""
+    istället för att dubbleras. (Säljpoäng-historik hanteras numera
+    klientsidan, eftersom innehav bara finns i webbläsaren.)"""
     if score is None:
         return None, None
 
-    threshold = BUY_SIGNAL_THRESHOLD if kind == "buy" else SELL_SIGNAL_THRESHOLD
-    series = history.setdefault(ticker, {}).setdefault(kind, [])
+    series = history.setdefault(ticker, {}).setdefault("buy", [])
     series[:] = [e for e in series if e["date"] != today_str]
     series.append({"date": today_str, "score": score})
     series.sort(key=lambda e: e["date"])
@@ -161,46 +107,12 @@ def update_score_history(history: dict, ticker: str, kind: str, score, today_str
 
     days = 0
     for entry in reversed(series):
-        if entry["score"] >= threshold:
+        if entry["score"] >= BUY_SIGNAL_THRESHOLD:
             days += 1
         else:
             break
 
     return days, delta
-
-
-def load_holdings():
-    """Läser en Avanza- eller Nordnet-CSV-export och returnerar en dict {ticker: antal}.
-
-    Avanza-export har kolumnen 'Namn' + 'Volym' (eller 'Antal').
-    Nordnet-export har 'Verdipapir'/'Værdipapir' + 'Antal'.
-    Vi matchar löst på ticker-symbol där det går; annars på namn mot watchlist.
-    """
-    if not HOLDINGS_FILE.exists():
-        return {}
-
-    holdings = {}
-    with open(HOLDINGS_FILE, "r", encoding="utf-8-sig") as f:
-        # Avanza/Nordnet exports are often semicolon-separated
-        sample = f.read(2048)
-        f.seek(0)
-        delimiter = ";" if sample.count(";") > sample.count(",") else ","
-        reader = csv.DictReader(f, delimiter=delimiter)
-        for row in reader:
-            # normalize keys (strip whitespace / BOM)
-            row = {k.strip().lower(): v for k, v in row.items() if k}
-            name = row.get("namn") or row.get("verdipapir") or row.get("värdipapir") or row.get("name")
-            qty_raw = row.get("volym") or row.get("antal") or row.get("quantity")
-            ticker = row.get("kortnamn") or row.get("ticker") or row.get("symbol")
-            if not name and not ticker:
-                continue
-            try:
-                qty = float(str(qty_raw).replace(",", ".").replace(" ", "")) if qty_raw else None
-            except ValueError:
-                qty = None
-            key = (ticker or name).strip()
-            holdings[key] = {"raw_name": name, "raw_ticker": ticker, "quantity": qty}
-    return holdings
 
 
 def compute_rsi(close: pd.Series, period: int = RSI_PERIOD) -> pd.Series:
@@ -466,122 +378,6 @@ def score_buy_candidate(d):
     return max(0, min(100, score)), reasons
 
 
-def _normalize_ticker(s: str) -> str:
-    """Normaliserar ett tickernamn för lös matchning: versaler, inga
-    mellanslag/bindestreck, inga marknadssuffix (.ST/.L/.DE osv)."""
-    if not s:
-        return ""
-    s = s.strip().upper().replace(" ", "").replace("-", "")
-    for suffix in (".ST", ".L", ".DE", ".US", ".OL", ".CO", ".HE", ".T", ".SS", ".SZ", ".HK", ".AS"):
-        if s.endswith(suffix.replace(".", "")):
-            s = s[: -len(suffix.replace(".", ""))]
-    return s
-
-
-def find_holding_match(entry_ticker: str, entry_name: str, holdings: dict):
-    """Matchar en watchlist-post mot inlästa innehav. Provar (i ordning):
-    exakt ticker, normaliserad ticker (hanterar t.ex. 'ADDT B' vs 'ADDT-B.ST'),
-    sedan skiplistat namn (case-insensitive)."""
-    if entry_ticker in holdings:
-        return holdings[entry_ticker]
-    if entry_name in holdings:
-        return holdings[entry_name]
-
-    norm_entry_ticker = _normalize_ticker(entry_ticker.split(".")[0] if "." in entry_ticker else entry_ticker)
-    # strip known suffixes fully (handles multi-part like .ST)
-    base_ticker = entry_ticker
-    for suffix in (".ST", ".L", ".DE", ".US", ".OL", ".CO", ".HE", ".T", ".SS", ".SZ", ".HK", ".AS"):
-        if base_ticker.endswith(suffix):
-            base_ticker = base_ticker[: -len(suffix)]
-            break
-    norm_entry_ticker = _normalize_ticker(base_ticker)
-    norm_entry_name = entry_name.strip().casefold() if entry_name else ""
-
-    for hd in holdings.values():
-        raw_ticker = hd.get("raw_ticker") or ""
-        raw_name = hd.get("raw_name") or ""
-        if norm_entry_ticker and _normalize_ticker(raw_ticker) == norm_entry_ticker:
-            return hd
-        if norm_entry_name and raw_name.strip().casefold() == norm_entry_name:
-            return hd
-    return None
-
-
-def score_sell_signal(d):
-    """Poäng (0-100) för säljvarning på ett befintligt innehav. Högre = starkare säljsignal."""
-    score = 0
-    reasons = []
-
-    if d["rsi14"] is not None and d["rsi14"] > 70:
-        score += 30
-        reasons.append(f"RSI överköpt ({d['rsi14']})")
-
-    if d["cross_signal"] == "death_cross":
-        score += 35
-        reasons.append("Death cross (SMA50 under SMA200)")
-
-    if d["above_sma50"] is False:
-        score += 15
-        reasons.append("Pris under SMA50")
-
-    if d["pe"] is not None and d["pe"] > 40:
-        score += 15
-        reasons.append(f"Högt P/E ({d['pe']}) – dyrt relativt vinst")
-
-    if d["volume_ratio"] and d["volume_ratio"] > 2 and d["above_sma50"] is False:
-        score += 15
-        reasons.append(f"Förhöjd säljvolym ({d['volume_ratio']}x snitt) i nedgång")
-
-    rec = d.get("recommendation_key")
-    if rec == "strong_sell":
-        score += 25
-        reasons.append(f"Analytikerkonsensus: starkt sälj ({d.get('num_analysts') or '?'} analytiker)")
-    elif rec == "sell":
-        score += 15
-        reasons.append(f"Analytikerkonsensus: sälj ({d.get('num_analysts') or '?'} analytiker)")
-    elif rec == "strong_buy":
-        score -= 20
-        reasons.append(f"Analytikerkonsensus: starkt köp ({d.get('num_analysts') or '?'} analytiker) — talar tydligt emot att sälja")
-    elif rec == "buy":
-        score -= 8
-        reasons.append(f"Analytikerkonsensus: köp ({d.get('num_analysts') or '?'} analytiker) — talar emot att sälja")
-
-    upside = d.get("analyst_upside_pct")
-    if upside is not None:
-        if upside < -10:
-            score += 15
-            reasons.append(f"Analytikernas kursmål {upside:+.0f}% under dagens pris")
-        elif upside > 20:
-            score -= 10
-            reasons.append(f"Analytikernas kursmål {upside:+.0f}% över dagens pris — talar emot att sälja nu")
-
-    if d.get("debt_to_equity") is not None and d["debt_to_equity"] > 150:
-        score += 10
-        reasons.append(f"Hög skuldsättning (D/E {d['debt_to_equity']})")
-
-    if d.get("pb") is not None and d["pb"] > 8:
-        score += 10
-        reasons.append(f"Mycket högt P/B ({d['pb']})")
-
-    if d.get("pb") is not None and d["pb"] < 0:
-        score += 25
-        reasons.append(f"Negativt P/B ({d['pb']}) – bolaget har negativt eget kapital, allvarlig varningssignal")
-
-    if d.get("market_cap") is not None and d["market_cap"] < 50_000_000:
-        score += 15
-        reasons.append("Mikro-cap (<50M i börsvärde) – hög risk, tunn handel gör tekniska signaler opålitliga")
-
-    if d.get("avg_dollar_volume") is not None and d["avg_dollar_volume"] < 100_000:
-        score += 10
-        reasons.append("Extremt låg likviditet (<100k i daglig omsättning) – svårt att komma ur positionen utan att flytta kursen")
-
-    if d.get("volatility_pct") is not None and d["volatility_pct"] > 80:
-        score += 10
-        reasons.append(f"Mycket hög volatilitet ({d['volatility_pct']}% årstakt) – ovanligt stora kurssvängningar")
-
-    return max(0, min(100, score)), reasons
-
-
 def get_app_version() -> str:
     """Läser det klassiska löpnumret från VERSION-filen (t.ex. '1.0') för
     visning i dashboardens versionsindikator. Filen uppdateras manuellt när
@@ -609,14 +405,11 @@ def sanitize_for_json(obj):
 
 def main():
     watchlist = load_watchlist()
-    holdings = load_holdings()
     sector_weights, sector_factor_names = load_risk_factors()
-    previously_held = load_previously_held()
     score_history = load_score_history()
     today_str = datetime.now(timezone.utc).date().isoformat()
 
     results = []
-    current_holding_entries = []
     for entry in watchlist:
         ticker = entry["ticker"]
         print(f"Hämtar {ticker}...", file=sys.stderr)
@@ -634,57 +427,30 @@ def main():
         d["sector"] = entry.get("sector")
         d["country"] = entry.get("country")
 
-        hd = find_holding_match(ticker, entry["name"], holdings)
-        is_holding = hd is not None
-        d["is_holding"] = is_holding
-        if is_holding:
-            d["quantity"] = hd.get("quantity")
-            current_holding_entries.append({"ticker": ticker, "name": entry["name"], "sector": entry.get("sector")})
-
         buy_score, buy_reasons = score_buy_candidate(d)
-        sell_score, sell_reasons = (None, [])
-        if is_holding:
-            sell_score, sell_reasons = score_sell_signal(d)
-
-        was_previously_held = (not is_holding) and ticker in previously_held
-        d["previously_held"] = was_previously_held
-        if was_previously_held:
-            # Rent informativt — påverkar INTE köppoängen. Att du ägt en
-            # aktie förut säger inget om att den är köpvärd nu.
-            last_held = previously_held[ticker].get("last_held", "?")
-            buy_reasons.append(f"Tidigare ägd av dig (senast {last_held}) – återköpskandidat (påverkar inte poängen)")
 
         sector = entry.get("sector")
         sector_weight = sector_weights.get(sector, 0) if sector else 0
+        geopolitics_note = None
         if sector_weight:
             buy_score = max(0, min(100, buy_score + sector_weight))
-            names = ", ".join(sector_factor_names.get(sector, []))
-            buy_reasons.append(f"Geopolitik/makro ({sector}): {names}")
-            if is_holding:
-                sell_score = max(0, min(100, sell_score - sector_weight))
-                sell_reasons.append(f"Geopolitik/makro ({sector}): {names}")
+            geopolitics_note = ", ".join(sector_factor_names.get(sector, []))
+            buy_reasons.append(f"Geopolitik/makro ({sector}): {geopolitics_note}")
 
         d["buy_score"] = buy_score
         d["buy_reasons"] = buy_reasons
+        # Exponerar den använda sektorvikten (+ förklaringstexten) så att
+        # webbläsaren kan räkna ut en identisk geopolitik-justering för
+        # säljpoängen, som numera beräknas helt klientsidan (innehav
+        # skickas aldrig till servern).
+        d["sector_weight"] = sector_weight
+        d["geopolitics_note"] = geopolitics_note
         d["buy_days_on_list"], d["buy_score_delta"] = update_score_history(
-            score_history, ticker, "buy", buy_score, today_str
+            score_history, ticker, buy_score, today_str
         )
-        if is_holding:
-            d["sell_score"] = sell_score
-            d["sell_reasons"] = sell_reasons
-            d["sell_days_on_list"], d["sell_score_delta"] = update_score_history(
-                score_history, ticker, "sell", sell_score, today_str
-            )
 
         results.append(d)
         time.sleep(0.3)  # snäll mot Yahoo Finance
-
-    updated_positions, did_update = update_previously_held(previously_held, current_holding_entries, len(holdings))
-    if did_update:
-        save_previously_held(updated_positions)
-        print(f"Innehavshistorik uppdaterad ({len(updated_positions)} tickers totalt).", file=sys.stderr)
-    else:
-        print("Inga innehav laddade denna körning — innehavshistorik lämnas orörd.", file=sys.stderr)
 
     save_score_history(score_history)
 
@@ -692,7 +458,6 @@ def main():
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "version": get_app_version(),
         "count": len(results),
-        "holdings_loaded": len(holdings),
         "results": results,
     }
 

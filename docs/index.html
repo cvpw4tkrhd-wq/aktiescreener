@@ -323,6 +323,41 @@
     background: none; border: none; color: var(--text-faint);
     font-family: 'IBM Plex Mono', monospace; cursor: pointer; font-size: 13px;
   }
+
+  .stat-label.has-glossary {
+    cursor: pointer;
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--text-faint);
+  }
+  .stat-label.has-glossary:hover { color: var(--amber); text-decoration-color: var(--amber); }
+
+  .glossary-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.55);
+    display: none; align-items: center; justify-content: center;
+    padding: 20px; z-index: 20;
+  }
+  .glossary-overlay.show { display: flex; }
+  .glossary-box {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    max-width: 340px; width: 100%;
+    padding: 20px;
+  }
+  .glossary-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 17px;
+    margin: 0 0 10px;
+    padding-right: 20px;
+  }
+  .glossary-text {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--text-dim);
+    margin: 0;
+  }
     .ai-writeup {
     margin-top: 18px;
     padding-top: 14px;
@@ -514,6 +549,10 @@
 
 <div class="overlay" id="overlay">
   <div class="drawer" id="drawer"></div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay">
+  <div class="glossary-box" id="glossaryBox"></div>
 </div>
 
 <script>
@@ -1171,6 +1210,49 @@ function sparklineHtml(r) {
     </div>`;
 }
 
+const METRIC_GLOSSARY = {
+  'PRIS': { title: 'Pris', text: 'Aktuellt pris per aktie på börsen, i bolagets handelsvaluta.' },
+  'P/E': { title: 'P/E-tal', text: 'Pris delat med vinst per aktie. Visar ungefär hur många års vinst du "betalar för" i aktiepriset. Lägre P/E kan betyda billigare aktie – men kan också betyda att marknaden väntar sig sämre vinst framöver. Jämförs bäst mot liknande bolag i samma bransch.' },
+  'RSI14': { title: 'RSI14 (momentum)', text: 'Mäter om en aktie handlats mycket upp eller ner den senaste tiden, på en skala 0–100. Över 70 kallas ofta "överköpt" (kan vara mogen för en paus), under 30 "översåld". Säger inget om bolaget är bra eller dåligt – bara om kursen rört sig mycket nyligen.' },
+  'SMA50 / SMA200': { title: 'SMA50 / SMA200 (glidande medelvärden)', text: 'Genomsnittligt pris de senaste 50 respektive 200 dagarna. Jämnar ut dagliga svängningar för att visa den underliggande trenden. Om det kortare snittet (50 dagar) ligger över det längre (200 dagar) tolkas det som en uppåttrend, och tvärtom nedåt.' },
+  'VOLYM': { title: 'Volym', text: 'Hur mycket aktien handlats senaste dagen, jämfört med snittet de senaste 20 dagarna. Kraftigt förhöjd volym kan betyda att något viktigt hänt med bolaget – nyheter, rapport, eller stora köp/sälj från enskilda aktörer.' },
+  'KURSMÅL': { title: 'Kursmål', text: 'Genomsnittligt kursmål från analytikerna som bevakar aktien – deras uppskattning av var priset "borde" stå om ungefär 12 månader. En samlad gissning, inte en garanti eller ett facit.' },
+  'ANALYTIKER': { title: 'Analytikerkonsensus', text: 'Den samlade rekommendationen från banker/mäklarhus som bevakar aktien just nu: starkt köp, köp, håll, sälj eller starkt sälj.' },
+  'ANTAL ANALYTIKER': { title: 'Antal analytiker', text: 'Hur många analytiker som bevakar aktien och bidrar till konsensusbetyget ovan. Fler analytiker brukar ge en mer pålitlig samlad bild, färre gör enskilda åsikter mer avgörande.' },
+  'P/B': { title: 'P/B-tal', text: 'Pris delat med bokfört värde (tillgångar minus skulder, enligt bokföringen). Under 1 kan betyda att aktien handlas billigare än vad som finns "i böckerna" – men kan också vara ett tecken på att marknaden inte litar på de bokförda värdena.' },
+  'UTDELNING': { title: 'Utdelning', text: 'Årlig utdelning som andel av aktiekursen. Hög utdelning kan vara attraktivt om du vill ha löpande avkastning, men en ovanligt hög siffra kan ibland signalera att marknaden tror utdelningen kommer sänkas.' },
+  'SKULDSÄTTNING (D/E)': { title: 'Skuldsättning (D/E)', text: 'Skulder i förhållande till eget kapital. Högre siffra betyder att bolaget lånat mer pengar relativt vad ägarna satsat, vilket ökar risken – särskilt om räntorna stiger eller intäkterna viker.' },
+  'VOLATILITET (ÅR)': { title: 'Volatilitet', text: 'Hur mycket kursen svängt upp och ner den senaste tiden, omräknat till en årstakt. Högre volatilitet betyder större och mer oregelbundna kursrörelser – högre risk åt både upp- och nedsidan.' },
+  'BETA': { title: 'Beta', text: 'Hur mycket aktien historiskt svängt jämfört med börsen som helhet. Beta 1 = svänger ungefär som marknaden. Över 1 = svänger mer (högre risk). Under 1 = svänger mindre.' },
+  'FCF-MARGINAL': { title: 'FCF-marginal', text: 'Fritt kassaflöde (pengar som blir över efter investeringar) som andel av intäkterna. Positiv och hög marginal betyder att bolaget faktiskt genererar kontanter, inte bara bokförd vinst på papperet.' },
+  'SBC/INTÄKTER': { title: 'Aktiebaserad ersättning / intäkter', text: 'Aktier och optioner som ges till anställda, som andel av intäkterna. Hög andel späder ut befintliga aktieägares ägande över tid, även om det inte syns som en kostnad i kassaflödet.' },
+  'CAPEX/AVSKRIVNINGAR': { title: 'Capex / avskrivningar', text: 'Investeringar i utrustning och anläggningar jämfört med hur mycket som skrivs av samma period. Högt värde betyder att bolaget investerar aggressivt för framtida tillväxt – men det är osäkert om det betalar sig.' },
+  'DAGAR MED SIGNAL': { title: 'Dagar med signal', text: 'Hur många körningar i rad aktien haft en aktiv köp- eller säljsignal (poäng över tröskelvärdet). Fler dagar i rad kan tyda på en mer stabil signal snarare än en tillfällig kursrörelse.' },
+  'FÖRÄNDRING SEDAN SENAST': { title: 'Förändring sedan senast', text: 'Hur mycket poängen ändrats sedan förra körningen. Visar om något nytt – nyheter, kursrörelse, ändrad analytikersyn – precis flyttat bedömningen i någon riktning.' },
+};
+
+function openGlossary(labelText) {
+  const entry = METRIC_GLOSSARY[labelText.trim()];
+  if (!entry) return;
+  document.getElementById('glossaryBox').innerHTML = `
+    <button class="drawer-close" id="glossaryClose">STÄNG ✕</button>
+    <h3 class="glossary-title">${entry.title}</h3>
+    <p class="glossary-text">${entry.text}</p>
+  `;
+  document.getElementById('glossaryOverlay').classList.add('show');
+  document.getElementById('glossaryClose').addEventListener('click', closeGlossary);
+}
+function closeGlossary() {
+  document.getElementById('glossaryOverlay').classList.remove('show');
+}
+document.getElementById('glossaryOverlay').addEventListener('click', e => {
+  if (e.target.id === 'glossaryOverlay') closeGlossary();
+});
+document.getElementById('drawer').addEventListener('click', (e) => {
+  const label = e.target.closest('.stat-label');
+  if (label && METRIC_GLOSSARY[label.textContent.trim()]) openGlossary(label.textContent.trim());
+});
+
 function openDrawer(ticker) {
   const r = state.data.results.find(x => x.ticker === ticker);
   if (!r) return;
@@ -1215,10 +1297,14 @@ function openDrawer(ticker) {
   document.getElementById('drawer').scrollTop = 0;
   document.body.style.overflow = 'hidden';
   document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+  document.querySelectorAll('#drawer .stat-label').forEach(el => {
+    if (METRIC_GLOSSARY[el.textContent.trim()]) el.classList.add('has-glossary');
+  });
 }
 function closeDrawer() {
   document.getElementById('overlay').classList.remove('show');
   document.body.style.overflow = '';
+  closeGlossary();
 }
 document.getElementById('overlay').addEventListener('click', e => { if (e.target.id === 'overlay') closeDrawer(); });
 

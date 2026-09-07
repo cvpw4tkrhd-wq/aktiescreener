@@ -727,6 +727,13 @@ function scoreSellSignal(d) {
     }
   }
 
+  if (d.country_weight) {
+    score = Math.max(0, Math.min(100, score - d.country_weight));
+    if (d.geopolitics_country_note) {
+      reasons.push(`Geopolitik/makro (${d.country}): ${d.geopolitics_country_note}`);
+    }
+  }
+
   return { score, reasons };
 }
 

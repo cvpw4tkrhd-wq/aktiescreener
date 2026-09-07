@@ -640,6 +640,7 @@ function buildHoldingsFromRows(rows) {
   const tickerIdx = findIdx(['kortnamn', 'ticker', 'symbol']);
   const marknadIdx = findIdx(['marknad', 'market']);
   const landIdx = findIdx(['land', 'country']);
+  const typIdx = findIdx(['typ', 'type']);
 
   const holdings = {};
   for (let i = 1; i < rows.length; i++) {
@@ -650,6 +651,10 @@ function buildHoldingsFromRows(rows) {
     const qtyRaw = cell(qtyIdx);
     const marknad = cell(marknadIdx);
     const land = cell(landIdx);
+    const typ = cell(typIdx).toUpperCase();
+    // Screenern är byggd för enskilda aktier - fonder och ETF:er filtreras
+    // bort helt (om Typ-kolumnen finns; saknas den antas raden vara en aktie).
+    if (typ && typ !== 'STOCK') continue;
     if (!name && !ticker) continue;
     let qty = null;
     if (qtyRaw) {
@@ -1102,20 +1107,6 @@ async function load() {
   render();
 }
 
-function buildAddTickerIssueUrl(p) {
-  const ticker = p.guessed_ticker || '(okänd, vänligen ange rätt Yahoo Finance-ticker)';
-  const title = `Lägg till ticker: ${p.guessed_ticker || p.raw_ticker || p.raw_name}`;
-  const body =
-`Vänligen lägg till följande aktie i bevakningslistan:
-
-Ticker (gissad): ${ticker}
-Bolagsnamn: ${p.raw_name || ''}
-Kortnamn (mäklare): ${p.raw_ticker || ''}
-
-(Skapad automatiskt från aktiescreenerns "Mina innehav"-uppladdning. Inga belopp eller antal aktier ingår.)`;
-  return `https://github.com/cvpw4tkrhd-wq/aktiescreener/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
-}
-
 function renderPendingPanel() {
   const el = document.getElementById('pendingHost');
   if (state.tab !== 'sell' || !state.pendingHoldings || !state.pendingHoldings.length) {
@@ -1124,15 +1115,14 @@ function renderPendingPanel() {
   }
   el.innerHTML = `
     <div class="pending-panel">
-      <h3>Väntar på analys (${state.pendingHoldings.length})</h3>
-      <div class="pending-intro">Dessa finns i din uppladdade fil men inte i bevakningslistan än. Klicka för att skicka en förfrågan (bara ticker/namn skickas, aldrig belopp) — läggs till automatiskt inom några minuter, full analys efter nästa körning.</div>
+      <h3>Saknas i bevakningen (${state.pendingHoldings.length})</h3>
+      <div class="pending-intro">Dessa aktier finns i din uppladdade fil men inte i bevakningslistan än. Nämn namnen för Claude i chatten så läggs de till — ingen ytterligare åtgärd behövs från dig här.</div>
       ${state.pendingHoldings.map(p => `
         <div class="pending-row">
           <div>
             <div class="pending-name">${escapeHtml(p.raw_name || p.raw_ticker || p.key)}</div>
-            <div class="pending-ticker">${p.guessed_ticker ? 'Gissad ticker: ' + p.guessed_ticker : 'Kunde inte gissa ticker automatiskt'}</div>
+            <div class="pending-ticker">${p.guessed_ticker ? 'Trolig ticker: ' + p.guessed_ticker : ''}</div>
           </div>
-          <a class="pending-btn" href="${buildAddTickerIssueUrl(p)}" target="_blank" rel="noopener">LÄGG TILL →</a>
         </div>`).join('')}
     </div>`;
 }

@@ -1,0 +1,57 @@
+{
+  "_source": "Aswath Damodaran, NYU Stern (pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/pedata.html)",
+  "_methodology": "Bolagsantal-viktat snitt av trailing P/E, aggregerat från detaljerade branscher till screenerns sektorindelning. Delbranscher med extrema P/E-värden (>200) exkluderade för konsekvens med appens egna filter.",
+  "_last_updated": "2026-09-07",
+  "sectors": {
+    "Technology": {
+      "avg_pe": 63.6,
+      "num_firms": 658,
+      "num_industries": 8
+    },
+    "Semiconductors": {
+      "avg_pe": 83.1,
+      "num_firms": 97,
+      "num_industries": 2
+    },
+    "Industrials": {
+      "avg_pe": 53.3,
+      "num_firms": 623,
+      "num_industries": 14
+    },
+    "Financials": {
+      "avg_pe": 42.6,
+      "num_firms": 1173,
+      "num_industries": 9
+    },
+    "Consumer": {
+      "avg_pe": 48.2,
+      "num_firms": 1065,
+      "num_industries": 25
+    },
+    "Energy": {
+      "avg_pe": 28.9,
+      "num_firms": 371,
+      "num_industries": 9
+    },
+    "Healthcare": {
+      "avg_pe": 58.9,
+      "num_firms": 1063,
+      "num_industries": 5
+    },
+    "Materials": {
+      "avg_pe": 66.7,
+      "num_firms": 296,
+      "num_industries": 8
+    },
+    "Telecom": {
+      "avg_pe": 62.7,
+      "num_firms": 108,
+      "num_industries": 3
+    },
+    "RealEstate": {
+      "avg_pe": 49.8,
+      "num_firms": 270,
+      "num_industries": 4
+    }
+  }
+}

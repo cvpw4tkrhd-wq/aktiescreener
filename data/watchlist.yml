@@ -219,3 +219,8 @@ stocks:
   sector: Healthcare
   country: Storbritannien
   market: GB
+- ticker: ESSITY-B.ST
+  name: Essity B
+  sector: Consumer
+  country: Sverige
+  market: SE

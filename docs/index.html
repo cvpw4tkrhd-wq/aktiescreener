@@ -124,6 +124,32 @@
     padding: 14px 18px 10px;
     flex-wrap: wrap;
   }
+
+  .upload-panel {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .upload-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .upload-btn {
+    display: inline-block;
+    background: var(--panel-alt);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: var(--radius);
+    padding: 8px 14px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .upload-btn:hover { border-color: var(--amber); color: var(--amber); }
+  .upload-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-faint);
+    margin-top: 9px;
+    line-height: 1.55;
+  }
+  .upload-note.uploaded { color: var(--text-dim); }
   select, input[type=text] {
     background: var(--panel-alt);
     border: 1px solid var(--border);
@@ -161,7 +187,6 @@
   .tkr { color: var(--text-faint); font-family: 'IBM Plex Mono', monospace; font-size: 11px; display: block; margin-top: 1px; }
   .mkt-badge { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-faint); border: 1px solid var(--border); border-radius: 2px; padding: 1px 5px; margin-left: 6px; }
   .mkt-flag { font-size: 12px; margin-left: 6px; }
-  .mkt-badge.prev-held { color: var(--amber); border-color: var(--amber-dim); }
   .signal-flag {
     display: inline-block;
     font-family: 'IBM Plex Mono', monospace;
@@ -439,6 +464,7 @@
   </div>
 
   <div class="panel">
+    <div id="uploadHost"></div>
     <div class="filter-row">
       <select id="marketFilter">
         <option value="ALL">Alla marknader</option>
@@ -464,6 +490,9 @@
     Poängsättningen är ett grovt, regelbaserat filter baserat på P/E, SMA50/200,
     RSI14 och volymavvikelse mot 20-dagarssnitt — inte finansiell rådgivning.
     Data uppdateras schemalagt via GitHub Actions, se tidsstämpel ovan.
+    Din holdings.csv bearbetas helt i din egen webbläsare och sparas bara
+    lokalt på den här enheten — den skickas aldrig till någon server och
+    syns inte för andra som besöker sidan.
   </footer>
 </div>
 
@@ -472,7 +501,233 @@
 </div>
 
 <script>
-const state = { data: null, tab: 'buy', market: 'ALL', sort: 'score_desc' };
+const state = { data: null, tab: 'buy', market: 'ALL', sort: 'score_desc', holdings: {}, holdingsUploadedAt: null };
+
+// ===== Innehav: allt sker lokalt i webbläsaren, inget skickas till servern =====
+
+const SELL_SIGNAL_THRESHOLD = 50;
+const MAX_HISTORY_ENTRIES = 90;
+const TICKER_SUFFIXES = ['.ST', '.L', '.DE', '.US', '.OL', '.CO', '.HE', '.T', '.SS', '.SZ', '.HK', '.AS'];
+
+function parseHoldingsCSV(text) {
+  text = text.replace(/^\uFEFF/, '');
+  const lines = text.split(/\r\n|\n/).filter(l => l.trim() !== '');
+  if (!lines.length) return {};
+
+  const sample = lines.slice(0, Math.min(5, lines.length)).join('\n');
+  const semiCount = (sample.match(/;/g) || []).length;
+  const commaCount = (sample.match(/,/g) || []).length;
+  const delimiter = semiCount > commaCount ? ';' : ',';
+
+  const header = lines[0].split(delimiter).map(h => h.trim().toLowerCase());
+  const findIdx = (names) => {
+    for (const n of names) {
+      const i = header.indexOf(n);
+      if (i !== -1) return i;
+    }
+    return -1;
+  };
+  const nameIdx = findIdx(['namn', 'verdipapir', 'værdipapir', 'name']);
+  const qtyIdx = findIdx(['volym', 'antal', 'quantity']);
+  const tickerIdx = findIdx(['kortnamn', 'ticker', 'symbol']);
+
+  const holdings = {};
+  for (let i = 1; i < lines.length; i++) {
+    const cols = lines[i].split(delimiter);
+    const name = nameIdx !== -1 ? (cols[nameIdx] || '').trim() : '';
+    const ticker = tickerIdx !== -1 ? (cols[tickerIdx] || '').trim() : '';
+    const qtyRaw = qtyIdx !== -1 ? (cols[qtyIdx] || '').trim() : '';
+    if (!name && !ticker) continue;
+    let qty = null;
+    if (qtyRaw) {
+      const n = parseFloat(qtyRaw.replace(',', '.').replace(/\s/g, ''));
+      if (!isNaN(n)) qty = n;
+    }
+    const key = (ticker || name).trim();
+    holdings[key] = { raw_name: name, raw_ticker: ticker, quantity: qty };
+  }
+  return holdings;
+}
+
+function normalizeTicker(s) {
+  if (!s) return '';
+  s = s.trim().toUpperCase().replace(/\s/g, '').replace(/-/g, '');
+  for (const suf of TICKER_SUFFIXES) {
+    const bare = suf.slice(1);
+    if (s.endsWith(bare)) { s = s.slice(0, -bare.length); break; }
+  }
+  return s;
+}
+
+function findHoldingMatch(entryTicker, entryName, holdings) {
+  if (holdings[entryTicker]) return holdings[entryTicker];
+  if (entryName && holdings[entryName]) return holdings[entryName];
+
+  let baseTicker = entryTicker;
+  for (const suf of TICKER_SUFFIXES) {
+    if (baseTicker.endsWith(suf)) { baseTicker = baseTicker.slice(0, -suf.length); break; }
+  }
+  const normEntryTicker = normalizeTicker(baseTicker);
+  const normEntryName = entryName ? entryName.trim().toLowerCase() : '';
+
+  for (const key in holdings) {
+    const hd = holdings[key];
+    const rawTicker = hd.raw_ticker || '';
+    const rawName = hd.raw_name || '';
+    if (normEntryTicker && normalizeTicker(rawTicker) === normEntryTicker) return hd;
+    if (normEntryName && rawName.trim().toLowerCase() === normEntryName) return hd;
+  }
+  return null;
+}
+
+// Exakt portning av score_sell_signal() i scripts/screener.py - håll dem i synk.
+function scoreSellSignal(d) {
+  let score = 0;
+  const reasons = [];
+
+  if (d.rsi14 !== null && d.rsi14 !== undefined && d.rsi14 > 70) {
+    score += 30; reasons.push(`RSI överköpt (${d.rsi14})`);
+  }
+  if (d.cross_signal === 'death_cross') {
+    score += 35; reasons.push('Death cross (SMA50 under SMA200)');
+  }
+  if (d.above_sma50 === false) {
+    score += 15; reasons.push('Pris under SMA50');
+  }
+  if (d.pe !== null && d.pe !== undefined && d.pe > 40) {
+    score += 15; reasons.push(`Högt P/E (${d.pe}) – dyrt relativt vinst`);
+  }
+  if (d.volume_ratio && d.volume_ratio > 2 && d.above_sma50 === false) {
+    score += 15; reasons.push(`Förhöjd säljvolym (${d.volume_ratio}x snitt) i nedgång`);
+  }
+  const rec = d.recommendation_key;
+  const numAnalysts = d.num_analysts || '?';
+  if (rec === 'strong_sell') {
+    score += 25; reasons.push(`Analytikerkonsensus: starkt sälj (${numAnalysts} analytiker)`);
+  } else if (rec === 'sell') {
+    score += 15; reasons.push(`Analytikerkonsensus: sälj (${numAnalysts} analytiker)`);
+  } else if (rec === 'strong_buy') {
+    score -= 20; reasons.push(`Analytikerkonsensus: starkt köp (${numAnalysts} analytiker) — talar tydligt emot att sälja`);
+  } else if (rec === 'buy') {
+    score -= 8; reasons.push(`Analytikerkonsensus: köp (${numAnalysts} analytiker) — talar emot att sälja`);
+  }
+  const upside = d.analyst_upside_pct;
+  if (upside !== null && upside !== undefined) {
+    if (upside < -10) {
+      score += 15; reasons.push(`Analytikernas kursmål ${upside > 0 ? '+' : ''}${fmtNum(upside,0)}% under dagens pris`);
+    } else if (upside > 20) {
+      score -= 10; reasons.push(`Analytikernas kursmål +${fmtNum(upside,0)}% över dagens pris — talar emot att sälja nu`);
+    }
+  }
+  if (d.debt_to_equity !== null && d.debt_to_equity !== undefined && d.debt_to_equity > 150) {
+    score += 10; reasons.push(`Hög skuldsättning (D/E ${d.debt_to_equity})`);
+  }
+  if (d.pb !== null && d.pb !== undefined) {
+    if (d.pb > 8) { score += 10; reasons.push(`Mycket högt P/B (${d.pb})`); }
+    if (d.pb < 0) { score += 25; reasons.push(`Negativt P/B (${d.pb}) – bolaget har negativt eget kapital, allvarlig varningssignal`); }
+  }
+  if (d.market_cap !== null && d.market_cap !== undefined && d.market_cap < 50000000) {
+    score += 15; reasons.push('Mikro-cap (<50M i börsvärde) – hög risk, tunn handel gör tekniska signaler opålitliga');
+  }
+  if (d.avg_dollar_volume !== null && d.avg_dollar_volume !== undefined && d.avg_dollar_volume < 100000) {
+    score += 10; reasons.push('Extremt låg likviditet (<100k i daglig omsättning) – svårt att komma ur positionen utan att flytta kursen');
+  }
+  if (d.volatility_pct !== null && d.volatility_pct !== undefined && d.volatility_pct > 80) {
+    score += 10; reasons.push(`Mycket hög volatilitet (${d.volatility_pct}% årstakt) – ovanligt stora kurssvängningar`);
+  }
+
+  score = Math.max(0, Math.min(100, score));
+
+  if (d.sector_weight) {
+    score = Math.max(0, Math.min(100, score - d.sector_weight));
+    if (d.geopolitics_note) {
+      reasons.push(`Geopolitik/makro (${d.sector}): ${d.geopolitics_note}`);
+    }
+  }
+
+  return { score, reasons };
+}
+
+function loadHoldingsFromStorage() {
+  try {
+    const raw = localStorage.getItem('screener-holdings');
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch (e) { return null; }
+}
+function saveHoldingsToStorage(positions) {
+  const uploadedAt = new Date().toISOString();
+  localStorage.setItem('screener-holdings', JSON.stringify({ uploadedAt, positions }));
+  return uploadedAt;
+}
+function clearHoldingsStorage() {
+  localStorage.removeItem('screener-holdings');
+  localStorage.removeItem('screener-sell-history');
+}
+
+function loadSellHistory() {
+  try { return JSON.parse(localStorage.getItem('screener-sell-history') || '{}'); }
+  catch (e) { return {}; }
+}
+function saveSellHistory(hist) {
+  localStorage.setItem('screener-sell-history', JSON.stringify(hist));
+}
+function updateSellHistory(hist, ticker, score, todayStr) {
+  if (score === null || score === undefined) return { days: null, delta: null };
+  let series = (hist[ticker] || []).filter(e => e.date !== todayStr);
+  series.push({ date: todayStr, score });
+  series.sort((a, b) => (a.date < b.date ? -1 : 1));
+  while (series.length > MAX_HISTORY_ENTRIES) series.shift();
+  hist[ticker] = series;
+
+  const delta = series.length >= 2 ? series[series.length - 1].score - series[series.length - 2].score : null;
+  let days = 0;
+  for (let i = series.length - 1; i >= 0; i--) {
+    if (series[i].score >= SELL_SIGNAL_THRESHOLD) days++;
+    else break;
+  }
+  return { days, delta };
+}
+
+function applyHoldingsToResults() {
+  const results = (state.data && state.data.results) || [];
+  const holdings = state.holdings || {};
+
+  for (const r of results) {
+    r.is_holding = false;
+    r.quantity = undefined;
+    r.sell_score = undefined;
+    r.sell_reasons = undefined;
+    r.sell_days_on_list = undefined;
+    r.sell_score_delta = undefined;
+  }
+  if (!Object.keys(holdings).length) return;
+
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const sellHistory = loadSellHistory();
+
+  for (const r of results) {
+    const hd = findHoldingMatch(r.ticker, r.watchlist_name || r.name, holdings);
+    if (!hd) continue;
+    r.is_holding = true;
+    r.quantity = hd.quantity;
+    const { score, reasons } = scoreSellSignal(r);
+    r.sell_score = score;
+    r.sell_reasons = reasons;
+    const { days, delta } = updateSellHistory(sellHistory, r.ticker, score, todayStr);
+    r.sell_days_on_list = days;
+    r.sell_score_delta = delta;
+  }
+  saveSellHistory(sellHistory);
+}
+
+const storedHoldings = loadHoldingsFromStorage();
+if (storedHoldings) {
+  state.holdings = storedHoldings.positions || {};
+  state.holdingsUploadedAt = storedHoldings.uploadedAt || null;
+}
+
+// ===== /Innehav =====
 
 const themeToggle = document.getElementById('themeToggle');
 function applyTheme(t) {
@@ -508,6 +763,11 @@ function fmtVol(ratio) {
   if (!iso) return '–';
   const d = new Date(iso);
   return d.toLocaleDateString('sv-SE');
+}
+function fmtDateTime(iso) {
+  if (!iso) return '–';
+  const d = new Date(iso);
+  return d.toLocaleDateString('sv-SE') + ' ' + d.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
 }
 function escapeHtml(s) {
   if (!s) return '';
@@ -630,6 +890,63 @@ async function load() {
     document.getElementById('versionBadge').textContent = '';
     state.data = { results: [] };
   }
+  applyHoldingsToResults();
+  render();
+}
+
+function renderUploadPanel() {
+  const el = document.getElementById('uploadHost');
+  if (state.tab !== 'sell') { el.innerHTML = ''; return; }
+
+  const hasHoldings = state.holdingsUploadedAt && Object.keys(state.holdings).length > 0;
+  el.innerHTML = `
+    <div class="upload-panel">
+      <div class="upload-row">
+        <label class="upload-btn" for="csvUpload">${hasHoldings ? 'BYT UT CSV-FIL' : 'LADDA UPP HOLDINGS.CSV'}</label>
+        <input type="file" id="csvUpload" accept=".csv" style="display:none">
+        ${hasHoldings ? '<button class="iconbtn" id="clearHoldingsBtn">TA BORT</button>' : ''}
+      </div>
+      <div class="upload-note ${hasHoldings ? 'uploaded' : ''}">
+        ${hasHoldings
+          ? `Uppladdad ${fmtDateTime(state.holdingsUploadedAt)} — bearbetas och sparas bara i den här webbläsaren, skickas aldrig till någon server och syns inte för andra som besöker sidan.`
+          : 'CSV-export från Avanza eller Nordnet. Bearbetas helt i din egen webbläsare — filen skickas aldrig till någon server och sparas bara lokalt på den här enheten.'}
+      </div>
+    </div>`;
+
+  document.getElementById('csvUpload').addEventListener('change', handleCsvUpload);
+  const clearBtn = document.getElementById('clearHoldingsBtn');
+  if (clearBtn) clearBtn.addEventListener('click', handleClearHoldings);
+}
+
+function handleCsvUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const positions = parseHoldingsCSV(ev.target.result);
+      if (!Object.keys(positions).length) {
+        alert('Hittade inga rader i filen. Kontrollera att det är rätt CSV-export.');
+        return;
+      }
+      const uploadedAt = saveHoldingsToStorage(positions);
+      state.holdings = positions;
+      state.holdingsUploadedAt = uploadedAt;
+      applyHoldingsToResults();
+      render();
+    } catch (err) {
+      alert('Kunde inte läsa CSV-filen. Kontrollera att det är en giltig export från Avanza/Nordnet.');
+    }
+  };
+  reader.readAsText(file, 'utf-8');
+}
+
+function handleClearHoldings() {
+  if (!confirm('Ta bort dina uppladdade innehav från den här webbläsaren?')) return;
+  clearHoldingsStorage();
+  state.holdings = {};
+  state.holdingsUploadedAt = null;
+  applyHoldingsToResults();
   render();
 }
 
@@ -646,6 +963,7 @@ function sortRows(rows, key) {
 
 function render() {
   if (!state.data) return;
+  renderUploadPanel();
   let rows = state.data.results || [];
   if (state.market !== 'ALL') rows = rows.filter(r => r.market === state.market);
 
@@ -660,9 +978,16 @@ function render() {
   const sorted = sortRows(activeRows, state.sort);
 
   if (!sorted.length) {
-    host.innerHTML = `<div class="empty">${state.tab === 'sell'
-      ? 'Inga innehav matchade mot watchlist ännu. Lägg holdings.csv i /data och kör screenern.'
-      : 'Ingen data ännu. Kör screenern via GitHub Actions eller lokalt.'}</div>`;
+    const hasHoldings = state.holdingsUploadedAt && Object.keys(state.holdings).length > 0;
+    let emptyMsg;
+    if (state.tab === 'sell') {
+      emptyMsg = hasHoldings
+        ? 'Inga innehav matchade mot bevakningslistan. Kontrollera att aktierna finns i data/watchlist.yml.'
+        : 'Ladda upp din holdings.csv ovan för att se dina innehav.';
+    } else {
+      emptyMsg = 'Ingen data ännu. Kör workflowen i GitHub Actions.';
+    }
+    host.innerHTML = `<div class="empty">${emptyMsg}</div>`;
     return;
   }
 
@@ -675,7 +1000,7 @@ function render() {
     const cls = barClsMap[flag.cls];
     const trend = r.above_sma50 && r.above_sma200 ? 'up-txt' : (r.above_sma50 === false && r.above_sma200 === false ? 'down-txt' : 'dim');
     return `<tr data-ticker="${r.ticker}">
-      <td class="name"><div class="name-line">${r.name || r.watchlist_name}${flag ? `<span class="signal-flag ${flag.cls}">${flag.label}</span>` : ''}${r.previously_held ? '<span class="mkt-badge prev-held">TIDIGARE ÄGD</span>' : ''}${days >= 3 ? `<span class="mkt-badge days-badge" title="${days} körningar i rad med aktiv signal">${days}D</span>` : ''}</div><span class="tkr">${r.ticker}<span class="mkt-flag" title="${r.market}">${marketFlag(r.market)}</span></span></td>
+      <td class="name"><div class="name-line">${r.name || r.watchlist_name}${flag ? `<span class="signal-flag ${flag.cls}">${flag.label}</span>` : ''}${days >= 3 ? `<span class="mkt-badge days-badge" title="${days} körningar i rad med aktiv signal">${days}D</span>` : ''}</div><span class="tkr">${r.ticker}<span class="mkt-flag" title="${r.market}">${marketFlag(r.market)}</span></span></td>
       <td class="num">${fmtNum(r.price)} <span class="ccy">${r.currency || ''}</span></td>
       <td class="num">${r.pe !== null ? fmtNum(r.pe,1) : '–'}</td>
       <td class="num ${trend === 'up-txt' ? 'up-txt' : trend === 'down-txt' ? 'down-txt' : ''}">${r.rsi14 !== null ? fmtNum(r.rsi14,0) : '–'}</td>

@@ -893,13 +893,27 @@ function sectorPEStats(sector, excludeTicker) {
 
 function peComparisonHtml(r) {
   if (r.pe === null || r.pe === undefined || !r.sector) return '';
+  let html = '';
+
   const stats = sectorPEStats(r.sector, r.ticker);
-  if (!stats || stats.count < 2) return '';
-  const diffPct = ((r.pe - stats.median) / stats.median) * 100;
-  const cls = diffPct < 0 ? 'up-txt' : 'down-txt';
-  const sign = diffPct > 0 ? '+' : '';
-  const label = diffPct < 0 ? 'billigare' : 'dyrare';
-  return `<div class="pe-compare">Bransch (${r.sector}, n=${stats.count}): ${fmtNum(stats.median,1)} — <span class="${cls}">${sign}${fmtNum(diffPct,0)}% ${label}</span></div>`;
+  if (stats && stats.count >= 2) {
+    const diffPct = ((r.pe - stats.median) / stats.median) * 100;
+    const cls = diffPct < 0 ? 'up-txt' : 'down-txt';
+    const sign = diffPct > 0 ? '+' : '';
+    const label = diffPct < 0 ? 'billigare' : 'dyrare';
+    html += `<div class="pe-compare">Bevakade (${r.sector}, n=${stats.count}): ${fmtNum(stats.median,1)} — <span class="${cls}">${sign}${fmtNum(diffPct,0)}% ${label}</span></div>`;
+  }
+
+  const ext = state.externalPE && state.externalPE.sectors && state.externalPE.sectors[r.sector];
+  if (ext) {
+    const diffPct = ((r.pe - ext.avg_pe) / ext.avg_pe) * 100;
+    const cls = diffPct < 0 ? 'up-txt' : 'down-txt';
+    const sign = diffPct > 0 ? '+' : '';
+    const label = diffPct < 0 ? 'billigare' : 'dyrare';
+    html += `<div class="pe-compare" title="Källa: Damodaran/NYU Stern, ${ext.num_firms} bolag">Branschsnitt (${ext.num_firms} bolag globalt): ${fmtNum(ext.avg_pe,1)} — <span class="${cls}">${sign}${fmtNum(diffPct,0)}% ${label}</span></div>`;
+  }
+
+  return html;
 }
 
 function targetHtml(r) {
@@ -934,6 +948,10 @@ async function load() {
     document.getElementById('versionBadge').textContent = '';
     state.data = { results: [] };
   }
+  try {
+    const peRes = await fetch('external_pe.json?_=' + Date.now());
+    if (peRes.ok) state.externalPE = await peRes.json();
+  } catch (e) { /* extern branschdata är valfri, kärnan funkar utan den */ }
   applyHoldingsToResults();
   render();
 }

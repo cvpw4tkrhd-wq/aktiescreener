@@ -15,10 +15,12 @@
 
 factors:
   - name: "Iran-konflikten / Hormuzsundet"
-    updated: 2026-09-02
-    summary: "Fortsatt konflikt i Mellanöstern stör oljeflöden genom Hormuzsundet och driver upp priser på kritiska material (t.ex. volfram) som halvledarindustrin är beroende av, vilket ökar kostnader och osäkerhet i chiptillverkningskedjan."
+    updated: 2026-09-07
+    summary: "Konflikten i Mellanöstern har eskalerat sedan början av september - oljepriset har stigit kraftigt (Brent +5% på en dag) och asiatiska börser föll (Nikkei -2,9%). Stör oljeflöden genom Hormuzsundet och driver upp priser på kritiska material (t.ex. volfram) som halvledarindustrin är beroende av. Svenska analytiker (bl.a. Nordea) pekar ut kriget tillsammans med stigande långräntor som huvudorsak till börsoron i september. Högre oljepris gynnar energibolag, medan stigande räntor pressar räntekänsliga fastighetsbolag."
     sectors:
       Semiconductors: -10
+      Energy: 5
+      RealEstate: -5
     source_url: "https://sourceability.com/post/geopolitics-are-reshaping-semiconductor-supply-chain-risk-in-2026"
   - name: "USA-Kina teknikrivalitet / exportkontroller"
     updated: 2026-09-02
@@ -26,6 +28,13 @@ factors:
     sectors:
       Semiconductors: -10
     source_url: "https://www.deloitte.com/us/en/insights/industry/technology/technology-media-telecom-outlooks/semiconductor-industry-outlook.html"
+  - name: "USA-tullar mot Sverige/EU"
+    updated: 2026-09-07
+    summary: "USA infört breda tullar (ca 10% generellt på de flesta varor, 50% på stål/aluminium, upp till 100% på läkemedel utanför EU-avtalet som annars tak:ar tullen vid 15%). Träffar exportberoende svenska industribolag (Volvo, Atlas Copco, Sandvik m.fl.) och läkemedelsbolag. Flera analytiker (JP Morgan, Handelsbanken) bedömer effekten som 'hanterbar' snarare än allvarlig, delvis eftersom storbolag investerar i amerikansk produktion för att undvika tullarna - därför måttlig vikt."
+    sectors:
+      Industrials: -5
+      Healthcare: -5
+    source_url: "https://ostsvenskahandelskammaren.se/internationell-handel/trump-tullar-och-handelspolitik-det-har-galler/"
 
 # Exempel (inaktivt, bara för referens):
 # factors:

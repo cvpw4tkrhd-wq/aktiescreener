@@ -356,6 +356,9 @@ def score_buy_candidate(d):
         elif upside < -10:
             score -= 10
             reasons.append(f"Analytikernas kursmål {upside:+.0f}% under dagens pris")
+        elif upside < 0:
+            score -= 5
+            reasons.append(f"Analytikernas kursmål {upside:+.0f}% under dagens pris (måttligt)")
 
     if d.get("pb") is not None:
         if d["pb"] < 0:

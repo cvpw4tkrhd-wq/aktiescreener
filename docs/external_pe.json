@@ -1,6 +1,6 @@
 {
   "_source": "Aswath Damodaran, NYU Stern (pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/pedata.html)",
-  "_methodology": "Bolagsantal-viktat snitt av trailing P/E, aggregerat från detaljerade branscher till screenerns sektorindelning. Delbranscher med extrema P/E-värden (>200) exkluderade för konsekvens med appens egna filter.",
+  "_methodology": "Sektorsiffror: bolagsantal-viktat snitt av trailing P/E per bransch (Damodaran, USA-baserad data), aggregerat till screenerns sektorindelning. Landsjustering: sektorsiffran skalas med landets median-P/E för hela börsen relativt USA (samma källa, countrystats.html) - en approximation, inte en verklig bransch-per-land-matris (som inte finns tillgänglig i läsbart format för icke-amerikanska marknader).",
   "_last_updated": "2026-09-07",
   "sectors": {
     "Technology": {
@@ -53,5 +53,19 @@
       "num_firms": 270,
       "num_industries": 4
     }
+  },
+  "_country_median_pe": {
+    "SE": 22.99,
+    "US": 22.61,
+    "DE": 19.88,
+    "NL": 17.12,
+    "GB": 18.07
+  },
+  "country_multipliers": {
+    "SE": 1.017,
+    "US": 1.0,
+    "DE": 0.879,
+    "NL": 0.757,
+    "GB": 0.799
   }
 }

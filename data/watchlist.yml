@@ -224,3 +224,8 @@ stocks:
   sector: Consumer
   country: Sverige
   market: SE
+- ticker: SOFI
+  name: SoFi Technologies
+  sector: Financials
+  country: USA
+  market: US

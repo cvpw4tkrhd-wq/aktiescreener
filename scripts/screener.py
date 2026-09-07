@@ -60,18 +60,24 @@ RISK_FACTORS_FILE = DATA_DIR / "risk_factors.yml"
 
 def load_risk_factors():
     """Läser redigerbara geopolitiska/makro-riskfaktorer och summerar vikt per
-    sektor. Returnerar (sector_weights: dict, active_factor_names: dict sector->[namn])."""
+    sektor OCH per land. Returnerar (sector_weights, sector_factor_names,
+    country_weights, country_factor_names)."""
     if not RISK_FACTORS_FILE.exists():
-        return {}, {}
+        return {}, {}, {}, {}
     with open(RISK_FACTORS_FILE, "r", encoding="utf-8") as f:
         data = yaml.safe_load(f) or {}
     sector_weights = {}
     sector_factor_names = {}
+    country_weights = {}
+    country_factor_names = {}
     for factor in data.get("factors") or []:
         for sector, weight in (factor.get("sectors") or {}).items():
             sector_weights[sector] = sector_weights.get(sector, 0) + weight
             sector_factor_names.setdefault(sector, []).append(f"{factor.get('name','?')} ({weight:+d})")
-    return sector_weights, sector_factor_names
+        for country, weight in (factor.get("countries") or {}).items():
+            country_weights[country] = country_weights.get(country, 0) + weight
+            country_factor_names.setdefault(country, []).append(f"{factor.get('name','?')} ({weight:+d})")
+    return sector_weights, sector_factor_names, country_weights, country_factor_names
 
 
 def load_score_history():
@@ -460,7 +466,7 @@ def sanitize_for_json(obj):
 
 def main():
     watchlist = load_watchlist()
-    sector_weights, sector_factor_names = load_risk_factors()
+    sector_weights, sector_factor_names, country_weights, country_factor_names = load_risk_factors()
     score_history = load_score_history()
     today_str = datetime.now(timezone.utc).date().isoformat()
 
@@ -492,14 +498,23 @@ def main():
             geopolitics_note = ", ".join(sector_factor_names.get(sector, []))
             buy_reasons.append(f"Geopolitik/makro ({sector}): {geopolitics_note}")
 
+        country_weight = country_weights.get(entry["market"], 0)
+        geopolitics_country_note = None
+        if country_weight:
+            buy_score = max(0, min(100, buy_score + country_weight))
+            geopolitics_country_note = ", ".join(country_factor_names.get(entry["market"], []))
+            buy_reasons.append(f"Geopolitik/makro ({entry.get('country')}): {geopolitics_country_note}")
+
         d["buy_score"] = buy_score
         d["buy_reasons"] = buy_reasons
-        # Exponerar den använda sektorvikten (+ förklaringstexten) så att
-        # webbläsaren kan räkna ut en identisk geopolitik-justering för
-        # säljpoängen, som numera beräknas helt klientsidan (innehav
+        # Exponerar den använda sektor- och landsvikten (+ förklaringstexter)
+        # så att webbläsaren kan räkna ut en identisk geopolitik-justering
+        # för säljpoängen, som numera beräknas helt klientsidan (innehav
         # skickas aldrig till servern).
         d["sector_weight"] = sector_weight
         d["geopolitics_note"] = geopolitics_note
+        d["country_weight"] = country_weight
+        d["geopolitics_country_note"] = geopolitics_country_note
         d["buy_days_on_list"], d["buy_score_delta"] = update_score_history(
             score_history, ticker, buy_score, today_str
         )

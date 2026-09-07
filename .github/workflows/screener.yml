@@ -25,17 +25,6 @@ jobs:
       - name: Installera beroenden
         run: pip install -r requirements.txt
 
-      - name: Återskapa holdings.csv från secret (om satt)
-        env:
-          HOLDINGS_CSV_B64: ${{ secrets.HOLDINGS_CSV_B64 }}
-        run: |
-          if [ -n "$HOLDINGS_CSV_B64" ]; then
-            echo "$HOLDINGS_CSV_B64" | base64 -d > data/holdings.csv
-            echo "holdings.csv återskapad från secret."
-          else
-            echo "Ingen HOLDINGS_CSV_B64 secret satt, hoppar över."
-          fi
-
       - name: Kör screener
         run: python scripts/screener.py
 
@@ -53,7 +42,7 @@ jobs:
         run: |
           git config user.name "screener-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add docs/results.json data/previously_held.yml data/score_history.json
+          git add docs/results.json data/score_history.json
           [ -f data/writeups.json ] && git add data/writeups.json
           git diff --cached --quiet && echo "Inga förändringar" || git commit -m "Uppdatera screenerresultat $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push

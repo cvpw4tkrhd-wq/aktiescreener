@@ -239,8 +239,8 @@ def analyze_ticker(ticker: str):
 
         capex = _latest(cashflow, ["Capital Expenditure", "CapitalExpenditure", "Purchase Of PPE"])
         da = _latest(cashflow, ["Depreciation And Amortization", "Depreciation Amortization Depletion", "Depreciation"])
-        fcf = _latest(cashflow, ["Free Cash Flow"])
-        sbc = _latest(cashflow, ["Stock Based Compensation"])
+        fcf = _latest(cashflow, ["Free Cash Flow", "FreeCashFlow"])
+        sbc = _latest(cashflow, ["Stock Based Compensation", "StockBasedCompensation"])
         revenue = _latest(income, ["Total Revenue", "TotalRevenue", "Operating Revenue", "Revenue"])
 
         if capex is not None and da:
@@ -249,14 +249,8 @@ def analyze_ticker(ticker: str):
             fcf_margin_pct = (fcf / revenue) * 100
         if sbc is not None and revenue:
             sbc_to_revenue_pct = (abs(sbc) / revenue) * 100
-        _debug_cashflow_error = (
-            f"capex={capex is not None} da={da is not None} fcf={fcf is not None} "
-            f"sbc={sbc is not None} revenue={revenue is not None} | "
-            f"cashflow_rows={list(cashflow.index) if cashflow is not None and not cashflow.empty else 'TOM/NONE'}"
-        )[:600]
     except Exception as e:
         print(f"  Kassaflödesdata saknas/fel för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)
-        _debug_cashflow_error = f"EXCEPTION {type(e).__name__}: {e}"[:400]
 
     return {
         "ticker": ticker,
@@ -277,7 +271,6 @@ def analyze_ticker(ticker: str):
         "capex_to_da": round(capex_to_da, 2) if capex_to_da is not None else None,
         "fcf_margin_pct": round(fcf_margin_pct, 1) if fcf_margin_pct is not None else None,
         "sbc_to_revenue_pct": round(sbc_to_revenue_pct, 1) if sbc_to_revenue_pct is not None else None,
-        "_debug_cashflow_error": _debug_cashflow_error,
         "recommendation_key": recommendation_key if recommendation_key not in (None, "none") else None,
         "num_analysts": num_analysts if isinstance(num_analysts, int) else None,
         "target_mean_price": round(target_mean, 2) if isinstance(target_mean, (int, float)) else None,

@@ -144,11 +144,6 @@ stocks:
   sector: Semiconductors
   country: USA
   market: US
-- ticker: CUEN
-  name: Cuentas
-  sector: Technology
-  country: USA
-  market: US
 - ticker: SAP.DE
   name: SAP
   sector: Technology

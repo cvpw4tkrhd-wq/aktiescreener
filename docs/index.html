@@ -14,6 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root {
     --bg: #0B0E13;
@@ -509,17 +510,9 @@ const SELL_SIGNAL_THRESHOLD = 50;
 const MAX_HISTORY_ENTRIES = 90;
 const TICKER_SUFFIXES = ['.ST', '.L', '.DE', '.US', '.OL', '.CO', '.HE', '.T', '.SS', '.SZ', '.HK', '.AS'];
 
-function parseHoldingsCSV(text) {
-  text = text.replace(/^\uFEFF/, '');
-  const lines = text.split(/\r\n|\n/).filter(l => l.trim() !== '');
-  if (!lines.length) return {};
-
-  const sample = lines.slice(0, Math.min(5, lines.length)).join('\n');
-  const semiCount = (sample.match(/;/g) || []).length;
-  const commaCount = (sample.match(/,/g) || []).length;
-  const delimiter = semiCount > commaCount ? ';' : ',';
-
-  const header = lines[0].split(delimiter).map(h => h.trim().toLowerCase());
+function buildHoldingsFromRows(rows) {
+  if (!rows.length) return {};
+  const header = (rows[0] || []).map(h => String(h == null ? '' : h).trim().toLowerCase());
   const findIdx = (names) => {
     for (const n of names) {
       const i = header.indexOf(n);
@@ -532,11 +525,12 @@ function parseHoldingsCSV(text) {
   const tickerIdx = findIdx(['kortnamn', 'ticker', 'symbol']);
 
   const holdings = {};
-  for (let i = 1; i < lines.length; i++) {
-    const cols = lines[i].split(delimiter);
-    const name = nameIdx !== -1 ? (cols[nameIdx] || '').trim() : '';
-    const ticker = tickerIdx !== -1 ? (cols[tickerIdx] || '').trim() : '';
-    const qtyRaw = qtyIdx !== -1 ? (cols[qtyIdx] || '').trim() : '';
+  for (let i = 1; i < rows.length; i++) {
+    const cols = rows[i] || [];
+    const cell = (idx) => idx !== -1 ? String(cols[idx] == null ? '' : cols[idx]).trim() : '';
+    const name = cell(nameIdx);
+    const ticker = cell(tickerIdx);
+    const qtyRaw = cell(qtyIdx);
     if (!name && !ticker) continue;
     let qty = null;
     if (qtyRaw) {
@@ -547,6 +541,27 @@ function parseHoldingsCSV(text) {
     holdings[key] = { raw_name: name, raw_ticker: ticker, quantity: qty };
   }
   return holdings;
+}
+
+function parseHoldingsCSV(text) {
+  text = text.replace(/^\uFEFF/, '');
+  const lines = text.split(/\r\n|\n/).filter(l => l.trim() !== '');
+  if (!lines.length) return {};
+
+  const sample = lines.slice(0, Math.min(5, lines.length)).join('\n');
+  const semiCount = (sample.match(/;/g) || []).length;
+  const commaCount = (sample.match(/,/g) || []).length;
+  const delimiter = semiCount > commaCount ? ';' : ',';
+
+  const rows = lines.map(l => l.split(delimiter));
+  return buildHoldingsFromRows(rows);
+}
+
+function parseHoldingsXLSX(arrayBuffer) {
+  const wb = XLSX.read(arrayBuffer, { type: 'array' });
+  const sheet = wb.Sheets[wb.SheetNames[0]];
+  const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false, defval: '' });
+  return buildHoldingsFromRows(rows);
 }
 
 function normalizeTicker(s) {
@@ -902,14 +917,14 @@ function renderUploadPanel() {
   el.innerHTML = `
     <div class="upload-panel">
       <div class="upload-row">
-        <label class="upload-btn" for="csvUpload">${hasHoldings ? 'BYT UT CSV-FIL' : 'LADDA UPP HOLDINGS.CSV'}</label>
-        <input type="file" id="csvUpload" accept=".csv" style="display:none">
+        <label class="upload-btn" for="csvUpload">${hasHoldings ? 'BYT UT FIL' : 'LADDA UPP INNEHAV'}</label>
+        <input type="file" id="csvUpload" accept=".csv,.xlsx" style="display:none">
         ${hasHoldings ? '<button class="iconbtn" id="clearHoldingsBtn">TA BORT</button>' : ''}
       </div>
       <div class="upload-note ${hasHoldings ? 'uploaded' : ''}">
         ${hasHoldings
           ? `Uppladdad ${fmtDateTime(state.holdingsUploadedAt)} — bearbetas och sparas bara i den här webbläsaren, skickas aldrig till någon server och syns inte för andra som besöker sidan.`
-          : 'CSV-export från Avanza eller Nordnet. Bearbetas helt i din egen webbläsare — filen skickas aldrig till någon server och sparas bara lokalt på den här enheten.'}
+          : 'CSV- eller Excel-export (.csv/.xlsx) från Avanza eller Nordnet. Bearbetas helt i din egen webbläsare — filen skickas aldrig till någon server och sparas bara lokalt på den här enheten.'}
       </div>
     </div>`;
 
@@ -921,12 +936,13 @@ function renderUploadPanel() {
 function handleCsvUpload(e) {
   const file = e.target.files[0];
   if (!file) return;
+  const isXlsx = /\.xlsx$/i.test(file.name);
   const reader = new FileReader();
   reader.onload = (ev) => {
     try {
-      const positions = parseHoldingsCSV(ev.target.result);
+      const positions = isXlsx ? parseHoldingsXLSX(ev.target.result) : parseHoldingsCSV(ev.target.result);
       if (!Object.keys(positions).length) {
-        alert('Hittade inga rader i filen. Kontrollera att det är rätt CSV-export.');
+        alert('Hittade inga rader i filen. Kontrollera att det är rätt export från Avanza/Nordnet.');
         return;
       }
       const uploadedAt = saveHoldingsToStorage(positions);
@@ -935,10 +951,14 @@ function handleCsvUpload(e) {
       applyHoldingsToResults();
       render();
     } catch (err) {
-      alert('Kunde inte läsa CSV-filen. Kontrollera att det är en giltig export från Avanza/Nordnet.');
+      alert('Kunde inte läsa filen. Kontrollera att det är en giltig export (CSV eller Excel) från Avanza/Nordnet.');
     }
   };
-  reader.readAsText(file, 'utf-8');
+  if (isXlsx) {
+    reader.readAsArrayBuffer(file);
+  } else {
+    reader.readAsText(file, 'utf-8');
+  }
 }
 
 function handleClearHoldings() {

@@ -5,13 +5,14 @@
 # nyheter, föreslår ändringar här, och pushar sedan filen först efter att du
 # godkänt förslaget i chatten.
 #
-# Varje faktor har en vikt per sektor (-20 till +20):
-#   positiv vikt  = medvind för sektorn (höjer köppoäng, sänker säljpoäng)
-#   negativ vikt  = motvind för sektorn (sänker köppoäng, höjer säljpoäng)
+# Varje faktor kan ha vikter per SEKTOR och/eller per LAND (-20 till +20):
+#   positiv vikt  = medvind (höjer köppoäng, sänker säljpoäng)
+#   negativ vikt  = motvind (sänker köppoäng, höjer säljpoäng)
+# En faktor kan ha båda, bara en av dem, eller flera länder/sektorer samtidigt.
 #
 # Sektorer som används i watchlist.yml: Industrials, Technology, Consumer,
-# Financials, RealEstate, Semiconductors. Lägg till fler vid behov (t.ex.
-# Energy, Defense, Shipping) om bevakningslistan utökas dit.
+# Financials, RealEstate, Semiconductors, Energy, Healthcare, Materials,
+# Telecom. Länder (marknadskoder): SE, US, DE, NL, GB.
 
 factors:
   - name: "Iran-konflikten / Hormuzsundet"
@@ -35,13 +36,23 @@ factors:
       Industrials: -5
       Healthcare: -5
     source_url: "https://ostsvenskahandelskammaren.se/internationell-handel/trump-tullar-och-handelspolitik-det-har-galler/"
+  - name: "ECB-räntehöjning (Irankrigsdriven inflation)"
+    updated: 2026-09-07
+    summary: "ECB väntas höja styrräntan från 2,25% till 2,50% den 10 september 2026, uttryckligen för att dämpa inflationseffekter av Irankrigets energiprisuppgång. Ökar finansieringskostnader för bolag i euroområdet och Storbritannien (där Bank of England också pressas i samma riktning). Sverige avviker medvetet - Riksbanken avvaktar eftersom svensk inflation (KPIF 0,7%) är klart lägre än euroområdets, så ingen vikt sätts på SE."
+    countries:
+      DE: -3
+      NL: -3
+      GB: -3
+    source_url: "https://hurbra.se/ecb-ranta-10-september-2026/"
 
 # Exempel (inaktivt, bara för referens):
 # factors:
 #   - name: "Exempel: handelskonflikt USA-Kina"
 #     updated: 2026-09-02
-#     summary: "Kort sammanfattning av läget och varför sektorerna påverkas."
+#     summary: "Kort sammanfattning av läget och varför sektorerna/länderna påverkas."
 #     sectors:
 #       Semiconductors: -15
 #       Technology: -5
+#     countries:
+#       DE: -3
 #     source_url: "https://exempel.se/artikel"

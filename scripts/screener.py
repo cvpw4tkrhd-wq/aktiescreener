@@ -241,7 +241,7 @@ def analyze_ticker(ticker: str):
         da = _latest(cashflow, ["Depreciation And Amortization", "Depreciation Amortization Depletion", "Depreciation"])
         fcf = _latest(cashflow, ["Free Cash Flow"])
         sbc = _latest(cashflow, ["Stock Based Compensation"])
-        revenue = _latest(income, ["Total Revenue"])
+        revenue = _latest(income, ["Total Revenue", "TotalRevenue", "Operating Revenue", "Revenue"])
 
         if capex is not None and da:
             capex_to_da = abs(capex) / abs(da)
@@ -249,11 +249,14 @@ def analyze_ticker(ticker: str):
             fcf_margin_pct = (fcf / revenue) * 100
         if sbc is not None and revenue:
             sbc_to_revenue_pct = (abs(sbc) / revenue) * 100
+        _debug_cashflow_error = (
+            f"capex={capex is not None} da={da is not None} fcf={fcf is not None} "
+            f"sbc={sbc is not None} revenue={revenue is not None} | "
+            f"income_rows={list(income.index[:15]) if income is not None and not income.empty else 'TOM/NONE'}"
+        )[:400]
     except Exception as e:
         print(f"  Kassaflödesdata saknas/fel för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)
-        _debug_cashflow_error = f"{type(e).__name__}: {e}"[:150]
-    else:
-        _debug_cashflow_error = None
+        _debug_cashflow_error = f"EXCEPTION {type(e).__name__}: {e}"[:400]
 
     return {
         "ticker": ticker,

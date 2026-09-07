@@ -251,6 +251,9 @@ def analyze_ticker(ticker: str):
             sbc_to_revenue_pct = (abs(sbc) / revenue) * 100
     except Exception as e:
         print(f"  Kassaflödesdata saknas/fel för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)
+        _debug_cashflow_error = f"{type(e).__name__}: {e}"[:150]
+    else:
+        _debug_cashflow_error = None
 
     return {
         "ticker": ticker,
@@ -271,6 +274,7 @@ def analyze_ticker(ticker: str):
         "capex_to_da": round(capex_to_da, 2) if capex_to_da is not None else None,
         "fcf_margin_pct": round(fcf_margin_pct, 1) if fcf_margin_pct is not None else None,
         "sbc_to_revenue_pct": round(sbc_to_revenue_pct, 1) if sbc_to_revenue_pct is not None else None,
+        "_debug_cashflow_error": _debug_cashflow_error,
         "recommendation_key": recommendation_key if recommendation_key not in (None, "none") else None,
         "num_analysts": num_analysts if isinstance(num_analysts, int) else None,
         "target_mean_price": round(target_mean, 2) if isinstance(target_mean, (int, float)) else None,

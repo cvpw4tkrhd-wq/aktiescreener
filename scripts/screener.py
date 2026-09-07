@@ -216,6 +216,42 @@ def analyze_ticker(ticker: str):
     beta = info.get("beta")
     avg_dollar_volume = (last_avg_volume * last_close) if (last_avg_volume and last_close) else None
 
+    # Kapitalintensitet, kassaflödesmarginal och kvalitet på vinsten. Hämtas
+    # från kassaflödes- och resultaträkning (separata yfinance-anrop, kan
+    # saknas för mindre/utländska bolag - degraderar då bara till None).
+    capex_to_da = None
+    fcf_margin_pct = None
+    sbc_to_revenue_pct = None
+    try:
+        cashflow = tk.get_cashflow()
+        income = tk.get_income_stmt()
+
+        def _latest(df, row_names):
+            if df is None or df.empty:
+                return None
+            col = df.columns[0]
+            for name in row_names:
+                if name in df.index:
+                    val = df.loc[name, col]
+                    if pd.notna(val):
+                        return float(val)
+            return None
+
+        capex = _latest(cashflow, ["Capital Expenditure", "CapitalExpenditure", "Purchase Of PPE"])
+        da = _latest(cashflow, ["Depreciation And Amortization", "Depreciation Amortization Depletion", "Depreciation"])
+        fcf = _latest(cashflow, ["Free Cash Flow"])
+        sbc = _latest(cashflow, ["Stock Based Compensation"])
+        revenue = _latest(income, ["Total Revenue"])
+
+        if capex is not None and da:
+            capex_to_da = abs(capex) / abs(da)
+        if fcf is not None and revenue:
+            fcf_margin_pct = (fcf / revenue) * 100
+        if sbc is not None and revenue:
+            sbc_to_revenue_pct = (abs(sbc) / revenue) * 100
+    except Exception:
+        pass
+
     return {
         "ticker": ticker,
         "name": long_name,
@@ -232,6 +268,9 @@ def analyze_ticker(ticker: str):
         "cross_signal": cross_signal,
         "above_sma50": (last_close > last_sma50) if last_sma50 else None,
         "above_sma200": (last_close > last_sma200) if last_sma200 else None,
+        "capex_to_da": round(capex_to_da, 2) if capex_to_da is not None else None,
+        "fcf_margin_pct": round(fcf_margin_pct, 1) if fcf_margin_pct is not None else None,
+        "sbc_to_revenue_pct": round(sbc_to_revenue_pct, 1) if sbc_to_revenue_pct is not None else None,
         "recommendation_key": recommendation_key if recommendation_key not in (None, "none") else None,
         "num_analysts": num_analysts if isinstance(num_analysts, int) else None,
         "target_mean_price": round(target_mean, 2) if isinstance(target_mean, (int, float)) else None,
@@ -374,6 +413,22 @@ def score_buy_candidate(d):
         elif d["volatility_pct"] < 20:
             score += 5
             reasons.append(f"Låg volatilitet ({d['volatility_pct']}% årstakt) – stabil kursutveckling")
+
+    if d.get("fcf_margin_pct") is not None:
+        if d["fcf_margin_pct"] < 0:
+            score -= 15
+            reasons.append(f"Negativ FCF-marginal ({d['fcf_margin_pct']}%) – bolaget bränner kassa")
+        elif d["fcf_margin_pct"] > 15:
+            score += 10
+            reasons.append(f"Stark FCF-marginal ({d['fcf_margin_pct']}%) – genererar gott om fritt kassaflöde")
+
+    if d.get("sbc_to_revenue_pct") is not None and d["sbc_to_revenue_pct"] > 15:
+        score -= 10
+        reasons.append(f"Hög aktiebaserad ersättning ({d['sbc_to_revenue_pct']}% av intäkter) – utspädningsrisk, sänker kvaliteten på redovisad vinst")
+
+    if d.get("capex_to_da") is not None and d["capex_to_da"] > 5:
+        score -= 5
+        reasons.append(f"Mycket hög investeringstakt (capex {d['capex_to_da']}x avskrivningar) – aggressiv tillväxtfas, ökad osäkerhet kring avkastning")
 
     return max(0, min(100, score)), reasons
 

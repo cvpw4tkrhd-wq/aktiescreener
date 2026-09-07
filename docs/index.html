@@ -665,6 +665,19 @@ function scoreSellSignal(d) {
   if (d.volatility_pct !== null && d.volatility_pct !== undefined && d.volatility_pct > 80) {
     score += 10; reasons.push(`Mycket hög volatilitet (${d.volatility_pct}% årstakt) – ovanligt stora kurssvängningar`);
   }
+  if (d.fcf_margin_pct !== null && d.fcf_margin_pct !== undefined) {
+    if (d.fcf_margin_pct < 0) {
+      score += 15; reasons.push(`Negativ FCF-marginal (${d.fcf_margin_pct}%) – bolaget bränner kassa`);
+    } else if (d.fcf_margin_pct > 15) {
+      score -= 10; reasons.push(`Stark FCF-marginal (${d.fcf_margin_pct}%) – genererar gott om fritt kassaflöde, talar emot att sälja`);
+    }
+  }
+  if (d.sbc_to_revenue_pct !== null && d.sbc_to_revenue_pct !== undefined && d.sbc_to_revenue_pct > 15) {
+    score += 10; reasons.push(`Hög aktiebaserad ersättning (${d.sbc_to_revenue_pct}% av intäkter) – utspädningsrisk, sänker kvaliteten på redovisad vinst`);
+  }
+  if (d.capex_to_da !== null && d.capex_to_da !== undefined && d.capex_to_da > 5) {
+    score += 5; reasons.push(`Mycket hög investeringstakt (capex ${d.capex_to_da}x avskrivningar) – aggressiv tillväxtfas, ökad osäkerhet kring avkastning`);
+  }
 
   score = Math.max(0, Math.min(100, score));
 
@@ -1177,6 +1190,9 @@ function openDrawer(ticker) {
       <div><div class="stat-label">UTDELNING</div><div class="stat-val">${r.dividend_yield_pct !== null ? fmtNum(r.dividend_yield_pct,1) + '%' : '–'}</div></div>
       <div><div class="stat-label">SKULDSÄTTNING (D/E)</div><div class="stat-val">${r.debt_to_equity !== null ? fmtNum(r.debt_to_equity,0) : '–'}</div></div>
       <div><div class="stat-label">VOLATILITET (ÅR)</div><div class="stat-val">${r.volatility_pct !== null ? fmtNum(r.volatility_pct,0) + '%' : '–'}</div></div>
+      <div><div class="stat-label">FCF-MARGINAL</div><div class="stat-val">${r.fcf_margin_pct !== null && r.fcf_margin_pct !== undefined ? fmtNum(r.fcf_margin_pct,0) + '%' : '–'}</div></div>
+      <div><div class="stat-label">SBC/INTÄKTER</div><div class="stat-val">${r.sbc_to_revenue_pct !== null && r.sbc_to_revenue_pct !== undefined ? fmtNum(r.sbc_to_revenue_pct,0) + '%' : '–'}</div></div>
+      <div><div class="stat-label">CAPEX/AVSKRIVNINGAR</div><div class="stat-val">${r.capex_to_da !== null && r.capex_to_da !== undefined ? fmtNum(r.capex_to_da,1) + 'x' : '–'}</div></div>
       <div><div class="stat-label">BETA</div><div class="stat-val">${r.beta !== null ? fmtNum(r.beta,2) : '–'}</div></div>
       <div><div class="stat-label">ANALYTIKER</div><div class="stat-val">${r.recommendation_key ? r.recommendation_key.replace('_',' ').toUpperCase() : '–'}</div></div>
       <div><div class="stat-label">KURSMÅL</div><div class="stat-val">${targetHtml(r)}</div></div>

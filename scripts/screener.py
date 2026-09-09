@@ -197,6 +197,14 @@ def analyze_ticker(ticker: str):
     peg = info.get("trailingPegRatio")
     if peg is None:
         peg = info.get("pegRatio")
+
+    # Jämför forward P/E (baserat på förväntad framtida vinst) mot trailing
+    # P/E (baserat på senast rapporterade vinst). Lägre forward P/E än
+    # trailing = vinsttillväxt väntas. Högre = vinstnedgång väntas.
+    forward_pe_trend_pct = None
+    if isinstance(pe, (int, float)) and isinstance(forward_pe, (int, float)) and pe > 0:
+        forward_pe_trend_pct = (forward_pe - pe) / pe * 100
+
     currency = info.get("currency")
     long_name = info.get("longName") or info.get("shortName")
 
@@ -268,6 +276,7 @@ def analyze_ticker(ticker: str):
         "price": round(last_close, 2),
         "pe": round(pe, 2) if isinstance(pe, (int, float)) else None,
         "forward_pe": round(forward_pe, 2) if isinstance(forward_pe, (int, float)) else None,
+        "forward_pe_trend_pct": round(forward_pe_trend_pct, 1) if forward_pe_trend_pct is not None else None,
         "peg_ratio": round(peg, 2) if isinstance(peg, (int, float)) else None,
         "sma50": round(last_sma50, 2) if last_sma50 else None,
         "sma200": round(last_sma200, 2) if last_sma200 else None,
@@ -319,6 +328,14 @@ def score_buy_candidate(d):
         elif d["peg_ratio"] > 3:
             score -= 10
             reasons.append(f"Högt PEG-tal ({d['peg_ratio']}) – dyrt även efter hänsyn till förväntad tillväxt")
+
+    if d.get("forward_pe_trend_pct") is not None:
+        if d["forward_pe_trend_pct"] < -15:
+            score += 10
+            reasons.append(f"Forward P/E {d['forward_pe_trend_pct']:+.0f}% under historiskt P/E – vinsttillväxt väntas")
+        elif d["forward_pe_trend_pct"] > 15:
+            score -= 10
+            reasons.append(f"Forward P/E {d['forward_pe_trend_pct']:+.0f}% över historiskt P/E – vinstnedgång väntas")
 
     if d["rsi14"] is not None:
         if d["rsi14"] < 35:

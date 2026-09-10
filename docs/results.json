@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-10T20:44:36.423686+00:00",
-  "version": "3.5",
+  "generated_at": "2026-09-10T20:57:43.264241+00:00",
+  "version": "3.6",
   "count": 64,
   "results": [
     {
@@ -104,7 +104,7 @@
       "watchlist_name": "Volvo B",
       "sector": "Industrials",
       "country": "Sverige",
-      "buy_score": 70,
+      "buy_score": 66,
       "buy_reasons": [
         "Forward P/E -29% under historiskt P/E – vinsttillväxt väntas",
         "Analytikerkonsensus: köp (20 analytiker)",
@@ -116,7 +116,7 @@
       "country_weight": 0,
       "geopolitics_country_note": null,
       "buy_days_on_list": 2,
-      "buy_score_delta": 0
+      "buy_score_delta": -4
     },
     {
       "ticker": "ERIC-B.ST",
@@ -219,7 +219,7 @@
       "watchlist_name": "Ericsson B",
       "sector": "Technology",
       "country": "Sverige",
-      "buy_score": 60,
+      "buy_score": 55,
       "buy_reasons": [
         "Lågt P/E (13.18)",
         "Pris under både SMA50 och SMA200 (nedåttrend)",
@@ -232,7 +232,7 @@
       "country_weight": 0,
       "geopolitics_country_note": null,
       "buy_days_on_list": 0,
-      "buy_score_delta": -5
+      "buy_score_delta": -10
     },
     {
       "ticker": "HM-B.ST",
@@ -335,7 +335,7 @@
       "watchlist_name": "H&M B",
       "sector": "Consumer",
       "country": "Sverige",
-      "buy_score": 35,
+      "buy_score": 30,
       "buy_reasons": [
         "RSI lågt/översålt (34.6)",
         "Pris under både SMA50 och SMA200 (nedåttrend)",
@@ -349,7 +349,7 @@
       "country_weight": 0,
       "geopolitics_country_note": null,
       "buy_days_on_list": 0,
-      "buy_score_delta": 15
+      "buy_score_delta": 10
     },
     {
       "ticker": "ATCO-A.ST",
@@ -452,7 +452,7 @@
       "watchlist_name": "Atlas Copco A",
       "sector": "Industrials",
       "country": "Sverige",
-      "buy_score": 70,
+      "buy_score": 64,
       "buy_reasons": [
         "Pris över både SMA50 och SMA200 (uppåttrend)",
         "Analytikerkonsensus: köp (21 analytiker)",
@@ -465,8 +465,8 @@
       "geopolitics_note": "USA-tullar mot Sverige/EU (-5)",
       "country_weight": 0,
       "geopolitics_country_note": null,
-      "buy_days_on_list": 6,
-      "buy_score_delta": 0
+      "buy_days_on_list": 0,
+      "buy_score_delta": -6
     },
     {
       "ticker": "INVE-B.ST",
@@ -569,7 +569,7 @@
       "watchlist_name": "Investor B",
       "sector": "Financials",
       "country": "Sverige",
-      "buy_score": 70,
+      "buy_score": 63,
       "buy_reasons": [
         "Lågt P/E (4.7)",
         "Högt PEG-tal (5.08) – dyrt även efter hänsyn till förväntad tillväxt",
@@ -582,8 +582,8 @@
       "geopolitics_note": null,
       "country_weight": 0,
       "geopolitics_country_note": null,
-      "buy_days_on_list": 6,
-      "buy_score_delta": 0,
+      "buy_days_on_list": 0,
+      "buy_score_delta": -7,
       "ai_writeup": {
         "text": "**Verksamhet:** Investor AB är ett investmentbolag – alltså ett bolag som äger andelar i andra bolag, i stället för att tillverka eller sälja något självt. \n\nVerksamheten bygger på tre pelare: noterade innehav (t.ex. Atlas Copco, ABB, SEB, AstraZeneca), helägda onoterade bolag under varumärket Patricia Industries, samt investeringar i EQT:s fonder.\n\n \n\nBolaget grundades 1916 av familjen Wallenberg och är Nordeuropas ledande industriella ägare.\n\n\n\n**Konkurrensfördel (moat):** En \"moat\" är det som gör det svårt för andra att kopiera ett bolags framgång. Investors moat är ovanlig: \n\nstrategin bygger på aktivt ägande och långsiktighet – Investor behåller typiskt sina innehav i decennier snarare än år.\n\n \n\nFörvaltningskostnaderna är extremt låga – endast 0,08 % av det totala substansvärdet (det samlade värdet av alla innehav) under 2024\n\n – vilket är svårt att matcha för vanliga fonder. Därtill ger Wallenberg-familjen ett nätverk och ett förtroendekapital som är omöjligt att bygga upp snabbt.\n\n**Lönsamhet och avkastning:** Investor är ett investmentbolag, så traditionell ROIC (avkastning på investerat kapital – hur mycket vinst ett bolag genererar per satsad krona) mäts annorlunda. Det relevanta måttet är istället hur substansvärdet (NAV) växer. \n\nUnder det senaste decenniet har portföljbolagen sammantaget växt med ca 15 % per år, och aktien har stigit med 21 % per år i genomsnitt.\n\n \n\nDe underliggande portföljbolagen har i snitt uppnått ~19 % avkastning på reinvesterat kapital de senaste sju åren\n\n – klart över den tumregel på 15 % som brukar räknas som utmärkt.\n\n**Risker – de 3 viktigaste:**\n1. \n\nAktiekursen har nyligen sprungit ifrån de underliggande tillgångarnas faktiska värde\n\n, vilket innebär att köparen idag betalar mer än vad innehaven är värda – det finns liten eller ingen \"substansrabatt\" (rabatt mot NAV) kvar som säkerhetsmarginal.\n2. \n\nPortföljen är tungt viktat mot industrisektorn (~40 %), vilket ger exponering mot konjunkturkänsliga bolag som ABB och Atlas Copco – de kan påverkas negativt vid ekonomisk avmattning.\n\n\n3. \n\nValutamotvind, tullar, försiktig efterfrågan och oförutsägbar geopolitik beskriver ledningen själva som bestående utmaningar in i 2026.\n\n\n\n**Strukturell eller kvartalsberoende?** Det här är ett tydligt exempel på ett strukturellt bolag. \n\nFamiljen Wallenbergs filosofi om långsiktigt ansvarsfull kapitalism genomsyrar bolaget, och kortiktig volatilitet styr inte investeringsbesluten.\n\n \n\nMed ett permanent kapital kunde bolaget upprätthålla sina investeringar genom nedgångarna 2020–2024 utan att tvingas sälja.\n\n Du behöver inte följa varje kvartal – fördelen sitter i strukturen, inte i den löpande exekveringen.\n\nHELHETSBILD: Blandad – Investor är ett exceptionellt kvalitetsbolag med bevisad långsiktig avkastning, men aktiekursen har sprungit ikapp substansvärdet och erbjuder idag liten säkerhetsmarginal för den prismedvetne långsiktsinvesteraren.",
         "generated_at": "2026-09-03T09:06:29.799101+00:00"
@@ -690,7 +690,7 @@
       "watchlist_name": "Sandvik",
       "sector": "Industrials",
       "country": "Sverige",
-      "buy_score": 60,
+      "buy_score": 58,
       "buy_reasons": [
         "Pris över både SMA50 och SMA200 (uppåttrend)",
         "Låg skuldsättning (D/E 42.9)",
@@ -701,7 +701,7 @@
       "country_weight": 0,
       "geopolitics_country_note": null,
       "buy_days_on_list": 0,
-      "buy_score_delta": 5
+      "buy_score_delta": 3
     },
     {
       "ticker": "SEB-A.ST",
@@ -804,7 +804,7 @@
       "watchlist_name": "SEB A",
       "sector": "Financials",
       "country": "Sverige",
-      "buy_score": 90,
+      "buy_score": 81,
       "buy_reasons": [
         "Lågt P/E (14.46)",
         "Pris över både SMA50 och SMA200 (uppåttrend)",
@@ -818,7 +818,7 @@
       "country_weight": 0,
       "geopolitics_country_note": null,
       "buy_days_on_list": 6,
-      "buy_score_delta": 0,
+      "buy_score_delta": -9,
       "ai_writeup": {
         "text": "**Verksamhet:** \n\nSEB grundades 1856 och kombinerar stark företags- och institutionell bankverksamhet med privat förmögenhetsförvaltning, kapitalförvaltning och livförsäkring.\n\n Enkelt sagt: banken tjänar pengar på att låna ut, hantera företagens kassaflöden och förvalta förmögenheter. \n\nTyngdpunkten är inte bred privatkundsbankering – utan relationsdriven bankverksamhet för stora företag, finansiella institutioner och förmögna kunder.\n\n Konkurrensförsprånget (moat = vallgrav som skyddar affären) bygger på djupa, långvariga kundrelationer och ett starkt varumärke inom nordisk företagsfinansiering. \n\nSEB håller ungefär 20 % marknadsandel inom nordisk företagsbankering\n\n – det tar decennier att bygga upp, vilket gör det svårt för en utmanare att ta den platsen.\n\n**Lönsamhet:** Avkastning på eget kapital (ROE – hur mycket vinst banken genererar per investerad krona) är ett nyckeltal för banker. \n\nHelåret 2024 landade ROE på 16,2 %, vilket översteg bankens egna långsiktiga mål om 15 %.\n\n \n\nQ2 2025 låg ROE på 15,0 %.\n\n Det är solida siffror – klart godkänt ur ett långsiktigt kvalitetsperspektiv.\n\n**Risker:** Här är de tre viktigaste varningssignalerna:\n\n1. **Ränterisken är real.** \n\nNettot av ränteinkomster minskar i takt med att räntorna faller, även om effekten delvis motverkas av ökade utlånings- och inlåningsvolymer.\n\n En stor del av intäkterna är direkt beroende av räntenivån – något banken inte styr.\n2. **Konkurrensen hårdnar.** \n\nDe fyra storbankerna kontrollerade 63 % av den svenska kreditmarknaden 2024, men fintechbolag växer och introducerar AI-drivna tjänster som utmanar traditionella aktörer.\n\n\n3. **Reglering och juridik.** \n\nEtt tyskt skatteärende från 2020 är olöst och förväntas dra ut längre än ursprungligen kommunicerat.\n\n Bankverksamhet är hårt reglerad – regeländringar kan plötsligt höja kostnaderna.\n\n**Strukturell fördel eller kvartalsberoende?** SEB är till stor del strukturellt förankrat – kundrelationerna, varumärket och marknadsandelarna inom nordisk företagsfinansiering är svåra att rubba på kort sikt. Men det är *inte* ett bolag du kan köpa och glömma. \n\nTraditionella intäktsdrivare som nettot av ränteinkomster kan pressas, medan nya intäktsströmmar inom förmögenhetsförvaltning och investmentbanking växer fram.\n\n Den kvartalsvis publicerade ROE-siffran signalerar hur bra banken hanterar den balansen.\n\nHELHETSBILD: Blandad – SEB är en välskött, lönsam bank med äkta marknadsposition, men banker som affärsmodell är känsliga för räntor och reglering på ett sätt som begränsar den typ av långsiktig compounding (ränta-på-ränta-effekt) man söker i ett drömbolag.",
         "generated_at": "2026-09-03T11:21:23.247795+00:00"
@@ -925,7 +925,7 @@
       "watchlist_name": "Swedbank A",
       "sector": "Financials",
       "country": "Sverige",
-      "buy_score": 55,
+      "buy_score": 48,
       "buy_reasons": [
         "Lågt P/E (13.94)",
         "Högt PEG-tal (7.07) – dyrt även efter hänsyn till förväntad tillväxt",
@@ -940,7 +940,7 @@
       "country_weight": 0,
       "geopolitics_country_note": null,
       "buy_days_on_list": 0,
-      "buy_score_delta": 0,
+      "buy_score_delta": -7,
       "ai_writeup": {
         "text": "**Verksamhet:** Swedbank är en av Sveriges fyra stora banker och marknadsledare i Baltikum (Estland, Lettland och Litauen). \n\nBanken erbjuder vardagsprodukter som konton, betalningar, bolån, kort och rådgivning\n\n – alltså det mesta en privatperson eller ett litet företag behöver. Konkurrensfördelarna (det som gör det svårt för utmanare att ta kunder) är dels djupa, långvariga kundrelationer byggda under 200 år, dels att \n\nde fyra storbankerna kontrollerade 63 procent av den svenska kreditmarknaden 2024\n\n – en marknad som är svår att bryta sig in på tack vare tillit, reglering och byteskostnader (det är krångligt att byta bank).\n\n**Lönsamhet:** Det finns tydliga, offentliga belägg för god lönsamhet. \n\nAvkastningen på eget kapital (ROE – ett mått på hur mycket vinst banken skapar per krona ägarna satsat) uppgick till 17,1 procent för helåret 2024, med en kostnads-intäktskvot på 0,34\n\n – en siffra som visar att banken är ovanligt kostnadseffektiv. \n\nFör helåret 2025 landade ROE på 15,2 procent, med ett föreslagen utdelning på 29,80 kronor per aktie inklusive en extrautdelning.\n\n Det är stabila siffror som håller sig klart över mitt målkrav på 15 %.\n\n**Risker:** Här finns tre verkliga orosmoln:\n\n1. **Penningtvättsskandalen är inte helt över.** \n\nDen svenska Finansinspektionen inledde 2026 en ny granskning av Swedbanks åtgärder mot penningtvätt, och detta trots att en amerikansk DOJ-utredning nyligen avslutades utan böter – en utredning kopplad till misstänkta transaktioner i Baltikum.\n\n Historiken sitter kvar och kan påverka förtroendet.\n\n2. **Ränteberoendet är en sårbarhet.** En stor del av intäkterna kommer från skillnaden mellan vad banken lånar ut och vad den betalar på insättningar (räntenettot). \n\nRäntenettot sjönk med 6 procent sekventiellt i Q1 2025\n\n, vilket visar hur känslig banken är när räntorna faller.\n\n3. **Fintech-hot och digital konkurrens.** \n\nNordiska banker möter störningar från fintech-bolag som introducerar AI-drivna tjänster, vilket kräver kontinuerliga teknikinvesteringar för att behålla konkurrensfördelar.\n\n\n\n**Strukturell eller kvartalsvis bevakning?** En bank är aldrig helt \"sett och glömt\". Kreditkvalitet, räntemiljö och regulatoriska händelser kan förändras snabbt. Däremot är Swedbanks position som dominerande storbank i Sverige och Baltikum strukturell – den rubbas inte av ett enskilt kvartal. \n\nEn kärnkapitaltäckning (CET1) på 19,7 procent i Q1 2025, långt över myndighetskraven, ger en stark buffert\n\n. Bevakning en gång per halvår räcker för de flesta långsiktiga ägare, men penningtvättsfrågorna bör följas.\n\nHELHETSBILD: Blandad – Solid lönsamhet och stark marknadsposition, men penningtvättsskandalens långa svans och ränterisken gör att det inte är ett problemfritt \"köp och glöm\"-bolag.",
         "generated_at": "2026-09-03T11:21:56.840248+00:00"
@@ -969,8 +969,8 @@
       "sbc_to_revenue_pct": null,
       "recommendation_key": null,
       "num_analysts": 17,
-      "target_mean_price": 755.17,
-      "analyst_upside_pct": -12.6,
+      "target_mean_price": 754.78,
+      "analyst_upside_pct": -12.7,
       "pb": 39.62,
       "dividend_yield_pct": 5.05,
       "debt_to_equity": 2.1,
@@ -1047,7 +1047,7 @@
       "watchlist_name": "Evolution",
       "sector": "Consumer",
       "country": "Sverige",
-      "buy_score": 65,
+      "buy_score": 54,
       "buy_reasons": [
         "Lågt P/E (14.6)",
         "Forward P/E -18% under historiskt P/E – vinsttillväxt väntas",
@@ -1063,8 +1063,8 @@
       "geopolitics_note": null,
       "country_weight": 0,
       "geopolitics_country_note": null,
-      "buy_days_on_list": 2,
-      "buy_score_delta": 0
+      "buy_days_on_list": 0,
+      "buy_score_delta": -11
     },
     {
       "ticker": "SBB-B.ST",
@@ -1167,7 +1167,7 @@
       "watchlist_name": "SBB B",
       "sector": "RealEstate",
       "country": "Sverige",
-      "buy_score": 15,
+      "buy_score": 13,
       "buy_reasons": [
         "P/E saknas (t.ex. förlust eller ej rapporterat)",
         "Pris under både SMA50 och SMA200 (nedåttrend)",
@@ -1183,7 +1183,7 @@
       "country_weight": 0,
       "geopolitics_country_note": null,
       "buy_days_on_list": 0,
-      "buy_score_delta": 0
+      "buy_score_delta": -2
     },
     {
       "ticker": "ADDT-B.ST",
@@ -1286,7 +1286,7 @@
       "watchlist_name": "Addtech B",
       "sector": "Industrials",
       "country": "Sverige",
-      "buy_score": 55,
+      "buy_score": 50,
       "buy_reasons": [
         "Högt PEG-tal (4.1) – dyrt även efter hänsyn till förväntad tillväxt",
         "Analytikerkonsensus: starkt köp (7 analytiker)",
@@ -1300,7 +1300,7 @@
       "country_weight": 0,
       "geopolitics_country_note": null,
       "buy_days_on_list": 0,
-      "buy_score_delta": 0
+      "buy_score_delta": -5
     },
     {
       "ticker": "ASMDEE-B.ST",
@@ -1325,8 +1325,8 @@
       "sbc_to_revenue_pct": null,
       "recommendation_key": "strong_buy",
       "num_analysts": 7,
-      "target_mean_price": 190.0,
-      "analyst_upside_pct": 17.1,
+      "target_mean_price": 189.89,
+      "analyst_upside_pct": 17.0,
       "pb": 19.81,
       "dividend_yield_pct": 1.13,
       "debt_to_equity": 35.6,
@@ -1403,7 +1403,7 @@
       "watchlist_name": "Asmodee",
       "sector": "Consumer",
       "country": "Sverige",
-      "buy_score": 55,
+      "buy_score": 48,
       "buy_reasons": [
         "Högt P/E (73.77)",
         "Forward P/E +139% över historiskt P/E – vinstnedgång väntas",
@@ -1418,7 +1418,7 @@
       "country_weight": 0,
       "geopolitics_country_note": null,
       "buy_days_on_list": 0,
-      "buy_score_delta": 0
+      "buy_score_delta": -7
     },
     {
       "ticker": "LAGR-B.ST",
@@ -1521,7 +1521,7 @@
       "watchlist_name": "Lagercrantz Group B",
       "sector": "Industrials",
       "country": "Sverige",
-      "buy_score": 25,
+      "buy_score": 23,
       "buy_reasons": [
         "Högt PEG-tal (3.02) – dyrt även efter hänsyn till förväntad tillväxt",
         "Pris under både SMA50 och SMA200 (nedåttrend)",
@@ -1534,7 +1534,7 @@
       "country_weight": 0,
       "geopolitics_country_note": null,
       "buy_days_on_list": 0,
-      "buy_score_delta": -10
+      "buy_score_delta": -12
     },
     {
       "ticker": "LATO-B.ST",
@@ -1637,7 +1637,7 @@
       "watchlist_name": "Latour B",
       "sector": "Financials",
       "country": "Sverige",
-      "buy_score": 65,
+      "buy_score": 63,
       "buy_reasons": [
         "Pris över både SMA50 och SMA200 (uppåttrend)",
         "Låg skuldsättning (D/E 42.2)"
@@ -1646,8 +1646,8 @@
       "geopolitics_note": null,
       "country_weight": 0,
       "geopolitics_country_note": null,
-      "buy_days_on_list": 6,
-      "buy_score_delta": 0
+      "buy_days_on_list": 0,
+      "buy_score_delta": -2
     },
     {
       "ticker": "MIPS.ST",
@@ -1750,7 +1750,7 @@
       "watchlist_name": "Mips",
       "sector": "Industrials",
       "country": "Sverige",
-      "buy_score": 50,
+      "buy_score": 42,
       "buy_reasons": [
         "Högt P/E (59.84)",
         "Forward P/E -29% under historiskt P/E – vinsttillväxt väntas",
@@ -1767,7 +1767,7 @@
       "country_weight": 0,
       "geopolitics_country_note": null,
       "buy_days_on_list": 0,
-      "buy_score_delta": 0
+      "buy_score_delta": -8
     },
     {
       "ticker": "PACT.ST",
@@ -1870,7 +1870,7 @@
       "watchlist_name": "Proact IT Group",
       "sector": "Technology",
       "country": "Sverige",
-      "buy_score": 85,
+      "buy_score": 78,
       "buy_reasons": [
         "Forward P/E -15% under historiskt P/E – vinsttillväxt väntas",
         "Pris över både SMA50 och SMA200 (uppåttrend)",
@@ -1881,7 +1881,7 @@
       "country_weight": 0,
       "geopolitics_country_note": null,
       "buy_days_on_list": 4,
-      "buy_score_delta": 0
+      "buy_score_delta": -7
     },
     {
       "ticker": "NWG.L",
@@ -1984,7 +1984,7 @@
       "watchlist_name": "NatWest Group Plc",
       "sector": "Financials",
       "country": "Storbritannien",
-      "buy_score": 97,
+      "buy_score": 94,
       "buy_reasons": [
         "Lågt P/E (9.1)",
         "Analytikerkonsensus: köp (18 analytiker)",
@@ -1999,7 +1999,7 @@
       "country_weight": -3,
       "geopolitics_country_note": "ECB-räntehöjning (Irankrigsdriven inflation) (-3)",
       "buy_days_on_list": 6,
-      "buy_score_delta": 0
+      "buy_score_delta": -3
     },
     {
       "ticker": "AAPL",
@@ -2102,7 +2102,7 @@
       "watchlist_name": "Apple",
       "sector": "Technology",
       "country": "USA",
-      "buy_score": 70,
+      "buy_score": 64,
       "buy_reasons": [
         "Pris över både SMA50 och SMA200 (uppåttrend)",
         "Analytikerkonsensus: köp (38 analytiker)",
@@ -2115,8 +2115,8 @@
       "geopolitics_note": null,
       "country_weight": 0,
       "geopolitics_country_note": null,
-      "buy_days_on_list": 6,
-      "buy_score_delta": 5
+      "buy_days_on_list": 0,
+      "buy_score_delta": -1
     },
     {
       "ticker": "MSFT",
@@ -2219,7 +2219,7 @@
       "watchlist_name": "Microsoft",
       "sector": "Technology",
       "country": "USA",
-      "buy_score": 100,
+      "buy_score": 94,
       "buy_reasons": [
         "Forward P/E -24% under historiskt P/E – vinsttillväxt väntas",
         "Pris över både SMA50 och SMA200 (uppåttrend)",
@@ -2235,7 +2235,7 @@
       "country_weight": 0,
       "geopolitics_country_note": null,
       "buy_days_on_list": 6,
-      "buy_score_delta": 0
+      "buy_score_delta": -6
     },
     {
       "ticker": "GOOGL",
@@ -2338,7 +2338,7 @@
       "watchlist_name": "Alphabet",
       "sector": "Technology",
       "country": "USA",
-      "buy_score": 65,
+      "buy_score": 58,
       "buy_reasons": [
         "Forward P/E +34% över historiskt P/E – vinstnedgång väntas",
         "Pris under både SMA50 och SMA200 (nedåttrend)",
@@ -2353,8 +2353,8 @@
       "geopolitics_note": null,
       "country_weight": 0,
       "geopolitics_country_note": null,
-      "buy_days_on_list": 6,
-      "buy_score_delta": 0
+      "buy_days_on_list": 0,
+      "buy_score_delta": -7
     },
     {
       "ticker": "AMZN",
@@ -2457,7 +2457,7 @@
       "watchlist_name": "Amazon",
       "sector": "Consumer",
       "country": "USA",
-      "buy_score": 70,
+      "buy_score": 65,
       "buy_reasons": [
         "Forward P/E +19% över historiskt P/E – vinstnedgång väntas",
         "Analytikerkonsensus: starkt köp (60 analytiker)",
@@ -2469,7 +2469,7 @@
       "country_weight": 0,
       "geopolitics_country_note": null,
       "buy_days_on_list": 6,
-      "buy_score_delta": 0,
+      "buy_score_delta": -5,
       "ai_writeup": {
         "text": "**Verksamhet:** Amazon är tre bolag i ett. Det är en e-handelsplattform (som både säljer själv och hyr ut utrymme till externa säljare), en molntjänst (AWS – Amazon Web Services, det vill säga datorkraft som företag hyr via internet) och ett reklambolag. \n\nKonkurrensfördelarna – det som kallas \"moat\" (vallgrav, det som håller konkurrenter på avstånd) – inkluderar marknadsledarskap i e-handel och molntjänster, stordriftsfördelar, och ett Prime-medlemskap som skapar stark kundlojalitet och höga byteskostnader.\n\n \n\nLogistiknätverket med över 1 200 anläggningar och en privat godstransportflotta gör det extremt svårt för konkurrenter att kopiera.\n\n\n\n**Lönsamhet:** Det finns tydliga offentliga belägg för god lönsamhet. \n\nAmazons rörelseresultat (vinst från själva verksamheten, före räntor och skatt) förbättrades med 86% år 2024 och rörelsemarginalen steg till 10,8%.\n\n \n\nAWS genererade 45,6 miljarder dollar i rörelsevinst 2025 och är segmentet som drar in mest vinst av alla delar.\n\n \n\nAWS har konsekvent de högsta marginalerna och nådde 37% rörelsemarginal 2024\n\n – det är ovanligt högt och tyder på att kapitalet som investeras ger god avkastning (ROIC = avkastning på investerat kapital).\n\n**Risker:** De tre största farhågorna:\n\n1. \n\nAmazon planerar att investera 200 miljarder dollar i infrastruktur 2026 – en uppgång med 56% från föregående år. Det tynger kassaflödet (de fria pengarna) på kort sikt.\n\n\n2. \n\nAmazons teknologisatsningar kan stärka vallgraven, men kan också begränsa kassaflödet om infrastrukturen byggs ut snabbare än kunderna tillkommer.\n\n\n3. \n\nPågående antitrusträttsprocesser, stigande personalkostnader och intensifierad regulatorisk granskning är reella risker som kvarstår.\n\n\n\n**Strukturell eller operationell fördel?** Det här är i grunden ett strukturellt bolag. \n\nAWS-kunder börjar ofta med enkla tjänster, lägger sedan till databaser, AI-verktyg och säkerhetsprodukter – och ju fler tjänster de använder, desto svårare är det att byta.\n\n Den typen av inbyggd \"klebbighet\" (switching costs – kostnaden och besväret att byta leverantör) kräver inte perfekt exekvering varje kvartal för att bestå. E-handelsdelen är däremot mer känslig för operationella störningar och konkurrens. Sammantaget är det mer strukturellt än operationellt – men de massiva investeringarna gör att man ändå bör följa kapitalallokeringen (hur ledningen väljer att investera pengarna) löpande.\n\nHELHETSBILD: Positiv – Amazon har en sällsynt kombination av flera starka vallgravar, bevisad och förbättrad lönsamhet, men den gigantiska investeringstakten är en osäkerhetsfaktor som kräver att man tror på ledningens förmåga att få avkastning på kapitalet.",
         "generated_at": "2026-09-03T09:12:54.302410+00:00"
@@ -2697,7 +2697,7 @@
       "watchlist_name": "Meta Platforms",
       "sector": "Technology",
       "country": "USA",
-      "buy_score": 100,
+      "buy_score": 97,
       "buy_reasons": [
         "Lågt PEG-tal (0.86) – P/E ser rimligt ut i relation till förväntad vinsttillväxt",
         "Forward P/E -24% under historiskt P/E – vinsttillväxt väntas",
@@ -2715,7 +2715,7 @@
       "country_weight": 0,
       "geopolitics_country_note": null,
       "buy_days_on_list": 6,
-      "buy_score_delta": 0
+      "buy_score_delta": -3
     },
     {
       "ticker": "TSLA",
@@ -2818,7 +2818,7 @@
       "watchlist_name": "Tesla",
       "sector": "Consumer",
       "country": "USA",
-      "buy_score": 35,
+      "buy_score": 31,
       "buy_reasons": [
         "Högt P/E (339.78)",
         "Högt PEG-tal (4.4) – dyrt även efter hänsyn till förväntad tillväxt",
@@ -2833,7 +2833,7 @@
       "country_weight": 0,
       "geopolitics_country_note": null,
       "buy_days_on_list": 0,
-      "buy_score_delta": 0
+      "buy_score_delta": -4
     },
     {
       "ticker": "GLW",
@@ -2936,7 +2936,7 @@
       "watchlist_name": "Corning",
       "sector": "Industrials",
       "country": "USA",
-      "buy_score": 55,
+      "buy_score": 46,
       "buy_reasons": [
         "Högt P/E (75.17)",
         "Forward P/E -50% under historiskt P/E – vinsttillväxt väntas",
@@ -2953,7 +2953,7 @@
       "country_weight": 0,
       "geopolitics_country_note": null,
       "buy_days_on_list": 0,
-      "buy_score_delta": -10
+      "buy_score_delta": -19
     },
     {
       "ticker": "INTC",
@@ -3056,7 +3056,7 @@
       "watchlist_name": "Intel",
       "sector": "Semiconductors",
       "country": "USA",
-      "buy_score": 45,
+      "buy_score": 39,
       "buy_reasons": [
         "P/E saknas (t.ex. förlust eller ej rapporterat)",
         "Pris över både SMA50 och SMA200 (uppåttrend)",
@@ -3072,7 +3072,7 @@
       "country_weight": 0,
       "geopolitics_country_note": null,
       "buy_days_on_list": 0,
-      "buy_score_delta": 20
+      "buy_score_delta": 14
     },
     {
       "ticker": "MU",
@@ -3175,7 +3175,7 @@
       "watchlist_name": "Micron Technology",
       "sector": "Semiconductors",
       "country": "USA",
-      "buy_score": 70,
+      "buy_score": 59,
       "buy_reasons": [
         "Lågt PEG-tal (0.15) – P/E ser rimligt ut i relation till förväntad vinsttillväxt",
         "Forward P/E -72% under historiskt P/E – vinsttillväxt väntas",
@@ -3192,8 +3192,8 @@
       "geopolitics_note": "Iran-konflikten / Hormuzsundet (-10), USA-Kina teknikrivalitet / exportkontroller (-10)",
       "country_weight": 0,
       "geopolitics_country_note": null,
-      "buy_days_on_list": 2,
-      "buy_score_delta": 0
+      "buy_days_on_list": 0,
+      "buy_score_delta": -11
     },
     {
       "ticker": "SAP.DE",
@@ -3296,7 +3296,7 @@
       "watchlist_name": "SAP",
       "sector": "Technology",
       "country": "Tyskland",
-      "buy_score": 97,
+      "buy_score": 96,
       "buy_reasons": [
         "Forward P/E -20% under historiskt P/E – vinsttillväxt väntas",
         "Pris över både SMA50 och SMA200 (uppåttrend)",
@@ -3311,7 +3311,7 @@
       "country_weight": -3,
       "geopolitics_country_note": "ECB-räntehöjning (Irankrigsdriven inflation) (-3)",
       "buy_days_on_list": 6,
-      "buy_score_delta": 0
+      "buy_score_delta": -1
     },
     {
       "ticker": "SIE.DE",
@@ -3414,7 +3414,7 @@
       "watchlist_name": "Siemens",
       "sector": "Industrials",
       "country": "Tyskland",
-      "buy_score": 77,
+      "buy_score": 66,
       "buy_reasons": [
         "Högt PEG-tal (5.35) – dyrt även efter hänsyn till förväntad tillväxt",
         "Forward P/E -23% under historiskt P/E – vinsttillväxt väntas",
@@ -3429,7 +3429,7 @@
       "country_weight": -3,
       "geopolitics_country_note": "ECB-räntehöjning (Irankrigsdriven inflation) (-3)",
       "buy_days_on_list": 1,
-      "buy_score_delta": 25
+      "buy_score_delta": 14
     },
     {
       "ticker": "ALV.DE",
@@ -3532,7 +3532,7 @@
       "watchlist_name": "Allianz",
       "sector": "Financials",
       "country": "Tyskland",
-      "buy_score": 97,
+      "buy_score": 91,
       "buy_reasons": [
         "Lågt P/E (14.41)",
         "Pris över både SMA50 och SMA200 (uppåttrend)",
@@ -3547,7 +3547,7 @@
       "country_weight": -3,
       "geopolitics_country_note": "ECB-räntehöjning (Irankrigsdriven inflation) (-3)",
       "buy_days_on_list": 6,
-      "buy_score_delta": 5,
+      "buy_score_delta": -1,
       "ai_writeup": {
         "text": "**Verksamhet:** Allianz är Europas största försäkringsbolag (mätt i börsvärde). \n\nBolaget verkar inom tre ben: sak- och skadeförsäkring (t.ex. bil, hem, företag), liv- och hälsoförsäkring, samt kapitalförvaltning.\n\n Det sistnämnda inkluderar PIMCO – en av världens mest kända obligationsförvaltare. \n\nAllianz betjänar över 128 miljoner kunder i nära 70 länder.\n\n\n\n**Konkurrensfördel (moat):** En moat är det som gör det svårt för konkurrenter att ta kunder. Allianz har tre sådana:\n- **Varumärkesstyrka:** \n\nAllianz rankades som världens starkaste försäkringsvarumärke 2024 – för sjätte året i rad.\n\n\n- **Global skala:** \n\nDistributionsnät, teckningsförmåga (att bedöma och prissätta risk), skadehantering och finansiell styrka är de verkliga konkurrensfaktorerna\n\n – inte marknadsföring i sig. Dessa tar decennier att bygga.\n- **PIMCO-arvet:** \n\nLångsiktiga konkurrensfördelar från varumärkeskännedom, distributionsskala, riskhanteringsförmåga och PIMCOs institutionella relationer\n\n stärker kapitalet som bolaget förvaltar.\n\n**Lönsamhet:** Avkastning på eget kapital (RoE – alltså hur mycket vinst bolaget skapar per investerad krona från ägarna) är ett nyckeltal för försäkringsbolag. \n\nAllianz levererade en RoE på 18,1 % för helåret 2025, med ett rörelseresultat på rekordnivån 17,4 miljarder euro.\n\n Det är klart över den nivå (15 %+) som brukar anses vara god avkastning. OBS: Det råder en diskrepans i data – \n\nett analysverktyg (GuruFocus) beräknar ROIC (avkastning på allt investerat kapital) till enbart 1,2 %\n\n, vilket är en annan beräkningsmetod som inkluderar försäkringsbolags enorma balansräkningar. Tolka med försiktighet – RoE är mer relevant för branschen.\n\n**Risker:** De tre största skälen till att *inte* äga bolaget långsiktigt:\n1. **Klimat och katastrofrisker:** \n\nIhållande makroekonomiska utmaningar, klimatrelaterade skador och juridiska risker pressar skade- och sakförsäkringsdivisionen.\n\n Extremväder blir dyrare för hela branschen.\n2. **Valutarisk:** \n\nPågående valutasvängningar kan snabbt förändra rapporterade marginaler och tillväxt\n\n – Allianz är globalt och tjänar i många valutor.\n3. **Begränsat utrymme att \"compоunda\" (återinvestera till hög avkastning):** Försäkringsbolag är kapitaltunga och reglerade. De kan inte fritt återinvestera vinster som ett teknikbolag – en stor del måste delas ut eller hållas som buffert.\n\n**Strukturell eller operationell fördel?** Det här är ett bolag där fördelen är *strukturell och varaktig*. \n\nDen välbalanserade affärsmixen över sak-, liv- och kapitalförvaltningssegmenten stödjer intäktsstabilitet och minskar känsligheten för cykliska chocker.\n\n Varumärket, distributionsnätet och skalan byggs inte bort på ett kvartal. Enstaka dåliga kvartal (t.ex. vid stormar eller finansoro) påverkar resultaten, men hotar inte den underliggande positionen. Bevakning behövs – men panik vid svaga kvartal är sällan motiverad.\n\nHELHETSBILD: Positiv – Allianz är ett välbevisat, lönsamt bolag med verklig skala och varumärkeskraft, men klimatrisk och begränsad återinvesteringspotential gör det mer till en stabil utdelningsinvestering än en klassisk \"compounder\".",
         "generated_at": "2026-09-03T09:07:09.248789+00:00"
@@ -3654,7 +3654,7 @@
       "watchlist_name": "BASF",
       "sector": "Materials",
       "country": "Tyskland",
-      "buy_score": 97,
+      "buy_score": 87,
       "buy_reasons": [
         "Lågt PEG-tal (0.7) – P/E ser rimligt ut i relation till förväntad vinsttillväxt",
         "Forward P/E -20% under historiskt P/E – vinsttillväxt väntas",
@@ -3670,7 +3670,7 @@
       "country_weight": -3,
       "geopolitics_country_note": "ECB-räntehöjning (Irankrigsdriven inflation) (-3)",
       "buy_days_on_list": 6,
-      "buy_score_delta": 0,
+      "buy_score_delta": -10,
       "ai_writeup": {
         "text": "**Verksamhet:** \n\nBASF är världens största kemikalieproducent\n\n och säljer tusentals produkter till branscher som bilindustri, jordbruk, bygg och elektronik. Den påstådda konkurrensfördelen kallas internt för \"Verbund\" – ett tyskt ord för \"sammanlänkning\". \n\nDet handlar om stordriftsfördelar och djup integration mellan fabriker, där biprodukter i en process används som råvara i nästa\n\n – som ett slags ekonomisk kedja som är svår och dyr att kopiera. \n\nInom exempelvis lack och material är godkänd leverantörsstatus hos stora kunder ett reellt konkurrenshinder\n\n – när du väl är inne, är det jobbigt att byta ut dig.\n\n**Lönsamhet:** Här är bilden oroande. ROIC – avkastning på investerat kapital, ett mått på hur effektivt bolaget använder sina pengar – \n\nligger på ca 2,3 %, vilket är 46 % under medianen för kemibolag, och lägre än vad det faktiskt kostar bolaget att låna och driva verksamheten.\n\n Det betyder att varje krona de investerar förstör värde snarare än skapar det. \n\nQ2 2025 visade ett nettoresultat som föll med 77 %\n\n – ett kraftigt varningssignal, inte ett engångsproblem.\n\n**Risker:** De tre största skälen att tveka:\n\n1. \n\nEuropeiska fabriker – framför allt i Ludwigshafen – dras med strukturellt höga energikostnader och sjunkande konkurrenskraft, vilket tvingat fram omfattande omstruktureringar.\n\n\n2. \n\nUtdelning och återköp av aktier överstiger det fria kassaflödet (pengar kvar efter investeringar), vilket skapar oro kring om utdelningen är hållbar på sikt.\n\n\n3. \n\nKonkurrensen från lågkostnadsproducenter i Mellanöstern och Kina ökar\n\n, och \n\ndessa förväntas bli allt viktigare de kommande åren tack vare billigare råmaterial och energi.\n\n\n\n**Bevakning:** Detta är inte ett \"köp och glöm\"-bolag. \n\nStrukturell överkapacitet, geopolitisk instabilitet och svag efterfrågan\n\n gör att varje kvartal är relevant att följa. Energipriser, kinesisk efterfrågan och hur omstruktureringen fortskrider är avgörande variabler som kan förändras snabbt. Fördelen är inte tillräckligt strukturell eller skyddad för att man tryggt ska kunna blunda.\n\nHELHETSBILD: Försiktig – BASF är stort och välkänt, men avkastningen på investerat kapital är för svag, energikostnaderna biter hårt och utdelningen kan vara svår att hålla utan tydlig lönsamhetsförbättring.",
         "generated_at": "2026-09-03T11:22:26.712343+00:00"
@@ -3777,7 +3777,7 @@
       "watchlist_name": "BMW",
       "sector": "Consumer",
       "country": "Tyskland",
-      "buy_score": 82,
+      "buy_score": 71,
       "buy_reasons": [
         "Lågt P/E (6.03)",
         "Lågt PEG-tal (0.59) – P/E ser rimligt ut i relation till förväntad vinsttillväxt",
@@ -3793,7 +3793,7 @@
       "country_weight": -3,
       "geopolitics_country_note": "ECB-räntehöjning (Irankrigsdriven inflation) (-3)",
       "buy_days_on_list": 2,
-      "buy_score_delta": 0,
+      "buy_score_delta": -11,
       "ai_writeup": {
         "text": "**Verksamhet:** BMW tillverkar och säljer premiumbilarna BMW, MINI och Rolls-Royce samt motorcyklar. Konkurrensfördelens kärna – det som gör det svårt för andra att ta kunder – är \n\nett starkt varumärke där märket signalerar körglädje, ingenjörskonst och en tydlig premiumprofil\n\n. \n\nFamiljen Quandt (Stefan Quandt ~26 % och Susanne Klatten ~21 %) är dominant ägare\n\n, vilket ger viss stabilitet i ägarstyrningen. Det är dock ett varumärke som *kräver* kontinuerliga miljardtungar investeringar för att förbli relevant – det är ingen självgående \"moat\" (vallgrav, dvs. ett naturligt skydd mot konkurrenter) som en programvara eller ett patent.\n\n**Lönsamhet:** Här finns en tydlig röd flagga. ROIC (avkastning på investerat kapital – hur mycket vinst varje investerad krona ger tillbaka) ligger i dag på \n\nca 2–3 %, vilket är 54 % under medianen för branschen\n\n. Det är långt ifrån de 15 %+ som kännetecknar kvalitetsbolag med stark moat. \n\nNettovinsten föll 37 % under 2024 till 7,7 miljarder euro och omsättningen sjönk 8 %.\n\n Det är inte ett engångsproblem – \n\nROIC har fallit tre av de senaste fyra åren\n\n.\n\n**Risker:** De tre tyngsta orosmolnen:\n\n1. **Kina-beroendet.** \n\nKina utgör över 30 % av BMW:s försäljningsvolym, och passibilsregistreringarna i Kina faller – det drabbar lyxmärken hårdast.\n\n \n\nKonsumenterna skiftar till inhemska märken som BYD.\n\n\n2. **Elbilsövergången pressar marginalerna.** \n\nNye Klasse-plattformen och mjukvaruinvesteringar kräver massiva utgifter samtidigt som prissättningskraften eroderar och branschen lider av överkapacitet.\n\n\n3. **Tullar och geopolitik.** \n\nPermanenta amerikanska tullar riskerar stigande inflation, och handelspolitiska motåtgärder kan bromsa den globala ekonomin\n\n – med direkt effekt på BMW:s marginaler.\n\n**Typ av bevakning som krävs:** BMW kräver tät kvartalsviss bevakning. \n\nRegulatoriska förändringar, tullar, lokal elbilsadoption och regional konkurrens kan märkbart påverka resultaten\n\n. Det är *inte* ett bolag där man kan luta sig tillbaka – varje kvartal med nyheter från Kina, tullbeslut eller produktionsproblem kan flytta bilden väsentligt.\n\nHELHETSBILD: Försiktig – BMW är ett välkänt varumärke men saknar den typ av stark, självförstärkande konkurrensfördel som ett kvalitetsbolag bör ha, och lönsamheten (ROIC ~2–3 %) är för svag för en långsiktig \"compounder\"-investering.",
         "generated_at": "2026-09-03T09:13:26.060143+00:00"
@@ -3900,7 +3900,7 @@
       "watchlist_name": "Deutsche Telekom",
       "sector": "Telecom",
       "country": "Tyskland",
-      "buy_score": 87,
+      "buy_score": 78,
       "buy_reasons": [
         "Forward P/E -30% under historiskt P/E – vinsttillväxt väntas",
         "Analytikerkonsensus: starkt köp (18 analytiker)",
@@ -3915,7 +3915,7 @@
       "country_weight": -3,
       "geopolitics_country_note": "ECB-räntehöjning (Irankrigsdriven inflation) (-3)",
       "buy_days_on_list": 6,
-      "buy_score_delta": 0
+      "buy_score_delta": -9
     },
     {
       "ticker": "ASML.AS",
@@ -4018,7 +4018,7 @@
       "watchlist_name": "ASML Holding",
       "sector": "Semiconductors",
       "country": "Nederländerna",
-      "buy_score": 52,
+      "buy_score": 43,
       "buy_reasons": [
         "Högt P/E (57.9)",
         "Forward P/E -51% under historiskt P/E – vinsttillväxt väntas",
@@ -4037,7 +4037,7 @@
       "country_weight": -3,
       "geopolitics_country_note": "ECB-räntehöjning (Irankrigsdriven inflation) (-3)",
       "buy_days_on_list": 0,
-      "buy_score_delta": 0
+      "buy_score_delta": -9
     },
     {
       "ticker": "HEIA.AS",
@@ -4140,7 +4140,7 @@
       "watchlist_name": "Heineken",
       "sector": "Consumer",
       "country": "Nederländerna",
-      "buy_score": 77,
+      "buy_score": 71,
       "buy_reasons": [
         "Forward P/E -28% under historiskt P/E – vinsttillväxt väntas",
         "Analytikerkonsensus: köp (23 analytiker)",
@@ -4152,7 +4152,7 @@
       "country_weight": -3,
       "geopolitics_country_note": "ECB-räntehöjning (Irankrigsdriven inflation) (-3)",
       "buy_days_on_list": 2,
-      "buy_score_delta": 0
+      "buy_score_delta": -6
     },
     {
       "ticker": "INGA.AS",
@@ -4255,7 +4255,7 @@
       "watchlist_name": "ING Group",
       "sector": "Financials",
       "country": "Nederländerna",
-      "buy_score": 82,
+      "buy_score": 71,
       "buy_reasons": [
         "Lågt P/E (13.69)",
         "Forward P/E -20% under historiskt P/E – vinsttillväxt väntas",
@@ -4270,7 +4270,7 @@
       "country_weight": -3,
       "geopolitics_country_note": "ECB-räntehöjning (Irankrigsdriven inflation) (-3)",
       "buy_days_on_list": 2,
-      "buy_score_delta": 0,
+      "buy_score_delta": -11,
       "ai_writeup": {
         "text": "**Verksamhet:** ING är en stor europeisk bank med bas i Nederländerna. \n\nKärnan är privat- och företagsbank – de erbjuder sparkonton, lån och bolån till miljontals kunder.\n\n Den påstådda konkurrensfördelen (det som gör det svårt för konkurrenter att ta kunder) är kombinationen av tre saker: \n\nursprunget som direktbank har skapat en kultur för digital innovation och användarvänlighet\n\n, \n\nen relativt låg kostnadsnivå (kostnad vs. intäkt: 51% år 2025, vilket är bra för en storbank)\n\n, och en stor kundbas med hög \"byttröghet\" – dvs. kunder ogillar besväret med att byta bank.\n\n**Lönsamhet:** Avkastning på eget kapital (ROE – ett mått på hur mycket vinst banken genererar per krona aktieägarna äger) är \n\n13,2% för 2025, upp från 13,0% år 2024.\n\n Det är godkänt för en storbank. Dock är det traditionella måttet ROIC (avkastning på allt investerat kapital, inklusive inlånade pengar) \n\ngenomsnittligt bara ca 3% de senaste fem åren\n\n – det är strukturellt lågt för en bank, men delvis en matematisk effekt av hur banker räknar kapital. \n\nAvgiftsintäkter (kapitallätta intäkter, dvs. pengar utan att behöva låna ut mer) ökade 15% under 2025 och står nu för 20% av totalintäkterna\n\n – det är en positiv trend.\n\n**Risker:** De tre största skälen till att tveka:\n\n1. \n\nVolatila räntor, nya Basel IV-kapitalkrav och konkurrens från neobanker och techbolag kan begränsa tillväxt och kapitalåterföring.\n\n Ränteförändringar slår direkt mot intjäningen – det är svårt att skydda sig mot.\n2. \n\nING har en låg reserv mot dåliga lån (46%), vilket ger litet utrymme om kreditkvaliteten försämras.\n\n\n3. \n\nUtdelningshistoriken är instabil – utdelningen har tidigare fallit med över 20% ett enskilt år\n\n, vilket gör det svårt att lita på som stabil inkomstkälla.\n\n**Bevakning – strukturellt eller löpande?** Det här är ett bolag som kräver löpande bevakning. Banker är djupt känsliga för makrofaktorer utanför deras kontroll: räntebeslut, kreditförluster och regulatoriska krav kan snabbt förändra bilden. \n\nSnabba ränteförändringar kan pressa marginalerna och öka antalet dåliga lån.\n\n Det finns ingen enkel, svårrubbad \"moat\" (vallgrav = hållbar konkurrensfördel) som hos exempelvis ett mjukvarubolag med höga byteskostnader.\n\nHELHETSBILD: Blandad – ING är en välskött storbank med okej lönsamhet och digital ambition, men bankens intjäning styrs mer av räntor och regleringar än av en stark, skyddad konkurrensfördel.",
         "generated_at": "2026-09-03T11:20:49.261319+00:00"
@@ -4377,7 +4377,7 @@
       "watchlist_name": "Ahold Delhaize",
       "sector": "Consumer",
       "country": "Nederländerna",
-      "buy_score": 77,
+      "buy_score": 68,
       "buy_reasons": [
         "Lågt P/E (12.33)",
         "Pris under både SMA50 och SMA200 (nedåttrend)",
@@ -4391,7 +4391,7 @@
       "country_weight": -3,
       "geopolitics_country_note": "ECB-räntehöjning (Irankrigsdriven inflation) (-3)",
       "buy_days_on_list": 6,
-      "buy_score_delta": 0,
+      "buy_score_delta": -9,
       "ai_writeup": {
         "text": "**Verksamhet:** Ahold Delhaize är en av världens största dagligvaruhandlare. \n\nBolaget bildades 2016 genom en fusion mellan holländska Ahold och belgiska Delhaize, och driver i dag över 7 000 butiker i Europa och USA\n\n under varumärken som Albert Heijn, Food Lion och Stop & Shop. Den påstådda konkurrensfördelen – alltså det som ska göra det svårt för konkurrenter att ta kunder – är en kombination av två saker: \n\nlokalt förankrade varumärken med djupa rötter i sina samhällen, kombinerat med stordriftsfördelar i inköp, teknik och logistik.\n\n Lojalitetsprogram och kunddata nämns som tillgångar, men det är svårt att avgöra hur starka de verkligen är jämfört med konkurrenterna.\n\n**Lönsamhet:** Bolaget är lönsamt, men inte imponerande lönsamt sett till hur effektivt kapitalet används. ROIC (avkastning på investerat kapital – alltså hur många kronor man tjänar per krona man satsar i verksamheten) \n\nligger under branschsnittet.\n\n \n\nNuvarande ROIC är ungefär 7,7 %, ned från 8,2 % för tre år sedan.\n\n Det är långt under mitt gränsvärde på 15 %. \n\nRörelsemarginalen för helåret 2025 var 4,0 %\n\n – typiskt för livsmedelshandeln, men inte den typ av marginal som skapar en stark vallgrav (moat = ett skydd mot konkurrenter, som ett slott med vallgrav).\n\n**Risker:** De tre tyngsta:\n1. \n\nHård priskonkurrens från lågpriskedjor pressar marginalerna – bolaget tvingas bland annat satsa 1 miljard dollar i prissänkningar i USA bara för att hänga med.\n\n\n2. \n\nDen decentraliserade modellen med många varumärken skapar risk för att enskilda kedjor underpresterar – Stop & Shop i USA kräver just nu en kostsam vändning.\n\n\n3. \n\nGeopolitisk oro, importtullar och råvaruprissvängningar ökar de finansiella riskerna.\n\n\n\n**Bevakning:** Det här är ett bolag som kräver löpande bevakning. \n\nMathandel är intensivt lokal – varje kvartal handlar om att slå konkurrenter i rätt butikslägen, med rätt priser och rätt sortiment.\n\n Fördelen är inte strukturellt orubblig; den måste förtjänas om och om igen. Det är tvärtom mot vad jag letar efter som långsiktig kvalitetsinvesterare.\n\nHELHETSBILD: Försiktig – Stabil verksamhet med välkända varumärken, men låg avkastning på kapitalet, tunna marginaler och hård priskonkurrens gör att detta inte når upp till kraven för ett riktigt kvalitetsbolag.",
         "generated_at": "2026-09-03T09:12:16.035321+00:00"
@@ -4420,7 +4420,7 @@
       "sbc_to_revenue_pct": null,
       "recommendation_key": "buy",
       "num_analysts": 16,
-      "target_mean_price": 3819.12,
+      "target_mean_price": 3818.24,
       "analyst_upside_pct": 8.1,
       "pb": 1.48,
       "dividend_yield_pct": 3.3,
@@ -4498,7 +4498,7 @@
       "watchlist_name": "Shell",
       "sector": "Energy",
       "country": "Storbritannien",
-      "buy_score": 97,
+      "buy_score": 96,
       "buy_reasons": [
         "Lågt P/E (10.58)",
         "Pris över både SMA50 och SMA200 (uppåttrend)",
@@ -4514,7 +4514,7 @@
       "country_weight": -3,
       "geopolitics_country_note": "ECB-räntehöjning (Irankrigsdriven inflation) (-3)",
       "buy_days_on_list": 6,
-      "buy_score_delta": 0,
+      "buy_score_delta": -1,
       "ai_writeup": {
         "text": "**Verksamhet:** Shell är ett av världens största energibolag. \n\nKärnverksamheten spänner över integrerad gas, djupvattenbrytning av olja, och nedströmsverksamhet inom bränslen och kemikalier.\n\n Enkelt sagt: de tar upp olja och gas ur marken, förädlar den, och säljer den vidare – både som bensin och som flytande naturgas (LNG) till industrier världen runt.\n\n**Påstådd konkurrensfördel (moat – dvs. \"vallgrav\" som håller konkurrenter borta):** \n\nShells främsta fördel är dess stora handels- och optimeringsnätverk kombinerat med ledande position inom LNG, vilket gör att de kan fånga premiummarginaler från prisvariationer längs hela energikedjan.\n\n Det kostar enorma summor och tar decennier att bygga upp liknande global infrastruktur. Det är inte omöjligt att kopiera – men det är väldigt svårt och dyrt.\n\n**Lönsamhet och ROIC (avkastning på investerat kapital – hur mycket vinst bolaget genererar per satsad krona):** Här är bilden oroande. \n\nShells ROIC är cirka 5,3% per december 2025.\n\n Det är klart under mitt krav på 15% för kvalitetsbolag, och \n\nShell genererar avkastning som inte täcker kapitalkostnaden – vilket innebär att värde riskerar att förstöras när bolaget växer.\n\n \n\nTrots ett toppar på 16,9% år 2022 (drivet av höga energipriser) har ROIC fallit tillbaka kraftigt.\n\n Historiken pekar inte på ett strukturellt lönsamt \"compounder\" (bolag som återinvesterar vinst till hög avkastning år efter år).\n\n**Risker – de 3 största skälen att tveka:**\n\n1. **Råvaruprisberoendet.** \n\nShells intjäning är mycket känslig för svängningar i oljepriset.\n\n Det finns ingen kontroll på den variabeln – och den styr i princip hela resultatet.\n2. **Energiomställningen.** \n\nÖvergången till en koldioxidsnål ekonomi kan leda till lägre försäljningsvolymer och marginaler, potentiellt oanvändbara tillgångar och missade möjligheter.\n\n Shell äger enorma tillgångar som kan bli värdelösa (\"stranded assets\") om oljeefterfrågan faller snabbare än väntat.\n3. **Politisk och skattemässig risk.** \n\nShell verkar i över 70 länder med varierande politisk och juridisk stabilitet, vilket har exponerat och kan exponera bolaget för ett brett spektrum av politiska förändringar.\n\n \n\nHöga vinster under energikriser kan dessutom attrahera extra beskattning från regeringar.\n\n\n\n**Kräver kvartalsbevakning eller strukturell fördel?** Shell kräver tät bevakning. Resultaten svänger kraftigt beroende på oljepriset, geopolitik och vädret. Det är inte ett bolag vars konkurrensfördel \"sköter sig själv\" – \n\nframtidsutsikterna beror starkt på exekveringen av strategin och förmågan att balansera kapital mellan olja och fossilfria lösningar.\n\n Det är mer ett cykliskt råvarubolag än ett stabilt kvalitetsbolag.\n\nHELHETSBILD: Försiktig – Shell är ett stort, välkänt bolag, men låg och fallande avkastning på investerat kapital, stark råvaruprisexponering och osäker energiomställning gör det svårt att motivera det som en långsiktig kvalitetsinvestering.",
         "generated_at": "2026-09-03T09:05:53.485558+00:00"
@@ -4543,7 +4543,7 @@
       "sbc_to_revenue_pct": null,
       "recommendation_key": "buy",
       "num_analysts": 22,
-      "target_mean_price": 15754.83,
+      "target_mean_price": 15751.22,
       "analyst_upside_pct": 34.0,
       "pb": 4.91,
       "dividend_yield_pct": 2.05,
@@ -4621,7 +4621,7 @@
       "watchlist_name": "AstraZeneca",
       "sector": "Healthcare",
       "country": "Storbritannien",
-      "buy_score": 62,
+      "buy_score": 56,
       "buy_reasons": [
         "Forward P/E -42% under historiskt P/E – vinsttillväxt väntas",
         "Pris under både SMA50 och SMA200 (nedåttrend)",
@@ -4635,7 +4635,7 @@
       "country_weight": -3,
       "geopolitics_country_note": "ECB-räntehöjning (Irankrigsdriven inflation) (-3)",
       "buy_days_on_list": 0,
-      "buy_score_delta": 0
+      "buy_score_delta": -6
     },
     {
       "ticker": "HSBA.L",
@@ -4660,7 +4660,7 @@
       "sbc_to_revenue_pct": 0.9,
       "recommendation_key": "hold",
       "num_analysts": 17,
-      "target_mean_price": 1486.86,
+      "target_mean_price": 1486.52,
       "analyst_upside_pct": -2.8,
       "pb": 2.06,
       "dividend_yield_pct": 3.59,
@@ -4738,7 +4738,7 @@
       "watchlist_name": "HSBC Holdings",
       "sector": "Financials",
       "country": "Storbritannien",
-      "buy_score": 97,
+      "buy_score": 94,
       "buy_reasons": [
         "Lågt P/E (14.84)",
         "Lågt PEG-tal (0.92) – P/E ser rimligt ut i relation till förväntad vinsttillväxt",
@@ -4755,7 +4755,7 @@
       "country_weight": -3,
       "geopolitics_country_note": "ECB-räntehöjning (Irankrigsdriven inflation) (-3)",
       "buy_days_on_list": 6,
-      "buy_score_delta": 5
+      "buy_score_delta": 2
     },
     {
       "ticker": "BP.L",
@@ -4780,7 +4780,7 @@
       "sbc_to_revenue_pct": 0.6,
       "recommendation_key": "buy",
       "num_analysts": 19,
-      "target_mean_price": 604.31,
+      "target_mean_price": 604.17,
       "analyst_upside_pct": 6.9,
       "pb": 2.03,
       "dividend_yield_pct": 4.5,
@@ -4858,7 +4858,7 @@
       "watchlist_name": "BP",
       "sector": "Energy",
       "country": "Storbritannien",
-      "buy_score": 97,
+      "buy_score": 89,
       "buy_reasons": [
         "Lågt PEG-tal (0.06) – P/E ser rimligt ut i relation till förväntad vinsttillväxt",
         "Forward P/E -53% under historiskt P/E – vinsttillväxt väntas",
@@ -4873,7 +4873,7 @@
       "country_weight": -3,
       "geopolitics_country_note": "ECB-räntehöjning (Irankrigsdriven inflation) (-3)",
       "buy_days_on_list": 6,
-      "buy_score_delta": 0
+      "buy_score_delta": -8
     },
     {
       "ticker": "GSK.L",
@@ -4976,7 +4976,7 @@
       "watchlist_name": "GSK",
       "sector": "Healthcare",
       "country": "Storbritannien",
-      "buy_score": 62,
+      "buy_score": 53,
       "buy_reasons": [
         "Högt PEG-tal (91.97) – dyrt även efter hänsyn till förväntad tillväxt",
         "Forward P/E -38% under historiskt P/E – vinsttillväxt väntas",
@@ -4992,7 +4992,7 @@
       "country_weight": -3,
       "geopolitics_country_note": "ECB-räntehöjning (Irankrigsdriven inflation) (-3)",
       "buy_days_on_list": 0,
-      "buy_score_delta": 15
+      "buy_score_delta": 6
     },
     {
       "ticker": "ESSITY-B.ST",
@@ -5095,7 +5095,7 @@
       "watchlist_name": "Essity B",
       "sector": "Consumer",
       "country": "Sverige",
-      "buy_score": 70,
+      "buy_score": 60,
       "buy_reasons": [
         "Lågt P/E (14.82)",
         "Högt PEG-tal (3.21) – dyrt även efter hänsyn till förväntad tillväxt",
@@ -5108,8 +5108,8 @@
       "geopolitics_note": null,
       "country_weight": 0,
       "geopolitics_country_note": null,
-      "buy_days_on_list": 2,
-      "buy_score_delta": 0
+      "buy_days_on_list": 0,
+      "buy_score_delta": -10
     },
     {
       "ticker": "SOFI",
@@ -5212,7 +5212,7 @@
       "watchlist_name": "SoFi Technologies",
       "sector": "Financials",
       "country": "USA",
-      "buy_score": 55,
+      "buy_score": 49,
       "buy_reasons": [
         "Lågt PEG-tal (0.62) – P/E ser rimligt ut i relation till förväntad vinsttillväxt",
         "Forward P/E -41% under historiskt P/E – vinsttillväxt väntas",
@@ -5227,7 +5227,7 @@
       "country_weight": 0,
       "geopolitics_country_note": null,
       "buy_days_on_list": 0,
-      "buy_score_delta": 0
+      "buy_score_delta": -6
     },
     {
       "ticker": "BOL.ST",
@@ -5330,7 +5330,7 @@
       "watchlist_name": "Boliden",
       "sector": "Materials",
       "country": "Sverige",
-      "buy_score": 75,
+      "buy_score": 68,
       "buy_reasons": [
         "Lågt P/E (12.23)",
         "Pris över både SMA50 och SMA200 (uppåttrend)",
@@ -5445,7 +5445,7 @@
       "watchlist_name": "Skanska B",
       "sector": "Industrials",
       "country": "Sverige",
-      "buy_score": 60,
+      "buy_score": 58,
       "buy_reasons": [
         "Högt PEG-tal (5.82) – dyrt även efter hänsyn till förväntad tillväxt",
         "Analytikerkonsensus: köp (8 analytiker)",
@@ -5562,7 +5562,7 @@
       "watchlist_name": "Telia Company",
       "sector": "Telecom",
       "country": "Sverige",
-      "buy_score": 75,
+      "buy_score": 69,
       "buy_reasons": [
         "Forward P/E -36% under historiskt P/E – vinsttillväxt väntas",
         "Pris över både SMA50 och SMA200 (uppåttrend)",
@@ -5678,7 +5678,7 @@
       "watchlist_name": "Alfa Laval",
       "sector": "Industrials",
       "country": "Sverige",
-      "buy_score": 60,
+      "buy_score": 58,
       "buy_reasons": [
         "Analytikerkonsensus: köp (17 analytiker)",
         "Låg skuldsättning (D/E 45.8)",
@@ -5714,10 +5714,10 @@
       "sbc_to_revenue_pct": null,
       "recommendation_key": "buy",
       "num_analysts": 10,
-      "target_mean_price": 197.11,
-      "analyst_upside_pct": -0.8,
+      "target_mean_price": 197.01,
+      "analyst_upside_pct": -0.9,
       "pb": 21.64,
-      "dividend_yield_pct": 7.18,
+      "dividend_yield_pct": 7.25,
       "debt_to_equity": null,
       "market_cap": 674338832384,
       "avg_dollar_volume": 258691311.0,
@@ -5792,7 +5792,7 @@
       "watchlist_name": "Nordea Bank",
       "sector": "Financials",
       "country": "Sverige",
-      "buy_score": 45,
+      "buy_score": 36,
       "buy_reasons": [
         "Lågt P/E (13.01)",
         "Högt PEG-tal (8.87) – dyrt även efter hänsyn till förväntad tillväxt",
@@ -5801,7 +5801,7 @@
         "Analytikerkonsensus: köp (10 analytiker)",
         "Analytikernas kursmål -1% under dagens pris (måttligt)",
         "Högt P/B (21.64)",
-        "Utdelning 7.18%",
+        "Utdelning 7.25%",
         "Låg volatilitet (14.9% årstakt) – stabil kursutveckling",
         "Negativ FCF-marginal (-32.6%) – bolaget bränner kassa"
       ],
@@ -5835,8 +5835,8 @@
       "sbc_to_revenue_pct": null,
       "recommendation_key": "hold",
       "num_analysts": 25,
-      "target_mean_price": 355.42,
-      "analyst_upside_pct": -14.1,
+      "target_mean_price": 355.24,
+      "analyst_upside_pct": -14.2,
       "pb": 2.5,
       "dividend_yield_pct": 3.51,
       "debt_to_equity": 75.2,
@@ -5913,7 +5913,7 @@
       "watchlist_name": "Equinor",
       "sector": "Energy",
       "country": "Norge",
-      "buy_score": 75,
+      "buy_score": 68,
       "buy_reasons": [
         "Lågt P/E (12.09)",
         "Pris över både SMA50 och SMA200 (uppåttrend)",
@@ -6029,7 +6029,7 @@
       "watchlist_name": "DNB Bank",
       "sector": "Financials",
       "country": "Norge",
-      "buy_score": 80,
+      "buy_score": 71,
       "buy_reasons": [
         "Lågt P/E (11.52)",
         "Högt PEG-tal (5.22) – dyrt även efter hänsyn till förväntad tillväxt",
@@ -6147,7 +6147,7 @@
       "watchlist_name": "Telenor",
       "sector": "Telecom",
       "country": "Norge",
-      "buy_score": 70,
+      "buy_score": 59,
       "buy_reasons": [
         "Lågt P/E (11.45)",
         "Högt PEG-tal (3.15) – dyrt även efter hänsyn till förväntad tillväxt",
@@ -6162,7 +6162,7 @@
       "geopolitics_note": null,
       "country_weight": 0,
       "geopolitics_country_note": null,
-      "buy_days_on_list": 1,
+      "buy_days_on_list": 0,
       "buy_score_delta": null
     },
     {
@@ -6266,7 +6266,7 @@
       "watchlist_name": "Yara International",
       "sector": "Materials",
       "country": "Norge",
-      "buy_score": 85,
+      "buy_score": 76,
       "buy_reasons": [
         "Lågt P/E (8.28)",
         "Forward P/E +23% över historiskt P/E – vinstnedgång väntas",
@@ -6383,7 +6383,7 @@
       "watchlist_name": "Norsk Hydro",
       "sector": "Materials",
       "country": "Norge",
-      "buy_score": 90,
+      "buy_score": 84,
       "buy_reasons": [
         "Lågt PEG-tal (0.58) – P/E ser rimligt ut i relation till förväntad vinsttillväxt",
         "Forward P/E -45% under historiskt P/E – vinsttillväxt väntas",
@@ -6424,7 +6424,7 @@
       "target_mean_price": 309.3,
       "analyst_upside_pct": 8.0,
       "pb": 5.73,
-      "dividend_yield_pct": 4.01,
+      "dividend_yield_pct": 4.05,
       "debt_to_equity": 63.3,
       "market_cap": 1265138139136,
       "avg_dollar_volume": 1142720608.0,
@@ -6499,13 +6499,13 @@
       "watchlist_name": "Novo Nordisk",
       "sector": "Healthcare",
       "country": "Danmark",
-      "buy_score": 35,
+      "buy_score": 30,
       "buy_reasons": [
         "Lågt P/E (10.9)",
         "Högt PEG-tal (3.17) – dyrt även efter hänsyn till förväntad tillväxt",
         "Forward P/E +20% över historiskt P/E – vinstnedgång väntas",
         "Pris under både SMA50 och SMA200 (nedåttrend)",
-        "Utdelning 4.01%",
+        "Utdelning 4.05%",
         "Geopolitik/makro (Healthcare): USA-tullar mot Sverige/EU (-5)"
       ],
       "sector_weight": -5,
@@ -6538,7 +6538,7 @@
       "sbc_to_revenue_pct": null,
       "recommendation_key": "underperform",
       "num_analysts": 17,
-      "target_mean_price": 17183.33,
+      "target_mean_price": 17177.62,
       "analyst_upside_pct": -24.8,
       "pb": 0.93,
       "dividend_yield_pct": 2.16,
@@ -6616,7 +6616,7 @@
       "watchlist_name": "Maersk B",
       "sector": "Industrials",
       "country": "Danmark",
-      "buy_score": 60,
+      "buy_score": 54,
       "buy_reasons": [
         "Lågt PEG-tal (0.38) – P/E ser rimligt ut i relation till förväntad vinsttillväxt",
         "Forward P/E +53% över historiskt P/E – vinstnedgång väntas",
@@ -6734,7 +6734,7 @@
       "watchlist_name": "Ørsted",
       "sector": "Energy",
       "country": "Danmark",
-      "buy_score": 70,
+      "buy_score": 62,
       "buy_reasons": [
         "P/E saknas (t.ex. förlust eller ej rapporterat)",
         "Lågt PEG-tal (0.49) – P/E ser rimligt ut i relation till förväntad vinsttillväxt",
@@ -6749,7 +6749,7 @@
       "geopolitics_note": "Iran-konflikten / Hormuzsundet (+5)",
       "country_weight": 0,
       "geopolitics_country_note": null,
-      "buy_days_on_list": 1,
+      "buy_days_on_list": 0,
       "buy_score_delta": null
     },
     {
@@ -6853,7 +6853,7 @@
       "watchlist_name": "Carlsberg B",
       "sector": "Consumer",
       "country": "Danmark",
-      "buy_score": 75,
+      "buy_score": 69,
       "buy_reasons": [
         "Högt PEG-tal (3.59) – dyrt även efter hänsyn till förväntad tillväxt",
         "Forward P/E -31% under historiskt P/E – vinsttillväxt väntas",
@@ -6969,7 +6969,7 @@
       "watchlist_name": "Danske Bank",
       "sector": "Financials",
       "country": "Danmark",
-      "buy_score": 95,
+      "buy_score": 84,
       "buy_reasons": [
         "Lågt P/E (12.94)",
         "Högt PEG-tal (6.64) – dyrt även efter hänsyn till förväntad tillväxt",
@@ -7087,7 +7087,7 @@
       "watchlist_name": "Nokia",
       "sector": "Technology",
       "country": "Finland",
-      "buy_score": 65,
+      "buy_score": 59,
       "buy_reasons": [
         "Högt P/E (77.0)",
         "Lågt PEG-tal (0.92) – P/E ser rimligt ut i relation till förväntad vinsttillväxt",
@@ -7100,7 +7100,7 @@
       "geopolitics_note": null,
       "country_weight": 0,
       "geopolitics_country_note": null,
-      "buy_days_on_list": 1,
+      "buy_days_on_list": 0,
       "buy_score_delta": null
     },
     {
@@ -7129,7 +7129,7 @@
       "target_mean_price": 33.28,
       "analyst_upside_pct": 0.9,
       "pb": 3.0,
-      "dividend_yield_pct": 61.0,
+      "dividend_yield_pct": 60.0,
       "debt_to_equity": 55.5,
       "market_cap": 25353328640,
       "avg_dollar_volume": 37697062.0,
@@ -7204,13 +7204,13 @@
       "watchlist_name": "Neste",
       "sector": "Energy",
       "country": "Finland",
-      "buy_score": 100,
+      "buy_score": 92,
       "buy_reasons": [
         "Lågt PEG-tal (0.32) – P/E ser rimligt ut i relation till förväntad vinsttillväxt",
         "Forward P/E -18% under historiskt P/E – vinsttillväxt väntas",
         "Pris över både SMA50 och SMA200 (uppåttrend)",
         "Analytikerkonsensus: köp (19 analytiker)",
-        "Utdelning 61.0%",
+        "Utdelning 60.0%",
         "Geopolitik/makro (Energy): Iran-konflikten / Hormuzsundet (+5)"
       ],
       "sector_weight": 5,
@@ -7321,7 +7321,7 @@
       "watchlist_name": "UPM-Kymmene",
       "sector": "Materials",
       "country": "Finland",
-      "buy_score": 65,
+      "buy_score": 57,
       "buy_reasons": [
         "Högt PEG-tal (12.89) – dyrt även efter hänsyn till förväntad tillväxt",
         "Forward P/E -36% under historiskt P/E – vinsttillväxt väntas",
@@ -7337,7 +7337,7 @@
       "geopolitics_note": null,
       "country_weight": 0,
       "geopolitics_country_note": null,
-      "buy_days_on_list": 1,
+      "buy_days_on_list": 0,
       "buy_score_delta": null
     },
     {
@@ -7441,7 +7441,7 @@
       "watchlist_name": "Kone",
       "sector": "Industrials",
       "country": "Finland",
-      "buy_score": 65,
+      "buy_score": 59,
       "buy_reasons": [
         "Forward P/E -26% under historiskt P/E – vinsttillväxt väntas",
         "Pris under både SMA50 och SMA200 (nedåttrend)",
@@ -7456,7 +7456,7 @@
       "geopolitics_note": "USA-tullar mot Sverige/EU (-5)",
       "country_weight": 0,
       "geopolitics_country_note": null,
-      "buy_days_on_list": 1,
+      "buy_days_on_list": 0,
       "buy_score_delta": null
     },
     {
@@ -7560,7 +7560,7 @@
       "watchlist_name": "Sampo",
       "sector": "Financials",
       "country": "Finland",
-      "buy_score": 90,
+      "buy_score": 81,
       "buy_reasons": [
         "Lågt P/E (14.68)",
         "Högt PEG-tal (33.58) – dyrt även efter hänsyn till förväntad tillväxt",

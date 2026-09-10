@@ -6,7 +6,7 @@
 # sector:  används för geopolitik/makro-riskfaktorer (risk_factors.yml) och
 #          sammanfattningen på Mina innehav-fliken.
 # country: används för landssammanfattningen på Mina innehav-fliken.
-# market:  kort marknadskod, styr filtret i dashboarden (SE/US/DE/NL/GB).
+# market:  kort marknadskod, styr filtret i dashboarden (SE/US/DE/NL/GB/NO/DK/FI).
 
 stocks:
 - ticker: VOLV-B.ST
@@ -229,3 +229,103 @@ stocks:
   sector: Financials
   country: USA
   market: US
+- ticker: BOL.ST
+  name: Boliden
+  sector: Materials
+  country: Sverige
+  market: SE
+- ticker: SKA-B.ST
+  name: Skanska B
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: TELIA.ST
+  name: Telia Company
+  sector: Telecom
+  country: Sverige
+  market: SE
+- ticker: ALFA.ST
+  name: Alfa Laval
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: NDA-SE.ST
+  name: Nordea Bank
+  sector: Financials
+  country: Sverige
+  market: SE
+- ticker: EQNR.OL
+  name: Equinor
+  sector: Energy
+  country: Norge
+  market: 'NO'
+- ticker: DNB.OL
+  name: DNB Bank
+  sector: Financials
+  country: Norge
+  market: 'NO'
+- ticker: TEL.OL
+  name: Telenor
+  sector: Telecom
+  country: Norge
+  market: 'NO'
+- ticker: YAR.OL
+  name: Yara International
+  sector: Materials
+  country: Norge
+  market: 'NO'
+- ticker: NHY.OL
+  name: Norsk Hydro
+  sector: Materials
+  country: Norge
+  market: 'NO'
+- ticker: NOVO-B.CO
+  name: Novo Nordisk
+  sector: Healthcare
+  country: Danmark
+  market: DK
+- ticker: MAERSK-B.CO
+  name: Maersk B
+  sector: Industrials
+  country: Danmark
+  market: DK
+- ticker: ORSTED.CO
+  name: Ørsted
+  sector: Energy
+  country: Danmark
+  market: DK
+- ticker: CARL-B.CO
+  name: Carlsberg B
+  sector: Consumer
+  country: Danmark
+  market: DK
+- ticker: DANSKE.CO
+  name: Danske Bank
+  sector: Financials
+  country: Danmark
+  market: DK
+- ticker: NOKIA.HE
+  name: Nokia
+  sector: Technology
+  country: Finland
+  market: FI
+- ticker: NESTE.HE
+  name: Neste
+  sector: Energy
+  country: Finland
+  market: FI
+- ticker: UPM.HE
+  name: UPM-Kymmene
+  sector: Materials
+  country: Finland
+  market: FI
+- ticker: KNEBV.HE
+  name: Kone
+  sector: Industrials
+  country: Finland
+  market: FI
+- ticker: SAMPO.HE
+  name: Sampo
+  sector: Financials
+  country: Finland
+  market: FI

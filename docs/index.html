@@ -582,6 +582,9 @@
         <option value="DE">Tyskland</option>
         <option value="NL">Nederländerna</option>
         <option value="GB">Storbritannien</option>
+        <option value="NO">Norge</option>
+        <option value="DK">Danmark</option>
+        <option value="FI">Finland</option>
       </select>
       <select id="sortSelect">
         <option value="score_desc">Sortera: poäng (hög→låg)</option>
@@ -626,8 +629,9 @@ function guessYahooTicker(kortnamn, marknad, land) {
   const suffixByMarknad = {
     'XSTO': '.ST', 'XNAS': '', 'XNYS': '', 'XETR': '.DE',
     'XLON': '.L', 'CHIX': '.L', 'XAMS': '.AS',
+    'XOSL': '.OL', 'XCSE': '.CO', 'XHEL': '.HE',
   };
-  const suffixByLand = { SE: '.ST', US: '', DE: '.DE', GB: '.L', NL: '.AS' };
+  const suffixByLand = { SE: '.ST', US: '', DE: '.DE', GB: '.L', NL: '.AS', NO: '.OL', DK: '.CO', FI: '.HE' };
   let suffix = suffixByMarknad[String(marknad || '').toUpperCase()];
   if (suffix === undefined) suffix = suffixByLand[String(land || '').toUpperCase()];
   if (suffix === undefined || !kortnamn) return null;
@@ -1489,7 +1493,7 @@ function signalFlag(r) {
 }
 
 const MARKET_FLAGS = {
-  SE: '🇸🇪', US: '🇺🇸', DE: '🇩🇪', GB: '🇬🇧', NL: '🇳🇱',
+  SE: '🇸🇪', US: '🇺🇸', DE: '🇩🇪', GB: '🇬🇧', NL: '🇳🇱', NO: '🇳🇴', DK: '🇩🇰', FI: '🇫🇮',
 };
 function marketFlag(market) {
   return MARKET_FLAGS[market] || '🏳️';

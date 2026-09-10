@@ -313,7 +313,7 @@ def score_buy_candidate(d):
 
     if d["pe"] is not None:
         if 0 < d["pe"] < 15:
-            score += 15
+            score += 10
             reasons.append(f"Lågt P/E ({d['pe']})")
         elif d["pe"] > 40:
             score -= 15
@@ -323,7 +323,7 @@ def score_buy_candidate(d):
 
     if d.get("peg_ratio") is not None:
         if 0 < d["peg_ratio"] < 1:
-            score += 10
+            score += 8
             reasons.append(f"Lågt PEG-tal ({d['peg_ratio']}) – P/E ser rimligt ut i relation till förväntad vinsttillväxt")
         elif d["peg_ratio"] > 3:
             score -= 10
@@ -331,7 +331,7 @@ def score_buy_candidate(d):
 
     if d.get("forward_pe_trend_pct") is not None:
         if d["forward_pe_trend_pct"] < -15:
-            score += 10
+            score += 8
             reasons.append(f"Forward P/E {d['forward_pe_trend_pct']:+.0f}% under historiskt P/E – vinsttillväxt väntas")
         elif d["forward_pe_trend_pct"] > 15:
             score -= 10
@@ -339,36 +339,36 @@ def score_buy_candidate(d):
 
     if d["rsi14"] is not None:
         if d["rsi14"] < 35:
-            score += 15
+            score += 10
             reasons.append(f"RSI lågt/översålt ({d['rsi14']})")
         elif d["rsi14"] > 70:
             score -= 20
             reasons.append(f"RSI högt/överköpt ({d['rsi14']})")
 
     if d["cross_signal"] == "golden_cross":
-        score += 20
+        score += 15
         reasons.append("Golden cross (SMA50 korsade upp genom SMA200)")
     elif d["cross_signal"] == "death_cross":
         score -= 20
         reasons.append("Death cross (SMA50 korsade ner genom SMA200)")
 
     if d["above_sma50"] and d["above_sma200"]:
-        score += 10
+        score += 8
         reasons.append("Pris över både SMA50 och SMA200 (uppåttrend)")
     elif d["above_sma50"] is False and d["above_sma200"] is False:
         score -= 10
         reasons.append("Pris under både SMA50 och SMA200 (nedåttrend)")
 
     if d["volume_ratio"] and d["volume_ratio"] > 2:
-        score += 10
+        score += 7
         reasons.append(f"Kraftigt förhöjd volym ({d['volume_ratio']}x snitt) – möjlig större rörelse")
 
     rec = d.get("recommendation_key")
     if rec == "strong_buy":
-        score += 15
+        score += 12
         reasons.append(f"Analytikerkonsensus: starkt köp ({d.get('num_analysts') or '?'} analytiker)")
     elif rec == "buy":
-        score += 10
+        score += 8
         reasons.append(f"Analytikerkonsensus: köp ({d.get('num_analysts') or '?'} analytiker)")
     elif rec == "sell":
         score -= 10
@@ -380,7 +380,7 @@ def score_buy_candidate(d):
     upside = d.get("analyst_upside_pct")
     if upside is not None:
         if upside > 15:
-            score += 10
+            score += 8
             reasons.append(f"Analytikernas kursmål {upside:+.0f}% över dagens pris")
         elif upside < -10:
             score -= 10
@@ -398,7 +398,7 @@ def score_buy_candidate(d):
             if high_leverage:
                 reasons.append(f"Lågt P/B ({d['pb']}) men hög skuldsättning – kan vara en värdefälla snarare än ett fynd, ingen poängbonus")
             else:
-                score += 10
+                score += 8
                 reasons.append(f"Lågt P/B ({d['pb']}) – handlas nära/under bokfört värde")
         elif d["pb"] > 6:
             score -= 10
@@ -457,7 +457,7 @@ def score_buy_candidate(d):
             score -= 15
             reasons.append(f"Negativ FCF-marginal ({d['fcf_margin_pct']}%) – bolaget bränner kassa")
         elif d["fcf_margin_pct"] > 15:
-            score += 10
+            score += 8
             reasons.append(f"Stark FCF-marginal ({d['fcf_margin_pct']}%) – genererar gott om fritt kassaflöde")
 
     if d.get("sbc_to_revenue_pct") is not None and d["sbc_to_revenue_pct"] > 15:

@@ -29,6 +29,9 @@ SUFFIX_COUNTRY = {
     ".DE": ("DE", "Tyskland"),
     ".L": ("GB", "Storbritannien"),
     ".AS": ("NL", "Nederländerna"),
+    ".OL": ("NO", "Norge"),
+    ".CO": ("DK", "Danmark"),
+    ".HE": ("FI", "Finland"),
 }
 
 YF_SECTOR_MAP = {

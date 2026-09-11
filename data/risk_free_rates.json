@@ -1,0 +1,15 @@
+{
+  "_source": "10-åriga statsobligationsräntor från officiella källor (US Treasury, Bundesbank/Deutsche Finanzagentur för euroländer, UK DMO, Swedish National Debt Office, Norges Bank, Nationalbanken Danmark), sammanställt via fxmacrodata.com 2026-09-10",
+  "_methodology": "Används som 'riskfri ränta' per land för att sätta aktiers utdelning och vinstavkastning (earnings yield = 100/P/E) i relation till vad en riskfri placering ger. DE/NL/FI delar samma euroområdesränta (samma valuta/ECB).",
+  "_last_updated": "2026-09-10",
+  "rates": {
+    "US": 4.83,
+    "SE": 3.09,
+    "DE": 3.80,
+    "NL": 3.80,
+    "FI": 3.80,
+    "GB": 5.16,
+    "NO": 4.46,
+    "DK": 2.98
+  }
+}

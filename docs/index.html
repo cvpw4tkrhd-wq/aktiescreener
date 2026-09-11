@@ -765,6 +765,13 @@ function scoreSellSignal(d) {
       score -= 10; reasons.push(`Forward P/E ${d.forward_pe_trend_pct}% under historiskt P/E – vinsttillväxt väntas, talar emot att sälja`);
     }
   }
+  if (d.risk_premium_pct !== null && d.risk_premium_pct !== undefined) {
+    if (d.risk_premium_pct < 0) {
+      score += 10; reasons.push(`Negativ riskpremie (vinstavkastning ${d.earnings_yield_pct}% under riskfri ränta ${d.risk_free_rate_pct}%) – du får mer avkastning helt riskfritt just nu`);
+    } else if (d.risk_premium_pct > 8) {
+      score -= 10; reasons.push(`Hög riskpremie (vinstavkastning ${d.earnings_yield_pct}% mot riskfri ränta ${d.risk_free_rate_pct}%) – talar emot att sälja`);
+    }
+  }
   if (d.volume_ratio && d.volume_ratio > 2 && d.above_sma50 === false) {
     score += 15; reasons.push(`Förhöjd säljvolym (${d.volume_ratio}x snitt) i nedgång`);
   }
@@ -1096,6 +1103,15 @@ function peComparisonHtml(r) {
   return html;
 }
 
+function riskPremiumHtml(r) {
+  if (r.risk_premium_pct === null || r.risk_premium_pct === undefined) return '–';
+  let symbol = '–', cls = 'dim', label = 'Ingen tydlig signal';
+  if (r.risk_premium_pct < 0) { symbol = '▼'; cls = 'down-txt'; label = 'Sämre än riskfri ränta'; }
+  else if (r.risk_premium_pct > 8) { symbol = '▲'; cls = 'up-txt'; label = 'Klart bättre än riskfri ränta'; }
+  const sign = r.risk_premium_pct > 0 ? '+' : '';
+  return `${sign}${fmtNum(r.risk_premium_pct,1)}pp <span class="sma-trend ${cls}" title="${label} (vinstavkastning ${fmtNum(r.earnings_yield_pct,1)}% mot riskfri ränta ${fmtNum(r.risk_free_rate_pct,2)}%)">${symbol}</span>`;
+}
+
 function forwardPeHtml(r) {
   if (r.forward_pe === null || r.forward_pe === undefined) return '–';
   const trend = r.forward_pe_trend_pct;
@@ -1382,6 +1398,8 @@ const METRIC_GLOSSARY = {
   'P/E': { title: 'P/E-tal', text: 'Pris delat med vinst per aktie. Visar ungefär hur många års vinst du "betalar för" i aktiepriset. Lägre P/E kan betyda billigare aktie – men kan också betyda att marknaden väntar sig sämre vinst framöver. Jämförs bäst mot liknande bolag i samma bransch.' },
   'PEG-TAL': { title: 'PEG-tal', text: 'P/E-talet delat med förväntad vinsttillväxt. Sätter priset i relation till hur snabbt bolaget väntas växa – ett högt P/E kan vara rimligt för ett snabbväxande bolag men dyrt för ett som knappt växer alls. Under 1 brukar räknas som attraktivt, över 3 som dyrt. Bygger på analytikers tillväxtprognoser, som liksom kursmål är uppskattningar, inte fakta.' },
   'FORWARD P/E': { title: 'Forward P/E', text: 'Samma princip som vanligt P/E, men baserat på FÖRVÄNTAD framtida vinst istället för senast rapporterade. Symbolen visar om forward P/E är klart lägre (▲, grönt – vinsttillväxt väntas) eller klart högre (▼, rött – vinstnedgång väntas) än det vanliga P/E-talet. Bygger på analytikeres vinstprognoser, inte facit.' },
+  'RISKFRI RÄNTA': { title: 'Riskfri ränta', text: 'Vad en 10-årig statsobligation i bolagets hemland ger just nu - avkastningen du kan få praktiskt taget utan risk. Referenspunkten allt annat mäts mot: varför ta aktierisk för mindre än så? Statisk siffra, uppdateras bara när Claude uppdaterar referensfilen manuellt - inte i realtid.' },
+  'RISKPREMIE': { title: 'Riskpremie', text: 'Aktiens vinstavkastning (100/P/E) minus riskfri ränta - hur mycket EXTRA avkastning aktien erbjuder för risken du tar jämfört med en säker placering. Negativ riskpremie (▼, rött) betyder att du får bättre avkastning helt riskfritt just nu, vilket är ett varningstecken. Hög riskpremie (▲, grönt) betyder gott om kompensation för risken - men bygger på dagens vinst, inte en garanti om framtiden.' },
   'RSI14': { title: 'RSI14 (momentum)', text: 'Mäter om en aktie handlats mycket upp eller ner den senaste tiden, på en skala 0–100. Över 70 kallas ofta "överköpt" (kan vara mogen för en paus), under 30 "översåld". Säger inget om bolaget är bra eller dåligt – bara om kursen rört sig mycket nyligen.' },
   'SMA50 / SMA200': { title: 'SMA50 / SMA200 (glidande medelvärden)', text: 'Genomsnittligt pris de senaste 50 respektive 200 dagarna. Jämnar ut dagliga svängningar för att visa den underliggande trenden. Om det kortare snittet (50 dagar) ligger över det längre (200 dagar) tolkas det som en uppåttrend, och tvärtom nedåt.' },
   'VOLYM': { title: 'Volym', text: 'Hur mycket aktien handlats senaste dagen, jämfört med snittet de senaste 20 dagarna. Kraftigt förhöjd volym kan betyda att något viktigt hänt med bolaget – nyheter, rapport, eller stora köp/sälj från enskilda aktörer.' },
@@ -1436,6 +1454,8 @@ function openDrawer(ticker) {
       <div><div class="stat-label">P/E</div><div class="stat-val">${r.pe !== null ? fmtNum(r.pe,1) : '–'}</div>${peComparisonHtml(r)}</div>
       <div><div class="stat-label">PEG-TAL</div><div class="stat-val">${r.peg_ratio !== null && r.peg_ratio !== undefined ? fmtNum(r.peg_ratio,2) : '–'}</div></div>
       <div><div class="stat-label">FORWARD P/E</div><div class="stat-val">${forwardPeHtml(r)}</div></div>
+      <div><div class="stat-label">RISKFRI RÄNTA</div><div class="stat-val">${r.risk_free_rate_pct !== null && r.risk_free_rate_pct !== undefined ? fmtNum(r.risk_free_rate_pct,2) + '%' : '–'}</div></div>
+      <div><div class="stat-label">RISKPREMIE</div><div class="stat-val">${riskPremiumHtml(r)}</div></div>
       <div><div class="stat-label">RSI14</div><div class="stat-val">${r.rsi14 !== null ? fmtNum(r.rsi14,0) : '–'}</div></div>
       <div class="stat-wide"><div class="stat-label">SMA50 / SMA200</div><div class="stat-val">${smaTrendHtml(r)}</div></div>
       <div><div class="stat-label">VOLYM</div><div class="stat-val">${fmtVol(r.volume_ratio)}</div></div>

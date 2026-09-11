@@ -26,6 +26,8 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Kör screener
+        env:
+          FMP_API_KEY: ${{ secrets.FMP_API_KEY }}
         run: python scripts/screener.py
 
       - name: Generera AI-kvalitetsanalyser för toppkandidater

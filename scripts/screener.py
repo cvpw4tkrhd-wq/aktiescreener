@@ -14,8 +14,11 @@ eller schemalagt via GitHub Actions (.github/workflows/screener.yml)
 """
 
 import json
+import os
 import sys
 import time
+import urllib.request
+import urllib.error
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -132,6 +135,61 @@ def compute_rsi(close: pd.Series, period: int = RSI_PERIOD) -> pd.Series:
     rsi = 100 - (100 / (1 + rs))
     rsi = rsi.fillna(100)  # if avg_loss is 0, RSI = 100
     return rsi
+
+
+FMP_API_KEY = os.environ.get("FMP_API_KEY")
+FMP_BASE = "https://financialmodelingprep.com/stable"
+
+
+def _fmp_get(endpoint: str, symbol: str):
+    """Enkelt GET-anrop mot FMP:s stable-API. Returnerar None vid fel av
+    något slag (saknad nyckel, kvot slut, premium-låst, nätverksfel) -
+    ska ALDRIG krascha resten av körningen. Bara amerikanska aktier har
+    täckning på gratisnivån."""
+    if not FMP_API_KEY:
+        return None
+    url = f"{FMP_BASE}/{endpoint}?symbol={symbol}&apikey={FMP_API_KEY}"
+    try:
+        with urllib.request.urlopen(url, timeout=10) as resp:
+            data = json.loads(resp.read().decode())
+        if isinstance(data, list) and data:
+            return data[0]
+        return None
+    except Exception:
+        return None
+
+
+def fetch_fmp_fundamentals(ticker: str):
+    """Hämtar kapitalintensitet/kassaflödesnyckeltal från FMP istället för
+    yfinance, för amerikanska aktier (bättre standardiserade fältnamn än
+    yfinances kassaflödesrapport). Returnerar None om något saknas - då
+    behåller analyze_ticker() sina yfinance-värden istället (reserv)."""
+    cf = _fmp_get("cash-flow-statement", ticker)
+    inc = _fmp_get("income-statement", ticker)
+    if not cf or not inc:
+        return None
+
+    try:
+        capex = cf.get("capitalExpenditure")
+        da = cf.get("depreciationAndAmortization")
+        fcf = cf.get("freeCashFlow")
+        sbc = cf.get("stockBasedCompensation")
+        revenue = inc.get("revenue")
+
+        capex_to_da = abs(capex) / abs(da) if capex is not None and da else None
+        fcf_margin_pct = (fcf / revenue) * 100 if fcf is not None and revenue else None
+        sbc_to_revenue_pct = (abs(sbc) / revenue) * 100 if sbc is not None and revenue else None
+
+        if capex_to_da is None and fcf_margin_pct is None and sbc_to_revenue_pct is None:
+            return None
+
+        return {
+            "capex_to_da": round(capex_to_da, 2) if capex_to_da is not None else None,
+            "fcf_margin_pct": round(fcf_margin_pct, 1) if fcf_margin_pct is not None else None,
+            "sbc_to_revenue_pct": round(sbc_to_revenue_pct, 1) if sbc_to_revenue_pct is not None else None,
+        }
+    except Exception:
+        return None
 
 
 def analyze_ticker(ticker: str):
@@ -519,6 +577,13 @@ def main():
         d["watchlist_name"] = entry["name"]
         d["sector"] = entry.get("sector")
         d["country"] = entry.get("country")
+        d["data_source"] = "yfinance"
+
+        if entry["market"] == "US":
+            fmp_data = fetch_fmp_fundamentals(ticker)
+            if fmp_data:
+                d.update(fmp_data)
+                d["data_source"] = "yfinance+fmp"
 
         buy_score, buy_reasons = score_buy_candidate(d)
 

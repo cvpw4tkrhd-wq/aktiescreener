@@ -59,6 +59,18 @@ def load_watchlist():
 
 
 RISK_FACTORS_FILE = DATA_DIR / "risk_factors.yml"
+RISK_FREE_RATES_FILE = DATA_DIR / "risk_free_rates.json"
+
+
+def load_risk_free_rates():
+    """Läser landsspecifika riskfria räntor (10-åriga statsobligationer).
+    Returnerar {marknadskod: ränta_i_procent}. Statisk referensfil, inte
+    live-hämtad - uppdateras manuellt via Claude när du ber om en avstämning."""
+    if not RISK_FREE_RATES_FILE.exists():
+        return {}
+    with open(RISK_FREE_RATES_FILE, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    return data.get("rates") or {}
 
 
 def load_risk_factors():
@@ -462,9 +474,25 @@ def score_buy_candidate(d):
             score -= 10
             reasons.append(f"Högt P/B ({d['pb']})")
 
-    if d.get("dividend_yield_pct") is not None and d["dividend_yield_pct"] > 3:
-        score += 5
-        reasons.append(f"Utdelning {d['dividend_yield_pct']}%")
+    if d.get("dividend_yield_pct") is not None:
+        rf = d.get("risk_free_rate_pct")
+        if rf is not None:
+            if d["dividend_yield_pct"] > rf + 1:
+                score += 5
+                reasons.append(f"Utdelning {d['dividend_yield_pct']}% ger meningsfullt mer än riskfri ränta ({rf}%)")
+            elif d["dividend_yield_pct"] < rf - 2 and d["dividend_yield_pct"] > 0:
+                reasons.append(f"Utdelning {d['dividend_yield_pct']}% ger klart mindre än riskfri ränta ({rf}%) – ingen poäng för det")
+        elif d["dividend_yield_pct"] > 3:
+            score += 5
+            reasons.append(f"Utdelning {d['dividend_yield_pct']}%")
+
+    if d.get("risk_premium_pct") is not None:
+        if d["risk_premium_pct"] > 8:
+            score += 10
+            reasons.append(f"Hög riskpremie (vinstavkastning {d['earnings_yield_pct']}% mot riskfri ränta {d['risk_free_rate_pct']}%) – betydligt mer betalt för risken än en säker placering ger")
+        elif d["risk_premium_pct"] < 0:
+            score -= 10
+            reasons.append(f"Negativ riskpremie (vinstavkastning {d['earnings_yield_pct']}% under riskfri ränta {d['risk_free_rate_pct']}%) – du får MER avkastning helt riskfritt just nu")
 
     if d.get("debt_to_equity") is not None:
         if d["debt_to_equity"] < 50:
@@ -557,6 +585,7 @@ def sanitize_for_json(obj):
 def main():
     watchlist = load_watchlist()
     sector_weights, sector_factor_names, country_weights, country_factor_names = load_risk_factors()
+    risk_free_rates = load_risk_free_rates()
     score_history = load_score_history()
     today_str = datetime.now(timezone.utc).date().isoformat()
 
@@ -577,6 +606,13 @@ def main():
         d["watchlist_name"] = entry["name"]
         d["sector"] = entry.get("sector")
         d["country"] = entry.get("country")
+        d["risk_free_rate_pct"] = risk_free_rates.get(entry["market"])
+        if d["risk_free_rate_pct"] is not None and isinstance(d.get("pe"), (int, float)) and d["pe"] > 0:
+            d["earnings_yield_pct"] = round(100 / d["pe"], 2)
+            d["risk_premium_pct"] = round(d["earnings_yield_pct"] - d["risk_free_rate_pct"], 2)
+        else:
+            d["earnings_yield_pct"] = None
+            d["risk_premium_pct"] = None
         d["data_source"] = "yfinance"
 
         if entry["market"] == "US":

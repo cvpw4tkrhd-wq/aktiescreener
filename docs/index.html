@@ -567,14 +567,15 @@
   </header>
 
   <div class="tabs">
-    <div class="tab active" data-tab="buy">KÖPKANDIDATER <span class="count" id="buyCount"></span></div>
+    <div class="tab active" data-tab="us">USA <span class="count" id="usCount"></span></div>
+    <div class="tab" data-tab="eu">EUROPA <span class="count" id="euCount"></span></div>
     <div class="tab" data-tab="sell">MINA INNEHAV <span class="count" id="sellCount"></span></div>
   </div>
 
   <div class="panel">
     <div id="uploadHost"></div>
     <div id="pendingHost"></div>
-    <div class="filter-row">
+    <div class="filter-row" id="marketFilterRow">
       <select id="marketFilter">
         <option value="ALL">Alla marknader</option>
         <option value="SE">Stockholm</option>
@@ -617,7 +618,7 @@
 </div>
 
 <script>
-const state = { data: null, tab: 'buy', market: 'ALL', sort: 'score_desc', holdings: {}, holdingsUploadedAt: null };
+const state = { data: null, tab: 'us', market: 'ALL', sort: 'score_desc', holdings: {}, holdingsUploadedAt: null };
 
 // ===== Innehav: allt sker lokalt i webbläsaren, inget skickas till servern =====
 
@@ -1253,16 +1254,25 @@ function render() {
   renderUploadPanel();
   renderPendingPanel();
   let rows = state.data.results || [];
-  if (state.market !== 'ALL') rows = rows.filter(r => r.market === state.market);
 
-  const buyRows = rows.filter(r => !r.is_holding);
-  document.getElementById('buyCount').textContent = buyRows.length ? `[${buyRows.length}]` : '';
-  const sellRows = rows.filter(r => r.is_holding);
-  document.getElementById('sellCount').textContent = sellRows.length ? `[${sellRows.length}]` : '';
-  renderSummary(sellRows);
+  const notHeld = rows.filter(r => !r.is_holding);
+  const usRows = notHeld.filter(r => r.market === 'US');
+  const euRowsAll = notHeld.filter(r => r.market !== 'US');
+  const sellRowsAll = rows.filter(r => r.is_holding);
+
+  document.getElementById('usCount').textContent = usRows.length ? `[${usRows.length}]` : '';
+  document.getElementById('euCount').textContent = euRowsAll.length ? `[${euRowsAll.length}]` : '';
+  document.getElementById('sellCount').textContent = sellRowsAll.length ? `[${sellRowsAll.length}]` : '';
+  renderSummary(sellRowsAll);
+
+  const filterRow = document.getElementById('marketFilterRow');
+  if (filterRow) filterRow.style.display = state.tab === 'us' ? 'none' : '';
+
+  const euRows = state.market !== 'ALL' ? euRowsAll.filter(r => r.market === state.market) : euRowsAll;
+  const sellRows = state.market !== 'ALL' ? sellRowsAll.filter(r => r.market === state.market) : sellRowsAll;
 
   const host = document.getElementById('tableHost');
-  const activeRows = state.tab === 'sell' ? sellRows : buyRows;
+  const activeRows = state.tab === 'sell' ? sellRows : (state.tab === 'us' ? usRows : euRows);
   const sorted = sortRows(activeRows, state.sort);
 
   if (!sorted.length) {
@@ -1443,6 +1453,7 @@ function openDrawer(ticker) {
       <div><div class="stat-label">DAGAR MED SIGNAL</div><div class="stat-val">${state.tab === 'sell' ? (r.sell_days_on_list ?? 0) : (r.buy_days_on_list ?? 0)}</div></div>
       <div><div class="stat-label">FÖRÄNDRING SEDAN SENAST</div><div class="stat-val">${(() => { const d = state.tab === 'sell' ? r.sell_score_delta : r.buy_score_delta; return d === null || d === undefined ? '–' : (d > 0 ? '+' : '') + d; })()}</div></div>
     </div>
+    ${r.data_source === 'yfinance+fmp' ? '<div class="pe-compare-footnote">Kassaflödesnyckeltal (Capex/DA, FCF-marginal, SBC) hämtade från Financial Modeling Prep.</div>' : ''}
         <ul class="reasons">${reasons.length ? reasons.map(x => `<li>${x}</li>`).join('') : '<li>Inga särskilda signaler.</li>'}</ul>
     ${r.ai_writeup ? `
     <div class="ai-writeup">

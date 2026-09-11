@@ -1,0 +1,583 @@
+{
+  "snapshot_date": "2026-09-11",
+  "source_generated_at": "2026-09-10T20:57:43.264241+00:00",
+  "note": "Ögonblicksbild av ALLA screenade aktier (servern vet inte vilka som är dina personliga innehav, det hanteras bara i din webbläsare) - för att jämföra kursutveckling framöver.",
+  "stocks": [
+    {
+      "ticker": "VOLV-B.ST",
+      "name": "Volvo B",
+      "market": "SE",
+      "sector": "Industrials",
+      "price": 339.2,
+      "currency": "SEK",
+      "buy_score": 66
+    },
+    {
+      "ticker": "ERIC-B.ST",
+      "name": "Ericsson B",
+      "market": "SE",
+      "sector": "Technology",
+      "price": 97.24,
+      "currency": "SEK",
+      "buy_score": 55
+    },
+    {
+      "ticker": "HM-B.ST",
+      "name": "H&M B",
+      "market": "SE",
+      "sector": "Consumer",
+      "price": 164.35,
+      "currency": "SEK",
+      "buy_score": 30
+    },
+    {
+      "ticker": "ATCO-A.ST",
+      "name": "Atlas Copco A",
+      "market": "SE",
+      "sector": "Industrials",
+      "price": 201.5,
+      "currency": "SEK",
+      "buy_score": 64
+    },
+    {
+      "ticker": "INVE-B.ST",
+      "name": "Investor B",
+      "market": "SE",
+      "sector": "Financials",
+      "price": 402.75,
+      "currency": "SEK",
+      "buy_score": 63
+    },
+    {
+      "ticker": "SAND.ST",
+      "name": "Sandvik",
+      "market": "SE",
+      "sector": "Industrials",
+      "price": 384.0,
+      "currency": "SEK",
+      "buy_score": 58
+    },
+    {
+      "ticker": "SEB-A.ST",
+      "name": "SEB A",
+      "market": "SE",
+      "sector": "Financials",
+      "price": 226.6,
+      "currency": "SEK",
+      "buy_score": 81
+    },
+    {
+      "ticker": "SWED-A.ST",
+      "name": "Swedbank A",
+      "market": "SE",
+      "sector": "Financials",
+      "price": 384.5,
+      "currency": "SEK",
+      "buy_score": 48
+    },
+    {
+      "ticker": "EVO.ST",
+      "name": "Evolution",
+      "market": "SE",
+      "sector": "Consumer",
+      "price": 864.4,
+      "currency": "SEK",
+      "buy_score": 54
+    },
+    {
+      "ticker": "SBB-B.ST",
+      "name": "SBB B",
+      "market": "SE",
+      "sector": "RealEstate",
+      "price": 3.01,
+      "currency": "SEK",
+      "buy_score": 13
+    },
+    {
+      "ticker": "ADDT-B.ST",
+      "name": "Addtech B",
+      "market": "SE",
+      "sector": "Industrials",
+      "price": 324.8,
+      "currency": "SEK",
+      "buy_score": 50
+    },
+    {
+      "ticker": "ASMDEE-B.ST",
+      "name": "Asmodee",
+      "market": "SE",
+      "sector": "Consumer",
+      "price": 162.3,
+      "currency": "SEK",
+      "buy_score": 48
+    },
+    {
+      "ticker": "LAGR-B.ST",
+      "name": "Lagercrantz Group B",
+      "market": "SE",
+      "sector": "Industrials",
+      "price": 220.8,
+      "currency": "SEK",
+      "buy_score": 23
+    },
+    {
+      "ticker": "LATO-B.ST",
+      "name": "Latour B",
+      "market": "SE",
+      "sector": "Financials",
+      "price": 207.3,
+      "currency": "SEK",
+      "buy_score": 63
+    },
+    {
+      "ticker": "MIPS.ST",
+      "name": "Mips",
+      "market": "SE",
+      "sector": "Industrials",
+      "price": 374.0,
+      "currency": "SEK",
+      "buy_score": 42
+    },
+    {
+      "ticker": "PACT.ST",
+      "name": "Proact IT Group",
+      "market": "SE",
+      "sector": "Technology",
+      "price": 134.0,
+      "currency": "SEK",
+      "buy_score": 78
+    },
+    {
+      "ticker": "NWG.L",
+      "name": "NatWest Group Plc",
+      "market": "GB",
+      "sector": "Financials",
+      "price": 682.4,
+      "currency": "GBp",
+      "buy_score": 94
+    },
+    {
+      "ticker": "AAPL",
+      "name": "Apple",
+      "market": "US",
+      "sector": "Technology",
+      "price": 326.57,
+      "currency": "USD",
+      "buy_score": 64
+    },
+    {
+      "ticker": "MSFT",
+      "name": "Microsoft",
+      "market": "US",
+      "sector": "Technology",
+      "price": 492.44,
+      "currency": "USD",
+      "buy_score": 94
+    },
+    {
+      "ticker": "GOOGL",
+      "name": "Alphabet",
+      "market": "US",
+      "sector": "Technology",
+      "price": 332.6,
+      "currency": "USD",
+      "buy_score": 58
+    },
+    {
+      "ticker": "AMZN",
+      "name": "Amazon",
+      "market": "US",
+      "sector": "Consumer",
+      "price": 251.89,
+      "currency": "USD",
+      "buy_score": 65
+    },
+    {
+      "ticker": "NVDA",
+      "name": "Nvidia",
+      "market": "US",
+      "sector": "Semiconductors",
+      "price": 218.36,
+      "currency": "USD",
+      "buy_score": 80
+    },
+    {
+      "ticker": "META",
+      "name": "Meta Platforms",
+      "market": "US",
+      "sector": "Technology",
+      "price": 644.38,
+      "currency": "USD",
+      "buy_score": 97
+    },
+    {
+      "ticker": "TSLA",
+      "name": "Tesla",
+      "market": "US",
+      "sector": "Consumer",
+      "price": 363.56,
+      "currency": "USD",
+      "buy_score": 31
+    },
+    {
+      "ticker": "GLW",
+      "name": "Corning",
+      "market": "US",
+      "sector": "Industrials",
+      "price": 163.12,
+      "currency": "USD",
+      "buy_score": 46
+    },
+    {
+      "ticker": "INTC",
+      "name": "Intel",
+      "market": "US",
+      "sector": "Semiconductors",
+      "price": 100.32,
+      "currency": "USD",
+      "buy_score": 39
+    },
+    {
+      "ticker": "MU",
+      "name": "Micron Technology",
+      "market": "US",
+      "sector": "Semiconductors",
+      "price": 977.41,
+      "currency": "USD",
+      "buy_score": 59
+    },
+    {
+      "ticker": "SAP.DE",
+      "name": "SAP",
+      "market": "DE",
+      "sector": "Technology",
+      "price": 177.82,
+      "currency": "EUR",
+      "buy_score": 96
+    },
+    {
+      "ticker": "SIE.DE",
+      "name": "Siemens",
+      "market": "DE",
+      "sector": "Industrials",
+      "price": 258.1,
+      "currency": "EUR",
+      "buy_score": 66
+    },
+    {
+      "ticker": "ALV.DE",
+      "name": "Allianz",
+      "market": "DE",
+      "sector": "Financials",
+      "price": 439.5,
+      "currency": "EUR",
+      "buy_score": 91
+    },
+    {
+      "ticker": "BAS.DE",
+      "name": "BASF",
+      "market": "DE",
+      "sector": "Materials",
+      "price": 53.34,
+      "currency": "EUR",
+      "buy_score": 87
+    },
+    {
+      "ticker": "BMW.DE",
+      "name": "BMW",
+      "market": "DE",
+      "sector": "Consumer",
+      "price": 62.7,
+      "currency": "EUR",
+      "buy_score": 71
+    },
+    {
+      "ticker": "DTE.DE",
+      "name": "Deutsche Telekom",
+      "market": "DE",
+      "sector": "Telecom",
+      "price": 27.88,
+      "currency": "EUR",
+      "buy_score": 78
+    },
+    {
+      "ticker": "ASML.AS",
+      "name": "ASML Holding",
+      "market": "NL",
+      "sector": "Semiconductors",
+      "price": 1474.2,
+      "currency": "EUR",
+      "buy_score": 43
+    },
+    {
+      "ticker": "HEIA.AS",
+      "name": "Heineken",
+      "market": "NL",
+      "sector": "Consumer",
+      "price": 71.04,
+      "currency": "EUR",
+      "buy_score": 71
+    },
+    {
+      "ticker": "INGA.AS",
+      "name": "ING Group",
+      "market": "NL",
+      "sector": "Financials",
+      "price": 31.64,
+      "currency": "EUR",
+      "buy_score": 71
+    },
+    {
+      "ticker": "AD.AS",
+      "name": "Ahold Delhaize",
+      "market": "NL",
+      "sector": "Consumer",
+      "price": 30.94,
+      "currency": "EUR",
+      "buy_score": 68
+    },
+    {
+      "ticker": "SHEL.L",
+      "name": "Shell",
+      "market": "GB",
+      "sector": "Energy",
+      "price": 3533.0,
+      "currency": "GBp",
+      "buy_score": 96
+    },
+    {
+      "ticker": "AZN.L",
+      "name": "AstraZeneca",
+      "market": "GB",
+      "sector": "Healthcare",
+      "price": 11758.0,
+      "currency": "GBp",
+      "buy_score": 56
+    },
+    {
+      "ticker": "HSBA.L",
+      "name": "HSBC Holdings",
+      "market": "GB",
+      "sector": "Financials",
+      "price": 1529.0,
+      "currency": "GBp",
+      "buy_score": 94
+    },
+    {
+      "ticker": "BP.L",
+      "name": "BP",
+      "market": "GB",
+      "sector": "Energy",
+      "price": 565.1,
+      "currency": "GBp",
+      "buy_score": 89
+    },
+    {
+      "ticker": "GSK.L",
+      "name": "GSK",
+      "market": "GB",
+      "sector": "Healthcare",
+      "price": 1775.5,
+      "currency": "GBp",
+      "buy_score": 53
+    },
+    {
+      "ticker": "ESSITY-B.ST",
+      "name": "Essity B",
+      "market": "SE",
+      "sector": "Consumer",
+      "price": 262.7,
+      "currency": "SEK",
+      "buy_score": 60
+    },
+    {
+      "ticker": "SOFI",
+      "name": "SoFi Technologies",
+      "market": "US",
+      "sector": "Financials",
+      "price": 17.21,
+      "currency": "USD",
+      "buy_score": 49
+    },
+    {
+      "ticker": "BOL.ST",
+      "name": "Boliden",
+      "market": "SE",
+      "sector": "Materials",
+      "price": 546.8,
+      "currency": "SEK",
+      "buy_score": 68
+    },
+    {
+      "ticker": "SKA-B.ST",
+      "name": "Skanska B",
+      "market": "SE",
+      "sector": "Industrials",
+      "price": 265.0,
+      "currency": "SEK",
+      "buy_score": 58
+    },
+    {
+      "ticker": "TELIA.ST",
+      "name": "Telia Company",
+      "market": "SE",
+      "sector": "Telecom",
+      "price": 45.49,
+      "currency": "SEK",
+      "buy_score": 69
+    },
+    {
+      "ticker": "ALFA.ST",
+      "name": "Alfa Laval",
+      "market": "SE",
+      "sector": "Industrials",
+      "price": 545.6,
+      "currency": "SEK",
+      "buy_score": 58
+    },
+    {
+      "ticker": "NDA-SE.ST",
+      "name": "Nordea Bank",
+      "market": "SE",
+      "sector": "Financials",
+      "price": 198.7,
+      "currency": "SEK",
+      "buy_score": 36
+    },
+    {
+      "ticker": "EQNR.OL",
+      "name": "Equinor",
+      "market": "NO",
+      "sector": "Energy",
+      "price": 413.8,
+      "currency": "NOK",
+      "buy_score": 68
+    },
+    {
+      "ticker": "DNB.OL",
+      "name": "DNB Bank",
+      "market": "NO",
+      "sector": "Financials",
+      "price": 317.7,
+      "currency": "NOK",
+      "buy_score": 71
+    },
+    {
+      "ticker": "TEL.OL",
+      "name": "Telenor",
+      "market": "NO",
+      "sector": "Telecom",
+      "price": 134.2,
+      "currency": "NOK",
+      "buy_score": 59
+    },
+    {
+      "ticker": "YAR.OL",
+      "name": "Yara International",
+      "market": "NO",
+      "sector": "Materials",
+      "price": 461.3,
+      "currency": "NOK",
+      "buy_score": 76
+    },
+    {
+      "ticker": "NHY.OL",
+      "name": "Norsk Hydro",
+      "market": "NO",
+      "sector": "Materials",
+      "price": 91.0,
+      "currency": "NOK",
+      "buy_score": 84
+    },
+    {
+      "ticker": "NOVO-B.CO",
+      "name": "Novo Nordisk",
+      "market": "DK",
+      "sector": "Healthcare",
+      "price": 286.3,
+      "currency": "DKK",
+      "buy_score": 30
+    },
+    {
+      "ticker": "MAERSK-B.CO",
+      "name": "Maersk B",
+      "market": "DK",
+      "sector": "Industrials",
+      "price": 22850.0,
+      "currency": "DKK",
+      "buy_score": 54
+    },
+    {
+      "ticker": "ORSTED.CO",
+      "name": "Ørsted",
+      "market": "DK",
+      "sector": "Energy",
+      "price": 135.6,
+      "currency": "DKK",
+      "buy_score": 62
+    },
+    {
+      "ticker": "CARL-B.CO",
+      "name": "Carlsberg B",
+      "market": "DK",
+      "sector": "Consumer",
+      "price": 865.0,
+      "currency": "DKK",
+      "buy_score": 69
+    },
+    {
+      "ticker": "DANSKE.CO",
+      "name": "Danske Bank",
+      "market": "DK",
+      "sector": "Financials",
+      "price": 375.0,
+      "currency": "DKK",
+      "buy_score": 84
+    },
+    {
+      "ticker": "NOKIA.HE",
+      "name": "Nokia",
+      "market": "FI",
+      "sector": "Technology",
+      "price": 9.24,
+      "currency": "EUR",
+      "buy_score": 59
+    },
+    {
+      "ticker": "NESTE.HE",
+      "name": "Neste",
+      "market": "FI",
+      "sector": "Energy",
+      "price": 33.0,
+      "currency": "EUR",
+      "buy_score": 92
+    },
+    {
+      "ticker": "UPM.HE",
+      "name": "UPM-Kymmene",
+      "market": "FI",
+      "sector": "Materials",
+      "price": 25.62,
+      "currency": "EUR",
+      "buy_score": 57
+    },
+    {
+      "ticker": "KNEBV.HE",
+      "name": "Kone",
+      "market": "FI",
+      "sector": "Industrials",
+      "price": 49.8,
+      "currency": "EUR",
+      "buy_score": 59
+    },
+    {
+      "ticker": "SAMPO.HE",
+      "name": "Sampo",
+      "market": "FI",
+      "sector": "Financials",
+      "price": 9.39,
+      "currency": "EUR",
+      "buy_score": 81
+    }
+  ]
+}

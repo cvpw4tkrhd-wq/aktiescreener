@@ -329,3 +329,358 @@ stocks:
   sector: Financials
   country: Finland
   market: FI
+- ticker: ORCL
+  name: Oracle
+  sector: Technology
+  country: USA
+  market: US
+- ticker: CRM
+  name: Salesforce
+  sector: Technology
+  country: USA
+  market: US
+- ticker: ADBE
+  name: Adobe
+  sector: Technology
+  country: USA
+  market: US
+- ticker: NOW
+  name: ServiceNow
+  sector: Technology
+  country: USA
+  market: US
+- ticker: INTU
+  name: Intuit
+  sector: Technology
+  country: USA
+  market: US
+- ticker: IBM
+  name: IBM
+  sector: Technology
+  country: USA
+  market: US
+- ticker: CSCO
+  name: Cisco Systems
+  sector: Technology
+  country: USA
+  market: US
+- ticker: QCOM
+  name: Qualcomm
+  sector: Technology
+  country: USA
+  market: US
+- ticker: TXN
+  name: Texas Instruments
+  sector: Technology
+  country: USA
+  market: US
+- ticker: AVGO
+  name: Broadcom
+  sector: Technology
+  country: USA
+  market: US
+- ticker: AMD
+  name: Advanced Micro Devices
+  sector: Semiconductors
+  country: USA
+  market: US
+- ticker: AMAT
+  name: Applied Materials
+  sector: Semiconductors
+  country: USA
+  market: US
+- ticker: LRCX
+  name: Lam Research
+  sector: Semiconductors
+  country: USA
+  market: US
+- ticker: KLAC
+  name: KLA Corporation
+  sector: Semiconductors
+  country: USA
+  market: US
+- ticker: 'ON'
+  name: ON Semiconductor
+  sector: Semiconductors
+  country: USA
+  market: US
+- ticker: JPM
+  name: JPMorgan Chase
+  sector: Financials
+  country: USA
+  market: US
+- ticker: BAC
+  name: Bank of America
+  sector: Financials
+  country: USA
+  market: US
+- ticker: WFC
+  name: Wells Fargo
+  sector: Financials
+  country: USA
+  market: US
+- ticker: GS
+  name: Goldman Sachs
+  sector: Financials
+  country: USA
+  market: US
+- ticker: MS
+  name: Morgan Stanley
+  sector: Financials
+  country: USA
+  market: US
+- ticker: V
+  name: Visa
+  sector: Financials
+  country: USA
+  market: US
+- ticker: MA
+  name: Mastercard
+  sector: Financials
+  country: USA
+  market: US
+- ticker: AXP
+  name: American Express
+  sector: Financials
+  country: USA
+  market: US
+- ticker: BLK
+  name: BlackRock
+  sector: Financials
+  country: USA
+  market: US
+- ticker: SCHW
+  name: Charles Schwab
+  sector: Financials
+  country: USA
+  market: US
+- ticker: JNJ
+  name: Johnson & Johnson
+  sector: Healthcare
+  country: USA
+  market: US
+- ticker: PFE
+  name: Pfizer
+  sector: Healthcare
+  country: USA
+  market: US
+- ticker: UNH
+  name: UnitedHealth Group
+  sector: Healthcare
+  country: USA
+  market: US
+- ticker: ABBV
+  name: AbbVie
+  sector: Healthcare
+  country: USA
+  market: US
+- ticker: MRK
+  name: Merck
+  sector: Healthcare
+  country: USA
+  market: US
+- ticker: LLY
+  name: Eli Lilly
+  sector: Healthcare
+  country: USA
+  market: US
+- ticker: TMO
+  name: Thermo Fisher Scientific
+  sector: Healthcare
+  country: USA
+  market: US
+- ticker: ABT
+  name: Abbott Laboratories
+  sector: Healthcare
+  country: USA
+  market: US
+- ticker: BMY
+  name: Bristol-Myers Squibb
+  sector: Healthcare
+  country: USA
+  market: US
+- ticker: GILD
+  name: Gilead Sciences
+  sector: Healthcare
+  country: USA
+  market: US
+- ticker: KO
+  name: Coca-Cola
+  sector: Consumer
+  country: USA
+  market: US
+- ticker: PEP
+  name: PepsiCo
+  sector: Consumer
+  country: USA
+  market: US
+- ticker: WMT
+  name: Walmart
+  sector: Consumer
+  country: USA
+  market: US
+- ticker: PG
+  name: Procter & Gamble
+  sector: Consumer
+  country: USA
+  market: US
+- ticker: COST
+  name: Costco
+  sector: Consumer
+  country: USA
+  market: US
+- ticker: MCD
+  name: McDonald's
+  sector: Consumer
+  country: USA
+  market: US
+- ticker: NKE
+  name: Nike
+  sector: Consumer
+  country: USA
+  market: US
+- ticker: SBUX
+  name: Starbucks
+  sector: Consumer
+  country: USA
+  market: US
+- ticker: HD
+  name: Home Depot
+  sector: Consumer
+  country: USA
+  market: US
+- ticker: LOW
+  name: Lowe's
+  sector: Consumer
+  country: USA
+  market: US
+- ticker: DIS
+  name: Walt Disney
+  sector: Consumer
+  country: USA
+  market: US
+- ticker: NFLX
+  name: Netflix
+  sector: Consumer
+  country: USA
+  market: US
+- ticker: BA
+  name: Boeing
+  sector: Industrials
+  country: USA
+  market: US
+- ticker: CAT
+  name: Caterpillar
+  sector: Industrials
+  country: USA
+  market: US
+- ticker: HON
+  name: Honeywell
+  sector: Industrials
+  country: USA
+  market: US
+- ticker: UPS
+  name: United Parcel Service
+  sector: Industrials
+  country: USA
+  market: US
+- ticker: GE
+  name: GE Aerospace
+  sector: Industrials
+  country: USA
+  market: US
+- ticker: LMT
+  name: Lockheed Martin
+  sector: Industrials
+  country: USA
+  market: US
+- ticker: RTX
+  name: RTX Corporation
+  sector: Industrials
+  country: USA
+  market: US
+- ticker: DE
+  name: Deere & Company
+  sector: Industrials
+  country: USA
+  market: US
+- ticker: XOM
+  name: Exxon Mobil
+  sector: Energy
+  country: USA
+  market: US
+- ticker: CVX
+  name: Chevron
+  sector: Energy
+  country: USA
+  market: US
+- ticker: COP
+  name: ConocoPhillips
+  sector: Energy
+  country: USA
+  market: US
+- ticker: SLB
+  name: SLB
+  sector: Energy
+  country: USA
+  market: US
+- ticker: EOG
+  name: EOG Resources
+  sector: Energy
+  country: USA
+  market: US
+- ticker: LIN
+  name: Linde
+  sector: Materials
+  country: USA
+  market: US
+- ticker: APD
+  name: Air Products and Chemicals
+  sector: Materials
+  country: USA
+  market: US
+- ticker: NEM
+  name: Newmont
+  sector: Materials
+  country: USA
+  market: US
+- ticker: FCX
+  name: Freeport-McMoRan
+  sector: Materials
+  country: USA
+  market: US
+- ticker: T
+  name: AT&T
+  sector: Telecom
+  country: USA
+  market: US
+- ticker: VZ
+  name: Verizon Communications
+  sector: Telecom
+  country: USA
+  market: US
+- ticker: TMUS
+  name: T-Mobile US
+  sector: Telecom
+  country: USA
+  market: US
+- ticker: PLD
+  name: Prologis
+  sector: RealEstate
+  country: USA
+  market: US
+- ticker: AMT
+  name: American Tower
+  sector: RealEstate
+  country: USA
+  market: US
+- ticker: EQIX
+  name: Equinix
+  sector: RealEstate
+  country: USA
+  market: US
+- ticker: SPG
+  name: Simon Property Group
+  sector: RealEstate
+  country: USA
+  market: US

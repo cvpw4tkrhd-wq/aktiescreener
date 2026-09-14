@@ -1314,7 +1314,8 @@ function render() {
   renderPendingPanel();
   let rows = state.data.results || [];
 
-  const notHeld = rows.filter(r => !r.is_holding);
+  const MIN_CANDIDATE_SCORE = 40; // USA/Europa ska visa köpkandidater, inte alla screenade aktier
+  const notHeld = rows.filter(r => !r.is_holding && (r.buy_score ?? 0) >= MIN_CANDIDATE_SCORE);
   const usRows = notHeld.filter(r => r.market === 'US');
   const euRowsAll = notHeld.filter(r => r.market !== 'US');
   const sellRowsAll = rows.filter(r => r.is_holding);

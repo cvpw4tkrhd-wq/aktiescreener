@@ -1370,8 +1370,8 @@ function render() {
   });
 }
 
-function sparklineHtml(r) {
-  const prices = r.price_history_3m;
+function sparklineHtml(r, field, label) {
+  const prices = r[field];
   if (!prices || prices.length < 2) return '';
 
   const W = 420, H = 90, PAD = 6;
@@ -1393,7 +1393,7 @@ function sparklineHtml(r) {
   return `
     <div class="sparkline-wrap">
       <div class="sparkline-header">
-        <span class="stat-label">KURS 3 MÅN</span>
+        <span class="stat-label">${label}</span>
         <span class="sparkline-change ${up ? 'up-txt' : 'down-txt'}">${up ? '▲' : '▼'} ${up ? '+' : ''}${changePct.toFixed(1)}%</span>
       </div>
       <svg viewBox="0 0 ${W} ${H}" class="sparkline-svg" preserveAspectRatio="none">
@@ -1464,7 +1464,8 @@ function openDrawer(ticker) {
     <button class="drawer-close" id="drawerClose">STÄNG ✕</button>
     <h2>${r.name || r.watchlist_name}</h2>
     <div class="tkr-line">${r.ticker} · ${marketFlag(r.market)} ${r.market}${r.is_holding ? ' · INNEHAV' : ''}</div>
-    ${sparklineHtml(r)}
+    ${sparklineHtml(r, 'price_history_3m', 'KURS 3 MÅN')}
+    ${sparklineHtml(r, 'price_history_1y', 'KURS 1 ÅR')}
     <div class="stat-grid">
       <div><div class="stat-label">PRIS</div><div class="stat-val">${fmtNum(r.price)} ${r.currency||''}</div></div>
       <div><div class="stat-label">P/E</div><div class="stat-val">${r.pe !== null ? fmtNum(r.pe,1) : '–'}</div>${peComparisonHtml(r)}</div>

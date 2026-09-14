@@ -658,57 +658,61 @@ def main():
         if d is None:
             continue
 
-        d["market"] = entry["market"]
-        d["watchlist_name"] = entry["name"]
-        d["sector"] = entry.get("sector")
-        d["country"] = entry.get("country")
-        d["risk_free_rate_pct"] = risk_free_rates.get(entry["market"])
-        if d["risk_free_rate_pct"] is not None and isinstance(d.get("pe"), (int, float)) and d["pe"] > 0:
-            d["earnings_yield_pct"] = round(100 / d["pe"], 2)
-            d["risk_premium_pct"] = round(d["earnings_yield_pct"] - d["risk_free_rate_pct"], 2)
-        else:
-            d["earnings_yield_pct"] = None
-            d["risk_premium_pct"] = None
-        d["data_source"] = "yfinance"
+        try:
+            d["market"] = entry["market"]
+            d["watchlist_name"] = entry["name"]
+            d["sector"] = entry.get("sector")
+            d["country"] = entry.get("country")
+            d["risk_free_rate_pct"] = risk_free_rates.get(entry["market"])
+            if d["risk_free_rate_pct"] is not None and isinstance(d.get("pe"), (int, float)) and d["pe"] > 0:
+                d["earnings_yield_pct"] = round(100 / d["pe"], 2)
+                d["risk_premium_pct"] = round(d["earnings_yield_pct"] - d["risk_free_rate_pct"], 2)
+            else:
+                d["earnings_yield_pct"] = None
+                d["risk_premium_pct"] = None
+            d["data_source"] = "yfinance"
 
-        if entry["market"] == "US":
-            fmp_data = fetch_fmp_fundamentals(ticker)
-            if fmp_data:
-                d.update(fmp_data)
-                d["data_source"] = "yfinance+fmp"
+            if entry["market"] == "US":
+                fmp_data = fetch_fmp_fundamentals(ticker)
+                if fmp_data:
+                    d.update(fmp_data)
+                    d["data_source"] = "yfinance+fmp"
 
-        buy_score, buy_reasons = score_buy_candidate(d)
+            buy_score, buy_reasons = score_buy_candidate(d)
 
-        sector = entry.get("sector")
-        sector_weight = sector_weights.get(sector, 0) if sector else 0
-        geopolitics_note = None
-        if sector_weight:
-            buy_score = max(0, min(100, buy_score + sector_weight))
-            geopolitics_note = ", ".join(sector_factor_names.get(sector, []))
-            buy_reasons.append(f"Geopolitik/makro ({sector}): {geopolitics_note}")
+            sector = entry.get("sector")
+            sector_weight = sector_weights.get(sector, 0) if sector else 0
+            geopolitics_note = None
+            if sector_weight:
+                buy_score = max(0, min(100, buy_score + sector_weight))
+                geopolitics_note = ", ".join(sector_factor_names.get(sector, []))
+                buy_reasons.append(f"Geopolitik/makro ({sector}): {geopolitics_note}")
 
-        country_weight = country_weights.get(entry["market"], 0)
-        geopolitics_country_note = None
-        if country_weight:
-            buy_score = max(0, min(100, buy_score + country_weight))
-            geopolitics_country_note = ", ".join(country_factor_names.get(entry["market"], []))
-            buy_reasons.append(f"Geopolitik/makro ({entry.get('country')}): {geopolitics_country_note}")
+            country_weight = country_weights.get(entry["market"], 0)
+            geopolitics_country_note = None
+            if country_weight:
+                buy_score = max(0, min(100, buy_score + country_weight))
+                geopolitics_country_note = ", ".join(country_factor_names.get(entry["market"], []))
+                buy_reasons.append(f"Geopolitik/makro ({entry.get('country')}): {geopolitics_country_note}")
 
-        d["buy_score"] = buy_score
-        d["buy_reasons"] = buy_reasons
-        # Exponerar den använda sektor- och landsvikten (+ förklaringstexter)
-        # så att webbläsaren kan räkna ut en identisk geopolitik-justering
-        # för säljpoängen, som numera beräknas helt klientsidan (innehav
-        # skickas aldrig till servern).
-        d["sector_weight"] = sector_weight
-        d["geopolitics_note"] = geopolitics_note
-        d["country_weight"] = country_weight
-        d["geopolitics_country_note"] = geopolitics_country_note
-        d["buy_days_on_list"], d["buy_score_delta"] = update_score_history(
-            score_history, ticker, buy_score, today_str, price=d.get("price")
-        )
+            d["buy_score"] = buy_score
+            d["buy_reasons"] = buy_reasons
+            # Exponerar den använda sektor- och landsvikten (+ förklaringstexter)
+            # så att webbläsaren kan räkna ut en identisk geopolitik-justering
+            # för säljpoängen, som numera beräknas helt klientsidan (innehav
+            # skickas aldrig till servern).
+            d["sector_weight"] = sector_weight
+            d["geopolitics_note"] = geopolitics_note
+            d["country_weight"] = country_weight
+            d["geopolitics_country_note"] = geopolitics_country_note
+            d["buy_days_on_list"], d["buy_score_delta"] = update_score_history(
+                score_history, ticker, buy_score, today_str, price=d.get("price")
+            )
 
-        results.append(d)
+            results.append(d)
+        except Exception as e:
+            print(f"  Bearbetning/poängsättning misslyckades för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)
+
         time.sleep(0.3)  # snäll mot Yahoo Finance
 
     save_score_history(score_history)

@@ -493,16 +493,19 @@ def score_buy_candidate(d, extra_weight=0):
 
     rec = d.get("recommendation_key")
     if rec == "strong_buy":
-        bonus += 12
+        bonus += 18
         reasons.append(f"Analytikerkonsensus: starkt köp ({d.get('num_analysts') or '?'} analytiker)")
     elif rec == "buy":
-        bonus += 8
+        bonus += 12
         reasons.append(f"Analytikerkonsensus: köp ({d.get('num_analysts') or '?'} analytiker)")
+    elif rec == "hold":
+        penalty += 5
+        reasons.append(f"Analytikerkonsensus: håll ({d.get('num_analysts') or '?'} analytiker) – analytikerna ser varken tydlig upp- eller nedsida")
     elif rec == "sell":
-        penalty += 10
+        penalty += 18
         reasons.append(f"Analytikerkonsensus: sälj ({d.get('num_analysts') or '?'} analytiker)")
     elif rec == "strong_sell":
-        penalty += 15
+        penalty += 25
         reasons.append(f"Analytikerkonsensus: starkt sälj ({d.get('num_analysts') or '?'} analytiker)")
 
     upside = d.get("analyst_upside_pct")

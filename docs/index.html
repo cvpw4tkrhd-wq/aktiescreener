@@ -208,6 +208,20 @@
   }
   .diag-row:first-child { border-top: none; }
   .diag-ticker { color: var(--text-faint); }
+
+  .level-badge {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+    letter-spacing: 0.02em;
+  }
+  .level-badge.level-good { color: var(--up); border: 1px solid var(--up); }
+  .level-badge.level-neutral { color: var(--text-faint); border: 1px solid var(--border); }
+  .level-badge.level-bad { color: var(--down); border: 1px solid var(--down); }
   select, input[type=text] {
     background: var(--panel-alt);
     border: 1px solid var(--border);
@@ -1128,6 +1142,15 @@ function riskPremiumHtml(r) {
   return `${sign}${fmtNum(r.risk_premium_pct,1)}pp <span class="sma-trend ${cls}" title="${label} (vinstavkastning ${fmtNum(r.earnings_yield_pct,1)}% mot riskfri ränta ${fmtNum(r.risk_free_rate_pct,2)}%)">${symbol}</span>`;
 }
 
+function levelBadge(value, low, high, labels) {
+  if (value === null || value === undefined) return '';
+  let label, cls;
+  if (value < low) { label = labels[0]; cls = 'level-good'; }
+  else if (value > high) { label = labels[2]; cls = 'level-bad'; }
+  else { label = labels[1]; cls = 'level-neutral'; }
+  return `<span class="level-badge ${cls}">${label}</span>`;
+}
+
 function forwardPeHtml(r) {
   if (r.forward_pe === null || r.forward_pe === undefined) return '–';
   const trend = r.forward_pe_trend_pct;
@@ -1470,20 +1493,20 @@ function openDrawer(ticker) {
     ${sparklineHtml(r, 'price_history_1y', 'KURS 1 ÅR')}
     <div class="stat-grid">
       <div><div class="stat-label">PRIS</div><div class="stat-val">${fmtNum(r.price)} ${r.currency||''}</div></div>
-      <div><div class="stat-label">P/E</div><div class="stat-val">${r.pe !== null ? fmtNum(r.pe,1) : '–'}</div>${peComparisonHtml(r)}</div>
-      <div><div class="stat-label">PEG-TAL</div><div class="stat-val">${r.peg_ratio !== null && r.peg_ratio !== undefined ? fmtNum(r.peg_ratio,2) : '–'}</div></div>
+      <div><div class="stat-label">P/E</div><div class="stat-val">${r.pe !== null ? fmtNum(r.pe,1) : '–'}${levelBadge(r.pe, 15, 40, ['LÅGT','NORMALT','HÖGT'])}</div>${peComparisonHtml(r)}</div>
+      <div><div class="stat-label">PEG-TAL</div><div class="stat-val">${r.peg_ratio !== null && r.peg_ratio !== undefined ? fmtNum(r.peg_ratio,2) : '–'}${levelBadge(r.peg_ratio, 1, 3, ['LÅGT','NORMALT','HÖGT'])}</div></div>
       <div><div class="stat-label">FORWARD P/E</div><div class="stat-val">${forwardPeHtml(r)}</div></div>
       <div><div class="stat-label">RISKFRI RÄNTA</div><div class="stat-val">${r.risk_free_rate_pct !== null && r.risk_free_rate_pct !== undefined ? fmtNum(r.risk_free_rate_pct,2) + '%' : '–'}</div></div>
       <div><div class="stat-label">RISKPREMIE</div><div class="stat-val">${riskPremiumHtml(r)}</div></div>
       <div><div class="stat-label">INTÄKTSTILLVÄXT (YOY)</div><div class="stat-val">${r.revenue_growth_yoy_pct !== null && r.revenue_growth_yoy_pct !== undefined ? (r.revenue_growth_yoy_pct > 0 ? '+' : '') + fmtNum(r.revenue_growth_yoy_pct,1) + '%' : '–'}</div></div>
       <div><div class="stat-label">MARGINALTREND</div><div class="stat-val">${r.operating_margin_trend_pp !== null && r.operating_margin_trend_pp !== undefined ? (r.operating_margin_trend_pp > 0 ? '+' : '') + fmtNum(r.operating_margin_trend_pp,1) + 'pp' : '–'}</div></div>
-      <div><div class="stat-label">RSI14</div><div class="stat-val">${r.rsi14 !== null ? fmtNum(r.rsi14,0) : '–'}</div></div>
+      <div><div class="stat-label">RSI14</div><div class="stat-val">${r.rsi14 !== null ? fmtNum(r.rsi14,0) : '–'}${levelBadge(r.rsi14, 35, 70, ['ÖVERSÅLT','NEUTRALT','ÖVERKÖPT'])}</div></div>
       <div class="stat-wide"><div class="stat-label">SMA50 / SMA200</div><div class="stat-val">${smaTrendHtml(r)}</div></div>
       <div><div class="stat-label">VOLYM</div><div class="stat-val">${fmtVol(r.volume_ratio)}</div></div>
-      <div><div class="stat-label">P/B</div><div class="stat-val">${r.pb !== null ? fmtNum(r.pb,2) : '–'}</div></div>
+      <div><div class="stat-label">P/B</div><div class="stat-val">${r.pb !== null ? fmtNum(r.pb,2) : '–'}${levelBadge(r.pb, 1.5, 6, ['LÅGT','NORMALT','HÖGT'])}</div></div>
       <div><div class="stat-label">UTDELNING</div><div class="stat-val">${r.dividend_yield_pct !== null ? fmtNum(r.dividend_yield_pct,1) + '%' : '–'}</div></div>
-      <div><div class="stat-label">SKULDSÄTTNING (D/E)</div><div class="stat-val">${r.debt_to_equity !== null ? fmtNum(r.debt_to_equity,0) : '–'}</div></div>
-      <div><div class="stat-label">VOLATILITET (ÅR)</div><div class="stat-val">${r.volatility_pct !== null ? fmtNum(r.volatility_pct,0) + '%' : '–'}</div></div>
+      <div><div class="stat-label">SKULDSÄTTNING (D/E)</div><div class="stat-val">${r.debt_to_equity !== null ? fmtNum(r.debt_to_equity,0) : '–'}${levelBadge(r.debt_to_equity, 50, 150, ['LÅG','NORMAL','HÖG'])}</div></div>
+      <div><div class="stat-label">VOLATILITET (ÅR)</div><div class="stat-val">${r.volatility_pct !== null ? fmtNum(r.volatility_pct,0) + '%' : '–'}${levelBadge(r.volatility_pct, 20, 45, ['LÅG','NORMAL','HÖG'])}</div></div>
       <div><div class="stat-label">FCF-MARGINAL</div><div class="stat-val">${r.fcf_margin_pct !== null && r.fcf_margin_pct !== undefined ? fmtNum(r.fcf_margin_pct,0) + '%' : '–'}</div></div>
       <div><div class="stat-label">SBC/INTÄKTER</div><div class="stat-val">${r.sbc_to_revenue_pct !== null && r.sbc_to_revenue_pct !== undefined ? fmtNum(r.sbc_to_revenue_pct,0) + '%' : '–'}</div></div>
       <div><div class="stat-label">CAPEX/AVSKRIVNINGAR</div><div class="stat-val">${r.capex_to_da !== null && r.capex_to_da !== undefined ? fmtNum(r.capex_to_da,1) + 'x' : '–'}</div></div>

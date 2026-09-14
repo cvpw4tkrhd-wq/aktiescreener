@@ -358,8 +358,8 @@ def analyze_ticker(ticker: str):
             def _row(name):
                 return name if name in q_income.index else None
 
-            rev_row = _row("Total Revenue")
-            op_row = _row("Operating Income") or _row("Operating Revenue")
+            rev_row = _row("Total Revenue") or _row("TotalRevenue")
+            op_row = _row("Operating Income") or _row("OperatingIncome") or _row("Operating Revenue") or _row("OperatingRevenue")
 
             if rev_row:
                 rev_latest = q_income.loc[rev_row, latest_col]

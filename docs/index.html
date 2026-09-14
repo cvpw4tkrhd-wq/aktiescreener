@@ -608,6 +608,7 @@
         <option value="pe_asc">Sortera: P/E (lågt→högt)</option>
         <option value="rsi_asc">Sortera: RSI (lågt→högt)</option>
         <option value="vol_desc">Sortera: volymavvikelse</option>
+        <option value="target_desc">Sortera: kursmål (hög→låg)</option>
       </select>
     </div>
     <div id="tableHost"></div>
@@ -1301,6 +1302,7 @@ function sortRows(rows, key) {
     case 'pe_asc': s.sort((a,b) => (a.pe ?? 9999) - (b.pe ?? 9999)); break;
     case 'rsi_asc': s.sort((a,b) => (a.rsi14 ?? 9999) - (b.rsi14 ?? 9999)); break;
     case 'vol_desc': s.sort((a,b) => (b.volume_ratio ?? 0) - (a.volume_ratio ?? 0)); break;
+    case 'target_desc': s.sort((a,b) => (b.analyst_upside_pct ?? -9999) - (a.analyst_upside_pct ?? -9999)); break;
     default: s.sort((a,b) => (state.tab === 'sell' ? (b.sell_score ?? 0) - (a.sell_score ?? 0) : (b.buy_score ?? 0) - (a.buy_score ?? 0)));
   }
   return s;

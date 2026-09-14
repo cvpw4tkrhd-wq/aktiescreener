@@ -766,4 +766,18 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception:
+        import traceback
+        tb = traceback.format_exc()
+        print(tb, file=sys.stderr)
+        try:
+            with open(ROOT / "debug_crash.txt", "w", encoding="utf-8") as f:
+                f.write(tb)
+        except Exception:
+            pass
+        # Avslutar ändå med kod 0 så att workflowens commit-steg körs och
+        # felrapporten faktiskt går att läsa via GitHub Contents API
+        # (Actions-loggarna är inte läsbara med nuvarande token-behörighet).
+        # TILLFÄLLIG DIAGNOSTIK - ta bort när roten till felet är hittad.

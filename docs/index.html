@@ -772,6 +772,20 @@ function scoreSellSignal(d) {
       score -= 10; reasons.push(`Hög riskpremie (vinstavkastning ${d.earnings_yield_pct}% mot riskfri ränta ${d.risk_free_rate_pct}%) – talar emot att sälja`);
     }
   }
+  if (d.revenue_growth_yoy_pct !== null && d.revenue_growth_yoy_pct !== undefined) {
+    if (d.revenue_growth_yoy_pct < -5) {
+      score += 8; reasons.push(`Krympande intäkter (${fmtNum(d.revenue_growth_yoy_pct,0)}% mot samma kvartal förra året)`);
+    } else if (d.revenue_growth_yoy_pct > 15) {
+      score -= 8; reasons.push(`Stark intäktstillväxt (+${fmtNum(d.revenue_growth_yoy_pct,0)}% mot samma kvartal förra året) – talar emot att sälja`);
+    }
+  }
+  if (d.operating_margin_trend_pp !== null && d.operating_margin_trend_pp !== undefined) {
+    if (d.operating_margin_trend_pp < -3) {
+      score += 8; reasons.push(`Försämrad rörelsemarginal (${fmtNum(d.operating_margin_trend_pp,1)}pp mot samma kvartal förra året)`);
+    } else if (d.operating_margin_trend_pp > 3) {
+      score -= 8; reasons.push(`Förbättrad rörelsemarginal (+${fmtNum(d.operating_margin_trend_pp,1)}pp) – talar emot att sälja`);
+    }
+  }
   if (d.volume_ratio && d.volume_ratio > 2 && d.above_sma50 === false) {
     score += 15; reasons.push(`Förhöjd säljvolym (${d.volume_ratio}x snitt) i nedgång`);
   }
@@ -1400,6 +1414,8 @@ const METRIC_GLOSSARY = {
   'FORWARD P/E': { title: 'Forward P/E', text: 'Samma princip som vanligt P/E, men baserat på FÖRVÄNTAD framtida vinst istället för senast rapporterade. Symbolen visar om forward P/E är klart lägre (▲, grönt – vinsttillväxt väntas) eller klart högre (▼, rött – vinstnedgång väntas) än det vanliga P/E-talet. Bygger på analytikeres vinstprognoser, inte facit.' },
   'RISKFRI RÄNTA': { title: 'Riskfri ränta', text: 'Vad en 10-årig statsobligation i bolagets hemland ger just nu - avkastningen du kan få praktiskt taget utan risk. Referenspunkten allt annat mäts mot: varför ta aktierisk för mindre än så? Statisk siffra, uppdateras bara när Claude uppdaterar referensfilen manuellt - inte i realtid.' },
   'RISKPREMIE': { title: 'Riskpremie', text: 'Aktiens vinstavkastning (100/P/E) minus riskfri ränta - hur mycket EXTRA avkastning aktien erbjuder för risken du tar jämfört med en säker placering. Negativ riskpremie (▼, rött) betyder att du får bättre avkastning helt riskfritt just nu, vilket är ett varningstecken. Hög riskpremie (▲, grönt) betyder gott om kompensation för risken - men bygger på dagens vinst, inte en garanti om framtiden.' },
+  'INTÄKTSTILLVÄXT (YOY)': { title: 'Intäktstillväxt (år över år)', text: 'Hur mycket bolagets intäkter vuxit senaste kvartalet jämfört med samma kvartal förra året (undviker säsongseffekter, t.ex. att julhandel alltid är starkare än sommaren). Skiljer på bolag som konsekvent växer och bolag som bara råkar se billiga ut just nu.' },
+  'MARGINALTREND': { title: 'Marginaltrend', text: 'Förändringen i rörelsemarginal (rörelseresultat/intäkter) senaste kvartalet jämfört med samma kvartal förra året, i procentenheter. Förbättrad marginal betyder att bolaget blivit mer lönsamt per krona i intäkt - inte bara växer, utan växer med bättre lönsamhet.' },
   'RSI14': { title: 'RSI14 (momentum)', text: 'Mäter om en aktie handlats mycket upp eller ner den senaste tiden, på en skala 0–100. Över 70 kallas ofta "överköpt" (kan vara mogen för en paus), under 30 "översåld". Säger inget om bolaget är bra eller dåligt – bara om kursen rört sig mycket nyligen.' },
   'SMA50 / SMA200': { title: 'SMA50 / SMA200 (glidande medelvärden)', text: 'Genomsnittligt pris de senaste 50 respektive 200 dagarna. Jämnar ut dagliga svängningar för att visa den underliggande trenden. Om det kortare snittet (50 dagar) ligger över det längre (200 dagar) tolkas det som en uppåttrend, och tvärtom nedåt.' },
   'VOLYM': { title: 'Volym', text: 'Hur mycket aktien handlats senaste dagen, jämfört med snittet de senaste 20 dagarna. Kraftigt förhöjd volym kan betyda att något viktigt hänt med bolaget – nyheter, rapport, eller stora köp/sälj från enskilda aktörer.' },
@@ -1456,6 +1472,8 @@ function openDrawer(ticker) {
       <div><div class="stat-label">FORWARD P/E</div><div class="stat-val">${forwardPeHtml(r)}</div></div>
       <div><div class="stat-label">RISKFRI RÄNTA</div><div class="stat-val">${r.risk_free_rate_pct !== null && r.risk_free_rate_pct !== undefined ? fmtNum(r.risk_free_rate_pct,2) + '%' : '–'}</div></div>
       <div><div class="stat-label">RISKPREMIE</div><div class="stat-val">${riskPremiumHtml(r)}</div></div>
+      <div><div class="stat-label">INTÄKTSTILLVÄXT (YOY)</div><div class="stat-val">${r.revenue_growth_yoy_pct !== null && r.revenue_growth_yoy_pct !== undefined ? (r.revenue_growth_yoy_pct > 0 ? '+' : '') + fmtNum(r.revenue_growth_yoy_pct,1) + '%' : '–'}</div></div>
+      <div><div class="stat-label">MARGINALTREND</div><div class="stat-val">${r.operating_margin_trend_pp !== null && r.operating_margin_trend_pp !== undefined ? (r.operating_margin_trend_pp > 0 ? '+' : '') + fmtNum(r.operating_margin_trend_pp,1) + 'pp' : '–'}</div></div>
       <div><div class="stat-label">RSI14</div><div class="stat-val">${r.rsi14 !== null ? fmtNum(r.rsi14,0) : '–'}</div></div>
       <div class="stat-wide"><div class="stat-label">SMA50 / SMA200</div><div class="stat-val">${smaTrendHtml(r)}</div></div>
       <div><div class="stat-label">VOLYM</div><div class="stat-val">${fmtVol(r.volume_ratio)}</div></div>

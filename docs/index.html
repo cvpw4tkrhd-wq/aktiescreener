@@ -794,7 +794,9 @@ function scoreSellSignal(d) {
   if (rec === 'strong_sell') {
     score += 25; reasons.push(`Analytikerkonsensus: starkt sälj (${numAnalysts} analytiker)`);
   } else if (rec === 'sell') {
-    score += 15; reasons.push(`Analytikerkonsensus: sälj (${numAnalysts} analytiker)`);
+    score += 18; reasons.push(`Analytikerkonsensus: sälj (${numAnalysts} analytiker)`);
+  } else if (rec === 'hold') {
+    score += 5; reasons.push(`Analytikerkonsensus: håll (${numAnalysts} analytiker) – ingen tydlig upp- eller nedsida enligt analytikerna`);
   } else if (rec === 'strong_buy') {
     score -= 20; reasons.push(`Analytikerkonsensus: starkt köp (${numAnalysts} analytiker) — talar tydligt emot att sälja`);
   } else if (rec === 'buy') {
@@ -1328,7 +1330,7 @@ function render() {
     const cls = barClsMap[flag.cls];
     const trend = r.above_sma50 && r.above_sma200 ? 'up-txt' : (r.above_sma50 === false && r.above_sma200 === false ? 'down-txt' : 'dim');
     return `<tr data-ticker="${r.ticker}">
-      <td class="name"><div class="name-line">${r.name || r.watchlist_name}${flag ? `<span class="signal-flag ${flag.cls}">${flag.label}</span>` : ''}${days >= 3 ? `<span class="mkt-badge days-badge" title="${days} körningar i rad med aktiv signal">${days}D</span>` : ''}</div><span class="tkr">${r.ticker}<span class="mkt-flag" title="${r.market}">${marketFlag(r.market)}</span></span></td>
+      <td class="name"><div class="name-line">${r.name || r.watchlist_name}${flag ? `<span class="signal-flag ${flag.cls}"${flag.title ? ` title="${flag.title}"` : ''}>${flag.label}</span>` : ''}${days >= 3 ? `<span class="mkt-badge days-badge" title="${days} körningar i rad med aktiv signal">${days}D</span>` : ''}</div><span class="tkr">${r.ticker}<span class="mkt-flag" title="${r.market}">${marketFlag(r.market)}</span></span></td>
       <td class="num">${fmtNum(r.price)} <span class="ccy">${r.currency || ''}</span></td>
       <td class="num">${r.pe !== null ? fmtNum(r.pe,1) : '–'}</td>
       <td class="num ${trend === 'up-txt' ? 'up-txt' : trend === 'down-txt' ? 'down-txt' : ''}">${r.rsi14 !== null ? fmtNum(r.rsi14,0) : '–'}</td>
@@ -1538,7 +1540,19 @@ function deltaHtml(delta) {
 
 function signalFlag(r) {
   if ((r.sell_score || 0) >= 50) return { label: 'SÄLJ', cls: 'flag-sell' };
-  if ((r.buy_score || 0) >= 65) return { label: 'KÖP', cls: 'flag-buy' };
+
+  const rec = r.recommendation_key;
+  const scoreQualifiesBuy = (r.buy_score || 0) >= 65;
+
+  if (scoreQualifiesBuy) {
+    if (rec === 'sell' || rec === 'strong_sell' || rec === 'hold') {
+      return {
+        label: 'HÅLL', cls: 'flag-hold',
+        title: `Modellens poäng (${r.buy_score}) skulle räcka för KÖP, men analytikerkonsensus är "${rec === 'hold' ? 'håll' : rec === 'sell' ? 'sälj' : 'starkt sälj'}" — visas därför som HÅLL`,
+      };
+    }
+    return { label: 'KÖP', cls: 'flag-buy' };
+  }
   return { label: 'HÅLL', cls: 'flag-hold' };
 }
 

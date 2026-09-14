@@ -226,8 +226,11 @@ def analyze_ticker(ticker: str):
     close = hist["Close"]
     volume = hist["Volume"]
 
-    # Kort prisserie (~3 månader / 63 handelsdagar) för minigraf i dashboarden.
+    # Prisserier för minigrafer i dashboarden: ~3 månader (63 handelsdagar)
+    # och hela det redan hämtade året. Ingen extra API-kostnad - vi har
+    # redan 1 års data för de tekniska indikatorerna.
     price_history_3m = [round(float(v), 4) for v in close.tail(63)]
+    price_history_1y = [round(float(v), 4) for v in close]
 
     sma50 = close.rolling(SMA_SHORT).mean()
     sma200 = close.rolling(SMA_LONG).mean() if len(close) >= SMA_LONG else pd.Series([None] * len(close))
@@ -412,6 +415,7 @@ def analyze_ticker(ticker: str):
         "volatility_pct": round(volatility_pct, 1) if volatility_pct is not None else None,
         "beta": round(beta, 2) if isinstance(beta, (int, float)) else None,
         "price_history_3m": price_history_3m,
+        "price_history_1y": price_history_1y,
     }
 
 

@@ -34,7 +34,7 @@ SCORE_HISTORY_FILE = DATA_DIR / "score_history.json"
 OUTPUT_FILE = DOCS_DIR / "results.json"
 
 BUY_SIGNAL_THRESHOLD = 65   # köppoäng för att räknas som "aktiv köpsignal" i dagräkningen
-MAX_HISTORY_ENTRIES = 90    # ca 4 månaders vardagskörningar per ticker
+MAX_HISTORY_ENTRIES = 400   # ca 1,5 års vardagskörningar per ticker - för framtida backtesting av poäng vs avkastning
 
 RSI_PERIOD = 14
 SMA_SHORT = 50
@@ -108,18 +108,22 @@ def save_score_history(history: dict):
         json.dump(history, f, ensure_ascii=False, indent=2, sort_keys=True)
 
 
-def update_score_history(history: dict, ticker: str, score, today_str: str):
-    """Lägger till dagens köppoäng i historiken för en ticker och returnerar
-    (dagar_i_rad_med_aktiv_köpsignal, poängförändring_sedan_föregående_körning).
-    Kör man screenern flera gånger samma dag skrivs den dagens post över
-    istället för att dubbleras. (Säljpoäng-historik hanteras numera
-    klientsidan, eftersom innehav bara finns i webbläsaren.)"""
+def update_score_history(history: dict, ticker: str, score, today_str: str, price=None):
+    """Lägger till dagens köppoäng (och pris, för framtida backtesting) i
+    historiken för en ticker och returnerar (dagar_i_rad_med_aktiv_köpsignal,
+    poängförändring_sedan_föregående_körning). Kör man screenern flera
+    gånger samma dag skrivs den dagens post över istället för att
+    dubbleras. (Säljpoäng-historik hanteras numera klientsidan, eftersom
+    innehav bara finns i webbläsaren.)"""
     if score is None:
         return None, None
 
     series = history.setdefault(ticker, {}).setdefault("buy", [])
     series[:] = [e for e in series if e["date"] != today_str]
-    series.append({"date": today_str, "score": score})
+    entry = {"date": today_str, "score": score}
+    if price is not None:
+        entry["price"] = price
+    series.append(entry)
     series.sort(key=lambda e: e["date"])
     if len(series) > MAX_HISTORY_ENTRIES:
         del series[: -MAX_HISTORY_ENTRIES]
@@ -339,6 +343,40 @@ def analyze_ticker(ticker: str):
     except Exception as e:
         print(f"  Kassaflödesdata saknas/fel för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)
 
+    # Flerkvartals tillväxt- och marginaltrend. Jämför senaste kvartalet mot
+    # samma kvartal föregående år (undviker säsongseffekter). Kräver minst
+    # 5 kvartal historik - saknas ofta för mindre/utländska bolag, då
+    # degraderar fälten bara till None.
+    revenue_growth_yoy_pct = None
+    operating_margin_trend_pp = None
+    try:
+        q_income = tk.get_income_stmt(freq="quarterly")
+        if q_income is not None and not q_income.empty and len(q_income.columns) >= 5:
+            cols = list(q_income.columns)  # nyast först
+            latest_col, year_ago_col = cols[0], cols[4]
+
+            def _row(name):
+                return name if name in q_income.index else None
+
+            rev_row = _row("Total Revenue")
+            op_row = _row("Operating Income") or _row("Operating Revenue")
+
+            if rev_row:
+                rev_latest = q_income.loc[rev_row, latest_col]
+                rev_year_ago = q_income.loc[rev_row, year_ago_col]
+                if pd.notna(rev_latest) and pd.notna(rev_year_ago) and rev_year_ago:
+                    revenue_growth_yoy_pct = (float(rev_latest) - float(rev_year_ago)) / abs(float(rev_year_ago)) * 100
+
+                if op_row:
+                    op_latest = q_income.loc[op_row, latest_col]
+                    op_year_ago = q_income.loc[op_row, year_ago_col]
+                    if pd.notna(op_latest) and pd.notna(op_year_ago) and rev_latest and rev_year_ago:
+                        margin_latest = float(op_latest) / float(rev_latest) * 100
+                        margin_year_ago = float(op_year_ago) / float(rev_year_ago) * 100
+                        operating_margin_trend_pp = margin_latest - margin_year_ago
+    except Exception as e:
+        print(f"  Kvartalstrend saknas/fel för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)
+
     return {
         "ticker": ticker,
         "name": long_name,
@@ -348,6 +386,8 @@ def analyze_ticker(ticker: str):
         "forward_pe": round(forward_pe, 2) if isinstance(forward_pe, (int, float)) else None,
         "forward_pe_trend_pct": round(forward_pe_trend_pct, 1) if forward_pe_trend_pct is not None else None,
         "peg_ratio": round(peg, 2) if isinstance(peg, (int, float)) else None,
+        "revenue_growth_yoy_pct": round(revenue_growth_yoy_pct, 1) if revenue_growth_yoy_pct is not None else None,
+        "operating_margin_trend_pp": round(operating_margin_trend_pp, 1) if operating_margin_trend_pp is not None else None,
         "sma50": round(last_sma50, 2) if last_sma50 else None,
         "sma200": round(last_sma200, 2) if last_sma200 else None,
         "rsi14": round(last_rsi, 1) if last_rsi is not None else None,
@@ -493,6 +533,22 @@ def score_buy_candidate(d):
         elif d["risk_premium_pct"] < 0:
             score -= 10
             reasons.append(f"Negativ riskpremie (vinstavkastning {d['earnings_yield_pct']}% under riskfri ränta {d['risk_free_rate_pct']}%) – du får MER avkastning helt riskfritt just nu")
+
+    if d.get("revenue_growth_yoy_pct") is not None:
+        if d["revenue_growth_yoy_pct"] > 15:
+            score += 8
+            reasons.append(f"Stark intäktstillväxt ({d['revenue_growth_yoy_pct']:+.0f}% mot samma kvartal förra året)")
+        elif d["revenue_growth_yoy_pct"] < -5:
+            score -= 8
+            reasons.append(f"Krympande intäkter ({d['revenue_growth_yoy_pct']:+.0f}% mot samma kvartal förra året)")
+
+    if d.get("operating_margin_trend_pp") is not None:
+        if d["operating_margin_trend_pp"] > 3:
+            score += 8
+            reasons.append(f"Förbättrad rörelsemarginal ({d['operating_margin_trend_pp']:+.1f} procentenheter mot samma kvartal förra året)")
+        elif d["operating_margin_trend_pp"] < -3:
+            score -= 8
+            reasons.append(f"Försämrad rörelsemarginal ({d['operating_margin_trend_pp']:+.1f} procentenheter mot samma kvartal förra året)")
 
     if d.get("debt_to_equity") is not None:
         if d["debt_to_equity"] < 50:
@@ -649,7 +705,7 @@ def main():
         d["country_weight"] = country_weight
         d["geopolitics_country_note"] = geopolitics_country_note
         d["buy_days_on_list"], d["buy_score_delta"] = update_score_history(
-            score_history, ticker, buy_score, today_str
+            score_history, ticker, buy_score, today_str, price=d.get("price")
         )
 
         results.append(d)

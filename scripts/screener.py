@@ -419,147 +419,161 @@ def analyze_ticker(ticker: str):
     }
 
 
-def score_buy_candidate(d):
-    """Enkel poängmodell (0-100) för köpvärdhet. Inte finansiell rådgivning -
-    tänkt som ett första filter, inte en slutgiltig sanning."""
-    score = 50
+def score_buy_candidate(d, extra_weight=0):
+    """Poängmodell (0-100) för köpvärdhet. Inte finansiell rådgivning -
+    tänkt som ett första filter, inte en slutgiltig sanning.
+
+    Bonuspoäng (allt positivt, inklusive extra_weight om den är positiv)
+    och strafpoäng hålls isär under uträkningen. Straffen räknas fullt ut
+    som förut - en dålig aktie ska fortsatt kunna hamna nära noll. Men
+    bonuspoängen dämpas med avtagande avkastning (de första
+    BONUS_FULL_THRESHOLD poängen räknas fullt ut, resten till en bråkdel)
+    så att det krävs väsentligt fler samtidiga positiva signaler för att nå
+    poäng nära 100 - och detta håller automatiskt även när fler
+    bonusfaktorer läggs till i framtiden, utan att varje enskild vikt
+    behöver sänkas manuellt igen.
+
+    extra_weight: geopolitik/makro-vikt (sektor + land), positiv eller
+    negativ, som ska vägas in i samma dämpning som resten av bonusarna."""
+    bonus = 0
+    penalty = 0
     reasons = []
 
     if d["pe"] is not None:
         if 0 < d["pe"] < 15:
-            score += 10
+            bonus += 10
             reasons.append(f"Lågt P/E ({d['pe']})")
         elif d["pe"] > 40:
-            score -= 15
+            penalty += 15
             reasons.append(f"Högt P/E ({d['pe']})")
     else:
         reasons.append("P/E saknas (t.ex. förlust eller ej rapporterat)")
 
     if d.get("peg_ratio") is not None:
         if 0 < d["peg_ratio"] < 1:
-            score += 8
+            bonus += 8
             reasons.append(f"Lågt PEG-tal ({d['peg_ratio']}) – P/E ser rimligt ut i relation till förväntad vinsttillväxt")
         elif d["peg_ratio"] > 3:
-            score -= 10
+            penalty += 10
             reasons.append(f"Högt PEG-tal ({d['peg_ratio']}) – dyrt även efter hänsyn till förväntad tillväxt")
 
     if d.get("forward_pe_trend_pct") is not None:
         if d["forward_pe_trend_pct"] < -15:
-            score += 8
+            bonus += 8
             reasons.append(f"Forward P/E {d['forward_pe_trend_pct']:+.0f}% under historiskt P/E – vinsttillväxt väntas")
         elif d["forward_pe_trend_pct"] > 15:
-            score -= 10
+            penalty += 10
             reasons.append(f"Forward P/E {d['forward_pe_trend_pct']:+.0f}% över historiskt P/E – vinstnedgång väntas")
 
     if d["rsi14"] is not None:
         if d["rsi14"] < 35:
-            score += 10
+            bonus += 10
             reasons.append(f"RSI lågt/översålt ({d['rsi14']})")
         elif d["rsi14"] > 70:
-            score -= 20
+            penalty += 20
             reasons.append(f"RSI högt/överköpt ({d['rsi14']})")
 
     if d["cross_signal"] == "golden_cross":
-        score += 15
+        bonus += 15
         reasons.append("Golden cross (SMA50 korsade upp genom SMA200)")
     elif d["cross_signal"] == "death_cross":
-        score -= 20
+        penalty += 20
         reasons.append("Death cross (SMA50 korsade ner genom SMA200)")
 
     if d["above_sma50"] and d["above_sma200"]:
-        score += 8
+        bonus += 8
         reasons.append("Pris över både SMA50 och SMA200 (uppåttrend)")
     elif d["above_sma50"] is False and d["above_sma200"] is False:
-        score -= 10
+        penalty += 10
         reasons.append("Pris under både SMA50 och SMA200 (nedåttrend)")
 
     if d["volume_ratio"] and d["volume_ratio"] > 2:
-        score += 7
+        bonus += 7
         reasons.append(f"Kraftigt förhöjd volym ({d['volume_ratio']}x snitt) – möjlig större rörelse")
 
     rec = d.get("recommendation_key")
     if rec == "strong_buy":
-        score += 12
+        bonus += 12
         reasons.append(f"Analytikerkonsensus: starkt köp ({d.get('num_analysts') or '?'} analytiker)")
     elif rec == "buy":
-        score += 8
+        bonus += 8
         reasons.append(f"Analytikerkonsensus: köp ({d.get('num_analysts') or '?'} analytiker)")
     elif rec == "sell":
-        score -= 10
+        penalty += 10
         reasons.append(f"Analytikerkonsensus: sälj ({d.get('num_analysts') or '?'} analytiker)")
     elif rec == "strong_sell":
-        score -= 15
+        penalty += 15
         reasons.append(f"Analytikerkonsensus: starkt sälj ({d.get('num_analysts') or '?'} analytiker)")
 
     upside = d.get("analyst_upside_pct")
     if upside is not None:
         if upside > 15:
-            score += 8
+            bonus += 8
             reasons.append(f"Analytikernas kursmål {upside:+.0f}% över dagens pris")
         elif upside < -10:
-            score -= 10
+            penalty += 10
             reasons.append(f"Analytikernas kursmål {upside:+.0f}% under dagens pris")
         elif upside < 0:
-            score -= 5
+            penalty += 5
             reasons.append(f"Analytikernas kursmål {upside:+.0f}% under dagens pris (måttligt)")
 
     if d.get("pb") is not None:
         if d["pb"] < 0:
-            score -= 25
+            penalty += 25
             reasons.append(f"Negativt P/B ({d['pb']}) – bolaget har negativt eget kapital, allvarlig varningssignal")
         elif 0 < d["pb"] < 1.5:
             high_leverage = d.get("debt_to_equity") is not None and d["debt_to_equity"] > 100
             if high_leverage:
                 reasons.append(f"Lågt P/B ({d['pb']}) men hög skuldsättning – kan vara en värdefälla snarare än ett fynd, ingen poängbonus")
             else:
-                score += 8
+                bonus += 8
                 reasons.append(f"Lågt P/B ({d['pb']}) – handlas nära/under bokfört värde")
         elif d["pb"] > 6:
-            score -= 10
+            penalty += 10
             reasons.append(f"Högt P/B ({d['pb']})")
 
     if d.get("dividend_yield_pct") is not None:
         rf = d.get("risk_free_rate_pct")
         if rf is not None:
             if d["dividend_yield_pct"] > rf + 1:
-                score += 5
+                bonus += 5
                 reasons.append(f"Utdelning {d['dividend_yield_pct']}% ger meningsfullt mer än riskfri ränta ({rf}%)")
             elif d["dividend_yield_pct"] < rf - 2 and d["dividend_yield_pct"] > 0:
                 reasons.append(f"Utdelning {d['dividend_yield_pct']}% ger klart mindre än riskfri ränta ({rf}%) – ingen poäng för det")
         elif d["dividend_yield_pct"] > 3:
-            score += 5
+            bonus += 5
             reasons.append(f"Utdelning {d['dividend_yield_pct']}%")
 
     if d.get("risk_premium_pct") is not None:
         if d["risk_premium_pct"] > 8:
-            score += 10
+            bonus += 10
             reasons.append(f"Hög riskpremie (vinstavkastning {d['earnings_yield_pct']}% mot riskfri ränta {d['risk_free_rate_pct']}%) – betydligt mer betalt för risken än en säker placering ger")
         elif d["risk_premium_pct"] < 0:
-            score -= 10
+            penalty += 10
             reasons.append(f"Negativ riskpremie (vinstavkastning {d['earnings_yield_pct']}% under riskfri ränta {d['risk_free_rate_pct']}%) – du får MER avkastning helt riskfritt just nu")
 
     if d.get("revenue_growth_yoy_pct") is not None:
         if d["revenue_growth_yoy_pct"] > 15:
-            score += 8
+            bonus += 8
             reasons.append(f"Stark intäktstillväxt ({d['revenue_growth_yoy_pct']:+.0f}% mot samma kvartal förra året)")
         elif d["revenue_growth_yoy_pct"] < -5:
-            score -= 8
+            penalty += 8
             reasons.append(f"Krympande intäkter ({d['revenue_growth_yoy_pct']:+.0f}% mot samma kvartal förra året)")
 
     if d.get("operating_margin_trend_pp") is not None:
         if d["operating_margin_trend_pp"] > 3:
-            score += 8
+            bonus += 8
             reasons.append(f"Förbättrad rörelsemarginal ({d['operating_margin_trend_pp']:+.1f} procentenheter mot samma kvartal förra året)")
         elif d["operating_margin_trend_pp"] < -3:
-            score -= 8
+            penalty += 8
             reasons.append(f"Försämrad rörelsemarginal ({d['operating_margin_trend_pp']:+.1f} procentenheter mot samma kvartal förra året)")
 
     if d.get("debt_to_equity") is not None:
         if d["debt_to_equity"] < 50:
-            score += 5
+            bonus += 5
             reasons.append(f"Låg skuldsättning (D/E {d['debt_to_equity']})")
         elif d["debt_to_equity"] > 150:
-            score -= 10
+            penalty += 10
             reasons.append(f"Hög skuldsättning (D/E {d['debt_to_equity']})")
 
     # Kombinationssignal för finansiell stress: ingen vinst + hög
@@ -570,51 +584,64 @@ def score_buy_candidate(d):
         and d.get("debt_to_equity") is not None and d["debt_to_equity"] > 120
         and d["above_sma50"] is False
     ):
-        score -= 15
+        penalty += 15
         reasons.append("Kombination av utebliven vinst, hög skuldsättning och nedåttrend – tecken på finansiell stress")
 
     # Kvalitetsspärrar: mikro-cap och illikvida aktier ger opålitliga
     # tekniska signaler (SMA/RSI blir brus vid tunn handel) och extra risk.
     if d.get("market_cap") is not None:
         if d["market_cap"] < 50_000_000:
-            score -= 25
+            penalty += 25
             reasons.append("Mikro-cap (<50M i börsvärde) – hög risk, tunn handel gör tekniska signaler opålitliga")
         elif d["market_cap"] < 300_000_000:
-            score -= 10
+            penalty += 10
             reasons.append("Litet börsvärde (<300M) – högre risk och volatilitet än genomsnittet")
 
     if d.get("avg_dollar_volume") is not None and d["avg_dollar_volume"] < 100_000:
-        score -= 20
+        penalty += 20
         reasons.append("Extremt låg likviditet (<100k i daglig omsättning) – svårt att handla utan att flytta kursen")
 
     if d.get("volatility_pct") is not None:
         if d["volatility_pct"] > 80:
-            score -= 15
+            penalty += 15
             reasons.append(f"Mycket hög volatilitet ({d['volatility_pct']}% årstakt) – stora, oregelbundna kurssvängningar")
         elif d["volatility_pct"] > 45:
-            score -= 5
+            penalty += 5
             reasons.append(f"Förhöjd volatilitet ({d['volatility_pct']}% årstakt)")
         elif d["volatility_pct"] < 20:
-            score += 5
+            bonus += 5
             reasons.append(f"Låg volatilitet ({d['volatility_pct']}% årstakt) – stabil kursutveckling")
 
     if d.get("fcf_margin_pct") is not None:
         if d["fcf_margin_pct"] < 0:
-            score -= 15
+            penalty += 15
             reasons.append(f"Negativ FCF-marginal ({d['fcf_margin_pct']}%) – bolaget bränner kassa")
         elif d["fcf_margin_pct"] > 15:
-            score += 8
+            bonus += 8
             reasons.append(f"Stark FCF-marginal ({d['fcf_margin_pct']}%) – genererar gott om fritt kassaflöde")
 
     if d.get("sbc_to_revenue_pct") is not None and d["sbc_to_revenue_pct"] > 15:
-        score -= 10
+        penalty += 10
         reasons.append(f"Hög aktiebaserad ersättning ({d['sbc_to_revenue_pct']}% av intäkter) – utspädningsrisk, sänker kvaliteten på redovisad vinst")
 
     if d.get("capex_to_da") is not None and d["capex_to_da"] > 5:
-        score -= 5
+        penalty += 5
         reasons.append(f"Mycket hög investeringstakt (capex {d['capex_to_da']}x avskrivningar) – aggressiv tillväxtfas, ökad osäkerhet kring avkastning")
 
-    return max(0, min(100, score)), reasons
+    if extra_weight > 0:
+        bonus += extra_weight
+    elif extra_weight < 0:
+        penalty += -extra_weight
+
+    BONUS_FULL_THRESHOLD = 25   # dessa första poängen räknas fullt ut
+    DIMINISHING_RATE = 0.4      # allt därutöver räknas bara till 40%
+    if bonus > BONUS_FULL_THRESHOLD:
+        effective_bonus = BONUS_FULL_THRESHOLD + (bonus - BONUS_FULL_THRESHOLD) * DIMINISHING_RATE
+    else:
+        effective_bonus = bonus
+
+    score = 50 + effective_bonus - penalty
+    return max(0, min(100, round(score))), reasons
 
 
 def get_app_version() -> str:
@@ -682,20 +709,19 @@ def main():
                     d.update(fmp_data)
                     d["data_source"] = "yfinance+fmp"
 
-            buy_score, buy_reasons = score_buy_candidate(d)
-
             sector = entry.get("sector")
             sector_weight = sector_weights.get(sector, 0) if sector else 0
+            country_weight = country_weights.get(entry["market"], 0)
+
+            buy_score, buy_reasons = score_buy_candidate(d, extra_weight=sector_weight + country_weight)
+
             geopolitics_note = None
             if sector_weight:
-                buy_score = max(0, min(100, buy_score + sector_weight))
                 geopolitics_note = ", ".join(sector_factor_names.get(sector, []))
                 buy_reasons.append(f"Geopolitik/makro ({sector}): {geopolitics_note}")
 
-            country_weight = country_weights.get(entry["market"], 0)
             geopolitics_country_note = None
             if country_weight:
-                buy_score = max(0, min(100, buy_score + country_weight))
                 geopolitics_country_note = ", ".join(country_factor_names.get(entry["market"], []))
                 buy_reasons.append(f"Geopolitik/makro ({entry.get('country')}): {geopolitics_country_note}")
 

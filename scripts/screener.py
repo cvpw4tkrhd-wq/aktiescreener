@@ -37,6 +37,7 @@ BUY_SIGNAL_THRESHOLD = 65   # köppoäng för att räknas som "aktiv köpsignal"
 MAX_HISTORY_ENTRIES = 400   # ca 1,5 års vardagskörningar per ticker - för framtida backtesting av poäng vs avkastning
 
 RSI_PERIOD = 14
+SMA_SHORTEST = 20  # tidigare varningssignal (SMA20 vs SMA50), snabbare men brusigare än golden/death cross
 SMA_SHORT = 50
 SMA_LONG = 200
 VOLUME_LOOKBACK = 20
@@ -232,6 +233,7 @@ def analyze_ticker(ticker: str):
     price_history_3m = [round(float(v), 4) for v in close.tail(63)]
     price_history_1y = [round(float(v), 4) for v in close]
 
+    sma20 = close.rolling(SMA_SHORTEST).mean()
     sma50 = close.rolling(SMA_SHORT).mean()
     sma200 = close.rolling(SMA_LONG).mean() if len(close) >= SMA_LONG else pd.Series([None] * len(close))
     rsi = compute_rsi(close)
@@ -247,6 +249,7 @@ def analyze_ticker(ticker: str):
         volatility_pct = float(window.std() * (252 ** 0.5) * 100)
 
     last_close = float(close.iloc[-1])
+    last_sma20 = float(sma20.iloc[-1]) if not pd.isna(sma20.iloc[-1]) else None
     last_sma50 = float(sma50.iloc[-1]) if not pd.isna(sma50.iloc[-1]) else None
     last_sma200 = float(sma200.iloc[-1]) if len(sma200) and not pd.isna(sma200.iloc[-1]) else None
     last_rsi = float(rsi.iloc[-1]) if not pd.isna(rsi.iloc[-1]) else None
@@ -263,6 +266,17 @@ def analyze_ticker(ticker: str):
             cross_signal = "golden_cross"
         elif diff_prev > 0 and diff_now < 0:
             cross_signal = "death_cross"
+
+    # Samma logik men för SMA20 vs SMA50 - en snabbare, tidigare varning
+    # (mer brusig, men reagerar innan den tröga golden/death cross gör det).
+    cross_signal_20_50 = None
+    if last_sma50 is not None and len(sma20.dropna()) > 5 and len(sma50.dropna()) > 5:
+        diff_now_20_50 = sma20.iloc[-1] - sma50.iloc[-1]
+        diff_prev_20_50 = sma20.iloc[-6] - sma50.iloc[-6]
+        if diff_prev_20_50 < 0 and diff_now_20_50 > 0:
+            cross_signal_20_50 = "golden_cross"
+        elif diff_prev_20_50 > 0 and diff_now_20_50 < 0:
+            cross_signal_20_50 = "death_cross"
 
     info = {}
     try:
@@ -391,7 +405,9 @@ def analyze_ticker(ticker: str):
         "peg_ratio": round(peg, 2) if isinstance(peg, (int, float)) else None,
         "revenue_growth_yoy_pct": round(revenue_growth_yoy_pct, 1) if revenue_growth_yoy_pct is not None else None,
         "operating_margin_trend_pp": round(operating_margin_trend_pp, 1) if operating_margin_trend_pp is not None else None,
+        "sma20": round(last_sma20, 2) if last_sma20 else None,
         "sma50": round(last_sma50, 2) if last_sma50 else None,
+        "cross_signal_20_50": cross_signal_20_50,
         "sma200": round(last_sma200, 2) if last_sma200 else None,
         "rsi14": round(last_rsi, 1) if last_rsi is not None else None,
         "volume": int(last_volume),

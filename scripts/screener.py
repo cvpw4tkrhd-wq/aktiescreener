@@ -55,6 +55,7 @@ def load_watchlist():
             "market": entry.get("market", "?"),
             "sector": entry.get("sector"),
             "country": entry.get("country"),
+            "growth_candidate": entry.get("growth_candidate", False),
         })
     return tickers
 

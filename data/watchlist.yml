@@ -699,3 +699,111 @@ stocks:
   sector: Industrials
   country: USA
   market: US
+- ticker: IONQ
+  name: IonQ
+  sector: Technology
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: RGTI
+  name: Rigetti Computing
+  sector: Technology
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: QBTS
+  name: D-Wave Quantum
+  sector: Technology
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: QS
+  name: QuantumScape
+  sector: Materials
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: SLDP
+  name: Solid Power
+  sector: Materials
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: EOSE
+  name: Eos Energy Enterprises
+  sector: Energy
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: SGMO
+  name: Sangamo Therapeutics
+  sector: Healthcare
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: CRBU
+  name: Caribou Biosciences
+  sector: Healthcare
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: IOVA
+  name: Iovance Biotherapeutics
+  sector: Healthcare
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: KTOS
+  name: Kratos Defense & Security
+  sector: Industrials
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: AVAV
+  name: AeroVironment
+  sector: Industrials
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: ONDS
+  name: Ondas Holdings
+  sector: Industrials
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: AIP
+  name: Arteris
+  sector: Semiconductors
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: POET
+  name: POET Technologies
+  sector: Semiconductors
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: UCTT
+  name: Ultra Clean Holdings
+  sector: Semiconductors
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: SPIR
+  name: Spire Global
+  sector: Industrials
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: ASTS
+  name: AST SpaceMobile
+  sector: Telecom
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: LUNR
+  name: Intuitive Machines
+  sector: Industrials
+  country: USA
+  market: US
+  growth_candidate: true

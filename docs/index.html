@@ -214,6 +214,17 @@
     letter-spacing: 0.03em;
     margin: 0 0 4px;
   }
+  .section-divider {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 16px 18px 10px;
+    border-top: 1px solid var(--border);
+    margin-top: 4px;
+  }
+  .section-divider .count { color: var(--text-faint); text-transform: none; letter-spacing: normal; }
   .pending-intro {
     font-size: 11.5px;
     color: var(--text-faint);
@@ -1433,7 +1444,7 @@ function render() {
     return;
   }
 
-  const rowsHtml = sorted.map(r => {
+  function buildRowHtml(r) {
     const score = state.tab === 'sell' ? r.sell_score : (state.tab === 'growth' ? r.growth_score : r.buy_score);
     const delta = state.tab === 'sell' ? r.sell_score_delta : r.buy_score_delta;
     const days = state.tab === 'sell' ? r.sell_days_on_list : (state.tab === 'growth' ? 0 : r.buy_days_on_list);
@@ -1466,10 +1477,9 @@ function render() {
       </td>
       <td class="num"><button class="info-btn" data-ticker="${r.ticker}" title="Visa alla nyckeltal" aria-label="Visa alla nyckeltal">ⓘ</button></td>
     </tr>`;
-  }).join('');
+  }
 
-  host.innerHTML = `<div class="table-scroll"><table>
-    <thead><tr>
+  const theadHtml = `<thead><tr>
       <th>Aktie</th>
       <th class="num">Pris</th>
       <th class="num">P/E</th>
@@ -1478,9 +1488,20 @@ function render() {
       <th class="num">Kursmål</th>
       <th class="num">${state.tab === 'sell' ? 'Sälj · Köp' : 'Köppoäng'}</th>
       <th class="num"></th>
-    </tr></thead>
-    <tbody>${rowsHtml}</tbody>
-  </table></div>`;
+    </tr></thead>`;
+
+  if (state.tab === 'sell') {
+    const normalHoldings = sorted.filter(r => !r.growth_candidate);
+    const growthHoldings = sorted.filter(r => r.growth_candidate);
+    let html = `<div class="table-scroll"><table>${theadHtml}<tbody>${normalHoldings.map(buildRowHtml).join('')}</tbody></table></div>`;
+    if (growthHoldings.length) {
+      html += `<div class="section-divider">TILLVÄXTBOLAG BLAND DINA INNEHAV <span class="count">[${growthHoldings.length}]</span></div>
+        <div class="table-scroll"><table>${theadHtml}<tbody>${growthHoldings.map(buildRowHtml).join('')}</tbody></table></div>`;
+    }
+    host.innerHTML = html;
+  } else {
+    host.innerHTML = `<div class="table-scroll"><table>${theadHtml}<tbody>${sorted.map(buildRowHtml).join('')}</tbody></table></div>`;
+  }
 
   host.querySelectorAll('tbody tr').forEach(tr => {
     tr.addEventListener('click', () => openDrawer(tr.dataset.ticker));

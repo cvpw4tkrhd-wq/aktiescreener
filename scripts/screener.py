@@ -316,6 +316,26 @@ def analyze_ticker(ticker: str):
     recommendation_key = info.get("recommendationKey")  # t.ex. 'strong_buy','buy','hold','sell','strong_sell','none'
     num_analysts = info.get("numberOfAnalystOpinions")
     target_mean = info.get("targetMeanPrice")
+
+    # Full uppdelning av hur många analytiker som satt varje enskilt betyg
+    # (inte bara den sammanfattande konsensusetiketten ovan).
+    recommendation_breakdown = None
+    try:
+        rec_df = tk.get_recommendations()
+        if rec_df is not None and not rec_df.empty:
+            row = rec_df.iloc[0]  # "0m" - senaste perioden, alltid först
+            breakdown = {
+                "strong_buy": int(row.get("strongBuy", 0) or 0),
+                "buy": int(row.get("buy", 0) or 0),
+                "hold": int(row.get("hold", 0) or 0),
+                "sell": int(row.get("sell", 0) or 0),
+                "strong_sell": int(row.get("strongSell", 0) or 0),
+            }
+            if sum(breakdown.values()) > 0:
+                recommendation_breakdown = breakdown
+    except Exception:
+        pass
+
     analyst_upside = None
     if isinstance(target_mean, (int, float)) and last_close:
         analyst_upside = (target_mean - last_close) / last_close * 100
@@ -421,6 +441,7 @@ def analyze_ticker(ticker: str):
         "sbc_to_revenue_pct": round(sbc_to_revenue_pct, 1) if sbc_to_revenue_pct is not None else None,
         "recommendation_key": recommendation_key if recommendation_key not in (None, "none") else None,
         "num_analysts": num_analysts if isinstance(num_analysts, int) else None,
+        "recommendation_breakdown": recommendation_breakdown,
         "target_mean_price": round(target_mean, 2) if isinstance(target_mean, (int, float)) else None,
         "analyst_upside_pct": round(analyst_upside, 1) if analyst_upside is not None else None,
         "pb": round(pb, 2) if isinstance(pb, (int, float)) else None,

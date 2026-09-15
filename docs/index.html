@@ -1228,11 +1228,11 @@ function riskPremiumHtml(r) {
   return `${sign}${fmtNum(r.risk_premium_pct,1)}pp <span class="sma-trend ${cls}" title="${label} (vinstavkastning ${fmtNum(r.earnings_yield_pct,1)}% mot riskfri ränta ${fmtNum(r.risk_free_rate_pct,2)}%)">${symbol}</span>`;
 }
 
-function levelBadge(value, low, high, labels) {
+function levelBadge(value, low, high, labels, highIsGood) {
   if (value === null || value === undefined) return '';
   let label, cls;
-  if (value < low) { label = labels[0]; cls = 'level-good'; }
-  else if (value > high) { label = labels[2]; cls = 'level-bad'; }
+  if (value < low) { label = labels[0]; cls = highIsGood ? 'level-bad' : 'level-good'; }
+  else if (value > high) { label = labels[2]; cls = highIsGood ? 'level-good' : 'level-bad'; }
   else { label = labels[1]; cls = 'level-neutral'; }
   return `<span class="level-badge ${cls}">${label}</span>`;
 }
@@ -1635,7 +1635,7 @@ function openDrawer(ticker) {
       <div><div class="stat-label">SKULDSÄTTNING (D/E)</div><div class="stat-val">${r.debt_to_equity !== null ? fmtNum(r.debt_to_equity,0) : '–'}${levelBadge(r.debt_to_equity, 50, 150, ['LÅG','NORMAL','HÖG'])}</div></div>
       <div><div class="stat-label">VOLATILITET (ÅR)</div><div class="stat-val">${r.volatility_pct !== null ? fmtNum(r.volatility_pct,0) + '%' : '–'}${levelBadge(r.volatility_pct, 20, 45, ['LÅG','NORMAL','HÖG'])}</div></div>
       <div><div class="stat-label">FCF-MARGINAL</div><div class="stat-val">${r.fcf_margin_pct !== null && r.fcf_margin_pct !== undefined ? fmtNum(r.fcf_margin_pct,0) + '%' : '–'}</div></div>
-      <div><div class="stat-label">ROIC</div><div class="stat-val">${r.roic_pct !== null && r.roic_pct !== undefined ? fmtNum(r.roic_pct,1) + '%' : '–'}${levelBadge(r.roic_pct, 5, 15, ['LÅG','NORMAL','HÖG'])}</div></div>
+      <div><div class="stat-label">ROIC</div><div class="stat-val">${r.roic_pct !== null && r.roic_pct !== undefined ? fmtNum(r.roic_pct,1) + '%' : '–'}${levelBadge(r.roic_pct, 5, 15, ['LÅG','NORMAL','HÖG'], true)}</div></div>
       <div><div class="stat-label">SBC/INTÄKTER</div><div class="stat-val">${r.sbc_to_revenue_pct !== null && r.sbc_to_revenue_pct !== undefined ? fmtNum(r.sbc_to_revenue_pct,0) + '%' : '–'}</div></div>
       <div><div class="stat-label">CAPEX/AVSKRIVNINGAR</div><div class="stat-val">${r.capex_to_da !== null && r.capex_to_da !== undefined ? fmtNum(r.capex_to_da,1) + 'x' : '–'}</div></div>
       <div><div class="stat-label">BETA</div><div class="stat-val">${r.beta !== null ? fmtNum(r.beta,2) : '–'}</div></div>

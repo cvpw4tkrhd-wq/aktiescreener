@@ -281,6 +281,8 @@
   .mkt-badge.days-badge { color: var(--amber); border-color: var(--amber-dim); }
   .mkt-badge.gc-badge { color: var(--up); border-color: var(--up); }
   .mkt-badge.dc-badge { color: var(--down); border-color: var(--down); }
+  .mkt-badge.gc-badge-early { color: var(--up); border-color: var(--border); opacity: 0.75; }
+  .mkt-badge.dc-badge-early { color: var(--down); border-color: var(--border); opacity: 0.75; }
   .info-btn {
     background: none; border: 1px solid var(--border); color: var(--text-faint);
     border-radius: var(--radius); width: 24px; height: 24px; cursor: pointer; font-size: 13px;
@@ -585,6 +587,7 @@
   <div class="tabs">
     <div class="tab active" data-tab="us">USA <span class="count" id="usCount"></span></div>
     <div class="tab" data-tab="eu">EUROPA <span class="count" id="euCount"></span></div>
+    <div class="tab" data-tab="nordic">NORDEN <span class="count" id="nordicCount"></span></div>
     <div class="tab" data-tab="sell">MINA INNEHAV <span class="count" id="sellCount"></span></div>
   </div>
 
@@ -1316,14 +1319,17 @@ function render() {
   renderPendingPanel();
   let rows = state.data.results || [];
 
-  const MIN_CANDIDATE_SCORE = 40; // USA/Europa ska visa köpkandidater, inte alla screenade aktier
+  const NORDIC_MARKETS = ['SE', 'NO', 'DK', 'FI'];
+  const MIN_CANDIDATE_SCORE = 40; // USA/Europa/Norden ska visa köpkandidater, inte alla screenade aktier
   const notHeld = rows.filter(r => !r.is_holding && (r.buy_score ?? 0) >= MIN_CANDIDATE_SCORE);
   const usRows = notHeld.filter(r => r.market === 'US');
-  const euRowsAll = notHeld.filter(r => r.market !== 'US');
+  const nordicRowsAll = notHeld.filter(r => NORDIC_MARKETS.includes(r.market));
+  const euRowsAll = notHeld.filter(r => r.market !== 'US' && !NORDIC_MARKETS.includes(r.market));
   const sellRowsAll = rows.filter(r => r.is_holding);
 
   document.getElementById('usCount').textContent = usRows.length ? `[${usRows.length}]` : '';
   document.getElementById('euCount').textContent = euRowsAll.length ? `[${euRowsAll.length}]` : '';
+  document.getElementById('nordicCount').textContent = nordicRowsAll.length ? `[${nordicRowsAll.length}]` : '';
   document.getElementById('sellCount').textContent = sellRowsAll.length ? `[${sellRowsAll.length}]` : '';
   renderSummary(sellRowsAll);
 
@@ -1331,10 +1337,11 @@ function render() {
   if (filterRow) filterRow.style.display = state.tab === 'us' ? 'none' : '';
 
   const euRows = state.market !== 'ALL' ? euRowsAll.filter(r => r.market === state.market) : euRowsAll;
+  const nordicRows = state.market !== 'ALL' ? nordicRowsAll.filter(r => r.market === state.market) : nordicRowsAll;
   const sellRows = state.market !== 'ALL' ? sellRowsAll.filter(r => r.market === state.market) : sellRowsAll;
 
   const host = document.getElementById('tableHost');
-  const activeRows = state.tab === 'sell' ? sellRows : (state.tab === 'us' ? usRows : euRows);
+  const activeRows = state.tab === 'sell' ? sellRows : (state.tab === 'us' ? usRows : (state.tab === 'nordic' ? nordicRows : euRows));
   const sorted = sortRows(activeRows, state.sort);
 
   if (!sorted.length) {
@@ -1362,9 +1369,13 @@ function render() {
     return `<tr data-ticker="${r.ticker}">
       <td class="name"><div class="name-line">${r.name || r.watchlist_name}${flag ? `<span class="signal-flag ${flag.cls}"${flag.title ? ` title="${flag.title}"` : ''}>${flag.label}</span>` : ''}${days >= 3 ? `<span class="mkt-badge days-badge" title="${days} körningar i rad med aktiv signal">${days}D</span>` : ''}${(() => {
         const cp = crossProximity(r);
-        if (cp === 'golden') return `<span class="mkt-badge gc-badge" title="Golden cross eller inom 1% marginal - SMA50 på/över SMA200">+↑</span>`;
-        if (cp === 'death') return `<span class="mkt-badge dc-badge" title="Death cross eller inom 1% marginal - SMA50 på/under SMA200">+↓</span>`;
-        return '';
+        const cp20 = crossProximity20_50(r);
+        let html = '';
+        if (cp === 'golden') html += `<span class="mkt-badge gc-badge" title="Golden cross eller inom 2% marginal - SMA50 på/över SMA200">+↑</span>`;
+        else if (cp === 'death') html += `<span class="mkt-badge dc-badge" title="Death cross eller inom 2% marginal - SMA50 på/under SMA200">+↓</span>`;
+        if (cp20 === 'golden') html += `<span class="mkt-badge gc-badge-early" title="Tidig varning: SMA20 korsade upp genom SMA50, eller inom 2% marginal - reagerar snabbare men mer brusigt än golden cross">↑20</span>`;
+        else if (cp20 === 'death') html += `<span class="mkt-badge dc-badge-early" title="Tidig varning: SMA20 korsade ner genom SMA50, eller inom 2% marginal - reagerar snabbare men mer brusigt än death cross">↓20</span>`;
+        return html;
       })()}</div><span class="tkr">${r.ticker}<span class="mkt-flag" title="${r.market}">${marketFlag(r.market)}</span></span></td>
       <td class="num">${fmtNum(r.price)} <span class="ccy">${r.currency || ''}</span></td>
       <td class="num">${r.pe !== null ? fmtNum(r.pe,1) : '–'}</td>
@@ -1455,6 +1466,7 @@ const METRIC_GLOSSARY = {
   'MARGINALTREND': { title: 'Marginaltrend', text: 'Förändringen i rörelsemarginal (rörelseresultat/intäkter) senaste kvartalet jämfört med samma kvartal förra året, i procentenheter. Förbättrad marginal betyder att bolaget blivit mer lönsamt per krona i intäkt - inte bara växer, utan växer med bättre lönsamhet.' },
   'RSI14': { title: 'RSI14 (momentum)', text: 'Mäter om en aktie handlats mycket upp eller ner den senaste tiden, på en skala 0–100. Över 70 kallas ofta "överköpt" (kan vara mogen för en paus), under 30 "översåld". Säger inget om bolaget är bra eller dåligt – bara om kursen rört sig mycket nyligen.' },
   'SMA50 / SMA200': { title: 'SMA50 / SMA200 (glidande medelvärden)', text: 'Genomsnittligt pris de senaste 50 respektive 200 dagarna. Jämnar ut dagliga svängningar för att visa den underliggande trenden. Om det kortare snittet (50 dagar) ligger över det längre (200 dagar) tolkas det som en uppåttrend, och tvärtom nedåt.' },
+  'SMA20': { title: 'SMA20 (kort glidande medelvärde)', text: 'Genomsnittligt pris de senaste 20 dagarna - reagerar snabbare på kursrörelser än SMA50/SMA200. När SMA20 korsar SMA50 fångas en trendförändring tidigare än golden/death cross gör, men signalen är också mer brusig och ger fler falska utslag.' },
   'VOLYM': { title: 'Volym', text: 'Hur mycket aktien handlats senaste dagen, jämfört med snittet de senaste 20 dagarna. Kraftigt förhöjd volym kan betyda att något viktigt hänt med bolaget – nyheter, rapport, eller stora köp/sälj från enskilda aktörer.' },
   'KURSMÅL': { title: 'Kursmål', text: 'Genomsnittligt kursmål från analytikerna som bevakar aktien – deras uppskattning av var priset "borde" stå om ungefär 12 månader. En samlad gissning, inte en garanti eller ett facit.' },
   'ANALYTIKER': { title: 'Analytikerkonsensus', text: 'Den samlade rekommendationen från banker/mäklarhus som bevakar aktien just nu: starkt köp, köp, håll, sälj eller starkt sälj.' },
@@ -1514,6 +1526,7 @@ function openDrawer(ticker) {
       <div><div class="stat-label">MARGINALTREND</div><div class="stat-val">${r.operating_margin_trend_pp !== null && r.operating_margin_trend_pp !== undefined ? (r.operating_margin_trend_pp > 0 ? '+' : '') + fmtNum(r.operating_margin_trend_pp,1) + 'pp' : '–'}</div></div>
       <div><div class="stat-label">RSI14</div><div class="stat-val">${r.rsi14 !== null ? fmtNum(r.rsi14,0) : '–'}${levelBadge(r.rsi14, 35, 70, ['ÖVERSÅLT','NEUTRALT','ÖVERKÖPT'])}</div></div>
       <div class="stat-wide"><div class="stat-label">SMA50 / SMA200</div><div class="stat-val">${smaTrendHtml(r)}</div></div>
+      <div><div class="stat-label">SMA20</div><div class="stat-val">${r.sma20 !== null && r.sma20 !== undefined ? fmtNum(r.sma20) : '–'}</div></div>
       <div><div class="stat-label">VOLYM</div><div class="stat-val">${fmtVol(r.volume_ratio)}</div></div>
       <div><div class="stat-label">P/B</div><div class="stat-val">${r.pb !== null ? fmtNum(r.pb,2) : '–'}${levelBadge(r.pb, 1.5, 6, ['LÅGT','NORMALT','HÖGT'])}</div></div>
       <div><div class="stat-label">UTDELNING</div><div class="stat-val">${r.dividend_yield_pct !== null ? fmtNum(r.dividend_yield_pct,1) + '%' : '–'}</div></div>
@@ -1578,8 +1591,17 @@ function crossProximity(r) {
   if (r.cross_signal === 'golden_cross') return 'golden';
   if (r.cross_signal === 'death_cross') return 'death';
   const diffPct = Math.abs(r.sma50 - r.sma200) / r.sma200 * 100;
-  if (diffPct > 1) return null;
+  if (diffPct > 2) return null;
   return r.sma50 >= r.sma200 ? 'golden' : 'death';
+}
+
+function crossProximity20_50(r) {
+  if (r.sma20 == null || r.sma50 == null || !r.sma50) return null;
+  if (r.cross_signal_20_50 === 'golden_cross') return 'golden';
+  if (r.cross_signal_20_50 === 'death_cross') return 'death';
+  const diffPct = Math.abs(r.sma20 - r.sma50) / r.sma50 * 100;
+  if (diffPct > 2) return null;
+  return r.sma20 >= r.sma50 ? 'golden' : 'death';
 }
 
 function signalFlag(r) {

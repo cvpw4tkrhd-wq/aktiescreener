@@ -952,6 +952,7 @@ def main():
             d["watchlist_name"] = entry["name"]
             d["sector"] = entry.get("sector")
             d["country"] = entry.get("country")
+            d["growth_candidate"] = bool(entry.get("growth_candidate"))
             d["risk_free_rate_pct"] = risk_free_rates.get(entry["market"])
             if d["risk_free_rate_pct"] is not None and isinstance(d.get("pe"), (int, float)) and d["pe"] > 0:
                 d["earnings_yield_pct"] = round(100 / d["pe"], 2)

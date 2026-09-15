@@ -364,27 +364,42 @@ def analyze_ticker(ticker: str):
     beta = info.get("beta")
     avg_dollar_volume = (last_avg_volume * last_close) if (last_avg_volume and last_close) else None
 
-    # Kapitalintensitet, kassaflödesmarginal och kvalitet på vinsten. Hämtas
-    # från kassaflödes- och resultaträkning (separata yfinance-anrop, kan
-    # saknas för mindre/utländska bolag - degraderar då bara till None).
+    # Kapitalintensitet, kassaflödesmarginal, kvalitet på vinsten och ROIC.
+    # Hämtas från kassaflödes-, resultat- och balansräkning (separata
+    # yfinance-anrop). Varje källa hämtas OBEROENDE av de andra - om t.ex.
+    # kassaflödesdata saknas för ett bolag ska det inte hindra ROIC (som
+    # bara behöver resultat- och balansräkning) från att ändå beräknas.
     capex_to_da = None
     fcf_margin_pct = None
     sbc_to_revenue_pct = None
+    roic_pct = None
+
+    cashflow = income = balance = None
     try:
         cashflow = tk.get_cashflow()
+    except Exception as e:
+        print(f"  Kassaflödesdata saknas/fel för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)
+    try:
         income = tk.get_income_stmt()
+    except Exception as e:
+        print(f"  Resultaträkning saknas/fel för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)
+    try:
+        balance = tk.get_balance_sheet()
+    except Exception as e:
+        print(f"  Balansräkning saknas/fel för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)
 
-        def _latest(df, row_names):
-            if df is None or df.empty:
-                return None
-            col = df.columns[0]
-            for name in row_names:
-                if name in df.index:
-                    val = df.loc[name, col]
-                    if pd.notna(val):
-                        return float(val)
+    def _latest(df, row_names):
+        if df is None or df.empty:
             return None
+        col = df.columns[0]
+        for name in row_names:
+            if name in df.index:
+                val = df.loc[name, col]
+                if pd.notna(val):
+                    return float(val)
+        return None
 
+    try:
         capex = _latest(cashflow, ["Capital Expenditure", "CapitalExpenditure", "Purchase Of PPE"])
         da = _latest(cashflow, ["Depreciation And Amortization", "Depreciation Amortization Depletion", "Depreciation"])
         fcf = _latest(cashflow, ["Free Cash Flow", "FreeCashFlow"])
@@ -398,7 +413,31 @@ def analyze_ticker(ticker: str):
         if sbc is not None and revenue:
             sbc_to_revenue_pct = (abs(sbc) / revenue) * 100
     except Exception as e:
-        print(f"  Kassaflödesdata saknas/fel för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)
+        print(f"  Kassaflödesnyckeltal misslyckades för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)
+
+    try:
+        # ROIC (avkastning på investerat kapital) = NOPAT / investerat
+        # kapital. Mäter hur effektivt bolaget omvandlar kapital (eget +
+        # lånat, minus kassa) till vinst, oavsett hur det är finansierat -
+        # ett av de tydligaste kvalitetsmåtten för att skilja genuint bra
+        # bolag från medelmåttiga.
+        operating_income = _latest(income, ["Operating Income", "OperatingIncome"])
+        tax_provision = _latest(income, ["Tax Provision", "TaxProvision"])
+        pretax_income = _latest(income, ["Pretax Income", "PretaxIncome"])
+        total_debt = _latest(balance, ["Total Debt", "TotalDebt"])
+        equity = _latest(balance, ["Stockholders Equity", "StockholdersEquity", "Total Equity Gross Minority Interest", "TotalEquityGrossMinorityInterest"])
+        cash = _latest(balance, ["Cash And Cash Equivalents", "CashAndCashEquivalents", "Cash Cash Equivalents And Short Term Investments", "CashCashEquivalentsAndShortTermInvestments"]) or 0
+
+        if operating_income is not None and total_debt is not None and equity is not None:
+            tax_rate = 0.21  # rimlig schablon om faktisk skattesats saknas
+            if tax_provision is not None and pretax_income and pretax_income > 0:
+                tax_rate = max(0.0, min(1.0, tax_provision / pretax_income))
+            nopat = operating_income * (1 - tax_rate)
+            invested_capital = total_debt + equity - cash
+            if invested_capital > 0:
+                roic_pct = (nopat / invested_capital) * 100
+    except Exception as e:
+        print(f"  ROIC-beräkning misslyckades för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)
 
     # Flerkvartals tillväxt- och marginaltrend. Jämför senaste kvartalet mot
     # samma kvartal föregående år (undviker säsongseffekter). Kräver minst
@@ -459,7 +498,7 @@ def analyze_ticker(ticker: str):
         "capex_to_da": round(capex_to_da, 2) if capex_to_da is not None else None,
         "fcf_margin_pct": round(fcf_margin_pct, 1) if fcf_margin_pct is not None else None,
         "sbc_to_revenue_pct": round(sbc_to_revenue_pct, 1) if sbc_to_revenue_pct is not None else None,
-        "recommendation_key": recommendation_key if recommendation_key not in (None, "none") else None,
+        "roic_pct": round(roic_pct, 1) if roic_pct is not None else None,
         "num_analysts": num_analysts if isinstance(num_analysts, int) else None,
         "recommendation_breakdown": recommendation_breakdown,
         "target_mean_price": round(target_mean, 2) if isinstance(target_mean, (int, float)) else None,
@@ -680,6 +719,14 @@ def score_buy_candidate(d, extra_weight=0):
             bonus += 8
             reasons.append(f"Stark FCF-marginal ({d['fcf_margin_pct']}%) – genererar gott om fritt kassaflöde")
 
+    if d.get("roic_pct") is not None:
+        if d["roic_pct"] > 15:
+            bonus += 10
+            reasons.append(f"Stark avkastning på investerat kapital (ROIC {d['roic_pct']}%) – omvandlar kapital effektivt till vinst")
+        elif d["roic_pct"] < 0:
+            penalty += 12
+            reasons.append(f"Negativ ROIC ({d['roic_pct']}%) – bolaget förstör kapital snarare än att skapa avkastning på det")
+
     if d.get("sbc_to_revenue_pct") is not None and d["sbc_to_revenue_pct"] > 15:
         penalty += 10
         reasons.append(f"Hög aktiebaserad ersättning ({d['sbc_to_revenue_pct']}% av intäkter) – utspädningsrisk, sänker kvaliteten på redovisad vinst")
@@ -882,6 +929,14 @@ def score_growth_candidate(d, extra_weight=0):
         elif d["fcf_margin_pct"] > 15:
             bonus += 8
             reasons.append(f"Stark FCF-marginal ({d['fcf_margin_pct']}%) – ovanligt moget kassaflöde för bolagets storlek")
+
+    if d.get("roic_pct") is not None:
+        if d["roic_pct"] > 15:
+            bonus += 8
+            reasons.append(f"Stark avkastning på investerat kapital (ROIC {d['roic_pct']}%) – ovanligt moget för bolagets storlek")
+        elif d["roic_pct"] < -10:
+            penalty += 8
+            reasons.append(f"Kraftigt negativ ROIC ({d['roic_pct']}%) – måttligt negativt är normalt i tillväxtfas, men den här nivån är en varningssignal")
 
     if d.get("sbc_to_revenue_pct") is not None and d["sbc_to_revenue_pct"] > 15:
         penalty += 8

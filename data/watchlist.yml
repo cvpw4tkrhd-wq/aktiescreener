@@ -684,3 +684,18 @@ stocks:
   sector: RealEstate
   country: USA
   market: US
+- ticker: SONY
+  name: Sony Group Corporation
+  sector: Consumer
+  country: USA
+  market: US
+- ticker: TTWO
+  name: Take-Two Interactive Software
+  sector: Consumer
+  country: USA
+  market: US
+- ticker: ASBP
+  name: Aspire-Lakewood Holdings
+  sector: Industrials
+  country: USA
+  market: US

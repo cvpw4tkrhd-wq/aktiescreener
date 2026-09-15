@@ -1390,9 +1390,8 @@ function render() {
   const euRowsAll = notHeld.filter(r => r.market !== 'US' && !NORDIC_MARKETS.includes(r.market));
   const sellRowsAll = rows.filter(r => r.is_holding);
 
-  const GROWTH_CAP_MIN = 100_000_000, GROWTH_CAP_MAX = 1_000_000_000, MIN_GROWTH_SCORE = 40;
-  const growthRowsAll = rows.filter(r => !r.is_holding && r.market_cap != null
-    && r.market_cap >= GROWTH_CAP_MIN && r.market_cap <= GROWTH_CAP_MAX && (r.growth_score ?? 0) >= MIN_GROWTH_SCORE);
+  const MIN_GROWTH_SCORE = 40;
+  const growthRowsAll = rows.filter(r => !r.is_holding && r.growth_candidate && (r.growth_score ?? 0) >= MIN_GROWTH_SCORE);
 
   document.getElementById('usCount').textContent = usRows.length ? `[${usRows.length}]` : '';
   document.getElementById('euCount').textContent = euRowsAll.length ? `[${euRowsAll.length}]` : '';
@@ -1405,7 +1404,7 @@ function render() {
   growthWarningHost.innerHTML = state.tab === 'growth' ? `
     <div class="growth-warning">
       <div class="gw-title">Hög risk – läs innan du tittar vidare</div>
-      <p>Bolag med börsvärde 100M–1md USD. Poängen här är beräknad med en egen modell som viktar upp tillväxt och momentum och tar bort straffet för litenhet/volatilitet – men likviditetsspärrar och finansiella varningstecken är oförändrade. Hög poäng betyder inte lägre risk, bara att tillväxtsignalerna ser starka ut just nu. Unga småbolag kan gå i konkurs, spädas ut kraftigt, eller vara nästan omöjliga att sälja i en nedgång.</p>
+      <p>Manuellt utvalda bolag inom branscher med stor tillväxtpotential (kvantdatorer, bioteknik, batteriteknik, försvarsteknik, AI-infrastruktur, rymdteknik) – oavsett börsvärde. Poängen här är beräknad med en egen modell som viktar upp tillväxt och momentum och tar bort straffet för litenhet/volatilitet – men likviditetsspärrar och finansiella varningstecken är oförändrade. Hög poäng betyder inte lägre risk, bara att tillväxtsignalerna ser starka ut just nu. Unga småbolag kan gå i konkurs, spädas ut kraftigt, eller vara nästan omöjliga att sälja i en nedgång.</p>
     </div>` : '';
 
   const filterRow = document.getElementById('marketFilterRow');

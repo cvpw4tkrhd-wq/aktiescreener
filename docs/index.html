@@ -926,6 +926,13 @@ function scoreSellSignal(d) {
       score -= 10; reasons.push(`Stark FCF-marginal (${d.fcf_margin_pct}%) – genererar gott om fritt kassaflöde, talar emot att sälja`);
     }
   }
+  if (d.roic_pct !== null && d.roic_pct !== undefined) {
+    if (d.roic_pct < 0) {
+      score += 12; reasons.push(`Negativ ROIC (${d.roic_pct}%) – bolaget förstör kapital snarare än att skapa avkastning på det`);
+    } else if (d.roic_pct > 15) {
+      score -= 10; reasons.push(`Stark avkastning på investerat kapital (ROIC ${d.roic_pct}%) – talar emot att sälja`);
+    }
+  }
   if (d.sbc_to_revenue_pct !== null && d.sbc_to_revenue_pct !== undefined && d.sbc_to_revenue_pct > 15) {
     score += 10; reasons.push(`Hög aktiebaserad ersättning (${d.sbc_to_revenue_pct}% av intäkter) – utspädningsrisk, sänker kvaliteten på redovisad vinst`);
   }
@@ -1558,6 +1565,7 @@ const METRIC_GLOSSARY = {
   'FORWARD P/E': { title: 'Forward P/E', text: 'Samma princip som vanligt P/E, men baserat på FÖRVÄNTAD framtida vinst istället för senast rapporterade. Symbolen visar om forward P/E är klart lägre (▲, grönt – vinsttillväxt väntas) eller klart högre (▼, rött – vinstnedgång väntas) än det vanliga P/E-talet. Bygger på analytikeres vinstprognoser, inte facit.' },
   'RISKFRI RÄNTA': { title: 'Riskfri ränta', text: 'Vad en 10-årig statsobligation i bolagets hemland ger just nu - avkastningen du kan få praktiskt taget utan risk. Referenspunkten allt annat mäts mot: varför ta aktierisk för mindre än så? Statisk siffra, uppdateras bara när Claude uppdaterar referensfilen manuellt - inte i realtid.' },
   'RISKPREMIE': { title: 'Riskpremie', text: 'Aktiens vinstavkastning (100/P/E) minus riskfri ränta - hur mycket EXTRA avkastning aktien erbjuder för risken du tar jämfört med en säker placering. Negativ riskpremie (▼, rött) betyder att du får bättre avkastning helt riskfritt just nu, vilket är ett varningstecken. Hög riskpremie (▲, grönt) betyder gott om kompensation för risken - men bygger på dagens vinst, inte en garanti om framtiden.' },
+  'ROIC': { title: 'ROIC (avkastning på investerat kapital)', text: 'Hur effektivt bolaget omvandlar kapital - eget och lånat, minus kassa - till vinst, oavsett hur det är finansierat. Ett av de tydligaste kvalitetsmåtten för att skilja genuint bra bolag från medelmåttiga: över 15% räknas som starkt, negativ ROIC betyder att bolaget förstör kapital snarare än att skapa avkastning på det. Beräknat från resultat- och balansräkning, kan sakna för mindre/utländska bolag.' },
   'INTÄKTSTILLVÄXT (YOY)': { title: 'Intäktstillväxt (år över år)', text: 'Hur mycket bolagets intäkter vuxit senaste kvartalet jämfört med samma kvartal förra året (undviker säsongseffekter, t.ex. att julhandel alltid är starkare än sommaren). Skiljer på bolag som konsekvent växer och bolag som bara råkar se billiga ut just nu.' },
   'MARGINALTREND': { title: 'Marginaltrend', text: 'Förändringen i rörelsemarginal (rörelseresultat/intäkter) senaste kvartalet jämfört med samma kvartal förra året, i procentenheter. Förbättrad marginal betyder att bolaget blivit mer lönsamt per krona i intäkt - inte bara växer, utan växer med bättre lönsamhet.' },
   'RSI14': { title: 'RSI14 (momentum)', text: 'Mäter om en aktie handlats mycket upp eller ner den senaste tiden, på en skala 0–100. Över 70 kallas ofta "överköpt" (kan vara mogen för en paus), under 30 "översåld". Säger inget om bolaget är bra eller dåligt – bara om kursen rört sig mycket nyligen.' },
@@ -1627,6 +1635,7 @@ function openDrawer(ticker) {
       <div><div class="stat-label">SKULDSÄTTNING (D/E)</div><div class="stat-val">${r.debt_to_equity !== null ? fmtNum(r.debt_to_equity,0) : '–'}${levelBadge(r.debt_to_equity, 50, 150, ['LÅG','NORMAL','HÖG'])}</div></div>
       <div><div class="stat-label">VOLATILITET (ÅR)</div><div class="stat-val">${r.volatility_pct !== null ? fmtNum(r.volatility_pct,0) + '%' : '–'}${levelBadge(r.volatility_pct, 20, 45, ['LÅG','NORMAL','HÖG'])}</div></div>
       <div><div class="stat-label">FCF-MARGINAL</div><div class="stat-val">${r.fcf_margin_pct !== null && r.fcf_margin_pct !== undefined ? fmtNum(r.fcf_margin_pct,0) + '%' : '–'}</div></div>
+      <div><div class="stat-label">ROIC</div><div class="stat-val">${r.roic_pct !== null && r.roic_pct !== undefined ? fmtNum(r.roic_pct,1) + '%' : '–'}${levelBadge(r.roic_pct, 5, 15, ['LÅG','NORMAL','HÖG'])}</div></div>
       <div><div class="stat-label">SBC/INTÄKTER</div><div class="stat-val">${r.sbc_to_revenue_pct !== null && r.sbc_to_revenue_pct !== undefined ? fmtNum(r.sbc_to_revenue_pct,0) + '%' : '–'}</div></div>
       <div><div class="stat-label">CAPEX/AVSKRIVNINGAR</div><div class="stat-val">${r.capex_to_da !== null && r.capex_to_da !== undefined ? fmtNum(r.capex_to_da,1) + 'x' : '–'}</div></div>
       <div><div class="stat-label">BETA</div><div class="stat-val">${r.beta !== null ? fmtNum(r.beta,2) : '–'}</div></div>

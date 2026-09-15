@@ -735,12 +735,6 @@ stocks:
   country: USA
   market: US
   growth_candidate: true
-- ticker: SGMO
-  name: Sangamo Therapeutics
-  sector: Healthcare
-  country: USA
-  market: US
-  growth_candidate: true
 - ticker: CRBU
   name: Caribou Biosciences
   sector: Healthcare
@@ -804,6 +798,12 @@ stocks:
 - ticker: LUNR
   name: Intuitive Machines
   sector: Industrials
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: EDIT
+  name: Editas Medicine
+  sector: Healthcare
   country: USA
   market: US
   growth_candidate: true

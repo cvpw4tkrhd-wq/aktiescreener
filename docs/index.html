@@ -185,6 +185,27 @@
     padding: 14px 18px;
     border-bottom: 1px solid var(--border);
   }
+  .growth-warning {
+    margin: 14px 18px 0;
+    padding: 14px 16px;
+    background: var(--panel-alt);
+    border: 1px solid var(--down);
+    border-radius: var(--radius);
+  }
+  .growth-warning .gw-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--down);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin: 0 0 6px;
+  }
+  .growth-warning p {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin: 0;
+    line-height: 1.55;
+  }
   .pending-panel h3 {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
@@ -625,12 +646,14 @@
     <div class="tab active" data-tab="us">USA <span class="count" id="usCount"></span></div>
     <div class="tab" data-tab="eu">EUROPA <span class="count" id="euCount"></span></div>
     <div class="tab" data-tab="nordic">NORDEN <span class="count" id="nordicCount"></span></div>
+    <div class="tab" data-tab="growth">TILLVÄXTBOLAG <span class="count" id="growthCount"></span></div>
     <div class="tab" data-tab="sell">MINA INNEHAV <span class="count" id="sellCount"></span></div>
   </div>
 
   <div class="panel">
     <div id="uploadHost"></div>
     <div id="pendingHost"></div>
+    <div id="growthWarningHost"></div>
     <div class="filter-row" id="marketFilterRow">
       <select id="marketFilter">
         <option value="ALL">Alla marknader</option>
@@ -1345,7 +1368,10 @@ function sortRows(rows, key) {
     case 'rsi_asc': s.sort((a,b) => (a.rsi14 ?? 9999) - (b.rsi14 ?? 9999)); break;
     case 'vol_desc': s.sort((a,b) => (b.volume_ratio ?? 0) - (a.volume_ratio ?? 0)); break;
     case 'target_desc': s.sort((a,b) => (b.analyst_upside_pct ?? -9999) - (a.analyst_upside_pct ?? -9999)); break;
-    default: s.sort((a,b) => (state.tab === 'sell' ? (b.sell_score ?? 0) - (a.sell_score ?? 0) : (b.buy_score ?? 0) - (a.buy_score ?? 0)));
+    default: s.sort((a,b) => {
+      const scoreOf = r => state.tab === 'sell' ? (r.sell_score ?? 0) : (state.tab === 'growth' ? (r.growth_score ?? 0) : (r.buy_score ?? 0));
+      return scoreOf(b) - scoreOf(a);
+    });
   }
   return s;
 }
@@ -1364,21 +1390,34 @@ function render() {
   const euRowsAll = notHeld.filter(r => r.market !== 'US' && !NORDIC_MARKETS.includes(r.market));
   const sellRowsAll = rows.filter(r => r.is_holding);
 
+  const GROWTH_CAP_MIN = 100_000_000, GROWTH_CAP_MAX = 1_000_000_000, MIN_GROWTH_SCORE = 40;
+  const growthRowsAll = rows.filter(r => !r.is_holding && r.market_cap != null
+    && r.market_cap >= GROWTH_CAP_MIN && r.market_cap <= GROWTH_CAP_MAX && (r.growth_score ?? 0) >= MIN_GROWTH_SCORE);
+
   document.getElementById('usCount').textContent = usRows.length ? `[${usRows.length}]` : '';
   document.getElementById('euCount').textContent = euRowsAll.length ? `[${euRowsAll.length}]` : '';
   document.getElementById('nordicCount').textContent = nordicRowsAll.length ? `[${nordicRowsAll.length}]` : '';
+  document.getElementById('growthCount').textContent = growthRowsAll.length ? `[${growthRowsAll.length}]` : '';
   document.getElementById('sellCount').textContent = sellRowsAll.length ? `[${sellRowsAll.length}]` : '';
   renderSummary(sellRowsAll);
+
+  const growthWarningHost = document.getElementById('growthWarningHost');
+  growthWarningHost.innerHTML = state.tab === 'growth' ? `
+    <div class="growth-warning">
+      <div class="gw-title">Hög risk – läs innan du tittar vidare</div>
+      <p>Bolag med börsvärde 100M–1md USD. Poängen här är beräknad med en egen modell som viktar upp tillväxt och momentum och tar bort straffet för litenhet/volatilitet – men likviditetsspärrar och finansiella varningstecken är oförändrade. Hög poäng betyder inte lägre risk, bara att tillväxtsignalerna ser starka ut just nu. Unga småbolag kan gå i konkurs, spädas ut kraftigt, eller vara nästan omöjliga att sälja i en nedgång.</p>
+    </div>` : '';
 
   const filterRow = document.getElementById('marketFilterRow');
   if (filterRow) filterRow.style.display = state.tab === 'us' ? 'none' : '';
 
   const euRows = state.market !== 'ALL' ? euRowsAll.filter(r => r.market === state.market) : euRowsAll;
   const nordicRows = state.market !== 'ALL' ? nordicRowsAll.filter(r => r.market === state.market) : nordicRowsAll;
+  const growthRows = state.market !== 'ALL' ? growthRowsAll.filter(r => r.market === state.market) : growthRowsAll;
   const sellRows = state.market !== 'ALL' ? sellRowsAll.filter(r => r.market === state.market) : sellRowsAll;
 
   const host = document.getElementById('tableHost');
-  const activeRows = state.tab === 'sell' ? sellRows : (state.tab === 'us' ? usRows : (state.tab === 'nordic' ? nordicRows : euRows));
+  const activeRows = state.tab === 'sell' ? sellRows : (state.tab === 'us' ? usRows : (state.tab === 'nordic' ? nordicRows : (state.tab === 'growth' ? growthRows : euRows)));
   const sorted = sortRows(activeRows, state.sort);
 
   if (!sorted.length) {
@@ -1396,9 +1435,9 @@ function render() {
   }
 
   const rowsHtml = sorted.map(r => {
-    const score = state.tab === 'sell' ? r.sell_score : r.buy_score;
+    const score = state.tab === 'sell' ? r.sell_score : (state.tab === 'growth' ? r.growth_score : r.buy_score);
     const delta = state.tab === 'sell' ? r.sell_score_delta : r.buy_score_delta;
-    const days = state.tab === 'sell' ? r.sell_days_on_list : r.buy_days_on_list;
+    const days = state.tab === 'sell' ? r.sell_days_on_list : (state.tab === 'growth' ? 0 : r.buy_days_on_list);
     const flag = signalFlag(r);
     const barClsMap = { 'flag-buy': 'buy', 'flag-hold': 'hold', 'flag-sell': 'sell' };
     const cls = barClsMap[flag.cls];
@@ -1544,7 +1583,7 @@ document.getElementById('drawer').addEventListener('click', (e) => {
 function openDrawer(ticker) {
   const r = state.data.results.find(x => x.ticker === ticker);
   if (!r) return;
-  const reasons = state.tab === 'sell' ? (r.sell_reasons || []) : (r.buy_reasons || []);
+  const reasons = state.tab === 'sell' ? (r.sell_reasons || []) : (state.tab === 'growth' ? (r.growth_reasons || []) : (r.buy_reasons || []));
   document.getElementById('drawer').innerHTML = `
     <button class="drawer-close" id="drawerClose">STÄNG ✕</button>
     <h2>${r.name || r.watchlist_name}</h2>
@@ -1575,8 +1614,8 @@ function openDrawer(ticker) {
       <div><div class="stat-label">KURSMÅL</div><div class="stat-val">${targetHtml(r)}</div></div>
       <div><div class="stat-label">ANTAL ANALYTIKER</div><div class="stat-val">${r.num_analysts ?? '–'}</div></div>
       ${analystBreakdownHtml(r)}
-      <div><div class="stat-label">DAGAR MED SIGNAL</div><div class="stat-val">${state.tab === 'sell' ? (r.sell_days_on_list ?? 0) : (r.buy_days_on_list ?? 0)}</div></div>
-      <div><div class="stat-label">FÖRÄNDRING SEDAN SENAST</div><div class="stat-val">${(() => { const d = state.tab === 'sell' ? r.sell_score_delta : r.buy_score_delta; return d === null || d === undefined ? '–' : (d > 0 ? '+' : '') + d; })()}</div></div>
+      <div><div class="stat-label">DAGAR MED SIGNAL</div><div class="stat-val">${state.tab === 'sell' ? (r.sell_days_on_list ?? 0) : (state.tab === 'growth' ? '–' : (r.buy_days_on_list ?? 0))}</div></div>
+      <div><div class="stat-label">FÖRÄNDRING SEDAN SENAST</div><div class="stat-val">${(() => { if (state.tab === 'growth') return '–'; const d = state.tab === 'sell' ? r.sell_score_delta : r.buy_score_delta; return d === null || d === undefined ? '–' : (d > 0 ? '+' : '') + d; })()}</div></div>
     </div>
     ${r.data_source === 'yfinance+fmp' ? '<div class="pe-compare-footnote">Kassaflödesnyckeltal (Capex/DA, FCF-marginal, SBC) hämtade från Financial Modeling Prep.</div>' : ''}
         <ul class="reasons">${reasons.length ? reasons.map(x => `<li>${x}</li>`).join('') : '<li>Inga särskilda signaler.</li>'}</ul>
@@ -1677,14 +1716,15 @@ function crossProximity20_50(r) {
 function signalFlag(r) {
   if ((r.sell_score || 0) >= 50) return { label: 'SÄLJ', cls: 'flag-sell' };
 
+  const relevantScore = state.tab === 'growth' ? r.growth_score : r.buy_score;
   const rec = r.recommendation_key;
-  const scoreQualifiesBuy = (r.buy_score || 0) >= 65;
+  const scoreQualifiesBuy = (relevantScore || 0) >= 65;
 
   if (scoreQualifiesBuy) {
     if (rec === 'sell' || rec === 'strong_sell' || rec === 'hold') {
       return {
         label: 'HÅLL', cls: 'flag-hold',
-        title: `Modellens poäng (${r.buy_score}) skulle räcka för KÖP, men analytikerkonsensus är "${rec === 'hold' ? 'håll' : rec === 'sell' ? 'sälj' : 'starkt sälj'}" — visas därför som HÅLL`,
+        title: `Modellens poäng (${relevantScore}) skulle räcka för KÖP, men analytikerkonsensus är "${rec === 'hold' ? 'håll' : rec === 'sell' ? 'sälj' : 'starkt sälj'}" — visas därför som HÅLL`,
       };
     }
     return { label: 'KÖP', cls: 'flag-buy' };

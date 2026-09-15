@@ -558,6 +558,9 @@
     flex: 1 1 auto; height: 6px; background: var(--panel-alt); border-radius: 3px; overflow: hidden;
   }
   .summary-row .bar-fill { height: 100%; background: var(--amber); }
+  .summary-row .bar-fill.bar-up { background: var(--up); }
+  .summary-row .bar-fill.bar-down { background: var(--down); }
+  .summary-row .bar-fill.bar-neutral { background: var(--text-faint); }
   .summary-row .val { flex: 0 0 auto; font-family: 'IBM Plex Mono', monospace; color: var(--text-faint); width: 20px; text-align: right; }
   .summary-stats {
     display: flex; flex-wrap: wrap; gap: 22px; margin-bottom: 20px;
@@ -1571,6 +1574,7 @@ function openDrawer(ticker) {
       <div><div class="stat-label">ANALYTIKER</div><div class="stat-val">${r.recommendation_key ? r.recommendation_key.replace('_',' ').toUpperCase() : '–'}</div></div>
       <div><div class="stat-label">KURSMÅL</div><div class="stat-val">${targetHtml(r)}</div></div>
       <div><div class="stat-label">ANTAL ANALYTIKER</div><div class="stat-val">${r.num_analysts ?? '–'}</div></div>
+      ${analystBreakdownHtml(r)}
       <div><div class="stat-label">DAGAR MED SIGNAL</div><div class="stat-val">${state.tab === 'sell' ? (r.sell_days_on_list ?? 0) : (r.buy_days_on_list ?? 0)}</div></div>
       <div><div class="stat-label">FÖRÄNDRING SEDAN SENAST</div><div class="stat-val">${(() => { const d = state.tab === 'sell' ? r.sell_score_delta : r.buy_score_delta; return d === null || d === undefined ? '–' : (d > 0 ? '+' : '') + d; })()}</div></div>
     </div>
@@ -1630,6 +1634,26 @@ function deltaHtml(delta) {
   if (delta === null || delta === undefined || delta === 0) return '';
   const up = delta > 0;
   return `<span class="score-delta ${up ? 'up-txt' : 'down-txt'}" title="Förändring sedan senaste körningen">${up ? '▲' : '▼'}${Math.abs(delta)}</span>`;
+}
+
+function analystBreakdownHtml(r) {
+  const b = r.recommendation_breakdown;
+  if (!b) return '';
+  const total = b.strong_buy + b.buy + b.hold + b.sell + b.strong_sell;
+  if (!total) return '';
+  const rows = [
+    ['Starkt köp', b.strong_buy, 'bar-up'],
+    ['Köp', b.buy, 'bar-up'],
+    ['Håll', b.hold, 'bar-neutral'],
+    ['Sälj', b.sell, 'bar-down'],
+    ['Starkt sälj', b.strong_sell, 'bar-down'],
+  ];
+  return `<div class="stat-wide"><div class="stat-label">FÖRDELNING (${total} ANALYTIKER)</div>${rows.map(([label, count, cls]) => `
+    <div class="summary-row">
+      <span class="label">${label}</span>
+      <span class="bar-track"><span class="bar-fill ${cls}" style="width:${Math.round(count/total*100)}%"></span></span>
+      <span class="val">${count}</span>
+    </div>`).join('')}</div>`;
 }
 
 function crossProximity(r) {

@@ -317,6 +317,25 @@ def analyze_ticker(ticker: str):
     num_analysts = info.get("numberOfAnalystOpinions")
     target_mean = info.get("targetMeanPrice")
 
+    # Yahoo Finance anger brittiska aktier i pence (GBp), inte pund (GBP) -
+    # t.ex. visas BP som "568.4 GBp" istället för korrekta 5.684 GBP. Lätt
+    # att missläsa "GBp" som "GBP" och tro att priset är 100x för högt.
+    # Konverterar alla prisrelaterade värden en gång här så allt nedströms
+    # (SMA, prisgrafer, kursmål) blir konsekvent i riktiga pund.
+    if currency == "GBp":
+        last_close /= 100
+        if last_sma20 is not None:
+            last_sma20 /= 100
+        if last_sma50 is not None:
+            last_sma50 /= 100
+        if last_sma200 is not None:
+            last_sma200 /= 100
+        price_history_3m = [round(v / 100, 4) for v in price_history_3m]
+        price_history_1y = [round(v / 100, 4) for v in price_history_1y]
+        if isinstance(target_mean, (int, float)):
+            target_mean = target_mean / 100
+        currency = "GBP"
+
     # Full uppdelning av hur många analytiker som satt varje enskilt betyg
     # (inte bara den sammanfattande konsensusetiketten ovan).
     recommendation_breakdown = None

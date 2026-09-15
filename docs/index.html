@@ -43,6 +43,34 @@
     --amber: #97701C;
     --amber-dim: #D8C89A;
   }
+  [data-theme="terminal"] {
+    --bg: #050705;
+    --panel: #0D130D;
+    --panel-alt: #121A12;
+    --border: #1F2E1F;
+    --text: #C8F0C8;
+    --text-dim: #7FAE7F;
+    --text-faint: #4A6B4A;
+    --up: #39FF7A;
+    --down: #FF5F56;
+    --amber: #FFD166;
+    --amber-dim: #6B5A24;
+    --radius: 2px;
+  }
+  [data-theme="sepia"] {
+    --bg: #F2E8D5;
+    --panel: #FAF3E4;
+    --panel-alt: #ECE0C8;
+    --border: #D8C7A0;
+    --text: #3A2F1D;
+    --text-dim: #6B5C3F;
+    --text-faint: #A3906A;
+    --up: #3F7D4A;
+    --down: #9C3B2E;
+    --amber: #8A5A20;
+    --amber-dim: #CBB488;
+    --radius: 4px;
+  }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; max-width: 100%; overflow-x: hidden; }
   body {
@@ -80,7 +108,7 @@
     margin-top: 4px;
   }
   .controls { display: flex; gap: 10px; align-items: center; }
-  button.iconbtn {
+  button.iconbtn, select.iconbtn {
     background: none;
     border: 1px solid var(--border);
     color: var(--text-dim);
@@ -90,7 +118,8 @@
     font-size: 12px;
     cursor: pointer;
   }
-  button.iconbtn:hover { border-color: var(--text-dim); color: var(--text); }
+  select.iconbtn { appearance: auto; }
+  button.iconbtn:hover, select.iconbtn:hover { border-color: var(--text-dim); color: var(--text); }
   .version-badge { color: var(--text-faint); cursor: default; }
 
   .tabs {
@@ -545,7 +574,7 @@
     h1 { font-size: 22px; }
     .meta-line { font-size: 11px; }
     .controls { gap: 8px; }
-    button.iconbtn { padding: 8px 10px; }
+    button.iconbtn, select.iconbtn { padding: 8px 10px; }
     .tab { padding: 8px 11px; font-size: 11.5px; }
     .stat-grid { grid-template-columns: 1fr 1fr; }
     td, thead th { padding: 9px 6px; }
@@ -579,7 +608,12 @@
       <div class="meta-line" id="metaLine">laddar…</div>
     </div>
     <div class="controls">
-      <button class="iconbtn" id="themeToggle">LJUST LÄGE</button>
+      <select class="iconbtn" id="themeSelect">
+        <option value="dark">MÖRKT LÄGE</option>
+        <option value="light">LJUST LÄGE</option>
+        <option value="terminal">TERMINAL</option>
+        <option value="sepia">SEPIA</option>
+      </select>
       <span class="iconbtn version-badge" id="versionBadge">version –</span>
     </div>
   </header>
@@ -972,16 +1006,16 @@ if (storedHoldings) {
 
 // ===== /Innehav =====
 
-const themeToggle = document.getElementById('themeToggle');
+const themeSelect = document.getElementById('themeSelect');
 function applyTheme(t) {
   document.body.setAttribute('data-theme', t);
-  themeToggle.textContent = t === 'dark' ? 'LJUST LÄGE' : 'MÖRKT LÄGE';
-  localStorage.setItem('screener-theme', t);
+  themeSelect.value = t;
+  try { localStorage.setItem('screener-theme', t); } catch (e) { /* t.ex. privat läge - temat funkar ändå denna session */ }
 }
-applyTheme(localStorage.getItem('screener-theme') || 'dark');
-themeToggle.addEventListener('click', () => {
-  applyTheme(document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-});
+let savedTheme = 'dark';
+try { savedTheme = localStorage.getItem('screener-theme') || 'dark'; } catch (e) { /* samma reserv som ovan */ }
+applyTheme(savedTheme);
+themeSelect.addEventListener('change', e => applyTheme(e.target.value));
 
 document.querySelectorAll('.tab').forEach(el => {
   el.addEventListener('click', () => {
@@ -1465,8 +1499,7 @@ const METRIC_GLOSSARY = {
   'INTÄKTSTILLVÄXT (YOY)': { title: 'Intäktstillväxt (år över år)', text: 'Hur mycket bolagets intäkter vuxit senaste kvartalet jämfört med samma kvartal förra året (undviker säsongseffekter, t.ex. att julhandel alltid är starkare än sommaren). Skiljer på bolag som konsekvent växer och bolag som bara råkar se billiga ut just nu.' },
   'MARGINALTREND': { title: 'Marginaltrend', text: 'Förändringen i rörelsemarginal (rörelseresultat/intäkter) senaste kvartalet jämfört med samma kvartal förra året, i procentenheter. Förbättrad marginal betyder att bolaget blivit mer lönsamt per krona i intäkt - inte bara växer, utan växer med bättre lönsamhet.' },
   'RSI14': { title: 'RSI14 (momentum)', text: 'Mäter om en aktie handlats mycket upp eller ner den senaste tiden, på en skala 0–100. Över 70 kallas ofta "överköpt" (kan vara mogen för en paus), under 30 "översåld". Säger inget om bolaget är bra eller dåligt – bara om kursen rört sig mycket nyligen.' },
-  'SMA50 / SMA200': { title: 'SMA50 / SMA200 (glidande medelvärden)', text: 'Genomsnittligt pris de senaste 50 respektive 200 dagarna. Jämnar ut dagliga svängningar för att visa den underliggande trenden. Om det kortare snittet (50 dagar) ligger över det längre (200 dagar) tolkas det som en uppåttrend, och tvärtom nedåt.' },
-  'SMA20': { title: 'SMA20 (kort glidande medelvärde)', text: 'Genomsnittligt pris de senaste 20 dagarna - reagerar snabbare på kursrörelser än SMA50/SMA200. När SMA20 korsar SMA50 fångas en trendförändring tidigare än golden/death cross gör, men signalen är också mer brusig och ger fler falska utslag.' },
+  'SMA20 / SMA50 / SMA200': { title: 'SMA20 / SMA50 / SMA200 (glidande medelvärden)', text: 'Genomsnittligt pris de senaste 20, 50 respektive 200 dagarna, jämnar ut dagliga svängningar för att visa den underliggande trenden. Pilarna visar riktningen: SMA20 mot SMA50 ger en snabbare men mer brusig tidig signal, SMA50 mot SMA200 ger den tröga men mer tillförlitliga golden/death cross-signalen.' },
   'VOLYM': { title: 'Volym', text: 'Hur mycket aktien handlats senaste dagen, jämfört med snittet de senaste 20 dagarna. Kraftigt förhöjd volym kan betyda att något viktigt hänt med bolaget – nyheter, rapport, eller stora köp/sälj från enskilda aktörer.' },
   'KURSMÅL': { title: 'Kursmål', text: 'Genomsnittligt kursmål från analytikerna som bevakar aktien – deras uppskattning av var priset "borde" stå om ungefär 12 månader. En samlad gissning, inte en garanti eller ett facit.' },
   'ANALYTIKER': { title: 'Analytikerkonsensus', text: 'Den samlade rekommendationen från banker/mäklarhus som bevakar aktien just nu: starkt köp, köp, håll, sälj eller starkt sälj.' },
@@ -1525,8 +1558,7 @@ function openDrawer(ticker) {
       <div><div class="stat-label">INTÄKTSTILLVÄXT (YOY)</div><div class="stat-val">${r.revenue_growth_yoy_pct !== null && r.revenue_growth_yoy_pct !== undefined ? (r.revenue_growth_yoy_pct > 0 ? '+' : '') + fmtNum(r.revenue_growth_yoy_pct,1) + '%' : '–'}</div></div>
       <div><div class="stat-label">MARGINALTREND</div><div class="stat-val">${r.operating_margin_trend_pp !== null && r.operating_margin_trend_pp !== undefined ? (r.operating_margin_trend_pp > 0 ? '+' : '') + fmtNum(r.operating_margin_trend_pp,1) + 'pp' : '–'}</div></div>
       <div><div class="stat-label">RSI14</div><div class="stat-val">${r.rsi14 !== null ? fmtNum(r.rsi14,0) : '–'}${levelBadge(r.rsi14, 35, 70, ['ÖVERSÅLT','NEUTRALT','ÖVERKÖPT'])}</div></div>
-      <div class="stat-wide"><div class="stat-label">SMA50 / SMA200</div><div class="stat-val">${smaTrendHtml(r)}</div></div>
-      <div><div class="stat-label">SMA20</div><div class="stat-val">${r.sma20 !== null && r.sma20 !== undefined ? fmtNum(r.sma20) : '–'}</div></div>
+      <div class="stat-wide"><div class="stat-label">SMA20 / SMA50 / SMA200</div><div class="stat-val">${smaTrendHtml(r)}</div></div>
       <div><div class="stat-label">VOLYM</div><div class="stat-val">${fmtVol(r.volume_ratio)}</div></div>
       <div><div class="stat-label">P/B</div><div class="stat-val">${r.pb !== null ? fmtNum(r.pb,2) : '–'}${levelBadge(r.pb, 1.5, 6, ['LÅGT','NORMALT','HÖGT'])}</div></div>
       <div><div class="stat-label">UTDELNING</div><div class="stat-val">${r.dividend_yield_pct !== null ? fmtNum(r.dividend_yield_pct,1) + '%' : '–'}</div></div>
@@ -1570,14 +1602,28 @@ function closeDrawer() {
 document.getElementById('overlay').addEventListener('click', e => { if (e.target.id === 'overlay') closeDrawer(); });
 
 function smaTrendHtml(r) {
-  if (r.sma50 === null || r.sma200 === null) {
-    return `${r.sma50 !== null ? fmtNum(r.sma50) : '–'} / ${r.sma200 !== null ? fmtNum(r.sma200) : '–'}`;
+  const parts = [];
+
+  parts.push(r.sma20 !== null && r.sma20 !== undefined ? fmtNum(r.sma20) : '–');
+  if (r.sma20 !== null && r.sma20 !== undefined && r.sma50 !== null && r.sma50 !== undefined) {
+    const bullish20 = r.sma20 > r.sma50;
+    const symbol20 = bullish20 ? '▲' : (r.sma20 < r.sma50 ? '▼' : '–');
+    const cls20 = bullish20 ? 'up-txt' : (r.sma20 < r.sma50 ? 'down-txt' : 'dim');
+    const title20 = bullish20 ? 'SMA20 över SMA50' : (r.sma20 < r.sma50 ? 'SMA20 under SMA50' : 'SMA20 = SMA50');
+    parts.push(`<span class="sma-trend ${cls20}" title="${title20}">${symbol20}</span>`);
   }
-  const bullish = r.sma50 > r.sma200;
-  const symbol = bullish ? '▲' : (r.sma50 < r.sma200 ? '▼' : '–');
-  const cls = bullish ? 'up-txt' : (r.sma50 < r.sma200 ? 'down-txt' : 'dim');
-  const title = bullish ? 'SMA50 över SMA200 (uppåttrend)' : (r.sma50 < r.sma200 ? 'SMA50 under SMA200 (nedåttrend)' : 'SMA50 = SMA200');
-  return `${fmtNum(r.sma50)} <span class="sma-trend ${cls}" title="${title}">${symbol}</span> ${fmtNum(r.sma200)}`;
+
+  parts.push(r.sma50 !== null && r.sma50 !== undefined ? fmtNum(r.sma50) : '–');
+  if (r.sma50 !== null && r.sma50 !== undefined && r.sma200 !== null && r.sma200 !== undefined) {
+    const bullish = r.sma50 > r.sma200;
+    const symbol = bullish ? '▲' : (r.sma50 < r.sma200 ? '▼' : '–');
+    const cls = bullish ? 'up-txt' : (r.sma50 < r.sma200 ? 'down-txt' : 'dim');
+    const title = bullish ? 'SMA50 över SMA200 (uppåttrend)' : (r.sma50 < r.sma200 ? 'SMA50 under SMA200 (nedåttrend)' : 'SMA50 = SMA200');
+    parts.push(`<span class="sma-trend ${cls}" title="${title}">${symbol}</span>`);
+  }
+  parts.push(r.sma200 !== null && r.sma200 !== undefined ? fmtNum(r.sma200) : '–');
+
+  return parts.join(' ');
 }
 
 function deltaHtml(delta) {

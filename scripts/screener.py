@@ -1059,6 +1059,21 @@ def main():
                 score_history, ticker, buy_score, today_str, price=d.get("price")
             )
 
+            # "Ny på listan"-markering: om den tidigaste posten i
+            # poänghistoriken för denna ticker är från de senaste dagarna
+            # har den nyligen lagts till i bevakningslistan.
+            NEW_TICKER_WINDOW_DAYS = 5
+            try:
+                buy_history = score_history.get(ticker, {}).get("buy", [])
+                if buy_history:
+                    first_seen = datetime.strptime(buy_history[0]["date"], "%Y-%m-%d").date()
+                    today_date = datetime.strptime(today_str, "%Y-%m-%d").date()
+                    d["is_new"] = (today_date - first_seen).days <= NEW_TICKER_WINDOW_DAYS
+                else:
+                    d["is_new"] = True
+            except Exception:
+                d["is_new"] = False
+
             results.append(d)
         except Exception as e:
             print(f"  Bearbetning/poängsättning misslyckades för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)

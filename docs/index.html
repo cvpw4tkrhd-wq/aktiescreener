@@ -343,6 +343,7 @@
   .mkt-badge.gc-badge { color: var(--up); border-color: var(--up); }
   .mkt-badge.dc-badge { color: var(--down); border-color: var(--down); }
   .mkt-badge.gc-badge-early { color: var(--up); border-color: var(--border); opacity: 0.75; }
+  .new-star { color: var(--amber); font-size: 12px; }
   .mkt-badge.dc-badge-early { color: var(--down); border-color: var(--border); opacity: 0.75; }
   .info-btn {
     background: none; border: 1px solid var(--border); color: var(--text-faint);
@@ -657,7 +658,7 @@
     <div class="tab active" data-tab="us">USA <span class="count" id="usCount"></span></div>
     <div class="tab" data-tab="eu">EUROPA <span class="count" id="euCount"></span></div>
     <div class="tab" data-tab="nordic">NORDEN <span class="count" id="nordicCount"></span></div>
-    <div class="tab" data-tab="growth">TILLVÄXTBOLAG <span class="count" id="growthCount"></span></div>
+    <div class="tab" data-tab="growth">TILLVÄXT <span class="count" id="growthCount"></span></div>
     <div class="tab" data-tab="sell">MINA INNEHAV <span class="count" id="sellCount"></span></div>
   </div>
 
@@ -665,19 +666,6 @@
     <div id="uploadHost"></div>
     <div id="pendingHost"></div>
     <div id="growthWarningHost"></div>
-    <div class="filter-row" id="marketFilterRow">
-      <select id="marketFilter">
-        <option value="ALL">Alla marknader</option>
-        <option value="SE">Stockholm</option>
-        <option value="US">USA</option>
-        <option value="DE">Tyskland</option>
-        <option value="NL">Nederländerna</option>
-        <option value="GB">Storbritannien</option>
-        <option value="NO">Norge</option>
-        <option value="DK">Danmark</option>
-        <option value="FI">Finland</option>
-      </select>
-    </div>
     <div class="filter-row" id="sortFilterRow">
       <select id="sortSelect">
         <option value="score_desc">Sortera: poäng (hög→låg)</option>
@@ -711,7 +699,7 @@
 </div>
 
 <script>
-const state = { data: null, tab: 'us', market: 'ALL', sort: 'score_desc', holdings: {}, holdingsUploadedAt: null };
+const state = { data: null, tab: 'us', sort: 'score_desc', holdings: {}, holdingsUploadedAt: null };
 
 // ===== Innehav: allt sker lokalt i webbläsaren, inget skickas till servern =====
 
@@ -1069,7 +1057,6 @@ document.querySelectorAll('.tab').forEach(el => {
     render();
   });
 });
-document.getElementById('marketFilter').addEventListener('change', e => { state.market = e.target.value; render(); });
 document.getElementById('sortSelect').addEventListener('change', e => { state.sort = e.target.value; render(); });
 
 function fmtNum(n, digits=2) {
@@ -1425,13 +1412,10 @@ function render() {
       <p>Manuellt utvalda bolag inom branscher med stor tillväxtpotential (kvantdatorer, bioteknik, batteriteknik, försvarsteknik, AI-infrastruktur, rymdteknik) – oavsett börsvärde. Poängen här är beräknad med en egen modell som viktar upp tillväxt och momentum och tar bort straffet för litenhet/volatilitet – men likviditetsspärrar och finansiella varningstecken är oförändrade. Hög poäng betyder inte lägre risk, bara att tillväxtsignalerna ser starka ut just nu. Unga småbolag kan gå i konkurs, spädas ut kraftigt, eller vara nästan omöjliga att sälja i en nedgång.</p>
     </div>` : '';
 
-  const filterRow = document.getElementById('marketFilterRow');
-  if (filterRow) filterRow.style.display = state.tab === 'us' ? 'none' : '';
-
-  const euRows = state.market !== 'ALL' ? euRowsAll.filter(r => r.market === state.market) : euRowsAll;
-  const nordicRows = state.market !== 'ALL' ? nordicRowsAll.filter(r => r.market === state.market) : nordicRowsAll;
-  const growthRows = state.market !== 'ALL' ? growthRowsAll.filter(r => r.market === state.market) : growthRowsAll;
-  const sellRows = state.market !== 'ALL' ? sellRowsAll.filter(r => r.market === state.market) : sellRowsAll;
+  const euRows = euRowsAll;
+  const nordicRows = nordicRowsAll;
+  const growthRows = growthRowsAll;
+  const sellRows = sellRowsAll;
 
   const host = document.getElementById('tableHost');
   const activeRows = state.tab === 'sell' ? sellRows : (state.tab === 'us' ? usRows : (state.tab === 'nordic' ? nordicRows : (state.tab === 'growth' ? growthRows : euRows)));
@@ -1460,7 +1444,7 @@ function render() {
     const cls = barClsMap[flag.cls];
     const trend = r.above_sma50 && r.above_sma200 ? 'up-txt' : (r.above_sma50 === false && r.above_sma200 === false ? 'down-txt' : 'dim');
     return `<tr data-ticker="${r.ticker}">
-      <td class="name"><div class="name-line">${r.name || r.watchlist_name}${flag ? `<span class="signal-flag ${flag.cls}"${flag.title ? ` title="${flag.title}"` : ''}>${flag.label}</span>` : ''}${days >= 3 ? `<span class="mkt-badge days-badge" title="${days} körningar i rad med aktiv signal">${days}D</span>` : ''}${(() => {
+      <td class="name"><div class="name-line">${r.is_new ? `<span class="new-star" title="Ny på listan - tillagd de senaste dagarna">★</span> ` : ''}${r.name || r.watchlist_name}${flag ? `<span class="signal-flag ${flag.cls}"${flag.title ? ` title="${flag.title}"` : ''}>${flag.label}</span>` : ''}${days >= 3 ? `<span class="mkt-badge days-badge" title="${days} körningar i rad med aktiv signal">${days}D</span>` : ''}${(() => {
         const cp = crossProximity(r);
         const cp20 = crossProximity20_50(r);
         let html = '';

@@ -635,6 +635,113 @@
     .drawer { padding: 18px; max-height: calc(100vh - 48px); }
     .stat-grid { gap: 10px; }
   }
+
+  /* === Lärguide (inbäddad) === */
+/* --- Layout --- */
+  .guide-app{ display:flex; }
+  .guide-app .sidebar{
+    width:300px; flex-shrink:0; background:var(--panel);
+    border-right:1px solid var(--border); padding:22px 0 60px;
+  }
+  .guide-app .main{ flex:1; min-width:0; padding:40px 48px 100px; max-width:760px; }
+
+  .brand{ padding:0 22px 20px; border-bottom:1px solid var(--border); margin-bottom:14px; }
+  .brand .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--amber); text-transform:uppercase; letter-spacing:0.05em; }
+  .brand h1{ font-family:'Fraunces',serif; font-size:21px; font-weight:600; margin:6px 0 0; }
+
+  .progress-wrap{ padding:14px 22px 18px; border-bottom:1px solid var(--border); margin-bottom:8px; }
+  .progress-label{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--text-faint); margin-bottom:7px; display:flex; justify-content:space-between; }
+  .progress-bar{ height:6px; background:var(--panel-alt); border-radius:3px; overflow:hidden; }
+  .progress-bar > div{ height:100%; background:var(--amber); transition:width 0.3s; }
+
+  .module{ margin-bottom:4px; }
+  .module-title{
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.05em;
+    color:var(--text-faint); text-transform:uppercase; padding:14px 22px 6px;
+  }
+  .lesson-link{
+    display:flex; align-items:center; gap:9px; padding:8px 22px;
+    font-size:13.5px; color:var(--text-dim); cursor:pointer; border-left:2px solid transparent;
+  }
+  .lesson-link:hover{ background:var(--panel-alt); color:var(--text); }
+  .lesson-link.active{ background:var(--panel-alt); color:var(--text); border-left-color:var(--amber); }
+  .check{
+    width:15px; height:15px; border-radius:3px; border:1px solid var(--text-faint);
+    flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:10px;
+  }
+  .lesson-link.done .check{ background:var(--up); border-color:var(--up); color:#0f0e0b; }
+  .lesson-link.done { color: var(--text-dim); }
+
+  /* --- Lesson content --- */
+  .lesson-eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--amber); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:10px; }
+  .lesson-title{ font-family:'Fraunces',serif; font-weight:600; font-size:32px; margin:0 0 20px; line-height:1.15; }
+  .lesson-title small { display:block; font-family:'Inter',sans-serif; font-weight:400; font-size:15px; color:var(--text-dim); margin-top:8px; }
+
+  .analogy{
+    background:var(--panel-alt); border-left:3px solid var(--amber-dim);
+    border-radius:0 var(--radius) var(--radius) 0; padding:16px 20px; margin:20px 0;
+  }
+  .analogy .lbl{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--amber); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:6px; }
+  .analogy p{ margin:0; color:var(--text-dim); }
+
+  .in-app{
+    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+    padding:16px 20px; margin:20px 0;
+  }
+  .in-app .lbl{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--up); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px; }
+  .in-app table{ width:100%; border-collapse:collapse; font-size:13.5px; }
+  .in-app td{ padding:5px 8px 5px 0; border-bottom:1px solid var(--border); vertical-align:top; }
+  .in-app tr:last-child td{ border-bottom:none; }
+  .in-app td:first-child{ font-family:'IBM Plex Mono',monospace; color:var(--text); white-space:nowrap; font-size:12.5px; }
+  .in-app td:last-child{ color:var(--text-dim); }
+
+  .callout-warn{
+    border-left:3px solid var(--down); background:var(--panel-alt);
+    border-radius:0 var(--radius) var(--radius) 0; padding:14px 18px; margin:20px 0; font-size:13.5px; color:var(--text-dim);
+  }
+  .callout-warn strong{ color:var(--text); }
+
+  svg.diagram{ width:100%; height:auto; margin:20px 0; background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); }
+
+  h3.sub{ font-family:'Fraunces',serif; font-size:19px; font-weight:600; margin:28px 0 10px; }
+  .lesson-body p{ color:var(--text-dim); }
+  .lesson-body strong{ color:var(--text); font-weight:500; }
+  .lesson-body ul{ color:var(--text-dim); padding-left:20px; }
+  .lesson-body li{ margin-bottom:6px; }
+
+  .nav-buttons{ display:flex; justify-content:space-between; margin-top:44px; padding-top:22px; border-top:1px solid var(--border); }
+  .nav-btn{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--text-dim);
+    border:1px solid var(--border); border-radius:var(--radius); padding:9px 16px; cursor:pointer;
+    background:none; text-transform:uppercase; letter-spacing:0.03em;
+  }
+  .nav-btn:hover{ border-color:var(--amber); color:var(--text); }
+  .nav-btn:disabled{ opacity:0.3; cursor:default; }
+  .nav-btn:disabled:hover{ border-color:var(--border); color:var(--text-dim); }
+
+  .mark-done{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--bg);
+    background:var(--amber); border:none; border-radius:var(--radius); padding:9px 18px; cursor:pointer;
+    text-transform:uppercase; letter-spacing:0.03em; margin-top:28px;
+  }
+  .mark-done.done{ background:var(--up); }
+
+  .mobile-toggle{ display:none; }
+
+  @media (max-width: 860px){
+    .guide-app{ flex-direction:column; }
+    .sidebar{ width:100%; height:auto; position:relative; max-height:none; border-right:none; border-bottom:1px solid var(--border); }
+    .sidebar.collapsed .module{ display:none; }
+    .sidebar.collapsed .progress-wrap{ border-bottom:none; }
+    .guide-app .main{ padding:28px 20px 80px; }
+    .lesson-title{ font-size:26px; }
+    .mobile-toggle{
+      display:block; margin:0 22px 14px; font-family:'IBM Plex Mono',monospace; font-size:11px;
+      color:var(--amber); background:none; border:1px solid var(--amber-dim); border-radius:var(--radius);
+      padding:8px 12px; cursor:pointer; text-transform:uppercase;
+    }
+  }
+
 </style>
 </head>
 <body data-theme="dark">
@@ -661,9 +768,10 @@
     <div class="tab" data-tab="nordic">NORDEN <span class="count" id="nordicCount"></span></div>
     <div class="tab" data-tab="growth">TILLVÄXT <span class="count" id="growthCount"></span></div>
     <div class="tab" data-tab="sell">MINA INNEHAV <span class="count" id="sellCount"></span></div>
+    <div class="tab" data-tab="guide">GUIDE</div>
   </div>
 
-  <div class="panel">
+  <div class="panel" id="dataPanel">
     <div id="uploadHost"></div>
     <div id="pendingHost"></div>
     <div id="growthWarningHost"></div>
@@ -677,6 +785,22 @@
       </select>
     </div>
     <div id="tableHost"></div>
+  </div>
+
+  <div class="guide-app" id="guideHost" style="display:none;">
+    <div class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="eyebrow">Lärguide</div>
+        <h1>Läs dig till bättre analyser</h1>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Din progress</span><span id="progressText">0 / 28</span></div>
+        <div class="progress-bar"><div id="progressFill" style="width:0%"></div></div>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle">Visa/dölj innehåll</button>
+      <div id="moduleList"></div>
+    </div>
+    <div class="main" id="main"></div>
   </div>
 
   <div id="summaryHost"></div>
@@ -1055,7 +1179,15 @@ document.querySelectorAll('.tab').forEach(el => {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     el.classList.add('active');
     state.tab = el.dataset.tab;
-    render();
+    const isGuide = state.tab === 'guide';
+    document.getElementById('dataPanel').style.display = isGuide ? 'none' : '';
+    document.getElementById('guideHost').style.display = isGuide ? '' : 'none';
+    if (isGuide) {
+      document.getElementById('summaryHost').innerHTML = '';
+      initGuideOnce();
+    } else {
+      render();
+    }
   });
 });
 document.getElementById('sortSelect').addEventListener('change', e => { state.sort = e.target.value; render(); });
@@ -1805,6 +1937,669 @@ function renderSummary(sellRows) {
 }
 
 load();
+
+// === Lärguide (inbäddad) ===
+(function() {
+
+// ============================================================
+// INNEHÅLL
+// ============================================================
+const MODULES = [
+{
+  title: "Modul 1 — Grunderna",
+  lessons: [
+    {
+      id: "vad-ar-aktie",
+      title: "Vad är en aktie och en aktiekurs?",
+      body: `
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Tänk dig att tio kompisar tillsammans äger en pizzeria. Om ni delar upp ägandet i 100 lika stora "andelar" äger var och en av er 10 andelar. En aktie är exakt samma sak, fast i ett bolag: en liten, likadan bit av ägandet. Aktiekursen är helt enkelt vad marknaden just nu är villig att betala för en sådan bit.</p>
+        </div>
+        <p>När du köper en aktie köper du alltså inte "en lott" eller "ett kvitto" — du blir bokstavligen delägare i bolaget, om än en väldigt liten sådan i ett stort bolag. Du får rätt till din andel av framtida vinster (ofta i form av utdelning) och rätt att rösta på bolagsstämman, om än med försumbar påverkan om du äger få aktier.</p>
+        <p>Aktiekursen rör sig hela tiden eftersom den sätts av köpare och säljare som möts på en börs — precis som priset på en secondhand-cykel kan variera beroende på hur många som vill ha just den modellen just nu. Går fler personer med på att betala mer för att äga en bit av bolaget stiger kursen. Vill fler sälja än köpa sjunker den.</p>
+        <h3 class="sub">Börsvärde</h3>
+        <p><strong>Börsvärde</strong> (market cap) är hela bolagets prislapp: aktiekurs × antal utestående aktier. Om pizzerian har 100 andelar och varje andel kostar 50 kr är hela pizzerian värd 5 000 kr på pappret. Börsvärdet avgör bland annat om ett bolag räknas som stort, medelstort eller litet — något som återkommer senare i guiden och som appen tar hänsyn till.</p>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>PRIS</td><td>Senaste stängningskursen, i bolagets handelsvaluta</td></tr>
+          </table>
+        </div>
+      `
+    },
+    {
+      id: "poangmodellen-grund",
+      title: "Hur poängen (0–100) fungerar",
+      body: `
+        <p>Varje aktie i appen får en poäng mellan 0 och 100. Det är inte en sanning om framtiden — det är en sammanvägning av ett tjugotal mätbara faktorer, som du kommer lära dig en efter en i den här guiden. Ju fler positiva signaler som pekar samtidigt, desto högre poäng.</p>
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Tänk dig en läkarundersökning. Läkaren tittar inte bara på blodtrycket för att avgöra hur frisk du är — hen väger ihop blodtryck, puls, blodprover, vikt och en mängd andra mått. Ett enda värde säger sällan hela sanningen, men tillsammans målar de upp en rimlig helhetsbild. Poängen i appen fungerar likadant: den väger ihop värdering, trend, kvalitet och risk till en enda siffra, men ingen enskild faktor avgör allt.</p>
+        </div>
+        <h3 class="sub">Startpunkten: 50</h3>
+        <p>Varje aktie börjar på <strong>50 poäng</strong> — ett neutralt läge, varken bra eller dåligt. Sedan läggs bonusar till för positiva signaler (billig värdering, uppåttrend, stark tillväxt) och avdrag görs för negativa (dyr värdering, nedåttrend, hög skuldsättning). Summan klipps till mellan 0 och 100.</p>
+        <h3 class="sub">Avtagande avkastning på bonusar</h3>
+        <p>Ett viktigt designval: <strong>avdrag räknas alltid fullt ut</strong> — en genuint dålig aktie ska kunna hamna nära noll. Men <strong>bonusar dämpas</strong> efter en viss gräns (25 poäng), så att det krävs ovanligt många positiva faktorer samtidigt för att nå poäng nära 100. Det håller taket realistiskt istället för att många aktier klumpar ihop sig på 95–100.</p>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>≥65 poäng</td><td>Flaggas KÖP (om analytikerkonsensus inte säger emot — mer om det senare)</td></tr>
+            <tr><td>≥50 säljpoäng</td><td>Flaggas SÄLJ för innehav du äger</td></tr>
+            <tr><td>&lt;40 poäng</td><td>Visas inte som kandidat i USA/Europa/Norden-flikarna</td></tr>
+          </table>
+        </div>
+      `
+    },
+    {
+      id: "navigera-appen",
+      title: "Så läser du appens gränssnitt och symboler",
+      body: `
+        <p>Innan du dyker in i själva analysen är det värt att känna igen de symboler som återkommer i listan, så du slipper gissa vad de betyder när du väl ser dem.</p>
+        <h3 class="sub">Flikarna</h3>
+        <p><strong>USA</strong>, <strong>Europa</strong> och <strong>Norden</strong> visar köpkandidater sorterade efter marknad. <strong>Tillväxt</strong> visar manuellt utvalda unga/små bolag med en egen, mer risktålig poängmodell (mer om den senare). <strong>Mina innehav</strong> visar dina egna aktier, laddade upp som en CSV-fil som aldrig lämnar din webbläsare.</p>
+        <h3 class="sub">Symboler i namnraden</h3>
+        <div class="in-app">
+          <div class="lbl">Symbol → betydelse</div>
+          <table>
+            <tr><td>KÖP / HÅLL / SÄLJ</td><td>Färgad flagga baserad på poäng och analytikerkonsensus tillsammans</td></tr>
+            <tr><td>★</td><td>Ny på listan — tillagd de senaste dagarna</td></tr>
+            <tr><td>3D, 5D osv.</td><td>Antal körningar i rad med aktiv signal — en indikation på hur stabil signalen varit, inte bara en engångsutslag</td></tr>
+            <tr><td>+↑ / +↓</td><td>Golden cross / death cross, eller nära förestående (inom 2%)</td></tr>
+            <tr><td>↑20 / ↓20</td><td>Samma idé men en snabbare, tidigare varningssignal</td></tr>
+            <tr><td>IT#N</td><td>Plats N på Investtechs externa Topp 20-lista (teknisk analys)</td></tr>
+          </table>
+        </div>
+        <p>Öppnar du en aktie (klicka på raden, eller ⓘ-knappen) ser du en fullständig genomgång av alla nyckeltal, en motiveringslista som visar exakt vilka faktorer som drog poängen upp eller ner, samt två prisgrafer (3 månader och 1 år).</p>
+        <div class="callout-warn"><strong>Kom ihåg:</strong> ingenting i appen är finansiell rådgivning. Det är ett strukturerat första filter för din egen research — inte ett facit.</div>
+      `
+    }
+  ]
+},
+{
+  title: "Modul 2 — Värdering",
+  lessons: [
+    {
+      id: "pe-tal",
+      title: "P/E-talet — grunden i värdering",
+      body: `
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Tänk dig att du ska köpa ett fruktträd som ger 10 kg äpplen om året, värda 100 kr. Säljaren vill ha 1 500 kr för trädet. Då betalar du "15 gånger" den årliga skörden — det tar 15 år av äppelskördar (om de förblir lika stora) innan trädet "betalat tillbaka" sitt pris. P/E-talet är exakt samma idé, fast äpplen bytt mot vinst och trädet mot ett bolag.</p>
+        </div>
+        <p><strong>P/E</strong> står för "Price/Earnings" — aktiekurs delat med vinst per aktie. Ett P/E på 15 betyder att du betalar 15 kronor för varje krona bolaget tjänar per år. Lägre P/E betyder generellt att aktien är billigare i förhållande till sin vinst — men inte alltid av goda skäl.</p>
+        <h3 class="sub">Varför lågt P/E inte alltid är bra</h3>
+        <p>Ett mycket lågt P/E kan betyda att aktien är ett fynd — eller att marknaden tror att vinsten snart kommer sjunka kraftigt (t.ex. ett bolag i en döende bransch). Ett högt P/E kan betyda att aktien är dyr — eller att marknaden förväntar sig stark framtida tillväxt som gör dagens pris rimligt i efterhand. P/E ensamt berättar aldrig hela historien, vilket är precis varför appen väger in många andra faktorer också.</p>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>P/E &lt; 15</td><td>+10 poäng bonus</td></tr>
+            <tr><td>P/E &gt; 40</td><td>−15 poäng avdrag</td></tr>
+            <tr><td>P/E saknas</td><td>Vanligt om bolaget gör förlust eller är väldigt ungt — varken bonus eller straff</td></tr>
+          </table>
+        </div>
+      `
+    },
+    {
+      id: "pe-bransch",
+      title: "P/E i sitt sammanhang — jämförelse mot bransch",
+      body: `
+        <p>Ett P/E på 30 låter dyrt för en bank, men kan vara helt normalt för ett snabbväxande mjukvarubolag. Olika branscher har strukturellt olika "normala" P/E-nivåer — banker och verkstadsbolag handlas oftast lägre, teknik- och tillväxtbolag oftast högre, eftersom marknaden prissätter in framtida tillväxt olika mycket beroende på bransch.</p>
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Att jämföra P/E rakt av mellan branscher är lite som att jämföra kvadratmeterpriset på en lägenhet i centrala Stockholm med ett hus på landsbygden. Priset per kvadratmeter kan skilja sig enormt utan att någotdera är "fel" — det handlar om helt olika marknader med olika förutsättningar.</p>
+        </div>
+        <p>I appens detaljvy ser du därför P/E jämfört både med den globala branschmedianen (från Damodaran/NYU Stern-data) och landsjusterat, så att du slipper göra den branschjämförelsen i huvudet själv.</p>
+      `
+    },
+    {
+      id: "peg-tal",
+      title: "PEG-talet — P/E justerat för tillväxt",
+      body: `
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Tillbaka till fruktträdet: ett träd som redan ger 10 kg äpplen och förväntas fortsätta ge exakt 10 kg varje år är något annat än ett ungt träd som ger 2 kg idag men förväntas ge 8 kg om några år när det vuxit sig större. Det unga trädet må se "dyrt" ut i P/E-mått just nu (lite frukt, hög prislapp), men om tillväxten infrias var det egentligen billigt. PEG-talet är verktyget som tar hänsyn till just det.</p>
+        </div>
+        <p><strong>PEG</strong> = P/E delat med förväntad vinsttillväxt i procent. Ett PEG-tal under 1 brukar tolkas som att aktien är rimligt eller till och med billigt prissatt i förhållande till hur snabbt den väntas växa — även om P/E-talet i sig ser högt ut.</p>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>PEG &lt; 1</td><td>+8 poäng — P/E ser rimligt ut givet förväntad tillväxt</td></tr>
+            <tr><td>PEG &gt; 3</td><td>−10 poäng — dyrt även efter hänsyn till tillväxt</td></tr>
+          </table>
+        </div>
+      `
+    },
+    {
+      id: "forward-pe",
+      title: "Forward P/E — vad marknaden väntar sig framöver",
+      body: `
+        <p>Vanligt P/E bygger på vinsten det senaste året — redan hänt, redan känt. <strong>Forward P/E</strong> bygger istället på analytikernas förväntade vinst det kommande året. Skillnaden mellan de två berättar något viktigt: om Forward P/E är mycket lägre än dagens P/E väntar sig marknaden att vinsten ska växa rejält. Är den högre väntas vinsten falla.</p>
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Det är skillnaden mellan att fråga "hur mycket tjänade du förra året?" och "hur mycket tror du att du kommer tjäna nästa år?". Båda svaren är användbara, men det andra säger mer om vart det är på väg.</p>
+        </div>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>Forward P/E &lt; −15% mot historiskt</td><td>+8 poäng — vinsttillväxt väntas</td></tr>
+            <tr><td>Forward P/E &gt; +15% mot historiskt</td><td>−10 poäng — vinstnedgång väntas</td></tr>
+          </table>
+        </div>
+      `
+    },
+    {
+      id: "pb-tal",
+      title: "P/B-talet — pris mot bokfört värde",
+      body: `
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Tänk dig att du säljer ditt hus. "Bokfört värde" är ungefär vad som skulle bli kvar om du sålde av allt bolaget äger (fastigheter, maskiner, kontanter) och betalade av alla skulder — nettoförmögenheten, helt enkelt. P/B jämför aktiens pris mot den nettoförmögenheten per aktie.</p>
+        </div>
+        <p>Ett P/B under 1 betyder att aktien handlas under vad bolagets tillgångar formellt är värda på pappret — vilket ibland är ett fynd, men ibland ett varningstecken om att marknaden tvivlar på att tillgångarna verkligen är värda vad böckerna säger (t.ex. föråldrad utrustning, osäkra fordringar).</p>
+        <div class="callout-warn"><strong>Värdefälla:</strong> lågt P/B kombinerat med hög skuldsättning kan betyda att "det billiga" egentligen bara är en spegling av att bolaget är riskabelt skuldsatt. Appen ger därför ingen bonus för lågt P/B om skuldsättningen samtidigt är hög.</div>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>P/B &lt; 0</td><td>−25 poäng — negativt eget kapital, allvarlig varningssignal</td></tr>
+            <tr><td>0 &lt; P/B &lt; 1.5 (utan hög skuld)</td><td>+8 poäng</td></tr>
+            <tr><td>P/B &gt; 6</td><td>−10 poäng</td></tr>
+          </table>
+        </div>
+      `
+    },
+    {
+      id: "utdelning",
+      title: "Utdelning — att få betalt för att äga",
+      body: `
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Om aktien är en hyresfastighet är utdelningen hyresintäkten du får varje månad, utöver att fastighetens värde också kan stiga eller sjunka. Vissa bolag delar ut en del av vinsten direkt till aktieägarna, andra återinvesterar allt i tillväxt istället.</p>
+        </div>
+        <p><strong>Direktavkastning</strong> är utdelningen i procent av aktiekursen — hur stor "hyra" du får per investerad krona och år. Unga tillväxtbolag delar sällan ut något alls (de återinvesterar hellre pengarna för att växa snabbare), medan mogna, stabila bolag ofta delar ut en jämn ström.</p>
+      `
+    },
+    {
+      id: "riskpremie",
+      title: "Riskfri ränta och riskpremie",
+      body: `
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Du kan sätta pengarna på ett vanligt sparkonto och få en garanterad, låg ränta — noll risk, noll spänning. Eller så kan du låna ut pengar till en kompis som ska starta företag — högre möjlig avkastning, men också risken att aldrig se pengarna igen. Du bör rimligen kräva MER förväntad avkastning för att ta den risken, annars är sparkontot ett bättre val. Den extra avkastningen du kräver för att ta risken är riskpremien.</p>
+        </div>
+        <p><strong>Riskfri ränta</strong> är avkastningen på det säkraste tänkbara alternativet — i praktiken en stats obligationsränta (t.ex. svenska 10-åriga statsobligationer). <strong>Riskpremie</strong> i appen räknas som aktiens "vinstavkastning" (100 delat på P/E — den omvända versionen av P/E-talet) minus den riskfria räntan.</p>
+        <p>Är riskpremien <strong>negativ</strong> betyder det att du, rent matematiskt, får bättre avkastning helt riskfritt på ett säkert konto just nu — ett tydligt varningstecken, även om aktien i övrigt ser fin ut.</p>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>Riskpremie &gt; 8pp</td><td>+10 poäng — mycket kompensation för risken</td></tr>
+            <tr><td>Riskpremie &lt; 0</td><td>−10 poäng — du får mer riskfritt just nu</td></tr>
+          </table>
+        </div>
+      `
+    }
+  ]
+},
+{
+  title: "Modul 3 — Teknisk analys",
+  lessons: [
+    {
+      id: "sma",
+      title: "Glidande medelvärden (SMA) — att se trenden genom bruset",
+      body: `
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Tänk dig att du väger dig varje dag. Vikten hoppar upp och ner lite från dag till dag beroende på vad du åt igår, vätskebalans osv. — rent brus som inte säger mycket. Men om du räknar ut ditt <em>genomsnitt de senaste 20 dagarna</em> och jämför med genomsnittet <em>de senaste 200 dagarna</em>, ser du plötsligt en tydlig riktning: går du upp eller ner i vikt över tid, bortom dagliga svängningar?</p>
+        </div>
+        <p><strong>SMA</strong> (Simple Moving Average, glidande medelvärde) gör exakt det med aktiekursen. Appen räknar tre: <strong>SMA20</strong> (senaste 20 dagarna, reagerar snabbt), <strong>SMA50</strong> (medellång sikt) och <strong>SMA200</strong> (lång sikt, trög men stabil).</p>
+        <svg class="diagram" viewBox="0 0 640 220" xmlns="http://www.w3.org/2000/svg">
+          <rect width="640" height="220" fill="#17140f"/>
+          <text x="20" y="26" fill="#756b57" font-family="IBM Plex Mono, monospace" font-size="11">Pris (grå), SMA50 (blå), SMA200 (amber)</text>
+          <polyline points="20,150 80,120 140,160 200,100 260,140 320,90 380,110 440,70 500,95 560,60 620,80" fill="none" stroke="#756b57" stroke-width="1.5" opacity="0.5"/>
+          <polyline points="20,155 80,148 140,142 200,132 260,124 320,112 380,104 440,92 500,86 560,76 620,72" fill="none" stroke="#7ba687" stroke-width="2.5"/>
+          <polyline points="20,165 80,163 140,160 200,158 260,155 320,152 380,148 440,144 500,140 560,136 620,132" fill="none" stroke="#d9a441" stroke-width="2.5"/>
+          <circle cx="380" cy="104" r="4" fill="#7ba687"/>
+          <text x="390" y="100" fill="#7ba687" font-family="IBM Plex Mono, monospace" font-size="11">Golden cross</text>
+        </svg>
+        <p>När det korta genomsnittet (SMA50) passerar <strong>över</strong> det långa (SMA200) tolkas det som att trenden just vänt uppåt — det kortsiktiga genomsnittet "vinner" över det långsiktiga. Det kallas <strong>golden cross</strong>. Omvänt korsning nedåt kallas <strong>death cross</strong>.</p>
+      `
+    },
+    {
+      id: "golden-death-cross",
+      title: "Golden cross, death cross — och varför de kommer sent",
+      body: `
+        <p>Golden cross och death cross är kända, mycket använda signaler — men de har en inbyggd svaghet: de är <strong>trögbekräftande</strong>. Eftersom SMA50 i sig är ett genomsnitt av redan passerade priser, måste det "hinna ikapp" en trendförändring innan korsningen ens sker. När den väl inträffar har trenden ofta redan pågått ett tag.</p>
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Det är lite som att bedöma om det blivit vår genom att titta på medeltemperaturen den senaste månaden jämfört med de senaste sex månaderna. Den signalen dyker upp efter att våren redan börjat märkas, inte innan.</p>
+        </div>
+        <h3 class="sub">Den tidigare varianten: SMA20 mot SMA50</h3>
+        <p>Just därför har appen även en <strong>snabbare</strong> signal: SMA20 mot SMA50 istället för SMA50 mot SMA200. Den reagerar tidigare på en trendförändring, men är samtidigt mer <strong>brusig</strong> — fler falska utslag, eftersom ett kortare genomsnitt är känsligare för tillfälliga svängningar.</p>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>+↑ (gult)</td><td>Golden cross på SMA50/SMA200, eller inom 2% marginal av att ske</td></tr>
+            <tr><td>+↓ (rött)</td><td>Death cross på SMA50/SMA200, eller inom 2% marginal</td></tr>
+            <tr><td>↑20 / ↓20</td><td>Samma idé men på SMA20/SMA50 — snabbare, mer brusig, tidigare varning</td></tr>
+          </table>
+        </div>
+      `
+    },
+    {
+      id: "rsi",
+      title: "RSI — momentum och över-/undersålda lägen",
+      body: `
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Tänk dig ett gummiband. Sträcker du det mycket åt ena hållet byggs det upp en spänning som ofta (men inte alltid) resulterar i att det studsar tillbaka. RSI mäter ungefär hur "sträckt" en akties senaste kursrörelse varit.</p>
+        </div>
+        <p><strong>RSI</strong> (Relative Strength Index) är ett tal mellan 0 och 100 som mäter hur kraftiga och ihållande de senaste uppgångarna varit jämfört med nedgångarna, över de senaste 14 dagarna.</p>
+        <svg class="diagram" viewBox="0 0 640 140" xmlns="http://www.w3.org/2000/svg">
+          <rect width="640" height="140" fill="#17140f"/>
+          <rect x="40" y="40" width="560" height="30" fill="#c06a45" opacity="0.25"/>
+          <rect x="40" y="70" width="280" height="0" fill="none"/>
+          <rect x="182" y="40" width="276" height="30" fill="#2b271e"/>
+          <rect x="40" y="40" width="142" height="30" fill="#7ba687" opacity="0.25"/>
+          <text x="45" y="60" fill="#7ba687" font-family="IBM Plex Mono, monospace" font-size="12">0–35: Översålt</text>
+          <text x="250" y="60" fill="#b2a890" font-family="IBM Plex Mono, monospace" font-size="12">35–70: Neutralt</text>
+          <text x="475" y="60" fill="#c06a45" font-family="IBM Plex Mono, monospace" font-size="12">70–100: Överköpt</text>
+          <line x1="40" y1="90" x2="600" y2="90" stroke="#756b57" stroke-width="1"/>
+          <text x="40" y="110" fill="#756b57" font-family="IBM Plex Mono, monospace" font-size="10">0</text>
+          <text x="590" y="110" fill="#756b57" font-family="IBM Plex Mono, monospace" font-size="10">100</text>
+        </svg>
+        <p>Ett <strong>lågt RSI (under 35)</strong> tyder på att aktien sålts av kraftigt den senaste tiden och kan vara "översåld" — ett möjligt köpläge om nedgången var överdriven. Ett <strong>högt RSI (över 70)</strong> tyder på motsatsen — kraftig uppgång som kan vara mogen för en paus eller rekyl. RSI säger ingenting om <em>varför</em> — bara att rörelsen varit ovanligt kraftig åt ett håll.</p>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>RSI &lt; 35</td><td>+10 poäng — potentiellt översålt läge</td></tr>
+            <tr><td>RSI &gt; 70</td><td>−20 poäng — potentiellt överköpt läge</td></tr>
+          </table>
+        </div>
+      `
+    },
+    {
+      id: "volym",
+      title: "Volym — hur många som handlar",
+      body: `
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Föreställ dig en butik. En helt vanlig tisdag går kanske 50 kunder förbi. Men en dag med extrem trängsel, kö ut på gatan — något ovanligt drar uppenbarligen folks uppmärksamhet. Volym mäter samma sak för en aktie: hur många aktier som bytt ägare under dagen.</p>
+        </div>
+        <p><strong>Volymavvikelse</strong> jämför dagens handelsvolym mot det normala snittet. En kraftig avvikelse (2× snittet eller mer) betyder att något — nyheter, ett resultat, ett rykte — fått betydligt fler att köpa eller sälja än vanligt. Volym i sig säger inte åt vilket håll, bara att intresset ökat kraftigt, vilket ofta föregår eller följer en större kursrörelse.</p>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>Volym &gt; 2× snitt</td><td>+7 poäng — möjlig större rörelse på gång</td></tr>
+          </table>
+        </div>
+      `
+    }
+  ]
+},
+{
+  title: "Modul 4 — Fundamental kvalitet & tillväxt",
+  lessons: [
+    {
+      id: "intaktstillvaxt",
+      title: "Intäktstillväxt — växer bolaget?",
+      body: `
+        <p>Det mest grundläggande tillväxtmåttet av alla: hur mycket mer sålde bolaget senaste kvartalet jämfört med <em>samma kvartal förra året</em>? Jämförelsen görs mot samma period föregående år, inte mot förra kvartalet, för att undvika att säsongsmönster (jul, sommar) ger en missvisande bild.</p>
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Om en glasskiosk säljer mer glass i juli än i januari säger det ingenting om verksamheten går bra eller dåligt — det säger bara att det är sommar. Men jämför du juli i år mot juli förra året ser du den verkliga utvecklingen, rensat från säsong.</p>
+        </div>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>Tillväxt &gt; 15%</td><td>+8 poäng (standardmodell), +16 (tillväxtmodell)</td></tr>
+            <tr><td>Tillväxt &lt; −5%</td><td>−8 poäng (standardmodell), −12 (tillväxtmodell)</td></tr>
+          </table>
+        </div>
+      `
+    },
+    {
+      id: "marginaltrend",
+      title: "Rörelsemarginal och marginaltrend",
+      body: `
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Två pizzerior kan sälja för exakt lika mycket pengar men tjäna helt olika mycket — den ena kanske har dyra lokalhyror och slösar med ingredienser, den andra är effektivt driven. <strong>Rörelsemarginal</strong> mäter hur stor andel av varje omsatt krona som blir kvar som vinst efter driftskostnader.</p>
+        </div>
+        <p>Ännu mer intressant än marginalen i sig är <strong>trenden</strong> — förbättras eller försämras lönsamheten över tid? Ett bolag som växer OCH samtidigt blir mer lönsamt per krona omsättning visar tecken på <strong>skalbarhet</strong>: att verksamheten blir effektivare ju större den blir, inte bara större.</p>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>Marginal förbättras &gt; 3pp</td><td>+8 poäng (standard), +14 (tillväxt) — tecken på skalbarhet</td></tr>
+            <tr><td>Marginal försämras &gt; 3pp</td><td>−8 poäng (standard), −10 (tillväxt)</td></tr>
+          </table>
+        </div>
+      `
+    },
+    {
+      id: "fcf-marginal",
+      title: "Fritt kassaflöde (FCF) — riktiga pengar, inte bara siffror på papper",
+      body: `
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Din privatekonomi kan se bra ut på papper (hög lön) men ändå göra att kontot krymper varje månad om utgifterna är ännu högre. Ett bolags "vinst" enligt redovisningen kan på samma sätt se fin ut samtidigt som verksamheten faktiskt bränner pengar i praktiken — t.ex. för att den binder mycket kapital i lager eller investeringar. <strong>Fritt kassaflöde</strong> mäter de faktiska pengarna som blir kvar efter att räkningarna är betalda och nödvändiga investeringar gjorda.</p>
+        </div>
+        <p><strong>FCF-marginal</strong> är det fria kassaflödet i procent av intäkterna — hur stor andel av varje omsatt krona som faktiskt blir kvar som riktiga, spenderbara pengar. Negativ FCF-marginal betyder att bolaget förbrukar mer kassa än det drar in, vilket kan vara helt normalt för ett ungt bolag i tillväxtfas — men ohållbart i längden om det pågår för länge utan tydlig plan.</p>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>FCF-marginal &lt; 0</td><td>−15 poäng (standard), −10 (tillväxt, mer överseende)</td></tr>
+            <tr><td>FCF-marginal &gt; 15%</td><td>+8 poäng</td></tr>
+          </table>
+        </div>
+      `
+    },
+    {
+      id: "roic",
+      title: "ROIC — avkastning på investerat kapital",
+      body: `
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Tänk dig två personer som var och en får 100 000 kr att investera i en egen liten verksamhet. Efter ett år har den ena personen omvandlat pengarna till 120 000 kr i vinst-genererande tillgångar, den andra bara till 102 000 kr. Den första personen är helt enkelt duktigare på att omvandla kapital till värde — oavsett om startkapitalet kom från eget sparande eller ett lån. ROIC mäter exakt den förmågan hos ett bolag.</p>
+        </div>
+        <p><strong>ROIC</strong> (Return on Invested Capital) mäter hur effektivt bolaget omvandlar allt kapital det har tillgång till — eget kapital OCH lånat kapital, minus kassa — till vinst. Det är ett av de mest respekterade kvalitetsmåtten inom investering, eftersom det inte går att "fejka" genom att bara låna mer pengar (till skillnad från vissa andra lönsamhetsmått).</p>
+        <p>ROIC över 15% räknas generellt som starkt — bolaget skapar betydligt mer värde än vad kapitalet skulle kosta att låna eller vad ägarna rimligen kräver i avkastning. Negativ ROIC betyder att bolaget faktiskt <em>förstör</em> kapital snarare än att skapa avkastning på det.</p>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>ROIC &gt; 15%</td><td>+10 poäng (standard), +8 (tillväxt)</td></tr>
+            <tr><td>ROIC &lt; 0%</td><td>−12 poäng (standard) · tillväxtmodellen straffar bara vid &lt; −10% (mer överseende för unga bolag)</td></tr>
+          </table>
+        </div>
+      `
+    },
+    {
+      id: "skuldsattning",
+      title: "Skuldsättning (D/E) — hur mycket är lånat?",
+      body: `
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Om du köper ett hus för 3 miljoner med 300 000 kr i kontantinsats och resten som bolån, är din belåningsgrad hög — en liten nedgång i husets värde kan radera hela din egna insats. Ett bolag med hög skuldsättning (D/E, Debt/Equity) fungerar likadant: en liten motgång kan slå hårt mot ägarnas del av värdet, eftersom lånen ska betalas oavsett hur det går.</p>
+        </div>
+        <p><strong>D/E</strong> jämför bolagets totala skulder mot det egna kapitalet. Lägre D/E betyder mindre finansiell hävstång och därmed generellt lägre risk — men viss belåning är normalt och till och med sunt för de flesta bolag, precis som ett rimligt bolån för de flesta hushåll.</p>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>D/E &lt; 50</td><td>+5 poäng</td></tr>
+            <tr><td>D/E &gt; 150</td><td>−10 poäng</td></tr>
+          </table>
+        </div>
+      `
+    },
+    {
+      id: "sbc",
+      title: "Aktiebaserad ersättning (SBC) — en dold utspädningsrisk",
+      body: `
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Föreställ dig att pizzerians tio delägare bestämmer sig för att betala personalen med nya andelar i pizzerian istället för kontant lön. Personalen blir glad, men de befintliga tio delägarnas andel av pizzerian krymper — samma pizzeria delas nu på fler bitar. Det är precis vad aktiebaserad ersättning gör: bolaget "betalar" delvis med nya aktier istället för kontanter.</p>
+        </div>
+        <p>Aktiebaserad ersättning (SBC) är särskilt vanligt i tillväxt- och teknikbolag som ett sätt att attrahera personal utan att tära på kassan. Problemet är att det <strong>späder ut</strong> befintliga aktieägares andel över tid, och gör den redovisade vinsten mindre representativ för vad aktieägarna faktiskt får behålla.</p>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>SBC &gt; 15% av intäkter</td><td>−10 poäng (standard), −8 (tillväxt) — utspädningsrisk</td></tr>
+          </table>
+        </div>
+      `
+    },
+    {
+      id: "capex",
+      title: "Capex mot avskrivningar — investeringstakten",
+      body: `
+        <p><strong>Capex</strong> (Capital Expenditure) är pengar bolaget spenderar på ny utrustning, fabriker eller infrastruktur. <strong>Avskrivningar</strong> är den bokförda kostnaden för att gammal utrustning gradvis blir mindre värd. Jämförs de två — capex flera gånger högre än avskrivningarna — betyder det att bolaget investerar betydligt mer i framtida kapacitet än vad som bara krävs för att underhålla det befintliga.</p>
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Det är skillnaden mellan att bara byta ut en trasig diskmaskin (underhåll, motsvarar avskrivningarna) och att bygga till ett helt nytt kök (expansion, motsvarar hög capex). Bägge kostar pengar, men bara den ena investeringen är till för att växa.</p>
+        </div>
+        <p>Hög investeringstakt kan vara ett gott tecken på tillväxtambition — men innebär också ökad osäkerhet kring om investeringarna faktiskt kommer betala sig.</p>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>Capex &gt; 5× avskrivningar</td><td>−5 poäng — aggressiv investeringstakt, ökad osäkerhet</td></tr>
+          </table>
+        </div>
+      `
+    }
+  ]
+},
+{
+  title: "Modul 5 — Risk & kvalitetsspärrar",
+  lessons: [
+    {
+      id: "borsvarde-risk",
+      title: "Börsvärde och mikro-cap-risk",
+      body: `
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>En liten hörnbutik kan dubbla sin omsättning på ett år relativt lätt — men kan också stänga för gott om ägaren blir sjuk eller hyran höjs kraftigt. En stor butikskedja rör sig långsammare i båda riktningarna: svårare att dubbla omsättningen snabbt, men också mycket svårare att gå omkull över en natt. Börsvärde signalerar ungefär samma sak om ett bolag.</p>
+        </div>
+        <p>Väldigt små bolag (<strong>mikro-cap</strong>) kan ge enorm avkastning om de lyckas — men saknar ofta den finansiella buffert, riskspridning och offentliga granskning som större bolag har. Tekniska signaler (som SMA och RSI) blir dessutom mindre pålitliga vid tunn handel, eftersom få avslut kan flytta kursen mycket utan att det egentligen betyder något.</p>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>Börsvärde &lt; 50M USD</td><td>−25 poäng (standardmodellen) — mikro-cap, hög risk</td></tr>
+            <tr><td>Börsvärde &lt; 300M USD</td><td>−10 poäng</td></tr>
+            <tr><td>I Tillväxt-fliken</td><td>Inget börsvärdesstraff alls — litenhet är väntat, inte ett fel, i den modellen</td></tr>
+          </table>
+        </div>
+      `
+    },
+    {
+      id: "likviditet",
+      title: "Likviditet — kan du faktiskt sälja när du vill?",
+      body: `
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Tänk dig att sälja en vanlig, populär bostadsrätt i centrala Göteborg jämfört med ett unikt, ovanligt designat hus på landsbygden. Bostadsrätten har många potentiella köpare — du kan sälja snabbt till ett rättvist pris. Det ovanliga huset kanske bara har en handfull intresserade i hela landet — du kan tvingas sänka priset kraftigt eller vänta länge för att hitta en köpare.</p>
+        </div>
+        <p><strong>Likviditet</strong> mäter hur lätt en aktie är att köpa och sälja utan att själva transaktionen flyttar priset. Låg daglig handelsomsättning betyder att även en relativt liten order från dig kan flytta kursen mot dig — en risk som är lätt att glömma bort tills man faktiskt försöker sälja i en nedgång.</p>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>Daglig omsättning &lt; 100 000 (i handelsvalutan)</td><td>−20 poäng — extremt låg likviditet</td></tr>
+          </table>
+        </div>
+      `
+    },
+    {
+      id: "volatilitet",
+      title: "Volatilitet — hur skakig är resan?",
+      body: `
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Två bilresor kan ta exakt lika lång tid och sluta på samma resmål, men den ena går på en jämn motorväg medan den andra guppar fram på en gropig grusväg. Båda kommer fram — men den gropiga resan är betydligt jobbigare att sitta kvar genom, och det är lättare att hoppa av i panik mitt i, även om slutdestinationen var densamma.</p>
+        </div>
+        <p><strong>Volatilitet</strong> mäter hur mycket aktiekursen svänger upp och ner över tid, oavsett riktning. Hög volatilitet betyder större och mer oregelbundna kurssvängningar — vilket ökar risken att du säljer i panik vid fel tillfälle, även om aktien i slutändan skulle gått bra om du hållit kvar.</p>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>Volatilitet &gt; 80% (årstakt)</td><td>−15 poäng</td></tr>
+            <tr><td>Volatilitet 45–80%</td><td>−5 poäng</td></tr>
+            <tr><td>Volatilitet &lt; 20%</td><td>+5 poäng — stabil kursutveckling</td></tr>
+            <tr><td>I Tillväxt-fliken</td><td>Ingen påverkan alls — hög volatilitet är väntat och normalt för unga bolag i den modellen</td></tr>
+          </table>
+        </div>
+      `
+    }
+  ]
+},
+{
+  title: "Modul 6 — Externa signaler & helheten",
+  lessons: [
+    {
+      id: "analytiker",
+      title: "Analytikerkonsensus och kursmål",
+      body: `
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Att kolla samlade restaurangrecensioner innan du bokar bord är ofta bättre än en enda recension — fler oberoende bedömare minskar risken att du styrs av någons dåliga dag eller udda smak. Analytikerkonsensus fungerar liknande: en sammanvägning av flera professionella analytikers rekommendationer för en aktie.</p>
+        </div>
+        <p>Analytiker som bevakar ett bolag ger rekommendationer (starkt köp → köp → håll → sälj → starkt sälj) och ett <strong>kursmål</strong> — vad de tror aktien bör vara värd inom ungefär 12 månader. Konsensus är genomsnittet av alla bevakande analytikers syn.</p>
+        <div class="callout-warn"><strong>Viktigt att komma ihåg:</strong> analytiker har ofta systematiska intressekonflikter (banker som ger rekommendationer kan samtidigt vilja ha bolaget som kund för andra tjänster) och har historiskt varit dåliga på att förutse stora vändningar. Se det som EN datapunkt bland många, aldrig ett facit.</p>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>Starkt köp</td><td>+18 poäng (standard) · Håll</td></tr>
+            <tr><td>Håll</td><td>−5 poäng — analytikerna ser varken tydlig upp- eller nedsida</td></tr>
+            <tr><td>Starkt sälj</td><td>−25 poäng</td></tr>
+            <tr><td>KÖP-flaggan nedgraderas</td><td>Om poängen räcker för KÖP men konsensus säger håll/sälj, visas HÅLL istället — konsensus kan "överstyra" poängen i gränssnittet</td></tr>
+          </table>
+        </div>
+      `
+    },
+    {
+      id: "investtech",
+      title: "Investtech Topp 20 — en extern teknisk signal",
+      body: `
+        <p>Investtech är en etablerad nordisk aktör inom teknisk analys som dagligen rankar Stockholmsbörsens 20 tekniskt starkaste aktier, baserat på trend, stöd/motstånd, mönster och volymutveckling — en medelfristig horisont på 1–6 månader. Appen väger in denna externa, oberoende bedömning som en liten bonus när en bevakad aktie finns med på listan.</p>
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>Det är som att få ytterligare en oberoende expert att titta på samma bild du redan analyserat själv — om era bedömningar pekar åt samma håll stärker det ditt case; pekar de åt olika håll är det värt att fråga sig varför.</p>
+        </div>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>Plats #1–5</td><td>+10 poäng</td></tr>
+            <tr><td>Plats #6–10</td><td>+7 poäng</td></tr>
+            <tr><td>Plats #11–20</td><td>+5 poäng</td></tr>
+          </table>
+        </div>
+        <p>Listan uppdateras manuellt, inte i realtid — så betrakta den som en periodisk avstämning snarare än en live-signal.</p>
+      `
+    },
+    {
+      id: "helheten",
+      title: "Så vägs allt samman",
+      body: `
+        <p>Du har nu gått igenom alla enskilda byggstenar. Så här sätts de ihop:</p>
+        <svg class="diagram" viewBox="0 0 640 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="640" height="200" fill="#17140f"/>
+          <text x="20" y="30" fill="#b2a890" font-family="IBM Plex Mono, monospace" font-size="12">50 (start)</text>
+          <rect x="20" y="40" width="60" height="120" fill="#2b271e"/>
+          <text x="30" y="105" fill="#ede7d9" font-family="IBM Plex Mono, monospace" font-size="13">50</text>
+          <text x="110" y="30" fill="#7ba687" font-family="IBM Plex Mono, monospace" font-size="12">+ Bonusar (dämpade)</text>
+          <rect x="110" y="70" width="60" height="90" fill="#7ba687" opacity="0.35"/>
+          <text x="220" y="30" fill="#c06a45" font-family="IBM Plex Mono, monospace" font-size="12">− Avdrag (fulla)</text>
+          <rect x="220" y="90" width="60" height="70" fill="#c06a45" opacity="0.35"/>
+          <text x="330" y="105" fill="#756b57" font-family="IBM Plex Mono, monospace" font-size="18">=</text>
+          <rect x="380" y="30" width="80" height="130" fill="#d9a441" opacity="0.25" stroke="#d9a441"/>
+          <text x="395" y="100" fill="#d9a441" font-family="IBM Plex Mono, monospace" font-size="16">Slutpoäng</text>
+        </svg>
+        <p><strong>Avdrag räknas alltid fullt ut</strong> — en dålig aktie ska kunna hamna nära noll. <strong>Bonusar dämpas</strong> efter 25 poäng (de första 25 räknas fullt, resten bara till 40%) — det gör poäng nära 100 strukturellt sällsynta, och håller sig så även när nya faktorer läggs till i modellen över tid.</p>
+        <h3 class="sub">Geopolitik och makro</h3>
+        <p>Utöver bolagsspecifika faktorer väger appen även in manuellt uppdaterade sektor- och landsvikter kopplade till verkliga världshändelser (t.ex. Iran-konfliktens effekt på oljepris och halvledarsektorn) — dessa faller in i samma dämpade bonuspool, inte som ett separat, obegränsat tillägg.</p>
+      `
+    },
+    {
+      id: "kop-salj-tillvaxt",
+      title: "Köp-, sälj- och tillväxtpoäng — tre olika linser",
+      body: `
+        <p>Appen räknar egentligen tre olika poäng, med olika syften:</p>
+        <ul>
+          <li><strong>Köppoäng</strong> — standardmodellen, den du sett flest exempel på i den här guiden. Balanserad mellan värdering, trend, kvalitet och risk.</li>
+          <li><strong>Säljpoäng</strong> — spegelvänd logik, beräknad helt i din webbläsare för dina egna innehav (skickas aldrig till någon server). Samma faktorer, men tolkade ur perspektivet "talar det här FÖR att sälja?" snarare än att köpa.</li>
+          <li><strong>Tillväxtpoäng</strong> — en medvetet omkalibrerad modell för unga, manuellt utvalda bolag i Tillväxt-fliken. Mikro-cap- och volatilitetsstraff är borttagna (litenhet är väntat, inte ett fel), medan tillväxt- och momentumsignaler väger betydligt tyngre. Hårda riskspärrar som likviditet och finansiell stress-kombinationer är dock oförändrade — potential ska aldrig få väga bort genuina varningstecken.</li>
+        </ul>
+        <div class="callout-warn"><strong>Grattis, du är igenom hela guiden!</strong> Du har nu gått igenom samma byggstenar som appens poängmodell bygger på. Nästa steg för att verkligen befästa kunskapen är att öppna några aktier i appen och se om du kan förutsäga varför de fått den poäng de fått, innan du läser motiveringslistan.</div>
+      `
+    }
+  ]
+}
+];
+
+// ============================================================
+// LOGIK
+// ============================================================
+const ALL_LESSONS = MODULES.flatMap(m => m.lessons);
+const STORAGE_KEY = 'aktiescreener-guide-progress';
+
+function loadProgress() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) { return {}; }
+}
+function saveProgress(progress) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); } catch (e) {}
+}
+
+let progress = loadProgress();
+let currentId = ALL_LESSONS[0].id;
+
+function renderSidebar() {
+  const host = document.getElementById('moduleList');
+  host.innerHTML = MODULES.map(mod => `
+    <div class="module">
+      <div class="module-title">${mod.title}</div>
+      ${mod.lessons.map(l => `
+        <div class="lesson-link ${l.id === currentId ? 'active' : ''} ${progress[l.id] ? 'done' : ''}" data-id="${l.id}">
+          <span class="check">${progress[l.id] ? '✓' : ''}</span>
+          <span>${l.title}</span>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+  host.querySelectorAll('.lesson-link').forEach(el => {
+    el.addEventListener('click', () => { currentId = el.dataset.id; renderGuide(); window.scrollTo(0,0); });
+  });
+
+  const total = ALL_LESSONS.length;
+  const done = Object.values(progress).filter(Boolean).length;
+  document.getElementById('progressText').textContent = `${done} / ${total}`;
+  document.getElementById('progressFill').style.width = (done / total * 100) + '%';
+}
+
+function renderMain() {
+  const idx = ALL_LESSONS.findIndex(l => l.id === currentId);
+  const lesson = ALL_LESSONS[idx];
+  const prev = ALL_LESSONS[idx - 1];
+  const next = ALL_LESSONS[idx + 1];
+  const mod = MODULES.find(m => m.lessons.includes(lesson));
+  const isDone = !!progress[lesson.id];
+
+  document.getElementById('main').innerHTML = `
+    <div class="lesson-eyebrow">${mod.title} · Lektion ${idx + 1} av ${ALL_LESSONS.length}</div>
+    <h2 class="lesson-title">${lesson.title}</h2>
+    <div class="lesson-body">${lesson.body}</div>
+    <button class="mark-done ${isDone ? 'done' : ''}" id="markDoneBtn">${isDone ? '✓ Avklarad' : 'Markera som avklarad'}</button>
+    <div class="nav-buttons">
+      <button class="nav-btn" id="prevBtn" ${prev ? '' : 'disabled'}>← Föregående</button>
+      <button class="nav-btn" id="nextBtn" ${next ? '' : 'disabled'}>Nästa →</button>
+    </div>
+  `;
+
+  document.getElementById('markDoneBtn').addEventListener('click', () => {
+    progress[lesson.id] = !progress[lesson.id];
+    saveProgress(progress);
+    renderGuide();
+  });
+  if (prev) document.getElementById('prevBtn').addEventListener('click', () => { currentId = prev.id; renderGuide(); window.scrollTo(0,0); });
+  if (next) document.getElementById('nextBtn').addEventListener('click', () => { currentId = next.id; renderGuide(); window.scrollTo(0,0); });
+}
+
+function renderGuide() {
+  renderSidebar();
+  renderMain();
+}
+
+document.getElementById('mobileToggle').addEventListener('click', () => {
+  document.getElementById('sidebar').classList.toggle('collapsed');
+});
+
+let guideInitialized = false;
+window.initGuideOnce = function() {
+  if (!guideInitialized) {
+    renderGuide();
+    guideInitialized = true;
+  }
+};
+
+})();
 </script>
 </body>
 </html>

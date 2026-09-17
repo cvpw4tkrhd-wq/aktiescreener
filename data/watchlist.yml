@@ -922,3 +922,21 @@ stocks:
   country: Finland
   market: FI
   growth_candidate: true
+- ticker: OUST
+  name: Ouster
+  sector: Technology
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: SEZL
+  name: Sezzle
+  sector: Financials
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: USAR
+  name: USA Rare Earth
+  sector: Materials
+  country: USA
+  market: US
+  growth_candidate: true

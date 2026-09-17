@@ -646,6 +646,12 @@
   .guide-app .main{ flex:1; min-width:0; padding:40px 48px 100px; max-width:760px; }
 
   .brand{ padding:0 22px 20px; border-bottom:1px solid var(--border); margin-bottom:14px; }
+  .guide-back{
+    display:block; margin-bottom:14px; font-family:'IBM Plex Mono',monospace; font-size:11.5px;
+    color:var(--text-dim); background:none; border:1px solid var(--border); border-radius:var(--radius);
+    padding:7px 12px; cursor:pointer; text-align:left;
+  }
+  .guide-back:hover{ border-color:var(--amber); color:var(--text); }
   .brand .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--amber); text-transform:uppercase; letter-spacing:0.05em; }
   .brand h1{ font-family:'Fraunces',serif; font-size:21px; font-weight:600; margin:6px 0 0; }
 
@@ -752,6 +758,7 @@
       <div class="meta-line" id="metaLine">laddar…</div>
     </div>
     <div class="controls">
+      <button class="iconbtn" id="guideBtn">GUIDE</button>
       <select class="iconbtn" id="themeSelect">
         <option value="dark">MÖRKT LÄGE</option>
         <option value="light">LJUST LÄGE</option>
@@ -762,13 +769,12 @@
     </div>
   </header>
 
-  <div class="tabs">
+  <div class="tabs" id="tabsRow">
     <div class="tab active" data-tab="us">USA <span class="count" id="usCount"></span></div>
     <div class="tab" data-tab="eu">EUROPA <span class="count" id="euCount"></span></div>
     <div class="tab" data-tab="nordic">NORDEN <span class="count" id="nordicCount"></span></div>
     <div class="tab" data-tab="growth">TILLVÄXT <span class="count" id="growthCount"></span></div>
     <div class="tab" data-tab="sell">MINA INNEHAV <span class="count" id="sellCount"></span></div>
-    <div class="tab" data-tab="guide">GUIDE</div>
   </div>
 
   <div class="panel" id="dataPanel">
@@ -790,6 +796,7 @@
   <div class="guide-app" id="guideHost" style="display:none;">
     <div class="sidebar" id="sidebar">
       <div class="brand">
+        <button class="guide-back" id="guideBackBtn">← Tillbaka till screenern</button>
         <div class="eyebrow">Lärguide</div>
         <h1>Läs dig till bättre analyser</h1>
       </div>
@@ -1179,18 +1186,26 @@ document.querySelectorAll('.tab').forEach(el => {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     el.classList.add('active');
     state.tab = el.dataset.tab;
-    const isGuide = state.tab === 'guide';
-    document.getElementById('dataPanel').style.display = isGuide ? 'none' : '';
-    document.getElementById('guideHost').style.display = isGuide ? '' : 'none';
-    if (isGuide) {
-      document.getElementById('summaryHost').innerHTML = '';
-      initGuideOnce();
-    } else {
-      render();
-    }
+    render();
   });
 });
 document.getElementById('sortSelect').addEventListener('change', e => { state.sort = e.target.value; render(); });
+
+document.getElementById('guideBtn').addEventListener('click', () => {
+  document.getElementById('tabsRow').style.display = 'none';
+  document.getElementById('dataPanel').style.display = 'none';
+  document.getElementById('summaryHost').innerHTML = '';
+  document.getElementById('guideHost').style.display = '';
+  initGuideOnce();
+  window.scrollTo(0, 0);
+});
+document.getElementById('guideBackBtn').addEventListener('click', () => {
+  document.getElementById('guideHost').style.display = 'none';
+  document.getElementById('tabsRow').style.display = '';
+  document.getElementById('dataPanel').style.display = '';
+  render();
+  window.scrollTo(0, 0);
+});
 
 function fmtNum(n, digits=2) {
   if (n === null || n === undefined) return '–';

@@ -75,6 +75,20 @@ def load_risk_free_rates():
     return data.get("rates") or {}
 
 
+INVESTTECH_TOP20_FILE = DATA_DIR / "investtech_top20.json"
+
+
+def load_investtech_top20():
+    """Läser Investtechs Topp 20-lista (teknisk analys, Stockholmsbörsen).
+    Returnerar {ticker: {rank, score}}. Statisk referensfil, uppdateras
+    manuellt via Claude när du ber om en avstämning - inte live-hämtad."""
+    if not INVESTTECH_TOP20_FILE.exists():
+        return {}
+    with open(INVESTTECH_TOP20_FILE, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    return {e["ticker"]: e for e in data.get("entries", [])}
+
+
 def load_risk_factors():
     """Läser redigerbara geopolitiska/makro-riskfaktorer och summerar vikt per
     sektor OCH per land. Returnerar (sector_weights, sector_factor_names,
@@ -987,6 +1001,7 @@ def main():
     watchlist = load_watchlist()
     sector_weights, sector_factor_names, country_weights, country_factor_names = load_risk_factors()
     risk_free_rates = load_risk_free_rates()
+    investtech_top20 = load_investtech_top20()
     score_history = load_score_history()
     today_str = datetime.now(timezone.utc).date().isoformat()
 
@@ -1028,8 +1043,15 @@ def main():
             sector_weight = sector_weights.get(sector, 0) if sector else 0
             country_weight = country_weights.get(entry["market"], 0)
 
-            buy_score, buy_reasons = score_buy_candidate(d, extra_weight=sector_weight + country_weight)
-            growth_score, growth_reasons = score_growth_candidate(d, extra_weight=sector_weight + country_weight)
+            investtech_entry = investtech_top20.get(ticker)
+            investtech_weight = 0
+            if investtech_entry:
+                rank = investtech_entry["rank"]
+                investtech_weight = 10 if rank <= 5 else (7 if rank <= 10 else 5)
+
+            total_extra = sector_weight + country_weight + investtech_weight
+            buy_score, buy_reasons = score_buy_candidate(d, extra_weight=total_extra)
+            growth_score, growth_reasons = score_growth_candidate(d, extra_weight=total_extra)
 
             geopolitics_note = None
             if sector_weight:
@@ -1043,10 +1065,16 @@ def main():
                 buy_reasons.append(f"Geopolitik/makro ({entry.get('country')}): {geopolitics_country_note}")
                 growth_reasons.append(f"Geopolitik/makro ({entry.get('country')}): {geopolitics_country_note}")
 
+            if investtech_entry:
+                note = f"Investtech Topp 20 (plats #{investtech_entry['rank']}, teknisk poäng {investtech_entry['investtech_score']}) – teknisk medelfristig signal (1-6 mån)"
+                buy_reasons.append(note)
+                growth_reasons.append(note)
+
             d["buy_score"] = buy_score
             d["buy_reasons"] = buy_reasons
             d["growth_score"] = growth_score
             d["growth_reasons"] = growth_reasons
+            d["investtech_rank"] = investtech_entry["rank"] if investtech_entry else None
             # Exponerar den använda sektor- och landsvikten (+ förklaringstexter)
             # så att webbläsaren kan räkna ut en identisk geopolitik-justering
             # för säljpoängen, som numera beräknas helt klientsidan (innehav

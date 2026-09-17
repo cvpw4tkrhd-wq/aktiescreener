@@ -344,6 +344,7 @@
   .mkt-badge.dc-badge { color: var(--down); border-color: var(--down); }
   .mkt-badge.gc-badge-early { color: var(--up); border-color: var(--border); opacity: 0.75; }
   .new-star { color: var(--amber); font-size: 12px; }
+  .mkt-badge.it-badge { color: var(--amber); border-color: var(--amber-dim); }
   .mkt-badge.dc-badge-early { color: var(--down); border-color: var(--border); opacity: 0.75; }
   .info-btn {
     background: none; border: 1px solid var(--border); color: var(--text-faint);
@@ -1444,7 +1445,7 @@ function render() {
     const cls = barClsMap[flag.cls];
     const trend = r.above_sma50 && r.above_sma200 ? 'up-txt' : (r.above_sma50 === false && r.above_sma200 === false ? 'down-txt' : 'dim');
     return `<tr data-ticker="${r.ticker}">
-      <td class="name"><div class="name-line">${r.is_new ? `<span class="new-star" title="Ny på listan - tillagd de senaste dagarna">★</span> ` : ''}${r.name || r.watchlist_name}${flag ? `<span class="signal-flag ${flag.cls}"${flag.title ? ` title="${flag.title}"` : ''}>${flag.label}</span>` : ''}${days >= 3 ? `<span class="mkt-badge days-badge" title="${days} körningar i rad med aktiv signal">${days}D</span>` : ''}${(() => {
+      <td class="name"><div class="name-line">${r.is_new ? `<span class="new-star" title="Ny på listan - tillagd de senaste dagarna">★</span> ` : ''}${r.name || r.watchlist_name}${flag ? `<span class="signal-flag ${flag.cls}"${flag.title ? ` title="${flag.title}"` : ''}>${flag.label}</span>` : ''}${days >= 3 ? `<span class="mkt-badge days-badge" title="${days} körningar i rad med aktiv signal">${days}D</span>` : ''}${r.investtech_rank ? `<span class="mkt-badge it-badge" title="Investtech Topp 20, plats #${r.investtech_rank} - teknisk medelfristig signal (1-6 mån)">IT#${r.investtech_rank}</span>` : ''}${(() => {
         const cp = crossProximity(r);
         const cp20 = crossProximity20_50(r);
         let html = '';

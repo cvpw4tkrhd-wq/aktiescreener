@@ -807,3 +807,88 @@ stocks:
   country: USA
   market: US
   growth_candidate: true
+- ticker: MORROW.ST
+  name: Morrow Bank
+  sector: Financials
+  country: Sverige
+  market: SE
+- ticker: MSAB-B.ST
+  name: Micro Systemation B
+  sector: Technology
+  country: Sverige
+  market: SE
+- ticker: QIIWI.ST
+  name: Qiiwi Games
+  sector: Consumer
+  country: Sverige
+  market: SE
+- ticker: AVARDA.ST
+  name: Avarda Bank
+  sector: Financials
+  country: Sverige
+  market: SE
+- ticker: KAMBI.ST
+  name: Kambi Group
+  sector: Consumer
+  country: Sverige
+  market: SE
+- ticker: BULTEN.ST
+  name: Bulten
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: CYNCA.ST
+  name: Cynca Nordic
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: PRISMA.ST
+  name: Prisma Properties
+  sector: RealEstate
+  country: Sverige
+  market: SE
+- ticker: HACK.ST
+  name: Hacksaw
+  sector: Consumer
+  country: Sverige
+  market: SE
+- ticker: ATT.ST
+  name: Attendo
+  sector: Healthcare
+  country: Sverige
+  market: SE
+- ticker: FRO.OL
+  name: Frontline
+  sector: Industrials
+  country: Norge
+  market: 'NO'
+- ticker: BTS-B.ST
+  name: BTS Group B
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: ORRON.ST
+  name: Orrön Energy
+  sector: Energy
+  country: Sverige
+  market: SE
+- ticker: HAUTO.OL
+  name: Höegh Autoliners
+  sector: Industrials
+  country: Norge
+  market: 'NO'
+- ticker: FMM-B.ST
+  name: FM Mattsson
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: KJELL.ST
+  name: Kjell Group
+  sector: Consumer
+  country: Sverige
+  market: SE
+- ticker: SHB-A.ST
+  name: Svenska Handelsbanken A
+  sector: Financials
+  country: Sverige
+  market: SE

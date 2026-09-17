@@ -892,3 +892,33 @@ stocks:
   sector: Financials
   country: Sverige
   market: SE
+- ticker: CLAV.ST
+  name: Clavister Holding
+  sector: Technology
+  country: Sverige
+  market: SE
+  growth_candidate: true
+- ticker: ADVE.ST
+  name: Advenica
+  sector: Technology
+  country: Sverige
+  market: SE
+  growth_candidate: true
+- ticker: 4C.ST
+  name: 4C Group
+  sector: Technology
+  country: Sverige
+  market: SE
+  growth_candidate: true
+- ticker: UNIBAP.ST
+  name: Unibap Space Solutions
+  sector: Technology
+  country: Sverige
+  market: SE
+  growth_candidate: true
+- ticker: NANOFH.HE
+  name: Nanoform Finland
+  sector: Healthcare
+  country: Finland
+  market: FI
+  growth_candidate: true

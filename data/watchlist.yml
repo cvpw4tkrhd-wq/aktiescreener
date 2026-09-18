@@ -940,3 +940,13 @@ stocks:
   country: USA
   market: US
   growth_candidate: true
+- ticker: MSCI
+  name: MSCI Inc.
+  sector: Financials
+  country: USA
+  market: US
+- ticker: VST
+  name: Vistra Corp.
+  sector: Energy
+  country: USA
+  market: US

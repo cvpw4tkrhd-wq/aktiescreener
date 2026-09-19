@@ -57,19 +57,19 @@
     --amber-dim: #6B5A24;
     --radius: 2px;
   }
-  [data-theme="sepia"] {
-    --bg: #F2E8D5;
-    --panel: #FAF3E4;
-    --panel-alt: #ECE0C8;
-    --border: #D8C7A0;
-    --text: #3A2F1D;
-    --text-dim: #6B5C3F;
-    --text-faint: #A3906A;
-    --up: #3F7D4A;
-    --down: #9C3B2E;
-    --amber: #8A5A20;
-    --amber-dim: #CBB488;
-    --radius: 4px;
+  [data-theme="dusk"] {
+    --bg: #5C5470;
+    --panel: #6B6383;
+    --panel-alt: #786F92;
+    --border: #948BA8;
+    --text: #F6F3FA;
+    --text-dim: #D8D0E4;
+    --text-faint: #B3A8C4;
+    --up: #8FCBA3;
+    --down: #E4917A;
+    --amber: #F0C674;
+    --amber-dim: #A6905C;
+    --radius: 5px;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; max-width: 100%; overflow-x: hidden; }
@@ -121,6 +121,14 @@
   }
   select.iconbtn { appearance: auto; }
   button.iconbtn:hover, select.iconbtn:hover { border-color: var(--text-dim); color: var(--text); }
+  .iconbtn-theme {
+    color: #8AA9D9;
+    border-color: #4E6690;
+  }
+  .iconbtn-theme:hover {
+    color: #B3CCF0;
+    border-color: #8AA9D9;
+  }
   .version-badge { color: var(--text-faint); cursor: default; }
 
   .tabs {
@@ -821,13 +829,8 @@
         <button class="iconbtn" id="macroBtn">MAKRO</button>
       </div>
       <div class="controls-group">
-        <select class="iconbtn" id="themeSelect">
-          <option value="dark">MÖRKT LÄGE</option>
-          <option value="light">LJUST LÄGE</option>
-          <option value="terminal">TERMINAL</option>
-          <option value="sepia">SEPIA</option>
-        </select>
         <span class="iconbtn version-badge" id="versionBadge">version –</span>
+        <button class="iconbtn iconbtn-theme" id="themeBtn">TEMA</button>
       </div>
     </div>
   </header>
@@ -1235,16 +1238,21 @@ if (storedHoldings) {
 
 // ===== /Innehav =====
 
-const themeSelect = document.getElementById('themeSelect');
+const themeBtn = document.getElementById('themeBtn');
+const THEME_ORDER = ['dark', 'light', 'terminal', 'dusk'];
 function applyTheme(t) {
   document.body.setAttribute('data-theme', t);
-  themeSelect.value = t;
   try { localStorage.setItem('screener-theme', t); } catch (e) { /* t.ex. privat läge - temat funkar ändå denna session */ }
 }
 let savedTheme = 'dark';
 try { savedTheme = localStorage.getItem('screener-theme') || 'dark'; } catch (e) { /* samma reserv som ovan */ }
+if (!THEME_ORDER.includes(savedTheme)) savedTheme = 'dark'; // t.ex. gamla "sepia" sparat sedan tidigare
 applyTheme(savedTheme);
-themeSelect.addEventListener('change', e => applyTheme(e.target.value));
+themeBtn.addEventListener('click', () => {
+  const current = document.body.getAttribute('data-theme');
+  const next = THEME_ORDER[(THEME_ORDER.indexOf(current) + 1) % THEME_ORDER.length];
+  applyTheme(next);
+});
 
 document.querySelectorAll('.tab').forEach(el => {
   el.addEventListener('click', () => {

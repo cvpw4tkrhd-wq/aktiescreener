@@ -7,9 +7,11 @@
 (function () {
   'use strict';
 
-  var K_BOUGHT = 'top5_bought_v1';   // { "2026-09": ["WDC", "MU", ...] }
+  var K_BOUGHT = 'top5_bought_v2';   // { "2026-09": { avail: ["WDC"], done: ["WDC"], shares: {"WDC":1} } }
   var K_AMOUNT = 'top5_amount_v1';   // totalt belopp per månad i kr
   var K_START = 'top5_start_v1';     // "2026-09" – första månaden du följt listan
+  var K_BANKED = 'top5_banked_v1';   // { "WDC": 234.5, ... } – sparad, ännu inte köpt summa per aktie
+  var K_TOPUP = 'top5_topup_v1';     // { "WDC": "2026-09" } – senaste månad kontot fylldes på (skyddar mot dubbel påfyllning)
   var DEFAULT_AMOUNT = 5000;
 
   var MONTHS = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
@@ -78,7 +80,8 @@
     '<ol class="t5-steps">' +
     '<li><b>Vid årsskiftet</b> rankas alla bolag i S&amp;P 500 efter totalavkastning (kursutveckling plus utdelningar) under det gångna kalenderåret.</li>' +
     '<li><b>De fem bästa</b> blir årets lista. Den visas överst här och gäller hela året.</li>' +
-    '<li><b>Första handelsdagen varje månad</b> köper du för lika mycket i var och en av de fem. Med 5 000 kr i månaden blir det 1 000 kr per aktie.</li>' +
+    '<li><b>Första handelsdagen varje månad</b> köper du för lika mycket i var och en av de fem. Med 5 000 kr i månaden blir det 1 000 kr per aktie – men eftersom aktier bara går att köpa i hela poster sparas beloppet automatiskt ihop tills det räcker till en hel aktie, om en enskild aktie kostar mer än din månadsdel (se "Hela aktier, inte procent" nedan).</li>' +
+
     '<li><b>Sälj inte.</b> Inga stop-loss och ingen ombalansering. I våra tester gav stop-loss sämre resultat, eftersom vinnare ofta svänger kraftigt innan de stiger.</li>' +
     '<li><b>Nytt år, ny lista.</b> Från januari köper du de nya fem. Förra årets aktier ligger kvar orörda.</li>' +
     '</ol>' +
@@ -86,6 +89,8 @@
     '<p>En enda aktie kan falla hårt. Natl Oilwell, som var årets vinnare inför 2008, gav bara 0,58 gånger pengarna när du köpte den månadsvis. Med fem aktier var det sämsta årsutfallet i testet 1,22 gånger pengarna, och inget år gick med förlust.</p>' +
     '<h4>Varför månadsköp?</h4>' +
     '<p>Inköpen sprids över tolv månader, så ett dåligt inköpstillfälle väger mindre. Det är också lättare att hålla i praktiken än att hitta ett enda rätt ögonblick.</p>' +
+    '<h4>Hela aktier, inte procent</h4>' +
+    '<p>Mäklare säljer normalt inte delar av en aktie – du kan inte köpa "0,1 Micron-aktier" för 1 000 kr om aktien kostar 10 000 kr. Därför sparas din månadsdel för en sådan aktie automatiskt ihop i en egen liten pott tills den räcker till en hel post. Du ser hur mycket som är sparat för varje aktie i listan nedan, och behöver bara klicka i en bock den månaden potten faktiskt räcker till ett köp. Det gör att fördelningen mellan de fem förblir ungefär jämn över tid, bara utspridd i tid istället för varje månad.</p>' +
     '<h4>Att tänka på</h4>' +
     '<ul class="t5-list">' +
     '<li>Momentumlistor är ofta koncentrerade till samma bransch. Flera aktier från samma sektor betyder mer risk än fem aktier låter som.</li>' +
@@ -147,6 +152,8 @@
     '.t5-meta{display:flex;flex-wrap:wrap;gap:2px 12px;margin-top:4px;font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--text-faint)}' +
     '.t5-amt{font-family:"IBM Plex Mono",monospace;font-size:13px;white-space:nowrap;padding-top:2px}' +
     '.t5-row.done .t5-tk,.t5-row.done .t5-nm{opacity:.5}' +
+    '.t5-row-saving{opacity:.7}' +
+    '.t5-saving-amt{color:var(--text-faint)}' +
     '.t5-pos{color:var(--up)}.t5-neg{color:var(--down)}' +
     '.t5-note{margin-top:10px!important;padding:10px 12px;border:1px solid var(--amber-dim);border-radius:var(--radius);font-size:12.5px;line-height:1.5;color:var(--text-dim)}' +
     '.t5-warn{margin-top:14px!important;padding:10px 12px;border:1px solid var(--down);border-radius:var(--radius);font-size:12.5px;line-height:1.5}' +
@@ -204,8 +211,6 @@
     var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     var key = ym(today);
     var ftd = firstTradingDay(today.getFullYear(), today.getMonth());
-    var bought = lsGet(K_BOUGHT, {});
-    var doneList = bought[key] || [];
     var start = lsGet(K_START, null);
     if (!start) { start = key; lsSet(K_START, start); }
 
@@ -213,22 +218,58 @@
     if (!isFinite(total) || total < 0) total = DEFAULT_AMOUNT;
     var per = picks.length ? total / picks.length : 0;
 
-    var allDone = picks.length > 0 && picks.every(function (p) { return doneList.indexOf(p.ticker) > -1; });
+    // ---- Rullande sparpott per aktie ----
+    // Varje akties månadsdel läggs till en egen pott en gång per månad (skyddat
+    // mot dubbel påfyllning vid omladdning via K_TOPUP). Räcker potten inte till
+    // en hel post krävs ingen åtgärd - den fylls på automatiskt nästa månad.
+    var banked = lsGet(K_BANKED, {});
+    var topup = lsGet(K_TOPUP, {});
+    var bought = lsGet(K_BOUGHT, {});
+    var monthRec = bought[key] || { avail: [], done: [], shares: {} };
+    if (!monthRec.shares) monthRec.shares = {};
+
+    var toppedUpNow = false;
+    picks.forEach(function (p) {
+      if (topup[p.ticker] !== key) {
+        banked[p.ticker] = (banked[p.ticker] || 0) + per;
+        topup[p.ticker] = key;
+        toppedUpNow = true;
+      }
+    });
+    if (toppedUpNow) { lsSet(K_BANKED, banked); lsSet(K_TOPUP, topup); }
+
+    var rowsData = picks.map(function (p) {
+      var pot = banked[p.ticker] || 0;
+      var qty = p.price > 0 ? Math.floor(pot / p.price) : 0;
+      var cost = qty * p.price;
+      return { p: p, pot: pot, qty: qty, cost: cost, available: qty >= 1, done: monthRec.done.indexOf(p.ticker) > -1 };
+    });
+
+    var availTickers = rowsData.filter(function (r) { return r.available; }).map(function (r) { return r.p.ticker; });
+    monthRec.avail = availTickers;
+    bought[key] = monthRec;
+    lsSet(K_BOUGHT, bought);
+
+    var allDone = availTickers.length > 0 && availTickers.every(function (tk) { return monthRec.done.indexOf(tk) > -1; });
+    var nothingToDo = availTickers.length === 0;
     var nextFtd = firstTradingDay(today.getMonth() === 11 ? today.getFullYear() + 1 : today.getFullYear(),
       (today.getMonth() + 1) % 12);
 
     var st;
-    if (allDone) {
+    if (nothingToDo) {
+      st = { cls: 'wait', t: 'Inget att köpa den här månaden',
+        s: 'Ingen aktie har sparat ihop till en hel post ännu. Beloppet läggs på automatiskt igen ' + MONTHS_LONG[nextFtd.getMonth()] + '.' };
+    } else if (allDone) {
       st = { cls: 'ok', t: 'Klart för ' + MONTHS_LONG[today.getMonth()],
-        s: 'Nästa köp: ' + fmtDate(nextFtd) + ' (om ' + plural(dayDiff(today, nextFtd), 'dag', 'dagar') + ').' };
+        s: 'Nästa avstämning: ' + fmtDate(nextFtd) + ' (om ' + plural(dayDiff(today, nextFtd), 'dag', 'dagar') + ').' };
     } else if (today < ftd) {
-      st = { cls: 'wait', t: 'Nästa köp: ' + fmtDate(ftd),
+      st = { cls: 'wait', t: 'Nästa köptillfälle: ' + fmtDate(ftd),
         s: 'Om ' + plural(dayDiff(today, ftd), 'dag', 'dagar') + ' är det första handelsdagen i ' + MONTHS_LONG[today.getMonth()] + '.' };
     } else if (dayDiff(ftd, today) === 0) {
       st = { cls: 'due', t: 'Idag är första handelsdagen',
-        s: 'Köp de fem aktierna nedan och bocka av dem.' };
+        s: 'Köp de aktier nedan som räckt till en hel post, och bocka av dem.' };
     } else {
-      st = { cls: 'late', t: 'Månadens köp är inte klart',
+      st = { cls: 'late', t: 'Något återstår att köpa',
         s: 'Första handelsdagen var ' + fmtDate(ftd) + '. Köp och bocka av när det är gjort.' };
     }
 
@@ -238,28 +279,39 @@
     var topSector = null, topN = 0;
     Object.keys(counts).forEach(function (s) { if (s && counts[s] > topN) { topN = counts[s]; topSector = s; } });
 
-    var rows = picks.map(function (p) {
-      var checked = doneList.indexOf(p.ticker) > -1;
-      return '<label class="t5-row' + (checked ? ' done' : '') + '">' +
-        '<input type="checkbox" data-tk="' + esc(p.ticker) + '"' + (checked ? ' checked' : '') + '>' +
-        '<div class="t5-main"><div class="t5-line"><span class="t5-tk">' + esc(p.ticker) + '</span>' +
-        '<span class="t5-nm">' + esc(p.name) + '</span></div>' +
-        '<div class="t5-meta"><span>' + esc(data.ranking_year) + ': ' + pct(p.ret_prev_year_pct) + '</span>' +
+    var rows = rowsData.map(function (r) {
+      var p = r.p;
+      var meta = '<div class="t5-meta"><span>' + esc(data.ranking_year) + ': ' + pct(p.ret_prev_year_pct) + '</span>' +
         '<span>hittills i år: ' + pct(p.ytd_pct) + '</span>' +
-        '<span>' + esc(SECTORS[p.sector] || p.sector || '') + '</span></div></div>' +
-        '<div class="t5-amt" data-amt>' + fmtInt(per) + ' kr</div></label>';
+        '<span>' + esc(SECTORS[p.sector] || p.sector || '') + '</span></div>';
+
+      if (!r.available) {
+        return '<div class="t5-row t5-row-saving">' +
+          '<div class="t5-main"><div class="t5-line"><span class="t5-tk">' + esc(p.ticker) + '</span>' +
+          '<span class="t5-nm">' + esc(p.name) + '</span></div>' + meta + '</div>' +
+          '<div class="t5-amt t5-saving-amt" data-amt>Sparar ' + fmtInt(r.pot) + ' / ' + fmtInt(p.price) + ' kr</div></div>';
+      }
+      return '<label class="t5-row' + (r.done ? ' done' : '') + '">' +
+        '<input type="checkbox" data-tk="' + esc(p.ticker) + '"' + (r.done ? ' checked' : '') + '>' +
+        '<div class="t5-main"><div class="t5-line"><span class="t5-tk">' + esc(p.ticker) + '</span>' +
+        '<span class="t5-nm">' + esc(p.name) + '</span></div>' + meta + '</div>' +
+        '<div class="t5-amt" data-amt>Köp ' + plural(r.qty, 'st', 'st') + ' (' + fmtInt(r.cost) + ' kr)</div></label>';
     }).join('');
 
     var thisYear = today.getFullYear();
     var chips = '';
     for (var m = 0; m < 12; m++) {
       var mk = thisYear + '-' + pad(m + 1);
-      var got = (bought[mk] || []).length;
+      var rec = bought[mk];
       var cls;
       if (mk < start) cls = 'off';
       else if (mk > key) cls = '';
-      else if (mk === key) cls = allDone ? 'done' : 'cur';
-      else cls = got >= picks.length && picks.length ? 'done' : (got > 0 ? 'part' : 'miss');
+      else if (mk === key) cls = (nothingToDo || allDone) ? 'done' : 'cur';
+      else if (!rec || !rec.avail) cls = 'done'; // äldre data (innan sparpotten fanns) eller inget att göra den månaden
+      else {
+        var doneCount = rec.done ? rec.done.length : 0;
+        cls = rec.avail.length === 0 ? 'done' : (doneCount >= rec.avail.length ? 'done' : (doneCount > 0 ? 'part' : 'miss'));
+      }
       chips += '<div class="t5-mo ' + cls + '">' + MONTHS[m] + '</div>';
     }
 
@@ -277,16 +329,16 @@
       '<div class="t5-sec">' +
       '<h2 class="t5-title">Månadens köp</h2>' +
       '<p class="t5-lede">Årets fem bästa S&amp;P 500-aktier från ' + esc(data.ranking_year) +
-      '. Köp lika mycket i var och en första handelsdagen varje månad, och sälj inte.</p>' +
+      '. Varje aktie får en lika stor andel av månadsbeloppet, sparad tills den räcker till en hel post. Sälj inte.</p>' +
       stale +
       '<div class="t5-status ' + st.cls + '"><p class="t5-st-t">' + esc(st.t) + '</p><p class="t5-st-s">' + esc(st.s) + '</p></div>' +
       '<div class="t5-amount"><label for="t5Amount">Belopp per månad</label>' +
       '<input id="t5Amount" type="number" inputmode="numeric" min="0" step="500" value="' + Math.round(total) + '"><span>kr</span>' +
-      '<span id="t5Per">= ' + fmtInt(per) + ' kr per aktie</span></div>' +
+      '<span id="t5Per">= ' + fmtInt(per) + ' kr per aktie och månad</span></div>' +
       '<div class="t5-rows">' + rows + '</div>' +
       conc +
       '<div class="t5-months" aria-label="Månader ' + thisYear + '">' + chips + '</div>' +
-      '<p class="t5-legend">Fylld = klar, gul kant = delvis, röd kant = missad. Kurser per ' + esc(data.price_date) + ' i USD.</p>' +
+      '<p class="t5-legend">Fylld = klart eller inget att göra, gul kant = delvis, röd kant = missat köp. Kurser per ' + esc(data.price_date) + ' i USD.</p>' +
       '<div class="t5-actions"><button class="iconbtn" data-act="ics" type="button">Lägg månadspåminnelse i kalendern</button></div>' +
       '</div>';
   }
@@ -324,12 +376,31 @@
     var t = e.target;
     if (t && t.matches && t.matches('input[data-tk]')) {
       var key = ym(new Date());
+      var tk = t.getAttribute('data-tk');
+      var p = (data.picks || []).filter(function (x) { return x.ticker === tk; })[0];
+      if (!p) return;
       var bought = lsGet(K_BOUGHT, {});
-      var list = bought[key] || [];
-      var i = list.indexOf(t.getAttribute('data-tk'));
-      if (t.checked && i < 0) list.push(t.getAttribute('data-tk'));
-      if (!t.checked && i > -1) list.splice(i, 1);
-      bought[key] = list;
+      var monthRec = bought[key] || { avail: [], done: [], shares: {} };
+      if (!monthRec.shares) monthRec.shares = {};
+      var banked = lsGet(K_BANKED, {});
+      var pot = banked[tk] || 0;
+      var i = monthRec.done.indexOf(tk);
+
+      if (t.checked && i < 0) {
+        var qty = p.price > 0 ? Math.floor(pot / p.price) : 0;
+        if (qty >= 1) {
+          banked[tk] = pot - qty * p.price;
+          monthRec.done.push(tk);
+          monthRec.shares[tk] = qty;
+        }
+      } else if (!t.checked && i > -1) {
+        var refund = (monthRec.shares[tk] || 0) * p.price;
+        banked[tk] = pot + refund;
+        monthRec.done.splice(i, 1);
+        delete monthRec.shares[tk];
+      }
+      bought[key] = monthRec;
+      lsSet(K_BANKED, banked);
       lsSet(K_BOUGHT, bought);
       renderMonth();
     } else if (t && t.id === 't5Amount') {
@@ -343,10 +414,8 @@
       var v = parseFloat(t.value);
       if (!isFinite(v) || v < 0) return;
       var per = data.picks.length ? v / data.picks.length : 0;
-      var amts = panel.querySelectorAll('[data-amt]');
-      for (var i = 0; i < amts.length; i++) amts[i].textContent = fmtInt(per) + ' kr';
       var lbl = document.getElementById('t5Per');
-      if (lbl) lbl.textContent = '= ' + fmtInt(per) + ' kr per aktie';
+      if (lbl) lbl.textContent = '= ' + fmtInt(per) + ' kr per aktie och månad';
     }
   }
   function onPanelClick(e) {

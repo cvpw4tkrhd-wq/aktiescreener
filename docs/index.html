@@ -185,6 +185,63 @@
     padding: 14px 18px;
     border-bottom: 1px solid var(--border);
   }
+  .macro-panel {
+    margin: 16px 18px;
+    padding: 16px 18px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .macro-panel .mp-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--amber);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin: 0 0 12px;
+  }
+  .macro-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .macro-stat {
+    padding: 12px 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+  }
+  .macro-stat.mp-good { border-color: var(--up); background: color-mix(in srgb, var(--up) 8%, var(--panel)); }
+  .macro-stat.mp-bad { border-color: var(--down); background: color-mix(in srgb, var(--down) 8%, var(--panel)); }
+  .macro-stat .ms-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 4px;
+  }
+  .macro-stat .ms-val {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 20px;
+    margin-bottom: 4px;
+  }
+  .macro-stat.mp-good .ms-val { color: var(--up); }
+  .macro-stat.mp-bad .ms-val { color: var(--down); }
+  .macro-stat .ms-note {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
+  .macro-panel .mp-caveat {
+    font-size: 11.5px;
+    color: var(--text-faint);
+    line-height: 1.5;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: 4px;
+  }
   .growth-warning {
     margin: 14px 18px 0;
     padding: 14px 16px;
@@ -768,6 +825,8 @@
       <span class="iconbtn version-badge" id="versionBadge">version –</span>
     </div>
   </header>
+
+  <div id="macroHost"></div>
 
   <div class="tabs" id="tabsRow">
     <div class="tab active" data-tab="us">USA <span class="count" id="usCount"></span></div>
@@ -1419,7 +1478,53 @@ async function load() {
     if (peRes.ok) state.externalPE = await peRes.json();
   } catch (e) { /* extern branschdata är valfri, kärnan funkar utan den */ }
   applyHoldingsToResults();
+  renderMacroPanel();
   render();
+}
+
+function renderMacroPanel() {
+  const host = document.getElementById('macroHost');
+  const macro = state.data && state.data.macro;
+  if (!macro || (macro.yield_curve_10y2y_pct == null && macro.credit_spread_hy_pct == null)) {
+    host.innerHTML = '';
+    return;
+  }
+
+  const ycInverted = macro.yield_curve_inverted;
+  const ycDays = macro.yield_curve_inverted_days || 0;
+  const ycCls = ycInverted ? 'mp-bad' : 'mp-good';
+  const ycVal = macro.yield_curve_10y2y_pct != null ? (macro.yield_curve_10y2y_pct > 0 ? '+' : '') + macro.yield_curve_10y2y_pct.toFixed(2) + 'pp' : '–';
+  const ycNote = macro.yield_curve_10y2y_pct == null ? 'Data saknas'
+    : ycInverted
+      ? `Inverterad i ${ycDays} dagar. Bra: obligationsmarknaden prisar in att korträntor ska sjunka, dvs. förväntar en avmattning. Dåligt: en sammanhängande invertering har föregått i princip varje amerikansk lågkonjunktur sedan 1950-talet.`
+      : `Normal kurva (10-årsränta > 2-årsränta). Bra: obligationsmarknaden ser inget överhängande krisscenario just nu. Dåligt: säger ingenting om värdering — en normal kurva utesluter inte att aktier ändå är dyra.`;
+
+  const hyLevel = macro.credit_spread_level;
+  const hyCls = hyLevel === 'normal' ? 'mp-good' : 'mp-bad';
+  const hyVal = macro.credit_spread_hy_pct != null ? macro.credit_spread_hy_pct.toFixed(2) + 'pp' : '–';
+  const hyLevelText = hyLevel === 'kris' ? 'krisnivå' : hyLevel === 'forhojd' ? 'förhöjd' : 'normal';
+  const hyNote = macro.credit_spread_hy_pct == null ? 'Data saknas'
+    : hyLevel === 'normal'
+      ? `Bra: företag som lånar via högriskobligationer betalar en historiskt normal extra ränta – obligationsmarknaden ser inte förhöjd konkurs-/kreditrisk i systemet just nu. Dåligt: kan skifta snabbt, och säger inget om enskilda bolag.`
+      : `Dåligt: obligationsmarknaden kräver mer betalt för att låna ut till riskfyllda företag – ett tecken på ökad oro för konkurser/kreditförluster, som historiskt ofta föregått aktienedgångar. Bra: ju tidigare det syns här, desto mer tid att förhålla sig till det innan aktiemarknaden reagerar.`;
+
+  host.innerHTML = `
+    <div class="macro-panel">
+      <div class="mp-title">Makroläge — räntemarknaden (uppdaterad ${macro.as_of || '–'})</div>
+      <div class="macro-grid">
+        <div class="macro-stat ${ycCls}">
+          <div class="ms-label">Räntekurvan (10år − 2år)</div>
+          <div class="ms-val">${ycVal} ${ycInverted ? '· INVERTERAD' : '· NORMAL'}</div>
+          <div class="ms-note">${ycNote}</div>
+        </div>
+        <div class="macro-stat ${hyCls}">
+          <div class="ms-label">Kreditspread (high-yield)</div>
+          <div class="ms-val">${hyVal} · ${hyLevelText.toUpperCase()}</div>
+          <div class="ms-note">${hyNote}</div>
+        </div>
+      </div>
+      <div class="mp-caveat">Källa: FRED (Federal Reserve). Detta är breda, långsamma regimsignaler — inte en prognos för enskilda aktier eller exakt tidpunkt. Ledtiden till en eventuell nedgång har historiskt varierat mellan 6 och 24 månader, och det finns falska utslag (t.ex. 1966). Påverkar alla aktiers poäng med en liten, bred försiktighetsjustering när signalerna är negativa — aldrig avgörande på egen hand.</div>
+    </div>`;
 }
 
 function renderPendingPanel() {

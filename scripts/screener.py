@@ -173,6 +173,82 @@ FMP_API_KEY = os.environ.get("FMP_API_KEY")
 FMP_BASE = "https://financialmodelingprep.com/stable"
 
 
+FRED_CSV_URL = "https://fred.stlouisfed.org/graph/fredgraph.csv?id={series_id}"
+
+
+def fetch_fred_series(series_id: str, lookback_days: int = 400):
+    """Hämtar en tidsserie från FRED (Federal Reserve Economic Data) som CSV
+    - helt gratis, ingen API-nyckel krävs, samma källa som riksbanker och
+    finansbranschen själva använder. Returnerar en lista av (datum, värde)
+    sorterad äldst först, eller tom lista vid nätverksfel."""
+    try:
+        url = FRED_CSV_URL.format(series_id=series_id)
+        with urllib.request.urlopen(url, timeout=15) as resp:
+            text = resp.read().decode()
+        lines = text.strip().split("\n")
+        rows = []
+        for line in lines[1:]:  # hoppa över kolumnrubriken
+            parts = line.split(",")
+            if len(parts) != 2:
+                continue
+            date_str, val_str = parts
+            if val_str in (".", ""):
+                continue  # FRED anger saknade observationer (helger etc) som "."
+            try:
+                rows.append((date_str, float(val_str)))
+            except ValueError:
+                continue
+        return rows[-lookback_days:] if rows else []
+    except Exception as e:
+        print(f"FRED-hämtning misslyckades för {series_id}: {type(e).__name__}: {e}", file=sys.stderr)
+        return []
+
+
+def compute_macro_indicators():
+    """Bygger makropanelen: räntekurvan (10-årig minus 2-årig amerikansk
+    statsobligation) och high-yield kreditspread - båda gratis från FRED.
+    Lagras separat i results.json (inte per aktie) och används som en bred,
+    måttlig försiktighetsvikt i poängmodellerna när räntekurvan varit
+    sammanhängande inverterad en tid eller kreditspreadarna är förhöjda."""
+    macro = {"as_of": None, "source": "FRED (fred.stlouisfed.org)"}
+
+    yc_rows = fetch_fred_series("T10Y2Y")
+    if yc_rows:
+        latest_date, latest_val = yc_rows[-1]
+        macro["yield_curve_10y2y_pct"] = round(latest_val, 2)
+        macro["yield_curve_inverted"] = latest_val < 0
+        macro["as_of"] = latest_date
+        days_inverted = 0
+        for _, val in reversed(yc_rows):
+            if val < 0:
+                days_inverted += 1
+            else:
+                break
+        macro["yield_curve_inverted_days"] = days_inverted
+    else:
+        macro["yield_curve_10y2y_pct"] = None
+        macro["yield_curve_inverted"] = None
+        macro["yield_curve_inverted_days"] = 0
+
+    hy_rows = fetch_fred_series("BAMLH0A0HYM2")
+    if hy_rows:
+        latest_date_hy, latest_hy = hy_rows[-1]
+        macro["credit_spread_hy_pct"] = round(latest_hy, 2)
+        if not macro["as_of"]:
+            macro["as_of"] = latest_date_hy
+        if latest_hy > 8:
+            macro["credit_spread_level"] = "kris"
+        elif latest_hy > 5:
+            macro["credit_spread_level"] = "forhojd"
+        else:
+            macro["credit_spread_level"] = "normal"
+    else:
+        macro["credit_spread_hy_pct"] = None
+        macro["credit_spread_level"] = None
+
+    return macro
+
+
 def _fmp_get(endpoint: str, symbol: str):
     """Enkelt GET-anrop mot FMP:s stable-API. Returnerar None vid fel av
     något slag (saknad nyckel, kvot slut, premium-låst, nätverksfel) -
@@ -1002,6 +1078,25 @@ def main():
     sector_weights, sector_factor_names, country_weights, country_factor_names = load_risk_factors()
     risk_free_rates = load_risk_free_rates()
     investtech_top20 = load_investtech_top20()
+
+    macro = compute_macro_indicators()
+    macro_weight = 0
+    macro_notes = []
+    if macro.get("yield_curve_inverted") and macro.get("yield_curve_inverted_days", 0) >= 30:
+        macro_weight -= 5
+        macro_notes.append(
+            f"Inverterad räntekurva i {macro['yield_curve_inverted_days']} dagar (10år-2år: {macro['yield_curve_10y2y_pct']}pp) – bred makroförsiktighet, historiskt ett tidigt recessionstecken"
+        )
+    if macro.get("credit_spread_level") == "forhojd":
+        macro_weight -= 5
+        macro_notes.append(
+            f"Förhöjda kreditspreadar (high-yield {macro['credit_spread_hy_pct']}pp) – obligationsmarknaden prisar in ökad risk"
+        )
+    elif macro.get("credit_spread_level") == "kris":
+        macro_weight -= 10
+        macro_notes.append(
+            f"Kraftigt förhöjda kreditspreadar (high-yield {macro['credit_spread_hy_pct']}pp) – krisliknande nivå på obligationsmarknaden"
+        )
     score_history = load_score_history()
     today_str = datetime.now(timezone.utc).date().isoformat()
 
@@ -1049,7 +1144,7 @@ def main():
                 rank = investtech_entry["rank"]
                 investtech_weight = 10 if rank <= 5 else (7 if rank <= 10 else 5)
 
-            total_extra = sector_weight + country_weight + investtech_weight
+            total_extra = sector_weight + country_weight + investtech_weight + macro_weight
             buy_score, buy_reasons = score_buy_candidate(d, extra_weight=total_extra)
             growth_score, growth_reasons = score_growth_candidate(d, extra_weight=total_extra)
 
@@ -1069,6 +1164,10 @@ def main():
                 note = f"Investtech Topp 20 (plats #{investtech_entry['rank']}, teknisk poäng {investtech_entry['investtech_score']}) – teknisk medelfristig signal (1-6 mån)"
                 buy_reasons.append(note)
                 growth_reasons.append(note)
+
+            for macro_note in macro_notes:
+                buy_reasons.append(macro_note)
+                growth_reasons.append(macro_note)
 
             d["buy_score"] = buy_score
             d["buy_reasons"] = buy_reasons
@@ -1114,6 +1213,7 @@ def main():
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "version": get_app_version(),
         "count": len(results),
+        "macro": macro,
         "results": results,
     }
 

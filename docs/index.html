@@ -2604,6 +2604,31 @@ const MODULES = [
       `
     },
     {
+      id: "makropanel",
+      title: "Räntekurvan och kreditspreadar — vad obligationsmarknaden vet innan aktiemarknaden",
+      body: `
+        <div class="analogy">
+          <div class="lbl">Liknelse</div>
+          <p>En aktieinvesterare ställer sig frågan "kommer det här bolaget vara värt mer nästa kvartal?" — en fråga som lätt färgas av optimism och story. En obligationsinvesterare som lånar ut pengar i tio år ställer en helt annan fråga: "kommer jag få tillbaka pengarna?". Den frågan tvingar fram en nykter bedömning av inflation, konjunktur och om låntagaren ens överlever — och historiskt har obligationsmarknaden ofta prisat in problem veckor eller månader innan aktiemarknaden reagerar.</p>
+        </div>
+        <p>Appen bevakar två sådana signaler från den amerikanska obligationsmarknaden, båda gratis från FRED (Federal Reserve):</p>
+        <h3 class="sub">Räntekurvan (10-årsränta minus 2-årsränta)</h3>
+        <p>Normalt ger längre lån högre ränta än korta — du ska ju kompenseras för att låsa pengarna längre. När det vänder, och korta räntor blir högre än långa, kallas det en <strong>invertering</strong>. Obligationsmarknaden signalerar då att den väntar sig sämre tider och lägre räntor längre fram. En sammanhängande invertering har föregått i princip varje amerikansk lågkonjunktur sedan 1950-talet.</p>
+        <h3 class="sub">Kreditspread (high-yield)</h3>
+        <p>Hur mycket extra ränta riskfyllda företag måste betala jämfört med säkra statsobligationer för att låna pengar. Vidgas den extra räntan kraftigt betyder det att obligationsmarknaden börjar oroa sig för konkurser och kreditförluster i systemet.</p>
+        <div class="callout-warn"><strong>Viktig brasklapp, samma som visas i appens makropanel:</strong> det här är breda, långsamma regimsignaler — inte en prognos för enskilda aktier eller en exakt tidpunkt. Ledtiden till en eventuell nedgång har historiskt varierat mellan 6 och 24 månader, och det finns falska utslag (t.ex. 1966, då en invertering inte följdes av recession). Se det som "höj garden", inte som ett facit.</div>
+        <div class="in-app">
+          <div class="lbl">I appen</div>
+          <table>
+            <tr><td>Räntekurvan inverterad ≥30 dagar</td><td>−5 poäng, breda försiktighet över alla aktier</td></tr>
+            <tr><td>Kreditspread &gt;5pp (förhöjd)</td><td>−5 poäng</td></tr>
+            <tr><td>Kreditspread &gt;8pp (krisnivå)</td><td>−10 poäng</td></tr>
+          </table>
+        </div>
+        <p>Till skillnad från alla andra faktorer i den här guiden påverkar makropanelen <strong>alla aktiers poäng samtidigt</strong> med samma lilla justering, eftersom det är en signal om hela marknadsklimatet, inte om ett enskilt bolag. Du hittar panelen bakom MAKRO-knappen bredvid GUIDE högst upp i appen.</p>
+      `
+    },
+    {
       id: "helheten",
       title: "Så vägs allt samman",
       body: `

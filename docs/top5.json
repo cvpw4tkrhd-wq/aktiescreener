@@ -1,0 +1,60 @@
+{
+  "generated_at": "2026-09-19T18:14:37Z",
+  "price_date": "2026-09-18",
+  "ranking_year": 2025,
+  "buy_year": 2026,
+  "universe_size": 503,
+  "ranked_count": 493,
+  "picks": [
+    {
+      "ticker": "WDC",
+      "name": "Western Digital",
+      "sector": "Information Technology",
+      "ret_prev_year_pct": 283.7,
+      "base_price": 172.09,
+      "price": 441.36,
+      "ytd_pct": 156.5,
+      "rank": 1
+    },
+    {
+      "ticker": "MU",
+      "name": "Micron Technology",
+      "sector": "Information Technology",
+      "ret_prev_year_pct": 240.2,
+      "base_price": 285.25,
+      "price": 1015.8,
+      "ytd_pct": 256.1,
+      "rank": 2
+    },
+    {
+      "ticker": "STX",
+      "name": "Seagate Technology",
+      "sector": "Information Technology",
+      "ret_prev_year_pct": 225.3,
+      "base_price": 274.71,
+      "price": 858.79,
+      "ytd_pct": 212.6,
+      "rank": 3
+    },
+    {
+      "ticker": "HOOD",
+      "name": "Robinhood Markets",
+      "sector": "Financials",
+      "ret_prev_year_pct": 203.5,
+      "base_price": 113.1,
+      "price": 119.82,
+      "ytd_pct": 5.9,
+      "rank": 4
+    },
+    {
+      "ticker": "NEM",
+      "name": "Newmont",
+      "sector": "Materials",
+      "ret_prev_year_pct": 172.8,
+      "base_price": 99.21,
+      "price": 123.41,
+      "ytd_pct": 24.4,
+      "rank": 5
+    }
+  ]
+}

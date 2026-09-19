@@ -107,7 +107,8 @@
     color: var(--text-faint);
     margin-top: 4px;
   }
-  .controls { display: flex; gap: 10px; align-items: center; }
+  .controls { display: flex; gap: 20px; align-items: center; justify-content: space-between; }
+  .controls-group { display: flex; gap: 10px; align-items: center; }
   button.iconbtn, select.iconbtn {
     background: none;
     border: 1px solid var(--border);
@@ -815,18 +816,23 @@
       <div class="meta-line" id="metaLine">laddar…</div>
     </div>
     <div class="controls">
-      <button class="iconbtn" id="guideBtn">GUIDE</button>
-      <select class="iconbtn" id="themeSelect">
-        <option value="dark">MÖRKT LÄGE</option>
-        <option value="light">LJUST LÄGE</option>
-        <option value="terminal">TERMINAL</option>
-        <option value="sepia">SEPIA</option>
-      </select>
-      <span class="iconbtn version-badge" id="versionBadge">version –</span>
+      <div class="controls-group">
+        <button class="iconbtn" id="guideBtn">GUIDE</button>
+        <button class="iconbtn" id="macroBtn">MAKRO</button>
+      </div>
+      <div class="controls-group">
+        <select class="iconbtn" id="themeSelect">
+          <option value="dark">MÖRKT LÄGE</option>
+          <option value="light">LJUST LÄGE</option>
+          <option value="terminal">TERMINAL</option>
+          <option value="sepia">SEPIA</option>
+        </select>
+        <span class="iconbtn version-badge" id="versionBadge">version –</span>
+      </div>
     </div>
   </header>
 
-  <div id="macroHost"></div>
+  <div id="macroHost" style="display:none;"></div>
 
   <div class="tabs" id="tabsRow">
     <div class="tab active" data-tab="us">USA <span class="count" id="usCount"></span></div>
@@ -1254,6 +1260,7 @@ document.getElementById('guideBtn').addEventListener('click', () => {
   document.getElementById('tabsRow').style.display = 'none';
   document.getElementById('dataPanel').style.display = 'none';
   document.getElementById('summaryHost').innerHTML = '';
+  document.getElementById('macroHost').style.display = 'none';
   document.getElementById('guideHost').style.display = '';
   initGuideOnce();
   window.scrollTo(0, 0);
@@ -1264,6 +1271,10 @@ document.getElementById('guideBackBtn').addEventListener('click', () => {
   document.getElementById('dataPanel').style.display = '';
   render();
   window.scrollTo(0, 0);
+});
+document.getElementById('macroBtn').addEventListener('click', () => {
+  const host = document.getElementById('macroHost');
+  host.style.display = host.style.display === 'none' ? '' : 'none';
 });
 
 function fmtNum(n, digits=2) {

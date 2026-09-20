@@ -589,6 +589,7 @@ def analyze_ticker(ticker: str):
         "fcf_margin_pct": round(fcf_margin_pct, 1) if fcf_margin_pct is not None else None,
         "sbc_to_revenue_pct": round(sbc_to_revenue_pct, 1) if sbc_to_revenue_pct is not None else None,
         "roic_pct": round(roic_pct, 1) if roic_pct is not None else None,
+        "recommendation_key": recommendation_key if recommendation_key not in (None, "none") else None,
         "num_analysts": num_analysts if isinstance(num_analysts, int) else None,
         "recommendation_breakdown": recommendation_breakdown,
         "target_mean_price": round(target_mean, 2) if isinstance(target_mean, (int, float)) else None,

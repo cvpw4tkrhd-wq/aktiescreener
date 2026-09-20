@@ -1020,6 +1020,14 @@ function scoreSellSignal(d) {
   let score = 0;
   const reasons = [];
 
+  // Beräknas först: om bolaget redan visar tecken på finansiell stress
+  // (utebliven vinst + hög skuldsättning + nedåttrend) ska en "förbättrad"
+  // marginal eller "stark" FCF inte få dra ner säljpoängen - i ett sånt
+  // läge är de siffrorna ofta en artefakt av nedskärningar/tillgångsförsäljningar,
+  // inte ett tecken på att verksamheten faktiskt mår bättre.
+  const distress = d.pe === null && d.debt_to_equity !== null && d.debt_to_equity !== undefined
+    && d.debt_to_equity > 120 && d.above_sma50 === false;
+
   if (d.rsi14 !== null && d.rsi14 !== undefined && d.rsi14 > 70) {
     score += 30; reasons.push(`RSI överköpt (${d.rsi14})`);
   }
@@ -1063,8 +1071,10 @@ function scoreSellSignal(d) {
   if (d.operating_margin_trend_pp !== null && d.operating_margin_trend_pp !== undefined) {
     if (d.operating_margin_trend_pp < -3) {
       score += 8; reasons.push(`Försämrad rörelsemarginal (${fmtNum(d.operating_margin_trend_pp,1)}pp mot samma kvartal förra året)`);
-    } else if (d.operating_margin_trend_pp > 3) {
+    } else if (d.operating_margin_trend_pp > 3 && !distress) {
       score -= 8; reasons.push(`Förbättrad rörelsemarginal (+${fmtNum(d.operating_margin_trend_pp,1)}pp) – talar emot att sälja`);
+    } else if (d.operating_margin_trend_pp > 3 && distress) {
+      reasons.push(`Förbättrad rörelsemarginal (+${fmtNum(d.operating_margin_trend_pp,1)}pp) – men bolaget visar redan tecken på finansiell stress, så förbättringen räknas inte som en positiv signal här`);
     }
   }
   if (d.volume_ratio && d.volume_ratio > 2 && d.above_sma50 === false) {
@@ -1110,8 +1120,10 @@ function scoreSellSignal(d) {
   if (d.fcf_margin_pct !== null && d.fcf_margin_pct !== undefined) {
     if (d.fcf_margin_pct < 0) {
       score += 15; reasons.push(`Negativ FCF-marginal (${d.fcf_margin_pct}%) – bolaget bränner kassa`);
-    } else if (d.fcf_margin_pct > 15) {
+    } else if (d.fcf_margin_pct > 15 && !distress) {
       score -= 10; reasons.push(`Stark FCF-marginal (${d.fcf_margin_pct}%) – genererar gott om fritt kassaflöde, talar emot att sälja`);
+    } else if (d.fcf_margin_pct > 15 && distress) {
+      reasons.push(`Stark FCF-marginal (${d.fcf_margin_pct}%) – men bolaget visar redan tecken på finansiell stress, ofta en effekt av neddragna investeringar snarare än ett gott tecken`);
     }
   }
   if (d.roic_pct !== null && d.roic_pct !== undefined) {
@@ -1126,6 +1138,9 @@ function scoreSellSignal(d) {
   }
   if (d.capex_to_da !== null && d.capex_to_da !== undefined && d.capex_to_da > 5) {
     score += 5; reasons.push(`Mycket hög investeringstakt (capex ${d.capex_to_da}x avskrivningar) – aggressiv tillväxtfas, ökad osäkerhet kring avkastning`);
+  }
+  if (distress) {
+    score += 20; reasons.push('Kombination av utebliven vinst, hög skuldsättning och nedåttrend – tecken på finansiell stress');
   }
 
   score = Math.max(0, Math.min(100, score));
@@ -1999,7 +2014,7 @@ function crossProximity20_50(r) {
 }
 
 function signalFlag(r) {
-  if ((r.sell_score || 0) >= 50) return { label: 'SÄLJ', cls: 'flag-sell' };
+  if ((r.sell_score || 0) >= 40) return { label: 'SÄLJ', cls: 'flag-sell' };
 
   const relevantScore = state.tab === 'growth' ? r.growth_score : r.buy_score;
   const rec = r.recommendation_key;
@@ -2044,7 +2059,7 @@ function renderSummary(sellRows) {
   const sectors = groupCount(sellRows, 'sector');
   const countries = groupCount(sellRows, 'country');
   const avgSell = Math.round(sellRows.reduce((s, r) => s + (r.sell_score || 0), 0) / total);
-  const highSell = sellRows.filter(r => (r.sell_score || 0) >= 50).length;
+  const highSell = sellRows.filter(r => (r.sell_score || 0) >= 40).length;
 
   const barRows = (list) => list.map(([label, count]) => `
     <div class="summary-row">
@@ -2060,7 +2075,7 @@ function renderSummary(sellRows) {
         <div class="summary-stat"><div class="num">${sectors.length}</div><div class="lbl">SEKTORER</div></div>
         <div class="summary-stat"><div class="num">${countries.length}</div><div class="lbl">LÄNDER</div></div>
         <div class="summary-stat"><div class="num">${avgSell}</div><div class="lbl">SNITTSÄLJPOÄNG</div></div>
-        <div class="summary-stat"><div class="num">${highSell}</div><div class="lbl">MED SÄLJSIGNAL (≥50)</div></div>
+        <div class="summary-stat"><div class="num">${highSell}</div><div class="lbl">MED SÄLJSIGNAL (≥40)</div></div>
       </div>
       <div class="summary-grid">
         <div class="summary-block">

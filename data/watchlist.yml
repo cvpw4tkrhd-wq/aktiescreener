@@ -950,3 +950,93 @@ stocks:
   sector: Energy
   country: USA
   market: US
+- ticker: AAK.ST
+  name: AAK
+  sector: Materials
+  country: Sverige
+  market: SE
+- ticker: ADMCM.HE
+  name: Admicom
+  sector: Technology
+  country: Finland
+  market: FI
+- ticker: AXFO.ST
+  name: Axfood
+  sector: Consumer
+  country: Sverige
+  market: SE
+- ticker: BALD-B.ST
+  name: Balder B
+  sector: RealEstate
+  country: Sverige
+  market: SE
+- ticker: BURE.ST
+  name: Bure Equity
+  sector: Financials
+  country: Sverige
+  market: SE
+- ticker: BMAX.ST
+  name: Byggmax Group
+  sector: Consumer
+  country: Sverige
+  market: SE
+- ticker: HANZA.ST
+  name: HANZA
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: HPOL-B.ST
+  name: Hexpol B
+  sector: Materials
+  country: Sverige
+  market: SE
+- ticker: HUH1V.HE
+  name: Huhtamäki
+  sector: Materials
+  country: Finland
+  market: FI
+- ticker: INT.ST
+  name: Intellego Technologies
+  sector: Technology
+  country: Sverige
+  market: SE
+- ticker: INWI.ST
+  name: Inwido
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: LIME.ST
+  name: Lime Technologies
+  sector: Technology
+  country: Sverige
+  market: SE
+- ticker: LUND-B.ST
+  name: Lundberg B
+  sector: Financials
+  country: Sverige
+  market: SE
+- ticker: NEWA-B.ST
+  name: New Wave B
+  sector: Consumer
+  country: Sverige
+  market: SE
+- ticker: NOTE.ST
+  name: Note
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: SECU-B.ST
+  name: Securitas B
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: SVOL-B.ST
+  name: Svolder B
+  sector: Financials
+  country: Sverige
+  market: SE
+- ticker: VALMT.HE
+  name: Valmet
+  sector: Industrials
+  country: Finland
+  market: FI

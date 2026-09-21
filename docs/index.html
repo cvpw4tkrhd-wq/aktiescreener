@@ -184,7 +184,7 @@
   }
   .macro-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 12px;
     margin-bottom: 12px;
   }
@@ -216,6 +216,35 @@
     color: var(--text-dim);
     line-height: 1.4;
   }
+  .mp-section { margin-top: 16px; border-top: 1px solid var(--border); padding-top: 14px; }
+  .mp-section > summary, .mp-section .mp-sub {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--amber);
+    text-transform: uppercase; letter-spacing: 0.03em; cursor: pointer; margin: 0 0 10px; list-style: none;
+  }
+  .mp-section > summary::-webkit-details-marker { display: none; }
+  .mp-section > summary::before { content: '▸ '; }
+  .mp-section[open] > summary::before { content: '▾ '; }
+  .mp-note { font-size: 12px; color: var(--text-dim); line-height: 1.5; margin: 0 0 10px; }
+  .mp-adj { font-size: 12.5px; color: var(--text-dim); margin: 2px 0 0; }
+  .mp-adj b.neg { color: var(--down); } .mp-adj b.pos { color: var(--up); } .mp-adj b.zero { color: var(--text); }
+  .mp-scroll { overflow-x: auto; }
+  table.mp-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  table.mp-table th, table.mp-table td { padding: 7px 10px; text-align: right; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  table.mp-table th:first-child, table.mp-table td:first-child { text-align: left; }
+  table.mp-table th { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 500; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.03em; }
+  .rf-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+  .rf-item { border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 12px; min-width: 78px; }
+  .rf-item .rf-c { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: var(--text-faint); }
+  .rf-item .rf-v { font-family: 'Fraunces', serif; font-weight: 600; font-size: 17px; }
+  .geo-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 10px; }
+  .geo-card .geo-name { font-weight: 600; font-size: 13.5px; margin-bottom: 3px; }
+  .geo-card .geo-meta { font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: var(--text-faint); margin-bottom: 6px; }
+  .geo-card .geo-sum { font-size: 12.5px; color: var(--text-dim); line-height: 1.5; margin-bottom: 8px; }
+  .geo-card .geo-src a { font-size: 11.5px; color: var(--amber); }
+  .chip { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 2px 8px; margin: 0 6px 6px 0; border: 1px solid var(--border); border-radius: 999px; color: var(--text-dim); }
+  .chip.neg { color: var(--down); border-color: var(--down); }
+  .chip.pos { color: var(--up); border-color: var(--up); }
+  .chip.stale { color: var(--amber); border-color: var(--amber); }
   .macro-panel .mp-caveat {
     font-size: 11.5px;
     color: var(--text-faint);
@@ -1500,35 +1529,150 @@ async function load() {
   render();
 }
 
+const SECTOR_SV = { Semiconductors: 'Halvledare', Energy: 'Energi', RealEstate: 'Fastigheter', Industrials: 'Industri', Healthcare: 'Hälsovård', Technology: 'Teknik', Consumer: 'Konsument', Financials: 'Finans', Materials: 'Material', Telecom: 'Telekom' };
+const COUNTRY_SV = { SE: 'Sverige', US: 'USA', DE: 'Tyskland', NL: 'Nederländerna', GB: 'Storbritannien', FI: 'Finland', NO: 'Norge', DK: 'Danmark' };
+function medianOf(arr) {
+  const a = arr.filter(v => typeof v === 'number' && isFinite(v)).sort((x, y) => x - y);
+  if (!a.length) return null;
+  const m = Math.floor(a.length / 2);
+  return a.length % 2 ? a[m] : (a[m - 1] + a[m]) / 2;
+}
+function signedChip(label, w) {
+  const cls = w < 0 ? 'neg' : (w > 0 ? 'pos' : '');
+  return `<span class="chip ${cls}">${escapeHtml(label)} ${w > 0 ? '+' : ''}${w}</span>`;
+}
+
+function macroRatesSectionHtml() {
+  const data = state.data || {};
+  let rates = data.risk_free && data.risk_free.rates;
+  let derived = false;
+  if (!rates || !Object.keys(rates).length) {   // reserv: härled ur aktiernas egna fält
+    rates = {};
+    (data.results || []).forEach(r => { if (r.market && r.risk_free_rate_pct != null) rates[r.market] = r.risk_free_rate_pct; });
+    derived = true;
+  }
+  const keys = Object.keys(rates).sort((a, b) => (COUNTRY_SV[a] || a).localeCompare(COUNTRY_SV[b] || b, 'sv'));
+  if (!keys.length) return '';
+  const asOf = data.risk_free && data.risk_free.last_updated ? ` (uppdaterad ${escapeHtml(data.risk_free.last_updated)})` : '';
+  return `
+    <div class="mp-section">
+      <div class="mp-sub">Riskfri ränta per land — 10-årig statsobligation${asOf}</div>
+      <div class="rf-grid">${keys.map(k => `<div class="rf-item"><div class="rf-c">${escapeHtml(COUNTRY_SV[k] || k)}</div><div class="rf-v">${fmtNum(rates[k], 2)}%</div></div>`).join('')}</div>
+      <div class="mp-note">Referensen för <b>riskpremien</b> på varje aktie (vinstavkastning minus riskfri ränta). Riskpremien är aktiespecifik och visas kvar i aktiens detaljvy; själva räntan är gemensam per land och visas därför bara här.${derived ? ' (Härledd ur aktiedatan tills nästa körning.)' : ''}</div>
+    </div>`;
+}
+
+function macroGeopoliticsSectionHtml() {
+  const geo = state.data && state.data.geopolitics;
+  if (!geo || !geo.factors || !geo.factors.length) return '';
+  const now = state.data.generated_at ? new Date(state.data.generated_at) : new Date();
+  const cards = geo.factors.map(f => {
+    let ageDays = null;
+    if (f.updated) { const t = new Date(f.updated); if (!isNaN(t)) ageDays = Math.floor((now - t) / 86400000); }
+    const stale = ageDays !== null && ageDays >= 14;
+    const chips = [
+      ...Object.entries(f.sectors || {}).map(([k, w]) => signedChip(SECTOR_SV[k] || k, w)),
+      ...Object.entries(f.countries || {}).map(([k, w]) => signedChip(COUNTRY_SV[k] || k, w)),
+    ].join('');
+    const safeUrl = f.source_url && /^https?:\/\//i.test(f.source_url) ? f.source_url : null;
+    return `
+      <div class="geo-card">
+        <div class="geo-name">${escapeHtml(f.name)}</div>
+        <div class="geo-meta">Uppdaterad ${escapeHtml(f.updated || '–')}${ageDays !== null ? ` (${ageDays} d sedan)` : ''}${stale ? ' <span class="chip stale">Kan vara inaktuell – be Claude göra en avstämning</span>' : ''}</div>
+        <div class="geo-sum">${escapeHtml(f.summary || '')}</div>
+        <div>${chips}</div>
+        ${safeUrl ? `<div class="geo-src"><a href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer">Källa</a></div>` : ''}
+      </div>`;
+  }).join('');
+  const sw = Object.entries(geo.sector_weights || {}).filter(([, w]) => w !== 0);
+  const cw = Object.entries(geo.country_weights || {}).filter(([, w]) => w !== 0);
+  const net = (sw.length || cw.length) ? `
+      <div class="mp-sub" style="margin-top:6px;">Nettoeffekt på aktiernas poäng</div>
+      <div>${sw.map(([k, w]) => signedChip(SECTOR_SV[k] || k, w)).join('')}${cw.map(([k, w]) => signedChip(COUNTRY_SV[k] || k, w)).join('')}</div>` : '';
+  return `
+    <details class="mp-section" open>
+      <summary>Världspolitik &amp; säkerhetspolitiskt läge (${geo.factors.length} aktiva faktorer)</summary>
+      <div class="mp-note">Handredigerade faktorer som fångar geopolitik, krig, sanktioner, tullar och centralbanker. Negativ vikt är ett fullt poängavdrag för berörda sektorer/länder, positiv vikt är ett bonuspoäng (med avtagande effekt). Uppdateras bara när du ber Claude göra en avstämning – aldrig automatiskt.</div>
+      ${cards}
+      ${net}
+    </details>`;
+}
+
+function macroBreadthSectionHtml() {
+  const rows = (state.data && state.data.results) || [];
+  if (!rows.length) return '';
+  const NORDIC = ['SE', 'NO', 'DK', 'FI'];
+  const groups = [
+    ['USA', rows.filter(r => r.market === 'US')],
+    ['Europa', rows.filter(r => r.market !== 'US' && !NORDIC.includes(r.market))],
+    ['Norden', rows.filter(r => NORDIC.includes(r.market))],
+    ['Alla', rows],
+  ].filter(([, g]) => g.length);
+  const pct = (g, fn) => { const known = g.filter(r => fn(r) !== null && fn(r) !== undefined); return known.length ? Math.round(known.filter(fn).length / known.length * 100) + '%' : '–'; };
+  const line = groups.map(([name, g]) => {
+    const med = (fn) => { const v = medianOf(g.map(fn)); return v === null ? '–' : fmtNum(v, 1); };
+    const gold = g.filter(r => r.cross_signal_20_50 === 'golden_cross').length;
+    const death = g.filter(r => r.cross_signal_20_50 === 'death_cross').length;
+    const buys = g.filter(r => (r.buy_score || 0) >= 65).length;
+    return `<tr><td>${name}</td><td>${g.length}</td><td>${pct(g, r => r.above_sma200 === undefined ? undefined : r.above_sma200)}</td><td>${pct(g, r => r.above_sma50 === undefined ? undefined : r.above_sma50)}</td><td>${med(r => r.rsi14)}</td><td>${med(r => (typeof r.pe === 'number' && r.pe > 0) ? r.pe : null)}</td><td>${gold} / ${death}</td><td>${buys}</td></tr>`;
+  }).join('');
+  return `
+    <details class="mp-section" open>
+      <summary>Marknadsbredd — beräknad på dina bevakade aktier</summary>
+      <div class="mp-scroll"><table class="mp-table">
+        <thead><tr><th>Marknad</th><th>Antal</th><th>Över SMA200</th><th>Över SMA50</th><th>Median RSI</th><th>Median P/E</th><th>Golden / death (20/50)</th><th>Poäng ≥65</th></tr></thead>
+        <tbody>${line}</tbody>
+      </table></div>
+      <div class="mp-note" style="margin-top:8px;">Räknas ut i webbläsaren från samma 200 aktier som poängsätts – inte hela marknaden. Bredden säger hur många aktier som mår bra, inte bara hur index rör sig. Poäng ≥65 avser köppoängen, före analytikerkonsensusens eventuella nedgradering till HÅLL.</div>
+    </details>`;
+}
+
+function macroInvesttechSectionHtml() {
+  const rows = ((state.data && state.data.results) || []).filter(r => r.investtech_rank).sort((a, b) => a.investtech_rank - b.investtech_rank);
+  if (!rows.length) return '';
+  return `
+    <details class="mp-section">
+      <summary>Investtech Topp 20 — tekniska signaler (${rows.length} av dina bevakade)</summary>
+      <div>${rows.map(r => `<span class="chip pos" title="Investtech Topp 20, plats #${r.investtech_rank}">#${r.investtech_rank} ${escapeHtml(r.name || r.watchlist_name || r.ticker)}</span>`).join('')}</div>
+      <div class="mp-note">Teknisk medelfristig signal (1–6 månader). Ger extra poäng till aktier på listan: 10 för plats 1–5, 7 för 6–10 och 5 för 11–20. Listan uppdateras manuellt.</div>
+    </details>`;
+}
+
 function renderMacroPanel() {
   const host = document.getElementById('macroHost');
-  const macro = state.data && state.data.macro;
-  if (!macro || (macro.yield_curve_10y2y_pct == null && macro.credit_spread_hy_pct == null)) {
-    host.innerHTML = '';
-    return;
-  }
+  const data = state.data || {};
+  const macro = data.macro || {};
+  const hasRates = !(macro.yield_curve_10y2y_pct == null && macro.credit_spread_hy_pct == null);
 
-  const ycInverted = macro.yield_curve_inverted;
-  const ycDays = macro.yield_curve_inverted_days || 0;
-  const ycCls = ycInverted ? 'mp-bad' : 'mp-good';
-  const ycVal = macro.yield_curve_10y2y_pct != null ? (macro.yield_curve_10y2y_pct > 0 ? '+' : '') + macro.yield_curve_10y2y_pct.toFixed(2) + 'pp' : '–';
-  const ycNote = macro.yield_curve_10y2y_pct == null ? 'Data saknas'
-    : ycInverted
-      ? `Inverterad i ${ycDays} dagar. Bra: obligationsmarknaden prisar in att korträntor ska sjunka, dvs. förväntar en avmattning. Dåligt: en sammanhängande invertering har föregått i princip varje amerikansk lågkonjunktur sedan 1950-talet.`
-      : `Normal kurva (10-årsränta > 2-årsränta). Bra: obligationsmarknaden ser inget överhängande krisscenario just nu. Dåligt: säger ingenting om värdering — en normal kurva utesluter inte att aktier ändå är dyra.`;
+  let ratesBlock = '';
+  if (hasRates) {
+    const ycInverted = macro.yield_curve_inverted;
+    const ycDays = macro.yield_curve_inverted_days || 0;
+    const ycCls = ycInverted ? 'mp-bad' : 'mp-good';
+    const ycVal = macro.yield_curve_10y2y_pct != null ? (macro.yield_curve_10y2y_pct > 0 ? '+' : '') + macro.yield_curve_10y2y_pct.toFixed(2) + 'pp' : '–';
+    const ycNote = macro.yield_curve_10y2y_pct == null ? 'Data saknas'
+      : ycInverted
+        ? `Inverterad i ${ycDays} dagar. Bra: obligationsmarknaden prisar in att korträntor ska sjunka, dvs. förväntar en avmattning. Dåligt: en sammanhängande invertering har föregått i princip varje amerikansk lågkonjunktur sedan 1950-talet.`
+        : `Normal kurva (10-årsränta > 2-årsränta). Bra: obligationsmarknaden ser inget överhängande krisscenario just nu. Dåligt: säger ingenting om värdering — en normal kurva utesluter inte att aktier ändå är dyra.`;
 
-  const hyLevel = macro.credit_spread_level;
-  const hyCls = hyLevel === 'normal' ? 'mp-good' : 'mp-bad';
-  const hyVal = macro.credit_spread_hy_pct != null ? macro.credit_spread_hy_pct.toFixed(2) + 'pp' : '–';
-  const hyLevelText = hyLevel === 'kris' ? 'krisnivå' : hyLevel === 'forhojd' ? 'förhöjd' : 'normal';
-  const hyNote = macro.credit_spread_hy_pct == null ? 'Data saknas'
-    : hyLevel === 'normal'
-      ? `Bra: företag som lånar via högriskobligationer betalar en historiskt normal extra ränta – obligationsmarknaden ser inte förhöjd konkurs-/kreditrisk i systemet just nu. Dåligt: kan skifta snabbt, och säger inget om enskilda bolag.`
-      : `Dåligt: obligationsmarknaden kräver mer betalt för att låna ut till riskfyllda företag – ett tecken på ökad oro för konkurser/kreditförluster, som historiskt ofta föregått aktienedgångar. Bra: ju tidigare det syns här, desto mer tid att förhålla sig till det innan aktiemarknaden reagerar.`;
+    const hyLevel = macro.credit_spread_level;
+    const hyCls = hyLevel === 'normal' ? 'mp-good' : 'mp-bad';
+    const hyVal = macro.credit_spread_hy_pct != null ? macro.credit_spread_hy_pct.toFixed(2) + 'pp' : '–';
+    const hyLevelText = hyLevel === 'kris' ? 'krisnivå' : hyLevel === 'forhojd' ? 'förhöjd' : 'normal';
+    const hyNote = macro.credit_spread_hy_pct == null ? 'Data saknas'
+      : hyLevel === 'normal'
+        ? `Bra: företag som lånar via högriskobligationer betalar en historiskt normal extra ränta – obligationsmarknaden ser inte förhöjd konkurs-/kreditrisk i systemet just nu. Dåligt: kan skifta snabbt, och säger inget om enskilda bolag.`
+        : `Dåligt: obligationsmarknaden kräver mer betalt för att låna ut till riskfyllda företag – ett tecken på ökad oro för konkurser/kreditförluster, som historiskt ofta föregått aktienedgångar. Bra: ju tidigare det syns här, desto mer tid att förhålla sig till det innan aktiemarknaden reagerar.`;
 
-  host.innerHTML = `
-    <div class="macro-panel">
-      <div class="mp-title">Makroläge — räntemarknaden (uppdaterad ${macro.as_of || '–'})</div>
+    let adj = '';
+    if (typeof macro.score_adjustment === 'number') {
+      const a = macro.score_adjustment;
+      const cls = a < 0 ? 'neg' : (a > 0 ? 'pos' : 'zero');
+      adj = `<div class="mp-adj">Påverkan på alla aktiers poäng just nu: <b class="${cls}">${a > 0 ? '+' : ''}${a} poäng</b>${a === 0 ? ' – inga varningssignaler aktiva' : ''}.</div>`;
+    }
+
+    ratesBlock = `
+      <div class="mp-title">Makroläge — räntemarknaden (uppdaterad ${escapeHtml(macro.as_of || '–')})</div>
       <div class="macro-grid">
         <div class="macro-stat ${ycCls}">
           <div class="ms-label">Räntekurvan (10år − 2år)</div>
@@ -1541,8 +1685,12 @@ function renderMacroPanel() {
           <div class="ms-note">${hyNote}</div>
         </div>
       </div>
-      <div class="mp-caveat">Källa: FRED (Federal Reserve). Detta är breda, långsamma regimsignaler — inte en prognos för enskilda aktier eller exakt tidpunkt. Ledtiden till en eventuell nedgång har historiskt varierat mellan 6 och 24 månader, och det finns falska utslag (t.ex. 1966). Påverkar alla aktiers poäng med en liten, bred försiktighetsjustering när signalerna är negativa — aldrig avgörande på egen hand.</div>
-    </div>`;
+      ${adj}
+      <div class="mp-caveat">Källa: FRED (Federal Reserve). Detta är breda, långsamma regimsignaler — inte en prognos för enskilda aktier eller exakt tidpunkt. Ledtiden till en eventuell nedgång har historiskt varierat mellan 6 och 24 månader, och det finns falska utslag (t.ex. 1966). Påverkar alla aktiers poäng med en liten, bred försiktighetsjustering när signalerna är negativa — aldrig avgörande på egen hand.</div>`;
+  }
+
+  const body = ratesBlock + macroRatesSectionHtml() + macroGeopoliticsSectionHtml() + macroBreadthSectionHtml() + macroInvesttechSectionHtml();
+  host.innerHTML = body.trim() ? `<div class="macro-panel">${body}</div>` : '';
 }
 
 function renderPendingPanel() {

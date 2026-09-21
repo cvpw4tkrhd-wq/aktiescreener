@@ -50,4 +50,5 @@ jobs:
           [ -f debug_crash.txt ] && git add debug_crash.txt
           [ -f data/writeups.json ] && git add data/writeups.json
           git diff --cached --quiet && echo "Inga förändringar" || git commit -m "Uppdatera screenerresultat $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git pull --rebase
           git push

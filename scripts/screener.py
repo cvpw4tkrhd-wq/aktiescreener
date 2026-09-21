@@ -292,6 +292,235 @@ def compute_macro_indicators():
     return macro
 
 
+# ---------------------------------------------------------------------------
+# Obligationsöversikt + stabilitetspoäng (v8.0)
+# ---------------------------------------------------------------------------
+BOND_SERIES = [("3M", "DGS3MO"), ("2Y", "DGS2"), ("3Y", "DGS3"), ("5Y", "DGS5"),
+               ("7Y", "DGS7"), ("10Y", "DGS10"), ("30Y", "DGS30")]
+
+_RATE_WEEKLY = None  # veckoförändring i amerikansk 10-årsränta (pp), sätts i main()
+
+
+def _interp(x, pts):
+    """Linjär interpolation mellan (x, poäng)-punkter, klippt vid ändarna."""
+    if x is None:
+        return None
+    if x <= pts[0][0]:
+        return float(pts[0][1])
+    for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
+        if x <= x1:
+            return y0 + (y1 - y0) * (x - x0) / (x1 - x0)
+    return float(pts[-1][1])
+
+
+def _at(rows, off):
+    """Värde `off` observationer före senaste (0 = senaste)."""
+    if not rows or len(rows) <= off:
+        return None
+    return rows[-1 - off][1]
+
+
+def _chg(rows, n, off=0):
+    a, b = _at(rows, off), _at(rows, off + n)
+    return None if a is None or b is None else round(a - b, 2)
+
+
+def _fetch_move():
+    try:
+        h = yf.Ticker("^MOVE").history(period="1y", auto_adjust=False).dropna(subset=["Close"])
+        return [(str(i.date()), float(v)) for i, v in h["Close"].items()] if len(h) else []
+    except Exception as e:
+        print(f"MOVE-hämtning misslyckades: {type(e).__name__}: {e}", file=sys.stderr)
+        return []
+
+
+def _stability_label(score):
+    if score is None:
+        return None, "neutral"
+    if score >= 70:
+        return "Stabilt", "good"
+    if score >= 50:
+        return "Blandat", "neutral"
+    if score >= 30:
+        return "Ostabilt", "bad"
+    return "Stressat", "bad"
+
+
+def _category_scores(s, off, moff):
+    """Poäng 0-100 per kategori (högre = stabilare för aktier/fonder).
+    `off` = dagar bakåt för dagsserier, `moff` = månader bakåt för månadsserier."""
+    out = {}
+    # 1. Ränterörelse
+    y10, y30 = s.get("DGS10"), s.get("DGS30")
+    c10, c30 = _chg(y10, 21, off), _chg(y30, 21, off)
+    chs = [c for c in (c10, c30) if c is not None]
+    if chs:
+        sc = 70 - 60 * (sum(chs) / len(chs))
+        if _at(y30, off) is not None and _at(y30, off) >= 5.0:
+            sc -= 15
+        if _at(y10, off) is not None and _at(y10, off) >= 5.0:
+            sc -= 5
+        out["rates"] = max(0, min(100, sc))
+    # 2. Räntekurva
+    parts = []
+    t210, t103 = _at(s.get("T10Y2Y"), off), _at(s.get("T10Y3M"), off)
+    for t in (t210, t103):
+        if t is not None:
+            parts.append(max(0, min(100, 55 + 30 * t)))
+    if parts:
+        out["curve"] = sum(parts) / len(parts)
+    # 3. Kredit
+    parts = []
+    hy, ig = _at(s.get("BAMLH0A0HYM2"), off), _at(s.get("BAMLC0A0CM"), off)
+    if hy is not None:
+        h = _interp(hy, [(2, 100), (3.5, 90), (5, 65), (8, 20), (11, 5)])
+        hyc = _chg(s.get("BAMLH0A0HYM2"), 21, off)
+        if hyc is not None and hyc > 0.5:
+            h -= 10
+        parts.append(max(0, h))
+    if ig is not None:
+        parts.append(_interp(ig, [(0.6, 100), (1.0, 90), (1.5, 65), (2.5, 20), (3.5, 5)]))
+    if parts:
+        out["credit"] = sum(parts) / len(parts)
+    # 4. Realränta & inflationsförväntan
+    parts = []
+    real, be = _at(s.get("DFII10"), off), _at(s.get("T10YIE"), off)
+    if real is not None:
+        parts.append(_interp(real, [(0, 100), (1, 85), (2, 65), (2.5, 50), (3.5, 20)]))
+    if be is not None:
+        parts.append(_interp(be, [(1.0, 40), (1.75, 85), (2.25, 100), (2.75, 85), (3.25, 55), (4, 20)]))
+    if parts:
+        out["real"] = sum(parts) / len(parts)
+    # 5. Obligationsvolatilitet
+    mv = _at(s.get("MOVE"), off)
+    if mv is not None:
+        out["vol"] = _interp(mv, [(60, 100), (80, 90), (100, 70), (130, 35), (180, 5)])
+    # 6. Europa & Norden (månadsdata från OECD via FRED)
+    chs = [_chg(s.get(k), 1, moff) for k in ("IRLTLT01DEM156N", "IRLTLT01SEM156N")]
+    chs = [c for c in chs if c is not None]
+    if chs:
+        out["europe"] = _interp(sum(chs) / len(chs), [(-0.4, 100), (0, 75), (0.3, 50), (0.7, 20)])
+    return out
+
+
+CATEGORY_META = [
+    ("rates", "Ränterörelse", 1.5), ("curve", "Räntekurva", 1.0), ("credit", "Kredit", 1.5),
+    ("real", "Realränta & inflation", 1.0), ("vol", "Obligationsvolatilitet", 1.0),
+    ("europe", "Europa & Norden", 0.5),
+]
+
+
+def _overall(cats):
+    num = sum(cats[k] * w for k, _, w in CATEGORY_META if k in cats)
+    den = sum(w for k, _, w in CATEGORY_META if k in cats)
+    return round(num / den, 1) if den else None
+
+
+def _fmt(v, d=2):
+    return "–" if v is None else f"{v:.{d}f}".replace(".", ",")
+
+
+def _sg(v, d=2):
+    return "–" if v is None else f"{v:+.{d}f}".replace(".", ",")
+
+
+def compute_bond_dashboard():
+    """Ränteöversikt (3 mån-30 år), kurvform, kredit, realränta, MOVE, Europa
+    samt en stabilitetspoäng per kategori + totalt. Endast visning - påverkar
+    inte aktiernas poäng. Returnerar (dashboard, dgs10_rader)."""
+    s = {}
+    for _, sid in BOND_SERIES:
+        s[sid] = fetch_fred_series(sid, lookback_days=500)
+    for sid in ("T10Y2Y", "T10Y3M", "BAMLH0A0HYM2", "BAMLC0A0CM", "DFII10", "T10YIE"):
+        s[sid] = fetch_fred_series(sid, lookback_days=500)
+    for sid in ("IRLTLT01DEM156N", "IRLTLT01SEM156N"):
+        s[sid] = fetch_fred_series(sid, lookback_days=60)
+    s["MOVE"] = _fetch_move()
+    if not s.get("DGS10"):
+        return None, []
+
+    yields = []
+    for label, sid in BOND_SERIES:
+        rows = s[sid]
+        if not rows:
+            continue
+        v, c1w, c1m = rows[-1][1], _chg(rows, 5), _chg(rows, 21)
+        ref = c1m if c1m is not None else 0
+        status = "bad" if ref > 0.25 else ("good" if ref < -0.25 else "neutral")
+        yields.append({"label": label, "value": round(v, 2), "chg_1w": c1w, "chg_1m": c1m,
+                       "date": rows[-1][0], "status": status,
+                       "alert": bool(label == "30Y" and v >= 5.0)})
+
+    cats_now = _category_scores(s, 0, 0)
+    cats_prev = _category_scores(s, 21, 1)
+    total, prev_total = _overall(cats_now), _overall(cats_prev)
+
+    y10, y30, y2 = _at(s["DGS10"], 0), _at(s.get("DGS30"), 0), _at(s.get("DGS2"), 0)
+    hy, ig = _at(s["BAMLH0A0HYM2"], 0), _at(s["BAMLC0A0CM"], 0)
+    real, be, mv = _at(s["DFII10"], 0), _at(s["T10YIE"], 0), _at(s["MOVE"], 0)
+    de, se = s["IRLTLT01DEM156N"], s["IRLTLT01SEM156N"]
+    details = {
+        "rates": f"10 år {_fmt(y10)} % ({_sg(_chg(s['DGS10'], 21))} pp/mån), 30 år {_fmt(y30)} % ({_sg(_chg(s['DGS30'], 21))} pp/mån)"
+                 + (" – över 5 %-nivån" if y30 is not None and y30 >= 5 else ""),
+        "curve": f"10 år−2 år {_fmt(_at(s['T10Y2Y'], 0))} pp, 10 år−3 mån {_fmt(_at(s['T10Y3M'], 0))} pp",
+        "credit": f"High-yield {_fmt(hy)} pp, investment grade {_fmt(ig)} pp",
+        "real": f"Realränta 10 år {_fmt(real)} %, inflationsförväntan {_fmt(be)} %",
+        "vol": f"MOVE-index {_fmt(mv, 1)}",
+        "europe": f"Tyskland 10 år {_fmt(_at(de, 0))} %, Sverige 10 år {_fmt(_at(se, 0))} % (månadsdata, {de[-1][0][:7] if de else '–'})",
+    }
+    categories = []
+    for k, name, w in CATEGORY_META:
+        if k not in cats_now:
+            continue
+        label, status = _stability_label(cats_now[k])
+        prev = cats_prev.get(k)
+        categories.append({"key": k, "name": name, "score": round(cats_now[k]), "prev_score": None if prev is None else round(prev),
+                           "label": label, "status": status, "weight": w, "detail": details[k]})
+    label, status = _stability_label(total)
+    delta = None if total is None or prev_total is None else round(total - prev_total, 1)
+    trend = None if delta is None else ("stabilare" if delta >= 3 else ("mindre_stabilt" if delta <= -3 else "oförändrat"))
+
+    extras = {
+        "real_yield_10y": real, "breakeven_10y": be, "hy_spread": hy, "ig_spread": ig, "move": mv,
+        "spread_10y2y": _at(s["T10Y2Y"], 0), "spread_10y3m": _at(s["T10Y3M"], 0),
+        "de_10y": _at(de, 0), "se_10y": _at(se, 0), "eu_as_of": de[-1][0] if de else None,
+        "real_yield_chg_1m": _chg(s["DFII10"], 21), "breakeven_chg_1m": _chg(s["T10YIE"], 21),
+        "hy_chg_1m": _chg(s["BAMLH0A0HYM2"], 21), "ig_chg_1m": _chg(s["BAMLC0A0CM"], 21),
+        "move_chg_1m": None if not s["MOVE"] or len(s["MOVE"]) < 22 else round(s["MOVE"][-1][1] - s["MOVE"][-22][1], 1),
+    }
+    return {"as_of": s["DGS10"][-1][0], "yields": yields, "extras": extras, "categories": categories,
+            "stability": {"score": total, "prev_score": prev_total, "delta": delta, "trend": trend,
+                          "label": label, "status": status}}, s["DGS10"]
+
+
+def set_rate_series(dgs10_rows):
+    global _RATE_WEEKLY
+    if not dgs10_rows:
+        return
+    ser = pd.Series({pd.Timestamp(d): v for d, v in dgs10_rows}).sort_index()
+    _RATE_WEEKLY = ser.resample("W-FRI").last().diff().dropna()
+
+
+def compute_rate_beta(close):
+    """Aktiens veckoavkastning (%) per +1 pp i amerikansk 10-årsränta (1 år
+    veckodata - grov uppskattning). Returnerar (beta, r2) eller (None, None)."""
+    if _RATE_WEEKLY is None:
+        return None, None
+    try:
+        c = close.copy()
+        if getattr(c.index, "tz", None) is not None:
+            c.index = c.index.tz_localize(None)
+        w = (c.resample("W-FRI").last().pct_change() * 100).rename("r")
+        df = pd.concat([w, _RATE_WEEKLY.rename("x")], axis=1, join="inner").dropna()
+        if len(df) < 26 or df["x"].var() <= 0:
+            return None, None
+        beta = df["r"].cov(df["x"]) / df["x"].var()
+        r2 = df["r"].corr(df["x"]) ** 2
+        return round(float(beta), 2), round(float(r2), 3)
+    except Exception:
+        return None, None
+
+
 def _fmp_get(endpoint: str, symbol: str):
     """Enkelt GET-anrop mot FMP:s stable-API. Returnerar None vid fel av
     något slag (saknad nyckel, kvot slut, premium-låst, nätverksfel) -
@@ -663,6 +892,8 @@ def analyze_ticker(ticker: str):
         "sma50": round(last_sma50, 2) if last_sma50 else None,
         "cross_signal_20_50": cross_signal_20_50,
         "sma200": round(last_sma200, 2) if last_sma200 else None,
+        "rate_beta": compute_rate_beta(close)[0],
+        "rate_beta_r2": compute_rate_beta(close)[1],
         "rsi14": round(last_rsi, 1) if last_rsi is not None else None,
         "volume": int(last_volume),
         "avg_volume_20d": int(last_avg_volume) if last_avg_volume else None,
@@ -1203,6 +1434,13 @@ def main():
     investtech_top20 = load_investtech_top20()
 
     macro = compute_macro_indicators()
+    try:
+        bonds, dgs10_rows = compute_bond_dashboard()
+        set_rate_series(dgs10_rows)
+        macro["bonds"] = bonds
+    except Exception as e:
+        print(f"Obligationsöversikt misslyckades: {type(e).__name__}: {e}", file=sys.stderr)
+        macro["bonds"] = None
     macro_weight = 0
     macro_notes = []
     if macro.get("yield_curve_inverted") and macro.get("yield_curve_inverted_days", 0) >= 30:

@@ -463,6 +463,9 @@ def analyze_ticker(ticker: str):
     fcf_margin_pct = None
     sbc_to_revenue_pct = None
     roic_pct = None
+    roic_avg_pct = None
+    roic_min_pct = None
+    roic_years_count = 0
 
     cashflow = income = balance = None
     try:
@@ -506,28 +509,67 @@ def analyze_ticker(ticker: str):
         print(f"  Kassaflödesnyckeltal misslyckades för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)
 
     try:
-        # ROIC (avkastning på investerat kapital) = NOPAT / investerat
-        # kapital. Mäter hur effektivt bolaget omvandlar kapital (eget +
-        # lånat, minus kassa) till vinst, oavsett hur det är finansierat -
-        # ett av de tydligaste kvalitetsmåtten för att skilja genuint bra
-        # bolag från medelmåttiga.
-        operating_income = _latest(income, ["Operating Income", "OperatingIncome"])
-        tax_provision = _latest(income, ["Tax Provision", "TaxProvision"])
-        pretax_income = _latest(income, ["Pretax Income", "PretaxIncome"])
-        total_debt = _latest(balance, ["Total Debt", "TotalDebt"])
-        equity = _latest(balance, ["Stockholders Equity", "StockholdersEquity", "Total Equity Gross Minority Interest", "TotalEquityGrossMinorityInterest"])
-        cash = _latest(balance, ["Cash And Cash Equivalents", "CashAndCashEquivalents", "Cash Cash Equivalents And Short Term Investments", "CashCashEquivalentsAndShortTermInvestments"]) or 0
+        # ROIC (avkastning på investerat kapital) per redovisat räkenskapsår
+        # = NOPAT / investerat kapital. NOPAT = rörelseresultat (EBIT) x
+        # (1 - effektiv skattesats, begränsad till 0-35%, 21% som reserv om
+        # den inte går att räkna fram). Investerat kapital tas direkt från
+        # balansräkningens egen rad om den finns, annars eget kapital +
+        # räntebärande skulder - kassa.
+        #
+        # yfinance ger normalt bara ca 3-4 årsbokslut, inte tio - vi kräver
+        # minst 3 giltiga år innan något ROIC-värde alls sparas, och är
+        # ärliga om den kortare tidshorisonten i gränssnittet. Varje års
+        # beräkning hoppas över (räknas inte med) om underlag saknas, om
+        # investerat kapital blir noll/negativt, eller om resultatet blir
+        # orimligt högt (>100%) - sånt tyder på ett engångsutslag, inte en
+        # verklig, hållbar ROIC-nivå.
+        def _val(df, row_names, col):
+            for name in row_names:
+                if name in df.index:
+                    v = df.loc[name, col]
+                    if pd.notna(v):
+                        return float(v)
+            return None
 
-        if operating_income is not None and total_debt is not None and equity is not None:
-            tax_rate = 0.21  # rimlig schablon om faktisk skattesats saknas
-            if tax_provision is not None and pretax_income and pretax_income > 0:
-                tax_rate = max(0.0, min(1.0, tax_provision / pretax_income))
-            nopat = operating_income * (1 - tax_rate)
-            invested_capital = total_debt + equity - cash
-            if invested_capital > 0:
-                roic_pct = (nopat / invested_capital) * 100
+        roic_by_year = []
+        if income is not None and not income.empty and balance is not None and not balance.empty:
+            for col in income.columns:
+                if col not in balance.columns:
+                    continue
+                op_inc = _val(income, ["Operating Income", "OperatingIncome"], col)
+                if op_inc is None:
+                    continue
+                tax_prov = _val(income, ["Tax Provision", "TaxProvision"], col)
+                pretax = _val(income, ["Pretax Income", "PretaxIncome"], col)
+
+                invested = _val(balance, ["Invested Capital", "InvestedCapital"], col)
+                if invested is None:
+                    debt = _val(balance, ["Total Debt", "TotalDebt"], col)
+                    equity = _val(balance, ["Stockholders Equity", "StockholdersEquity", "Total Equity Gross Minority Interest", "TotalEquityGrossMinorityInterest"], col)
+                    cash = _val(balance, ["Cash And Cash Equivalents", "CashAndCashEquivalents", "Cash Cash Equivalents And Short Term Investments", "CashCashEquivalentsAndShortTermInvestments"], col) or 0
+                    if debt is not None and equity is not None:
+                        invested = debt + equity - cash
+                if invested is None or invested <= 0:
+                    continue
+
+                tax_rate = 0.21
+                if tax_prov is not None and pretax and pretax > 0:
+                    tax_rate = max(0.0, min(0.35, tax_prov / pretax))
+                nopat = op_inc * (1 - tax_rate)
+                year_roic = (nopat / invested) * 100
+                if year_roic > 100:
+                    continue
+                roic_by_year.append(year_roic)  # income.columns är nyast->äldst
+
+        roic_years_count = len(roic_by_year)
+        if roic_years_count >= 3:
+            roic_pct = roic_by_year[0]
+            roic_avg_pct = sum(roic_by_year) / roic_years_count
+            roic_min_pct = min(roic_by_year)
     except Exception as e:
         print(f"  ROIC-beräkning misslyckades för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)
+        roic_pct = roic_avg_pct = roic_min_pct = None
+        roic_years_count = 0
 
     # Flerkvartals tillväxt- och marginaltrend. Jämför senaste kvartalet mot
     # samma kvartal föregående år (undviker säsongseffekter). Kräver minst
@@ -588,7 +630,10 @@ def analyze_ticker(ticker: str):
         "capex_to_da": round(capex_to_da, 2) if capex_to_da is not None else None,
         "fcf_margin_pct": round(fcf_margin_pct, 1) if fcf_margin_pct is not None else None,
         "sbc_to_revenue_pct": round(sbc_to_revenue_pct, 1) if sbc_to_revenue_pct is not None else None,
-        "roic_pct": round(roic_pct, 1) if roic_pct is not None else None,
+        "roic": round(roic_pct, 1) if roic_pct is not None else None,
+        "roic_avg": round(roic_avg_pct, 1) if roic_avg_pct is not None else None,
+        "roic_min": round(roic_min_pct, 1) if roic_min_pct is not None else None,
+        "roic_years": roic_years_count,
         "recommendation_key": recommendation_key if recommendation_key not in (None, "none") else None,
         "num_analysts": num_analysts if isinstance(num_analysts, int) else None,
         "recommendation_breakdown": recommendation_breakdown,
@@ -810,13 +855,40 @@ def score_buy_candidate(d, extra_weight=0):
             bonus += 8
             reasons.append(f"Stark FCF-marginal ({d['fcf_margin_pct']}%) – genererar gott om fritt kassaflöde")
 
-    if d.get("roic_pct") is not None:
-        if d["roic_pct"] > 15:
-            bonus += 10
-            reasons.append(f"Stark avkastning på investerat kapital (ROIC {d['roic_pct']}%) – omvandlar kapital effektivt till vinst")
-        elif d["roic_pct"] < 0:
-            penalty += 12
-            reasons.append(f"Negativ ROIC ({d['roic_pct']}%) – bolaget förstör kapital snarare än att skapa avkastning på det")
+    # ROIC (flerårigt snitt). Max ±6 poäng totalt - ska inte dominera över
+    # övriga kvalitetsmått som FCF-marginal. Ej tillämpligt för banker/
+    # försäkring/fastighetsbolag (roic_na), och kräver minst 3 giltiga år
+    # (roic_avg är bara satt om så är fallet) - annars neutralt, inget avdrag.
+    if d.get("roic_na"):
+        pass
+    elif d.get("roic_avg") is not None:
+        avg = d["roic_avg"]
+        years = d.get("roic_years", 0)
+        roic_adj = 0
+        if avg > 15:
+            roic_adj += 5
+            reasons.append(f"Stark genomsnittlig avkastning på investerat kapital (ROIC-snitt {avg:.1f}% över {years} år)")
+        elif avg >= 10:
+            roic_adj += 3
+            reasons.append(f"God genomsnittlig ROIC ({avg:.1f}% över {years} år)")
+        elif avg < 6:
+            roic_adj -= 4
+            reasons.append(f"Svag genomsnittlig ROIC ({avg:.1f}% över {years} år) – omvandlar kapital till vinst mindre effektivt")
+
+        rmin = d.get("roic_min")
+        if rmin is not None:
+            if rmin > 8:
+                roic_adj += 2
+                reasons.append(f"Stabil ROIC – även sämsta året över {rmin:.1f}%")
+            elif (avg - rmin) > 15:
+                roic_adj -= 2
+                reasons.append(f"Ostabil ROIC – stora svängningar mellan åren (sämsta året {rmin:.1f}%)")
+
+        roic_adj = max(-6, min(6, roic_adj))
+        if roic_adj > 0:
+            bonus += roic_adj
+        elif roic_adj < 0:
+            penalty += -roic_adj
 
     if d.get("sbc_to_revenue_pct") is not None and d["sbc_to_revenue_pct"] > 15:
         penalty += 10
@@ -1021,13 +1093,20 @@ def score_growth_candidate(d, extra_weight=0):
             bonus += 8
             reasons.append(f"Stark FCF-marginal ({d['fcf_margin_pct']}%) – ovanligt moget kassaflöde för bolagets storlek")
 
-    if d.get("roic_pct") is not None:
-        if d["roic_pct"] > 15:
+    # ROIC (flerårigt snitt) - samma underliggande beräkning som köpmodellen,
+    # men mer överseende: unga tillväxtbolag förväntas ofta ha låg/negativ
+    # ROIC medan de investerar för att växa, så bara kraftigt negativa
+    # flerårssnitt straffas här. Ej tillämpligt för banker/försäkring/
+    # fastighetsbolag (roic_na); kräver minst 3 giltiga år för att ges alls.
+    if d.get("roic_na"):
+        pass
+    elif d.get("roic_avg") is not None:
+        if d["roic_avg"] > 15:
             bonus += 8
-            reasons.append(f"Stark avkastning på investerat kapital (ROIC {d['roic_pct']}%) – ovanligt moget för bolagets storlek")
-        elif d["roic_pct"] < -10:
+            reasons.append(f"Stark genomsnittlig avkastning på investerat kapital (ROIC-snitt {d['roic_avg']:.1f}% över {d.get('roic_years',0)} år) – ovanligt moget för bolagets storlek")
+        elif d["roic_avg"] < -10:
             penalty += 8
-            reasons.append(f"Kraftigt negativ ROIC ({d['roic_pct']}%) – måttligt negativt är normalt i tillväxtfas, men den här nivån är en varningssignal")
+            reasons.append(f"Kraftigt negativ genomsnittlig ROIC ({d['roic_avg']:.1f}%) – måttligt negativt är normalt i tillväxtfas, men den här nivån är en varningssignal")
 
     if d.get("sbc_to_revenue_pct") is not None and d["sbc_to_revenue_pct"] > 15:
         penalty += 8
@@ -1120,6 +1199,10 @@ def main():
             d["sector"] = entry.get("sector")
             d["country"] = entry.get("country")
             d["growth_candidate"] = bool(entry.get("growth_candidate"))
+            # ROIC är inte ett meningsfullt mått för banker/försäkring/
+            # fastighetsbolag - deras kapitalstruktur skiljer sig strukturellt
+            # från vanliga rörelsedrivande bolag. Ges neutral poäng istället.
+            d["roic_na"] = d["sector"] in ("Financials", "RealEstate")
             d["risk_free_rate_pct"] = risk_free_rates.get(entry["market"])
             if d["risk_free_rate_pct"] is not None and isinstance(d.get("pe"), (int, float)) and d["pe"] > 0:
                 d["earnings_yield_pct"] = round(100 / d["pe"], 2)

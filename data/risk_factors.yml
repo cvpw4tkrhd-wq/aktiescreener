@@ -16,13 +16,13 @@
 
 factors:
   - name: "Iran-konflikten / Hormuzsundet"
-    updated: 2026-09-07
-    summary: "Konflikten i Mellanöstern har eskalerat sedan början av september - oljepriset har stigit kraftigt (Brent +5% på en dag) och asiatiska börser föll (Nikkei -2,9%). Stör oljeflöden genom Hormuzsundet och driver upp priser på kritiska material (t.ex. volfram) som halvledarindustrin är beroende av. Svenska analytiker (bl.a. Nordea) pekar ut kriget tillsammans med stigande långräntor som huvudorsak till börsoron i september. Högre oljepris gynnar energibolag, medan stigande räntor pressar räntekänsliga fastighetsbolag."
+    updated: 2026-09-21
+    summary: "Kriget mellan USA/Israel och Iran har pågått sedan 28 februari 2026 och Hormuzsundet har sedan dess i huvudsak varit blockerat - sundet stod före kriget för ca en fjärdedel av världens sjöburna oljehandel och en femtedel av LNG. Oljepriset steg mot ca 99 dollar den 8 september efter uppgifter om ytterligare en iransk attack mot amerikanska fartyg, och Goldman Sachs höjde samma dag sina Brent-prognoser (85 dollar för december 2026) och varnar för över 120 dollar under 2027 om Gulf-produktionen förblir ca 4 miljoner fat/dag under förkrigsnivån; banken räknar med att sjöfartsstörningarna fortsätter in i 2027. Stör oljeflöden och driver upp priser på kritiska material (t.ex. volfram) som halvledarindustrin är beroende av. Högre oljepris gynnar energibolag, medan stigande räntor pressar räntekänsliga fastighetsbolag."
     sectors:
       Semiconductors: -10
       Energy: 5
       RealEstate: -5
-    source_url: "https://sourceability.com/post/geopolitics-are-reshaping-semiconductor-supply-chain-risk-in-2026"
+    source_url: "https://www.cnbc.com/2026/09/08/oil-prices-today-brent-wti-hormuz-iran-war.html"
   - name: "USA-Kina teknikrivalitet / exportkontroller"
     updated: 2026-09-02
     summary: "Fortsatta amerikanska exportrestriktioner mot Kina och osäkerhet kring handelspolitik skapar press på halvledarbolag, enligt bl.a. Deloittes och BlackRocks 2026-analyser."
@@ -37,13 +37,13 @@ factors:
       Healthcare: -5
     source_url: "https://ostsvenskahandelskammaren.se/internationell-handel/trump-tullar-och-handelspolitik-det-har-galler/"
   - name: "ECB-räntehöjning (Irankrigsdriven inflation)"
-    updated: 2026-09-07
-    summary: "ECB väntas höja styrräntan från 2,25% till 2,50% den 10 september 2026, uttryckligen för att dämpa inflationseffekter av Irankrigets energiprisuppgång. Ökar finansieringskostnader för bolag i euroområdet och Storbritannien (där Bank of England också pressas i samma riktning). Sverige avviker medvetet - Riksbanken avvaktar eftersom svensk inflation (KPIF 0,7%) är klart lägre än euroområdets, så ingen vikt sätts på SE."
+    updated: 2026-09-21
+    summary: "ECB höjde den 10 september 2026 sina styrräntor med 0,25 procentenheter - inlåningsräntan är nu 2,50% (från 2,25%), årets andra höjning, med hänvisning till att konflikten i Mellanöstern skapar inflationstryck. ECB räknar nu med ca 3,0% inflation 2026 och 2,5% 2027, och flera bedömare (bl.a. Deutsche Bank) räknar med ytterligare en höjning i december. Ökar finansieringskostnader för bolag i euroområdet och Storbritannien (där Bank of England pressas i samma riktning). Sverige avviker medvetet - Riksbanken låg kvar på 1,75% i augusti, svensk KPIF-inflation var bara 0,7% i augusti och nästa besked kommer 24 september, så ingen vikt sätts på SE."
     countries:
       DE: -3
       NL: -3
       GB: -3
-    source_url: "https://hurbra.se/ecb-ranta-10-september-2026/"
+    source_url: "https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260910~314e508016.sv.html"
 
 # Exempel (inaktivt, bara för referens):
 # factors:

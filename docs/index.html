@@ -10,38 +10,25 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Screener">
-<meta name="theme-color" content="#0B0E13">
+<meta name="theme-color" content="#F5F5F7">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
   :root {
-    --bg: #0B0E13;
-    --panel: #12161D;
-    --panel-alt: #171C24;
-    --border: #262B34;
-    --text: #E7E9EC;
-    --text-dim: #8A93A3;
-    --text-faint: #565E6C;
-    --up: #4FD1A0;
-    --down: #E8685C;
-    --amber: #DDA83F;
-    --amber-dim: #6B5A2C;
-    --radius: 3px;
-  }
-  [data-theme="light"] {
-    --bg: #F4F2ED;
+    --bg: #F5F5F7;
     --panel: #FFFFFF;
-    --panel-alt: #ECE9E2;
-    --border: #DAD5C9;
-    --text: #1B1D1F;
-    --text-dim: #5B5F66;
-    --text-faint: #9A9E9F;
-    --up: #16855C;
-    --down: #B5342A;
-    --amber: #97701C;
-    --amber-dim: #D8C89A;
+    --panel-alt: #EBEBEF;
+    --border: #D8D8DD;
+    --text: #1D1D1F;
+    --text-dim: #6E6E73;
+    --text-faint: #AAAAAA;
+    --up: #248A3D;
+    --down: #D70015;
+    --amber: #007AFF;
+    --amber-dim: #B7D6FF;
+    --radius: 8px;
   }
   [data-theme="terminal"] {
     --bg: #050705;
@@ -56,34 +43,6 @@
     --amber: #FFD166;
     --amber-dim: #6B5A24;
     --radius: 2px;
-  }
-  [data-theme="dusk"] {
-    --bg: #5C5470;
-    --panel: #6B6383;
-    --panel-alt: #786F92;
-    --border: #948BA8;
-    --text: #F6F3FA;
-    --text-dim: #D8D0E4;
-    --text-faint: #B3A8C4;
-    --up: #8FCBA3;
-    --down: #E4917A;
-    --amber: #F0C674;
-    --amber-dim: #A6905C;
-    --radius: 5px;
-  }
-  [data-theme="apple"] {
-    --bg: #F5F5F7;
-    --panel: #FFFFFF;
-    --panel-alt: #EBEBEF;
-    --border: #D8D8DD;
-    --text: #1D1D1F;
-    --text-dim: #6E6E73;
-    --text-faint: #AAAAAA;
-    --up: #248A3D;
-    --down: #D70015;
-    --amber: #007AFF;
-    --amber-dim: #B7D6FF;
-    --radius: 8px;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; max-width: 100%; overflow-x: hidden; }
@@ -135,15 +94,31 @@
   }
   select.iconbtn { appearance: auto; }
   button.iconbtn:hover, select.iconbtn:hover { border-color: var(--text-dim); color: var(--text); }
-  .iconbtn-theme {
-    color: #8AA9D9;
-    border-color: #4E6690;
+  .title-row { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .version-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-faint);
+    cursor: default;
   }
-  .iconbtn-theme:hover {
-    color: #B3CCF0;
-    border-color: #8AA9D9;
+  .theme-dd { position: relative; }
+  .theme-menu {
+    position: absolute; right: 0; top: calc(100% + 6px); z-index: 60;
+    min-width: 150px; padding: 4px;
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 24px rgba(0,0,0,.18);
   }
-  .version-badge { color: var(--text-faint); cursor: default; }
+  .theme-menu[hidden] { display: none; }
+  .theme-menu button {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    width: 100%; text-align: left; background: none; border: none; cursor: pointer;
+    color: var(--text-dim); font-family: 'IBM Plex Mono', monospace; font-size: 12px;
+    padding: 9px 10px; border-radius: calc(var(--radius) - 2px);
+  }
+  .theme-menu button:hover { background: var(--panel-alt); color: var(--text); }
+  .theme-menu button.active { color: var(--amber); }
+  .theme-menu button.active::after { content: '✓'; }
 
   .tabs {
     display: flex;
@@ -691,7 +666,7 @@
     .wrap { padding: 20px 14px 60px; }
     h1 { font-size: 22px; }
     .meta-line { font-size: 11px; }
-    .controls { gap: 8px; }
+    .controls { gap: 8px; width: 100%; }
     button.iconbtn, select.iconbtn { padding: 8px 10px; }
     .tab { padding: 8px 11px; font-size: 11.5px; }
     .stat-grid { grid-template-columns: 1fr 1fr; }
@@ -831,11 +806,14 @@
 
 </style>
 </head>
-<body data-theme="dark">
+<body data-theme="apple">
 <div class="wrap">
   <header class="top">
     <div>
-      <h1>Aktie<em>screener</em></h1>
+      <div class="title-row">
+        <h1>Aktie<em>screener</em></h1>
+        <span class="version-badge" id="versionBadge"></span>
+      </div>
       <div class="meta-line" id="metaLine">laddar…</div>
     </div>
     <div class="controls">
@@ -844,8 +822,13 @@
         <button class="iconbtn" id="macroBtn">MAKRO</button>
       </div>
       <div class="controls-group">
-        <span class="iconbtn version-badge" id="versionBadge">version –</span>
-        <button class="iconbtn iconbtn-theme" id="themeBtn">TEMA</button>
+        <div class="theme-dd" id="themeDd">
+          <button class="iconbtn" id="themeBtn" aria-haspopup="true" aria-expanded="false">THEME ▾</button>
+          <div class="theme-menu" id="themeMenu" hidden>
+            <button type="button" data-theme-opt="apple">Apple</button>
+            <button type="button" data-theme-opt="terminal">Terminal</button>
+          </div>
+        </div>
       </div>
     </div>
   </header>
@@ -1269,22 +1252,33 @@ if (storedHoldings) {
 // ===== /Innehav =====
 
 const themeBtn = document.getElementById('themeBtn');
-const THEME_ORDER = ['dark', 'light', 'terminal', 'dusk', 'apple'];
+const themeMenu = document.getElementById('themeMenu');
+const THEME_ORDER = ['apple', 'terminal'];
+const THEME_COLORS = { apple: '#F5F5F7', terminal: '#050705' };
 function applyTheme(t) {
   document.body.setAttribute('data-theme', t);
   const tc = document.querySelector('meta[name="theme-color"]');
-  if (tc) tc.setAttribute('content', {dark:'#0B0E13', light:'#F4F2ED', terminal:'#050705', dusk:'#5C5470', apple:'#F5F5F7'}[t] || '#0B0E13');
+  if (tc) tc.setAttribute('content', THEME_COLORS[t] || THEME_COLORS.apple);
+  themeMenu.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.themeOpt === t));
   try { localStorage.setItem('screener-theme', t); } catch (e) { /* t.ex. privat läge - temat funkar ändå denna session */ }
 }
-let savedTheme = 'dark';
-try { savedTheme = localStorage.getItem('screener-theme') || 'dark'; } catch (e) { /* samma reserv som ovan */ }
-if (!THEME_ORDER.includes(savedTheme)) savedTheme = 'dark'; // t.ex. gamla "sepia" sparat sedan tidigare
+function setThemeMenu(open) {
+  themeMenu.hidden = !open;
+  themeBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+let savedTheme = 'apple';
+try { savedTheme = localStorage.getItem('screener-theme') || 'apple'; } catch (e) { /* samma reserv som ovan */ }
+if (!THEME_ORDER.includes(savedTheme)) savedTheme = 'apple'; // t.ex. borttagna teman (dark/light/dusk) sparade sedan tidigare
 applyTheme(savedTheme);
-themeBtn.addEventListener('click', () => {
-  const current = document.body.getAttribute('data-theme');
-  const next = THEME_ORDER[(THEME_ORDER.indexOf(current) + 1) % THEME_ORDER.length];
-  applyTheme(next);
+themeBtn.addEventListener('click', (e) => { e.stopPropagation(); setThemeMenu(themeMenu.hidden); });
+themeMenu.addEventListener('click', (e) => {
+  const b = e.target.closest('button[data-theme-opt]');
+  if (!b) return;
+  applyTheme(b.dataset.themeOpt);
+  setThemeMenu(false);
 });
+document.addEventListener('click', (e) => { if (!e.target.closest('#themeDd')) setThemeMenu(false); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setThemeMenu(false); });
 
 document.querySelectorAll('.tab').forEach(el => {
   el.addEventListener('click', () => {
@@ -1518,7 +1512,7 @@ async function load() {
     document.getElementById('metaLine').textContent =
       `${state.data.count} tickers analyserade · uppdaterad ${timeAgo(state.data.generated_at)}`;
     const vb = document.getElementById('versionBadge');
-    vb.textContent = state.data.version ? `version ${state.data.version}` : '';
+    vb.textContent = state.data.version ? `v. ${String(state.data.version).replace(/^v\.?\s*/i, '')}` : '';
   } catch (e) {
     document.getElementById('metaLine').textContent = 'Ingen data hittades ännu — kör workflowen i GitHub Actions.';
     document.getElementById('versionBadge').textContent = '';

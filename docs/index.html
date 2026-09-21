@@ -514,6 +514,7 @@
     margin-top: 2px;
   }
   .stat-wide { grid-column: 1 / -1; }
+  .stat-sub { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-faint); margin-top: 4px; line-height: 1.4; }
   .sma-trend { display: inline-block; margin: 0 2px; font-size: 13px; }
   .reasons { list-style: none; margin: 0; padding: 0; }
   .reasons li {
@@ -1126,11 +1127,11 @@ function scoreSellSignal(d) {
       reasons.push(`Stark FCF-marginal (${d.fcf_margin_pct}%) – men bolaget visar redan tecken på finansiell stress, ofta en effekt av neddragna investeringar snarare än ett gott tecken`);
     }
   }
-  if (d.roic_pct !== null && d.roic_pct !== undefined) {
-    if (d.roic_pct < 0) {
-      score += 12; reasons.push(`Negativ ROIC (${d.roic_pct}%) – bolaget förstör kapital snarare än att skapa avkastning på det`);
-    } else if (d.roic_pct > 15) {
-      score -= 10; reasons.push(`Stark avkastning på investerat kapital (ROIC ${d.roic_pct}%) – talar emot att sälja`);
+  if (!d.roic_na && d.roic_avg !== null && d.roic_avg !== undefined) {
+    if (d.roic_avg < 0) {
+      score += 6; reasons.push(`Negativ genomsnittlig ROIC (${d.roic_avg}% över ${d.roic_years} år) – bolaget förstör kapital snarare än att skapa avkastning på det`);
+    } else if (d.roic_avg > 15) {
+      score -= 5; reasons.push(`Stark genomsnittlig avkastning på investerat kapital (ROIC-snitt ${d.roic_avg}%) – talar emot att sälja`);
     }
   }
   if (d.sbc_to_revenue_pct !== null && d.sbc_to_revenue_pct !== undefined && d.sbc_to_revenue_pct > 15) {
@@ -1836,7 +1837,7 @@ const METRIC_GLOSSARY = {
   'FORWARD P/E': { title: 'Forward P/E', text: 'Samma princip som vanligt P/E, men baserat på FÖRVÄNTAD framtida vinst istället för senast rapporterade. Symbolen visar om forward P/E är klart lägre (▲, grönt – vinsttillväxt väntas) eller klart högre (▼, rött – vinstnedgång väntas) än det vanliga P/E-talet. Bygger på analytikeres vinstprognoser, inte facit.' },
   'RISKFRI RÄNTA': { title: 'Riskfri ränta', text: 'Vad en 10-årig statsobligation i bolagets hemland ger just nu - avkastningen du kan få praktiskt taget utan risk. Referenspunkten allt annat mäts mot: varför ta aktierisk för mindre än så? Statisk siffra, uppdateras bara när Claude uppdaterar referensfilen manuellt - inte i realtid.' },
   'RISKPREMIE': { title: 'Riskpremie', text: 'Aktiens vinstavkastning (100/P/E) minus riskfri ränta - hur mycket EXTRA avkastning aktien erbjuder för risken du tar jämfört med en säker placering. Negativ riskpremie (▼, rött) betyder att du får bättre avkastning helt riskfritt just nu, vilket är ett varningstecken. Hög riskpremie (▲, grönt) betyder gott om kompensation för risken - men bygger på dagens vinst, inte en garanti om framtiden.' },
-  'ROIC': { title: 'ROIC (avkastning på investerat kapital)', text: 'Hur effektivt bolaget omvandlar kapital - eget och lånat, minus kassa - till vinst, oavsett hur det är finansierat. Ett av de tydligaste kvalitetsmåtten för att skilja genuint bra bolag från medelmåttiga: över 15% räknas som starkt, negativ ROIC betyder att bolaget förstör kapital snarare än att skapa avkastning på det. Beräknat från resultat- och balansräkning, kan sakna för mindre/utländska bolag.' },
+  'ROIC (FLERÅRSSNITT)': { title: 'ROIC - avkastning på investerat kapital (flerårssnitt)', text: 'Hur effektivt bolaget omvandlar kapital - eget och lånat, minus kassa - till vinst, oavsett hur det är finansierat. Ett av de tydligaste kvalitetsmåtten för att skilja genuint bra bolag från medelmåttiga. Räknas som ett snitt över de räkenskapsår Yahoo Finance ger tillgång till, normalt cirka 3-4 år (inte tio) - kräver minst 3 år för att visas alls. Snitt över 15% räknas som starkt, under 6% som svagt. Ett stabilt sämsta-år över 8% ger extra plus; stora svängningar mellan åren ger avdrag. Visas som "Ej tillämpligt" för banker, försäkringsbolag och fastighetsbolag/REIT, vars kapitalstruktur gör måttet missvisande. Beräknat från resultat- och balansräkning, kan saknas för mindre/utländska bolag.' },
   'INTÄKTSTILLVÄXT (YOY)': { title: 'Intäktstillväxt (år över år)', text: 'Hur mycket bolagets intäkter vuxit senaste kvartalet jämfört med samma kvartal förra året (undviker säsongseffekter, t.ex. att julhandel alltid är starkare än sommaren). Skiljer på bolag som konsekvent växer och bolag som bara råkar se billiga ut just nu.' },
   'MARGINALTREND': { title: 'Marginaltrend', text: 'Förändringen i rörelsemarginal (rörelseresultat/intäkter) senaste kvartalet jämfört med samma kvartal förra året, i procentenheter. Förbättrad marginal betyder att bolaget blivit mer lönsamt per krona i intäkt - inte bara växer, utan växer med bättre lönsamhet.' },
   'RSI14': { title: 'RSI14 (momentum)', text: 'Mäter om en aktie handlats mycket upp eller ner den senaste tiden, på en skala 0–100. Över 70 kallas ofta "överköpt" (kan vara mogen för en paus), under 30 "översåld". Säger inget om bolaget är bra eller dåligt – bara om kursen rört sig mycket nyligen.' },
@@ -1906,7 +1907,13 @@ function openDrawer(ticker) {
       <div><div class="stat-label">SKULDSÄTTNING (D/E)</div><div class="stat-val">${r.debt_to_equity !== null ? fmtNum(r.debt_to_equity,0) : '–'}${levelBadge(r.debt_to_equity, 50, 150, ['LÅG','NORMAL','HÖG'])}</div></div>
       <div><div class="stat-label">VOLATILITET (ÅR)</div><div class="stat-val">${r.volatility_pct !== null ? fmtNum(r.volatility_pct,0) + '%' : '–'}${levelBadge(r.volatility_pct, 20, 45, ['LÅG','NORMAL','HÖG'])}</div></div>
       <div><div class="stat-label">FCF-MARGINAL</div><div class="stat-val">${r.fcf_margin_pct !== null && r.fcf_margin_pct !== undefined ? fmtNum(r.fcf_margin_pct,0) + '%' : '–'}</div></div>
-      <div><div class="stat-label">ROIC</div><div class="stat-val">${r.roic_pct !== null && r.roic_pct !== undefined ? fmtNum(r.roic_pct,1) + '%' : '–'}${levelBadge(r.roic_pct, 5, 15, ['LÅG','NORMAL','HÖG'], true)}</div></div>
+      <div class="stat-wide">
+        <div class="stat-label">ROIC (FLERÅRSSNITT)</div>
+        <div class="stat-val">${r.roic_na ? 'Ej tillämpligt' : (r.roic_avg !== null && r.roic_avg !== undefined ? fmtNum(r.roic_avg,1) + '%' + levelBadge(r.roic_avg, 6, 15, ['LÅG','NORMAL','HÖG'], true) : 'Saknas')}</div>
+        ${!r.roic_na && r.roic_avg !== null && r.roic_avg !== undefined ? `<div class="stat-sub">Senaste år: ${fmtNum(r.roic,1)}% · Sämsta år: ${fmtNum(r.roic_min,1)}% · ${r.roic_years} år i underlaget</div>` : ''}
+        ${r.roic_na ? `<div class="stat-sub">Inte ett meningsfullt mått för banker, försäkringsbolag och fastighetsbolag/REIT - deras kapitalstruktur skiljer sig strukturellt</div>` : ''}
+        ${!r.roic_na && (r.roic_avg === null || r.roic_avg === undefined) ? `<div class="stat-sub">Kräver minst 3 års bokslutsdata från Yahoo Finance - saknas för det här bolaget${r.roic_years ? ` (bara ${r.roic_years} år tillgängliga)` : ''}</div>` : ''}
+      </div>
       <div><div class="stat-label">SBC/INTÄKTER</div><div class="stat-val">${r.sbc_to_revenue_pct !== null && r.sbc_to_revenue_pct !== undefined ? fmtNum(r.sbc_to_revenue_pct,0) + '%' : '–'}</div></div>
       <div><div class="stat-label">CAPEX/AVSKRIVNINGAR</div><div class="stat-val">${r.capex_to_da !== null && r.capex_to_da !== undefined ? fmtNum(r.capex_to_da,1) + 'x' : '–'}</div></div>
       <div><div class="stat-label">BETA</div><div class="stat-val">${r.beta !== null ? fmtNum(r.beta,2) : '–'}</div></div>
@@ -2456,12 +2463,19 @@ const MODULES = [
           <p>Tänk dig två personer som var och en får 100 000 kr att investera i en egen liten verksamhet. Efter ett år har den ena personen omvandlat pengarna till 120 000 kr i vinst-genererande tillgångar, den andra bara till 102 000 kr. Den första personen är helt enkelt duktigare på att omvandla kapital till värde — oavsett om startkapitalet kom från eget sparande eller ett lån. ROIC mäter exakt den förmågan hos ett bolag.</p>
         </div>
         <p><strong>ROIC</strong> (Return on Invested Capital) mäter hur effektivt bolaget omvandlar allt kapital det har tillgång till — eget kapital OCH lånat kapital, minus kassa — till vinst. Det är ett av de mest respekterade kvalitetsmåtten inom investering, eftersom det inte går att "fejka" genom att bara låna mer pengar (till skillnad från vissa andra lönsamhetsmått).</p>
-        <p>ROIC över 15% räknas generellt som starkt — bolaget skapar betydligt mer värde än vad kapitalet skulle kosta att låna eller vad ägarna rimligen kräver i avkastning. Negativ ROIC betyder att bolaget faktiskt <em>förstör</em> kapital snarare än att skapa avkastning på det.</p>
+        <p>ROIC över 15% räknas generellt som starkt — bolaget skapar betydligt mer värde än vad kapitalet skulle kosta att låna eller vad ägarna rimligen kräver i avkastning. Under 6% räknas som svagt.</p>
+        <h3 class="sub">Ett flerårssnitt, inte bara senaste året</h3>
+        <p>Ett enskilt år kan vara missvisande — ett engångslyft eller en tillfällig svacka säger inte mycket om den verkliga förmågan. Appen räknar därför ut ROIC för varje räkenskapsår Yahoo Finance ger tillgång till (normalt cirka 3–4 år, <strong>inte tio</strong> — värt att komma ihåg) och använder snittet. Är även det sämsta året över 8% ses det som extra stabilt; svänger ROIC kraftigt mellan åren dras poäng av istället, eftersom stabilitet i sig är ett kvalitetstecken.</p>
+        <p>För banker, försäkringsbolag och fastighetsbolag/REIT visas ROIC som <strong>"Ej tillämpligt"</strong> — deras kapitalstruktur skiljer sig så mycket från vanliga rörelsedrivande bolag att måttet blir missvisande snarare än informativt.</p>
         <div class="in-app">
           <div class="lbl">I appen</div>
           <table>
-            <tr><td>ROIC &gt; 15%</td><td>+10 poäng (standard), +8 (tillväxt)</td></tr>
-            <tr><td>ROIC &lt; 0%</td><td>−12 poäng (standard) · tillväxtmodellen straffar bara vid &lt; −10% (mer överseende för unga bolag)</td></tr>
+            <tr><td>ROIC-snitt &gt; 15%</td><td>+5 poäng (standard), +8 (tillväxt)</td></tr>
+            <tr><td>ROIC-snitt 10–15%</td><td>+3 poäng (standard)</td></tr>
+            <tr><td>ROIC-snitt &lt; 6%</td><td>−4 poäng (standard)</td></tr>
+            <tr><td>Sämsta året &gt; 8%</td><td>+2 poäng (stabilitetsbonus)</td></tr>
+            <tr><td>Stora svängningar mellan åren</td><td>−2 poäng</td></tr>
+            <tr><td>Totalt tak</td><td>Max ±6 poäng — ska inte dominera över t.ex. FCF-marginalen</td></tr>
           </table>
         </div>
       `

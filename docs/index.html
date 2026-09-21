@@ -101,24 +101,8 @@
     color: var(--text-faint);
     cursor: default;
   }
-  .theme-dd { position: relative; }
-  .theme-menu {
-    position: absolute; right: 0; top: calc(100% + 6px); z-index: 60;
-    min-width: 150px; padding: 4px;
-    background: var(--panel); border: 1px solid var(--border);
-    border-radius: var(--radius);
-    box-shadow: 0 8px 24px rgba(0,0,0,.18);
-  }
-  .theme-menu[hidden] { display: none; }
-  .theme-menu button {
-    display: flex; justify-content: space-between; align-items: center; gap: 12px;
-    width: 100%; text-align: left; background: none; border: none; cursor: pointer;
-    color: var(--text-dim); font-family: 'IBM Plex Mono', monospace; font-size: 12px;
-    padding: 9px 10px; border-radius: calc(var(--radius) - 2px);
-  }
-  .theme-menu button:hover { background: var(--panel-alt); color: var(--text); }
-  .theme-menu button.active { color: var(--amber); }
-  .theme-menu button.active::after { content: '✓'; }
+  #themeBtn { display: inline-flex; align-items: center; justify-content: center; padding: 7px 10px; }
+  #themeBtn svg { width: 16px; height: 16px; display: block; }
 
   .tabs {
     display: flex;
@@ -822,13 +806,7 @@
         <button class="iconbtn" id="macroBtn">MAKRO</button>
       </div>
       <div class="controls-group">
-        <div class="theme-dd" id="themeDd">
-          <button class="iconbtn" id="themeBtn" aria-haspopup="true" aria-expanded="false">THEME ▾</button>
-          <div class="theme-menu" id="themeMenu" hidden>
-            <button type="button" data-theme-opt="apple">Apple</button>
-            <button type="button" data-theme-opt="terminal">Terminal</button>
-          </div>
-        </div>
+        <button class="iconbtn" id="themeBtn" type="button" title="Byt tema" aria-label="Byt tema"></button>
       </div>
     </div>
   </header>
@@ -1252,33 +1230,28 @@ if (storedHoldings) {
 // ===== /Innehav =====
 
 const themeBtn = document.getElementById('themeBtn');
-const themeMenu = document.getElementById('themeMenu');
-const THEME_ORDER = ['apple', 'terminal'];
+const THEME_ORDER = ['apple', 'terminal']; // apple = ljust, terminal = mörkt
 const THEME_COLORS = { apple: '#F5F5F7', terminal: '#050705' };
+const ICON_SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>';
+const ICON_MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
 function applyTheme(t) {
   document.body.setAttribute('data-theme', t);
   const tc = document.querySelector('meta[name="theme-color"]');
   if (tc) tc.setAttribute('content', THEME_COLORS[t] || THEME_COLORS.apple);
-  themeMenu.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.themeOpt === t));
+  const light = t === 'apple';
+  themeBtn.innerHTML = light ? ICON_SUN : ICON_MOON; // ikonen visar aktuellt läge
+  const label = light ? 'Ljust tema – byt till mörkt' : 'Mörkt tema – byt till ljust';
+  themeBtn.title = label;
+  themeBtn.setAttribute('aria-label', label);
   try { localStorage.setItem('screener-theme', t); } catch (e) { /* t.ex. privat läge - temat funkar ändå denna session */ }
-}
-function setThemeMenu(open) {
-  themeMenu.hidden = !open;
-  themeBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
 }
 let savedTheme = 'apple';
 try { savedTheme = localStorage.getItem('screener-theme') || 'apple'; } catch (e) { /* samma reserv som ovan */ }
 if (!THEME_ORDER.includes(savedTheme)) savedTheme = 'apple'; // t.ex. borttagna teman (dark/light/dusk) sparade sedan tidigare
 applyTheme(savedTheme);
-themeBtn.addEventListener('click', (e) => { e.stopPropagation(); setThemeMenu(themeMenu.hidden); });
-themeMenu.addEventListener('click', (e) => {
-  const b = e.target.closest('button[data-theme-opt]');
-  if (!b) return;
-  applyTheme(b.dataset.themeOpt);
-  setThemeMenu(false);
+themeBtn.addEventListener('click', () => {
+  applyTheme(document.body.getAttribute('data-theme') === 'apple' ? 'terminal' : 'apple');
 });
-document.addEventListener('click', (e) => { if (!e.target.closest('#themeDd')) setThemeMenu(false); });
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setThemeMenu(false); });
 
 document.querySelectorAll('.tab').forEach(el => {
   el.addEventListener('click', () => {

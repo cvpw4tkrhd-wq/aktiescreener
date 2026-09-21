@@ -167,6 +167,32 @@
     padding: 14px 18px;
     border-bottom: 1px solid var(--border);
   }
+  /* --- Obligationsöversikt & stabilitetspoäng (v8.0) --- */
+  .bd-hero { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; padding: 14px 16px; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 14px; }
+  .bd-hero.good { border-color: var(--up); background: color-mix(in srgb, var(--up) 8%, var(--panel)); }
+  .bd-hero.bad { border-color: var(--down); background: color-mix(in srgb, var(--down) 8%, var(--panel)); }
+  .bd-score { font-family: 'IBM Plex Mono', monospace; font-size: 40px; font-weight: 700; line-height: 1; }
+  .bd-hero.good .bd-score { color: var(--up); }
+  .bd-hero.bad .bd-score { color: var(--down); }
+  .bd-hero-txt { flex: 1; min-width: 200px; font-size: 13px; line-height: 1.45; }
+  .bd-hero-txt b { font-size: 15px; }
+  .bd-cats { display: grid; gap: 8px; margin-bottom: 14px; }
+  .bd-cat { display: grid; grid-template-columns: 150px 1fr 44px; gap: 10px; align-items: center; font-size: 12px; }
+  .bd-cat .bd-detail { grid-column: 1 / -1; font-size: 11px; color: var(--text-dim); margin-top: -4px; }
+  .bd-track { height: 10px; background: var(--panel-alt); border-radius: 5px; overflow: hidden; }
+  .bd-fill { height: 100%; border-radius: 5px; background: var(--text-dim); }
+  .bd-fill.good { background: var(--up); } .bd-fill.bad { background: var(--down); }
+  .bd-num { font-family: 'IBM Plex Mono', monospace; text-align: right; }
+  .bd-yrow { display: grid; grid-template-columns: 50px 1fr 118px; gap: 10px; align-items: center; margin: 6px 0; font-size: 12px; }
+  .bd-yrow .bd-yl { font-family: 'IBM Plex Mono', monospace; color: var(--text-dim); }
+  .bd-yrow .bd-yv { font-family: 'IBM Plex Mono', monospace; text-align: right; }
+  .bd-yrow .bd-yv small { display: block; color: var(--text-dim); font-size: 10px; }
+  .bd-alert { color: var(--down); font-size: 11px; margin: 4px 0 0 60px; }
+  .bd-sens { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; margin: 8px 0; }
+  .bd-sens-item { padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 12px; }
+  .bd-sens-item b { font-family: 'IBM Plex Mono', monospace; }
+  .bd-sens-item.pos b { color: var(--up); } .bd-sens-item.neg b { color: var(--down); }
+  @media (max-width: 520px) { .bd-cat { grid-template-columns: 110px 1fr 36px; } .bd-yrow { grid-template-columns: 46px 1fr 104px; } }
   .macro-panel {
     margin: 16px 18px;
     padding: 16px 18px;
@@ -1638,6 +1664,75 @@ function macroInvesttechSectionHtml() {
     </details>`;
 }
 
+function macroBondsHtml() {
+  const b = (state.data && state.data.macro && state.data.macro.bonds) || null;
+  if (!b || !b.yields || !b.yields.length) return '';
+  const sv = n => (n == null ? '–' : String(n.toFixed ? n.toFixed(2) : n).replace('.', ','));
+  const sg = (n, d = 2) => (n == null ? '–' : (n > 0 ? '+' : '') + n.toFixed(d).replace('.', ','));
+  const st = b.stability || {};
+  const trendTxt = st.trend === 'stabilare' ? '▲ Rör sig mot stabilare' : st.trend === 'mindre_stabilt' ? '▼ Rör sig mot mindre stabilt' : '► I stort sett oförändrat';
+  const trendSub = st.delta != null ? ` (${sg(st.delta, 1)} poäng mot för en månad sedan)` : '';
+  const fundTxt = st.status === 'good'
+    ? 'Stabil räntemiljö: gynnsamt för aktiefonder och blandfonder. Räntefonder påverkas mest av hur snabbt räntorna rör sig – se ränterörelsen.'
+    : st.status === 'bad'
+      ? 'Orolig räntemiljö: aktie- och blandfonder utsätts för högre risk, och långa räntefonder kan tappa i värde om räntorna stiger.'
+      : 'Blandat läge: vissa signaler är positiva och andra negativa – följ särskilt de kategorier som är röda nedan.';
+  const hero = `
+    <div class="mp-title">Marknadsstabilitet — ränte- och kreditläge (uppdaterad ${escapeHtml(b.as_of || '–')})</div>
+    <div class="bd-hero ${st.status === 'good' ? 'good' : st.status === 'bad' ? 'bad' : ''}">
+      <div class="bd-score">${st.score != null ? Math.round(st.score) : '–'}<span style="font-size:14px;color:var(--text-dim)">/100</span></div>
+      <div class="bd-hero-txt"><b>${escapeHtml(st.label || '–')}</b> för aktier och fonder<br>${trendTxt}${trendSub}<br><span style="color:var(--text-dim)">${fundTxt}</span></div>
+    </div>`;
+  const cats = `<div class="bd-cats">${(b.categories || []).map(c => `
+      <div class="bd-cat"><div>${escapeHtml(c.name)}</div>
+        <div class="bd-track"><div class="bd-fill ${c.status === 'good' ? 'good' : c.status === 'bad' ? 'bad' : ''}" style="width:${c.score}%"></div></div>
+        <div class="bd-num">${c.score}</div>
+        <div class="bd-detail">${escapeHtml(c.label)} · ${escapeHtml(c.detail)}</div></div>`).join('')}</div>`;
+  const maxY = Math.max(6, ...b.yields.map(y => y.value));
+  const yrows = b.yields.map(y => `
+    <div class="bd-yrow"><div class="bd-yl">${y.label.replace('M', ' mån').replace('Y', ' år')}</div>
+      <div class="bd-track" style="height:14px"><div class="bd-fill ${y.status === 'bad' ? 'bad' : y.status === 'good' ? 'good' : ''}" style="width:${(y.value / maxY * 100).toFixed(1)}%"></div></div>
+      <div class="bd-yv">${sv(y.value)} %<small>${sg(y.chg_1w)} v · ${sg(y.chg_1m)} mån</small></div></div>
+    ${y.alert ? '<div class="bd-alert">30-årsräntan är över 5 % – nivå som historiskt skakat om aktiemarknaden.</div>' : ''}`).join('');
+  const yBlock = `<div class="mp-sub">Amerikanska statsräntor (röd = stiger snabbt senaste månaden, grön = faller, grå = stabil)</div>${yrows}`;
+  const x = b.extras || {};
+  const stat = (label, val, note, cls) => `<div class="macro-stat ${cls || ''}"><div class="ms-label">${label}</div><div class="ms-val">${val}</div><div class="ms-note">${note}</div></div>`;
+  const grid = `<div class="macro-grid" style="margin-top:14px">
+    ${stat('Realränta 10 år', sv(x.real_yield_10y) + ' %', 'Räntan efter inflation. Hög realränta pressar värderingen på tillväxtaktier mest (' + sg(x.real_yield_chg_1m) + ' pp/mån).', x.real_yield_10y >= 2.5 ? 'mp-bad' : x.real_yield_10y <= 1.5 ? 'mp-good' : '')}
+    ${stat('Inflationsförväntan 10 år', sv(x.breakeven_10y) + ' %', 'Vad marknaden räknar med i inflation. Nära 2–2,5 % är lugnt; högt tyder på oro (' + sg(x.breakeven_chg_1m) + ' pp/mån).', x.breakeven_10y >= 3 ? 'mp-bad' : x.breakeven_10y <= 2.5 ? 'mp-good' : '')}
+    ${stat('Kreditspread', 'HY ' + sv(x.hy_spread) + ' · IG ' + sv(x.ig_spread) + ' pp', 'Extra ränta företag betalar. Vidgas den är det ett tidigt stresstecken (HY ' + sg(x.hy_chg_1m) + ', IG ' + sg(x.ig_chg_1m) + ' pp/mån).', x.hy_spread > 5 ? 'mp-bad' : x.hy_spread <= 4 ? 'mp-good' : '')}
+    ${stat('Obligationsvolatilitet (MOVE)', x.move != null ? x.move.toFixed(1).replace('.', ',') : '–', 'Osäkerhet om framtida räntor. Under 100 lugnt, över 130 stress (' + (x.move_chg_1m != null ? sg(x.move_chg_1m, 1) : '–') + ' /mån).', x.move > 120 ? 'mp-bad' : x.move != null && x.move < 100 ? 'mp-good' : '')}
+    ${stat('Kurvform', '2–10 år ' + sg(x.spread_10y2y) + ' · 3 mån–10 år ' + sg(x.spread_10y3m) + ' pp', 'Positivt = normal kurva. Negativt = inverterad, historiskt ett recessionstecken.', x.spread_10y2y < 0 || x.spread_10y3m < 0 ? 'mp-bad' : 'mp-good')}
+    ${stat('Tyskland & Sverige 10 år', sv(x.de_10y) + ' % · ' + sv(x.se_10y) + ' %', 'Månadsdata från OECD (' + escapeHtml((x.eu_as_of || '').slice(0, 7)) + '), släpar efter dagsdata.', '')}
+  </div>`;
+  return `<div class="mp-section">${hero}${cats}${yBlock}${grid}${macroRateSensitivityHtml(b)}
+    <div class="mp-caveat">Poängen (0–100, högre = stabilare) är en enkel, förklarbar sammanvägning av kategorierna ovan och är ren information – den ändrar inte enskilda aktiers poäng. Källor: FRED (statsräntor, spreadar, realränta), Yahoo Finance (MOVE), OECD via FRED (Tyskland/Sverige). Trendpilen jämför mot värdena för cirka en månad sedan.</div></div>`;
+}
+
+function macroRateSensitivityHtml(b) {
+  const rows = ((state.data && state.data.results) || []).filter(r => r.rate_beta != null);
+  if (rows.length < 10) return '';
+  const bySector = {};
+  rows.forEach(r => { const s = r.sector || '–'; (bySector[s] = bySector[s] || []).push(r.rate_beta); });
+  const sect = Object.entries(bySector).filter(([, v]) => v.length >= 3)
+    .map(([s, v]) => [s, v.reduce((a, c) => a + c, 0) / v.length, v.length]).sort((a, c) => a[1] - c[1]);
+  if (!sect.length) return '';
+  const y10 = (b.yields || []).find(y => y.label === '10Y');
+  const dir = y10 && y10.chg_1m != null ? y10.chg_1m : 0;
+  const item = ([s, v, n]) => `<div class="bd-sens-item ${v < 0 ? 'neg' : 'pos'}">${escapeHtml(SECTOR_SV[s] || s)}<br><b>${v > 0 ? '+' : ''}${v.toFixed(1).replace('.', ',')} %</b> per +1 pp <span style="color:var(--text-dim)">(${n} st)</span></div>`;
+  const solid = rows.filter(r => (r.rate_beta_r2 || 0) >= 0.1).sort((a, c) => a.rate_beta - c.rate_beta);
+  const list = arr => arr.map(r => `${escapeHtml(r.ticker)} (${r.rate_beta > 0 ? '+' : ''}${r.rate_beta.toFixed(1).replace('.', ',')})`).join(', ') || '–';
+  const now = Math.abs(dir) >= 0.05
+    ? `10-årsräntan har ${dir > 0 ? 'stigit' : 'fallit'} ${sg2(dir)} pp senaste månaden – ${dir > 0 ? 'sektorerna längst till vänster (negativt värde) är mest utsatta' : 'sektorerna längst till vänster (negativt värde) gynnas mest'}.`
+    : '10-årsräntan är i stort sett oförändrad senaste månaden.';
+  return `<div class="mp-sub" style="margin-top:14px">Så känsliga är aktierna för räntan (senaste året)</div>
+    <div style="font-size:12px;margin-bottom:6px">${now}</div>
+    <div class="bd-sens">${sect.map(item).join('')}</div>
+    <div style="font-size:11.5px;color:var(--text-dim)">Mest missgynnade av stigande ränta: ${list(solid.slice(0, 5))}.<br>Mest gynnade: ${list(solid.slice(-5).reverse())}.</div>
+    <div style="font-size:11px;color:var(--text-faint);margin-top:4px">Grov skattning: veckoavkastning i procent per +1 pp i amerikansk 10-årsränta över ett år. Bara aktier med tydligt samband (R² ≥ 0,1) räknas i listorna. Icke-amerikanska aktier styrs delvis av sina egna räntor.</div>`;
+}
+function sg2(n) { return (n > 0 ? '+' : '') + n.toFixed(2).replace('.', ','); }
+
 function renderMacroPanel() {
   const host = document.getElementById('macroHost');
   const data = state.data || {};
@@ -1689,7 +1784,7 @@ function renderMacroPanel() {
       <div class="mp-caveat">Källa: FRED (Federal Reserve). Detta är breda, långsamma regimsignaler — inte en prognos för enskilda aktier eller exakt tidpunkt. Ledtiden till en eventuell nedgång har historiskt varierat mellan 6 och 24 månader, och det finns falska utslag (t.ex. 1966). Påverkar alla aktiers poäng med en liten, bred försiktighetsjustering när signalerna är negativa — aldrig avgörande på egen hand.</div>`;
   }
 
-  const body = ratesBlock + macroRatesSectionHtml() + macroGeopoliticsSectionHtml() + macroBreadthSectionHtml() + macroInvesttechSectionHtml();
+  const body = macroBondsHtml() + ratesBlock + macroRatesSectionHtml() + macroGeopoliticsSectionHtml() + macroBreadthSectionHtml() + macroInvesttechSectionHtml();
   host.innerHTML = body.trim() ? `<div class="macro-panel">${body}</div>` : '';
 }
 

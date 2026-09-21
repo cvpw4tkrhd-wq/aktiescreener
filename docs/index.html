@@ -71,6 +71,20 @@
     --amber-dim: #A6905C;
     --radius: 5px;
   }
+  [data-theme="apple"] {
+    --bg: #F5F5F7;
+    --panel: #FFFFFF;
+    --panel-alt: #EBEBEF;
+    --border: #D8D8DD;
+    --text: #1D1D1F;
+    --text-dim: #6E6E73;
+    --text-faint: #AAAAAA;
+    --up: #248A3D;
+    --down: #D70015;
+    --amber: #007AFF;
+    --amber-dim: #B7D6FF;
+    --radius: 8px;
+  }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; max-width: 100%; overflow-x: hidden; }
   body {
@@ -1255,9 +1269,11 @@ if (storedHoldings) {
 // ===== /Innehav =====
 
 const themeBtn = document.getElementById('themeBtn');
-const THEME_ORDER = ['dark', 'light', 'terminal', 'dusk'];
+const THEME_ORDER = ['dark', 'light', 'terminal', 'dusk', 'apple'];
 function applyTheme(t) {
   document.body.setAttribute('data-theme', t);
+  const tc = document.querySelector('meta[name="theme-color"]');
+  if (tc) tc.setAttribute('content', {dark:'#0B0E13', light:'#F4F2ED', terminal:'#050705', dusk:'#5C5470', apple:'#F5F5F7'}[t] || '#0B0E13');
   try { localStorage.setItem('screener-theme', t); } catch (e) { /* t.ex. privat läge - temat funkar ändå denna session */ }
 }
 let savedTheme = 'dark';

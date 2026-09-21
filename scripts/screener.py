@@ -1427,6 +1427,39 @@ def sanitize_for_json(obj):
     return obj
 
 
+def stability_adjustment(bonds):
+    """Bred, måttlig poängjustering från ränte-/kreditstabilitetspoängen (0-100).
+    Nivå: >=80 +2, 60-79 0, 50-59 -2, 40-49 -4, 30-39 -6, <30 -8.
+    Trend (mot för ~1 månad sedan): fall på >=5 poäng -2, ökning på >=5 poäng
+    +2 (bara om nivån är minst 50). Returnerar (justering, anteckningar)."""
+    st = (bonds or {}).get("stability") or {}
+    score, delta = st.get("score"), st.get("delta")
+    if score is None:
+        return 0, []
+    if score >= 80:
+        adj = 2
+    elif score >= 60:
+        adj = 0
+    elif score >= 50:
+        adj = -2
+    elif score >= 40:
+        adj = -4
+    elif score >= 30:
+        adj = -6
+    else:
+        adj = -8
+    notes = []
+    if adj:
+        notes.append(f"Ränte- och kreditstabilitet {score:.0f}/100 ({st.get('label')}) – {'stödjande' if adj > 0 else 'försiktighetsjustering'} för alla aktier")
+    if delta is not None and delta <= -5:
+        adj -= 2
+        notes.append(f"Stabiliteten har försämrats {abs(delta):.0f} poäng på en månad")
+    elif delta is not None and delta >= 5 and score >= 50:
+        adj += 2
+        notes.append(f"Stabiliteten har förbättrats {delta:.0f} poäng på en månad")
+    return adj, notes
+
+
 def main():
     watchlist = load_watchlist()
     sector_weights, sector_factor_names, country_weights, country_factor_names = load_risk_factors()
@@ -1458,6 +1491,11 @@ def main():
         macro_notes.append(
             f"Kraftigt förhöjda kreditspreadar (high-yield {macro['credit_spread_hy_pct']}pp) – krisliknande nivå på obligationsmarknaden"
         )
+    stab_adj, stab_notes = stability_adjustment(macro.get("bonds"))
+    macro_weight += stab_adj
+    macro_notes.extend(stab_notes)
+    macro_weight = max(-12, min(4, macro_weight))   # tak: räntekurva/kredit ingår redan i stabilitetspoängen
+    macro["stability_adjustment"] = stab_adj
     macro["score_adjustment"] = macro_weight   # visas i MAKRO-panelen: poängpåverkan på alla aktier
     macro["score_notes"] = macro_notes
     score_history = load_score_history()

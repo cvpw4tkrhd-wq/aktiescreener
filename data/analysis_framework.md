@@ -66,11 +66,22 @@ sektorrotation, IPO-marknad, M&A, återköp, nyemissioner, insiderägande.
   CO2-priser.
 - **Telekom:** 5G-investeringar, spektrumkostnader, ARPU.
 - **Försvar:** geopolitik, försvarsbudgetar, NATO, statliga kontrakt.
+- **Rymdteknik:** statliga kontrakt (NASA/ESA/försvar), satellitmarknadens
+  kommersialisering, lanseringskostnader.
+- **Kvantdatorer:** fortfarande i stor utsträckning forskningsstadiet,
+  statliga forskningsanslag, tidshorisont för kommersiell mognad högst
+  osäker.
 
 ## Landsspecifikt (marknader i vår watchlist)
 - **Sverige:** Riksbankens ränta, SEK, bostadsmarknad, hushållsskuld, export,
   arbetsmarknad. OBS: svenska bolag ofta mer internationella än
   noteringslandet antyder.
+- **Norge:** oljefonden, oljepris/energisektorns tyngd i ekonomin, NOK,
+  Norges Bank.
+- **Danmark:** DKK (fastkurs mot euron), läkemedels-/rederisektorns tyngd,
+  Nationalbanken.
+- **Finland:** eurozon-exponering, industri-/skogsindustrisektorns tyngd,
+  Rysslandsexponering (geografisk närhet).
 - **USA:** Fed, USD, konsumtion, statsskuld, tullar, valår/politisk riktning,
   antitrust.
 - **Tyskland:** industriproduktion, energipriser, Kinaexponering,

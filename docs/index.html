@@ -1706,7 +1706,7 @@ function macroBondsHtml() {
     ${stat('Tyskland & Sverige 10 år', sv(x.de_10y) + ' % · ' + sv(x.se_10y) + ' %', 'Månadsdata från OECD (' + escapeHtml((x.eu_as_of || '').slice(0, 7)) + '), släpar efter dagsdata.', '')}
   </div>`;
   return `<div class="mp-section">${hero}${cats}${yBlock}${grid}${macroRateSensitivityHtml(b)}
-    <div class="mp-caveat">Poängen (0–100, högre = stabilare) är en enkel, förklarbar sammanvägning av kategorierna ovan och är ren information – den ändrar inte enskilda aktiers poäng. Källor: FRED (statsräntor, spreadar, realränta), Yahoo Finance (MOVE), OECD via FRED (Tyskland/Sverige). Trendpilen jämför mot värdena för cirka en månad sedan.</div></div>`;
+    <div class="mp-caveat">Poängen (0–100, högre = stabilare) är en enkel, förklarbar sammanvägning av kategorierna ovan och påverkar alla aktiers poäng måttligt (+2 vid mycket stabilt, upp till −8 vid stress, ±2 för trend; totalt aldrig sämre än −12 med kreditspread/räntekurva). Källor: FRED (statsräntor, spreadar, realränta), Yahoo Finance (MOVE), OECD via FRED (Tyskland/Sverige). Trendpilen jämför mot värdena för cirka en månad sedan.</div></div>`;
 }
 
 function macroRateSensitivityHtml(b) {
@@ -1763,7 +1763,7 @@ function renderMacroPanel() {
     if (typeof macro.score_adjustment === 'number') {
       const a = macro.score_adjustment;
       const cls = a < 0 ? 'neg' : (a > 0 ? 'pos' : 'zero');
-      adj = `<div class="mp-adj">Påverkan på alla aktiers poäng just nu: <b class="${cls}">${a > 0 ? '+' : ''}${a} poäng</b>${a === 0 ? ' – inga varningssignaler aktiva' : ''}.</div>`;
+      adj = `<div class="mp-adj">Påverkan på alla aktiers poäng just nu: <b class="${cls}">${a > 0 ? '+' : ''}${a} poäng</b>${a === 0 ? ' – inga varningssignaler aktiva' : ''}.</div>` + ((macro.score_notes || []).length ? `<ul class="mp-adj" style="margin:4px 0 0 18px">${macro.score_notes.map(n => `<li>${escapeHtml(n)}</li>`).join('')}</ul>` : '');
     }
 
     ratesBlock = `

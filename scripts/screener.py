@@ -111,6 +111,49 @@ def load_risk_factors():
     return sector_weights, sector_factor_names, country_weights, country_factor_names
 
 
+def load_geopolitics_export(sector_weights, country_weights):
+    """Bygger den visningsbara geopolitik/världspolitik-sektionen till
+    results.json (MAKRO-panelen): varje faktor med sammanfattning, datum och
+    vikter, samt nettovikt per sektor/land. Rent visningsdata - poängsättningen
+    använder fortfarande load_risk_factors(). Fel här får aldrig stoppa körningen."""
+    try:
+        if not RISK_FACTORS_FILE.exists():
+            return None
+        with open(RISK_FACTORS_FILE, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f) or {}
+        factors = []
+        for fac in data.get("factors") or []:
+            factors.append({
+                "name": str(fac.get("name", "?")),
+                "updated": str(fac.get("updated")) if fac.get("updated") is not None else None,
+                "summary": fac.get("summary"),
+                "sectors": dict(fac.get("sectors") or {}),
+                "countries": dict(fac.get("countries") or {}),
+                "source_url": fac.get("source_url"),
+            })
+        return {"factors": factors, "sector_weights": dict(sector_weights), "country_weights": dict(country_weights)}
+    except Exception as e:
+        print(f"  Geopolitik-export misslyckades (ignoreras): {type(e).__name__}: {e}", file=sys.stderr)
+        return None
+
+
+def load_risk_free_export():
+    """Riskfria räntor + metadata för visning i MAKRO-panelen."""
+    try:
+        if not RISK_FREE_RATES_FILE.exists():
+            return None
+        with open(RISK_FREE_RATES_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return {
+            "rates": data.get("rates") or {},
+            "last_updated": data.get("_last_updated"),
+            "source": data.get("_source"),
+        }
+    except Exception as e:
+        print(f"  Riskfri-export misslyckades (ignoreras): {type(e).__name__}: {e}", file=sys.stderr)
+        return None
+
+
 def load_score_history():
     if not SCORE_HISTORY_FILE.exists():
         return {}
@@ -1177,6 +1220,8 @@ def main():
         macro_notes.append(
             f"Kraftigt förhöjda kreditspreadar (high-yield {macro['credit_spread_hy_pct']}pp) – krisliknande nivå på obligationsmarknaden"
         )
+    macro["score_adjustment"] = macro_weight   # visas i MAKRO-panelen: poängpåverkan på alla aktier
+    macro["score_notes"] = macro_notes
     score_history = load_score_history()
     today_str = datetime.now(timezone.utc).date().isoformat()
 
@@ -1298,6 +1343,8 @@ def main():
         "version": get_app_version(),
         "count": len(results),
         "macro": macro,
+        "geopolitics": load_geopolitics_export(sector_weights, country_weights),
+        "risk_free": load_risk_free_export(),
         "results": results,
     }
 

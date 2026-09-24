@@ -1115,10 +1115,10 @@ def score_buy_candidate(d, extra_weight=0):
 
     if d["pe"] is not None:
         if 0 < d["pe"] < 15:
-            bonus += 10
+            bonus += 6
             reasons.append(f"Lågt P/E ({d['pe']})")
         elif d["pe"] > 40:
-            penalty += 15
+            penalty += 10
             reasons.append(f"Högt P/E ({d['pe']})")
     else:
         reasons.append("P/E saknas (t.ex. förlust eller ej rapporterat)")
@@ -1144,7 +1144,7 @@ def score_buy_candidate(d, extra_weight=0):
             bonus += 10
             reasons.append(f"RSI lågt/översålt ({d['rsi14']})")
         elif d["rsi14"] > 70:
-            penalty += 20
+            penalty += 10
             reasons.append(f"RSI högt/överköpt ({d['rsi14']})")
 
     if d["cross_signal"] == "golden_cross":
@@ -1209,7 +1209,7 @@ def score_buy_candidate(d, extra_weight=0):
                 bonus += 8
                 reasons.append(f"Lågt P/B ({d['pb']}) – handlas nära/under bokfört värde")
         elif d["pb"] > 6:
-            penalty += 10
+            penalty += 5
             reasons.append(f"Högt P/B ({d['pb']})")
 
     if d.get("dividend_yield_pct") is not None:
@@ -1381,10 +1381,10 @@ def score_growth_candidate(d, extra_weight=0):
 
     if d["pe"] is not None:
         if 0 < d["pe"] < 15:
-            bonus += 10
+            bonus += 6
             reasons.append(f"Lågt P/E ({d['pe']})")
         elif d["pe"] > 40:
-            penalty += 15
+            penalty += 10
             reasons.append(f"Högt P/E ({d['pe']})")
     else:
         reasons.append("P/E saknas (vanligt för unga bolag utan stabil vinst)")
@@ -1481,7 +1481,7 @@ def score_growth_candidate(d, extra_weight=0):
                 bonus += 8
                 reasons.append(f"Lågt P/B ({d['pb']}) – handlas nära/under bokfört värde")
         elif d["pb"] > 6:
-            penalty += 8
+            penalty += 5
             reasons.append(f"Högt P/B ({d['pb']}) – kan vara rimligt för ett snabbväxande bolag, men innebär hög värderingsrisk")
 
     if d.get("risk_premium_pct") is not None:

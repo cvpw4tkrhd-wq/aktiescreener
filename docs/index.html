@@ -2443,8 +2443,8 @@ const MODULES = [
         <div class="in-app">
           <div class="lbl">I appen</div>
           <table>
-            <tr><td>P/E &lt; 15</td><td>+10 poäng bonus</td></tr>
-            <tr><td>P/E &gt; 40</td><td>−15 poäng avdrag</td></tr>
+            <tr><td>P/E &lt; 15</td><td>+6 poäng bonus</td></tr>
+            <tr><td>P/E &gt; 40</td><td>−10 poäng avdrag (dessutom jämförs P/E mot bolagets egen historik – se Värdering mot egen historik)</td></tr>
             <tr><td>P/E saknas</td><td>Vanligt om bolaget gör förlust eller är väldigt ungt — varken bonus eller straff</td></tr>
           </table>
         </div>
@@ -2513,7 +2513,7 @@ const MODULES = [
           <table>
             <tr><td>P/B &lt; 0</td><td>−25 poäng — negativt eget kapital, allvarlig varningssignal</td></tr>
             <tr><td>0 &lt; P/B &lt; 1.5 (utan hög skuld)</td><td>+8 poäng</td></tr>
-            <tr><td>P/B &gt; 6</td><td>−10 poäng</td></tr>
+            <tr><td>P/B &gt; 6</td><td>−5 poäng — svagt mått för bolag med få fysiska tillgångar</td></tr>
           </table>
         </div>
       `
@@ -2621,8 +2621,8 @@ const MODULES = [
         <div class="in-app">
           <div class="lbl">I appen</div>
           <table>
-            <tr><td>RSI &lt; 35</td><td>+10 poäng — potentiellt översålt läge</td></tr>
-            <tr><td>RSI &gt; 70</td><td>−20 poäng — potentiellt överköpt läge</td></tr>
+            <tr><td>RSI &lt; 35</td><td>+10 poäng (köp), +14 (tillväxt) — potentiellt översålt läge</td></tr>
+            <tr><td>RSI &gt; 70</td><td>−10 poäng (köp), −12 (tillväxt) — potentiellt överköpt läge</td></tr>
           </table>
         </div>
       `

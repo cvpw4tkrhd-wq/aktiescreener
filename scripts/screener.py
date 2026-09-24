@@ -662,13 +662,16 @@ def compute_valuation(tk, info, pe, forward_pe, revenue_growth_yoy_pct, dividend
 
 
 def valuation_weight(val, sector):
-    """Måttlig poängpåverkan: billig +4, dyr -4, rimlig 0. Halveras för
-    cykliska sektorer; ingen bonus om vinsten väntas falla. Returnerar (vikt, text)."""
-    if not val:
+    """Måttlig, graderad poängpåverkan efter avvikelse mot egen median:
+    15-30 % -> +/-3, över 30 % -> +/-6. Halveras för cykliska sektorer;
+    ingen bonus om vinsten väntas falla. Returnerar (vikt, text)."""
+    if not val or val.get("verdict") == "fair":
         return 0, None
-    v = val["verdict"]
-    w = 4 if v == "cheap" else (-4 if v == "expensive" else 0)
-    if w > 0 and "earnings_falling" in val["flags"]:
+    diff = abs(val.get("diff_pct") or 0)
+    w = 6 if diff > 30 else 3
+    if val["verdict"] == "expensive":
+        w = -w
+    if w > 0 and "earnings_falling" in (val.get("flags") or []):
         w = 0
     if sector in CYCLICAL_SECTORS:
         w = int(w / 2)
@@ -1172,6 +1175,9 @@ def score_buy_candidate(d, extra_weight=0):
     elif rec == "hold":
         penalty += 5
         reasons.append(f"Analytikerkonsensus: håll ({d.get('num_analysts') or '?'} analytiker) – analytikerna ser varken tydlig upp- eller nedsida")
+    elif rec == "underperform":
+        penalty += 12
+        reasons.append(f"Analytikerkonsensus: undervikta ({d.get('num_analysts') or '?'} analytiker) – analytikerna tror på sämre utveckling än marknaden")
     elif rec == "sell":
         penalty += 18
         reasons.append(f"Analytikerkonsensus: sälj ({d.get('num_analysts') or '?'} analytiker)")
@@ -1442,6 +1448,9 @@ def score_growth_candidate(d, extra_weight=0):
     elif rec == "hold":
         penalty += 5
         reasons.append(f"Analytikerkonsensus: håll ({d.get('num_analysts') or '?'} analytiker)")
+    elif rec == "underperform":
+        penalty += 12
+        reasons.append(f"Analytikerkonsensus: undervikta ({d.get('num_analysts') or '?'} analytiker) – analytikerna tror på sämre utveckling än marknaden")
     elif rec == "sell":
         penalty += 18
         reasons.append(f"Analytikerkonsensus: sälj ({d.get('num_analysts') or '?'} analytiker)")

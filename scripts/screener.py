@@ -827,9 +827,15 @@ def analyze_ticker(ticker: str):
     pb = info.get("priceToBook")
     div_yield_raw = info.get("dividendYield")
     dividend_yield_pct = None
-    if isinstance(div_yield_raw, (int, float)):
-        # yfinance växlar ibland mellan andel (0.024) och procent (2.4) beroende på version
-        dividend_yield_pct = div_yield_raw * 100 if div_yield_raw < 1 else div_yield_raw
+    if isinstance(div_yield_raw, (int, float)) and div_yield_raw >= 0:
+        # yfinance levererar dividendYield i procent (0.78 = 0,78 %). Den gamla
+        # heuristiken (<1 => andel) gjorde t.ex. MSFT:s 0,78 % till 78 %.
+        dividend_yield_pct = float(div_yield_raw)
+        if dividend_yield_pct > 20:
+            # Orimligt högt - troligen datafel hos Yahoo. Använd efterhandsdata
+            # (andel) om den är rimlig, annars släpp värdet.
+            tay = info.get("trailingAnnualDividendYield")
+            dividend_yield_pct = float(tay) * 100 if isinstance(tay, (int, float)) and 0 < tay < 0.2 else None
     debt_to_equity_raw = info.get("debtToEquity")
     debt_to_equity = None
     if isinstance(debt_to_equity_raw, (int, float)):

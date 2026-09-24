@@ -521,6 +521,164 @@ def compute_rate_beta(close):
         return None, None
 
 
+# ---------------------------------------------------------------------------
+# Värdering mot egen historik, efter bolagets fas (v8.2)
+# ---------------------------------------------------------------------------
+CYCLICAL_SECTORS = {"Energy", "Materials", "Semiconductors"}
+VAL_CHEAP, VAL_EXPENSIVE = 0.85, 1.15   # nu / historisk median
+
+
+def _fin_row(df, *names):
+    if df is None or getattr(df, "empty", True):
+        return None
+    for n in names:
+        if n in df.index:
+            s = df.loc[n].dropna()
+            if len(s):
+                return s.sort_index()
+    return None
+
+
+_FX_CACHE = {}
+
+
+def _fx_factor(fin_ccy, trade_ccy):
+    """Faktor för att räkna om rapportvaluta till handelsvaluta (aktuell kurs)."""
+    if not fin_ccy or not trade_ccy:
+        return 1.0
+    pence = trade_ccy == "GBp"
+    tc = "GBP" if pence else trade_ccy
+    f = 1.0
+    if fin_ccy.upper() != tc.upper():
+        key = f"{fin_ccy.upper()}{tc.upper()}=X"
+        if key not in _FX_CACHE:
+            try:
+                h = yf.Ticker(key).history(period="5d")["Close"].dropna()
+                _FX_CACHE[key] = float(h.iloc[-1]) if len(h) else None
+            except Exception:
+                _FX_CACHE[key] = None
+        if _FX_CACHE[key] is None:
+            return None
+        f = _FX_CACHE[key]
+    return f * (100 if pence else 1)
+
+
+def compute_valuation(tk, info, pe, forward_pe, revenue_growth_yoy_pct, dividend_yield_pct, market_cap):
+    """Klassar bolaget i fas och jämför dagens P/E (P/S för förlustbolag) med
+    bolagets egen median de senaste ~4 åren. Vinst/försäljning per aktie
+    interpoleras mellan bokslut så att historiken motsvarar rullande 12 mån,
+    och senaste punkten är de fyra senaste kvartalen. Returnerar dict eller None."""
+    try:
+        inc, qinc, cf = tk.income_stmt, tk.quarterly_income_stmt, tk.cash_flow
+    except Exception:
+        return None
+    ni = _fin_row(inc, "Net Income Common Stockholders", "Net Income")
+    rev = _fin_row(inc, "Total Revenue", "Operating Revenue")
+    sh = _fin_row(inc, "Diluted Average Shares", "Basic Average Shares")
+    if rev is None or sh is None or len(rev) < 2:
+        return None
+    fx = _fx_factor(info.get("financialCurrency"), info.get("currency"))
+    if fx is None:
+        return None
+
+    growing = revenue_growth_yoy_pct > 0 if revenue_growth_yoy_pct is not None else float(rev.iloc[-1]) > float(rev.iloc[-2])
+    profitable = (isinstance(pe, (int, float)) and pe > 0) or (ni is not None and float(ni.iloc[-1]) > 0)
+    buyback = _fin_row(cf, "Repurchase Of Capital Stock", "Common Stock Payments")
+    bb_amt = abs(float(buyback.iloc[-1])) if buyback is not None else 0
+    returns_capital = bool((dividend_yield_pct or 0) > 0.3 or (market_cap and bb_amt * fx > 0.005 * market_cap))
+    if not profitable and growing:
+        phase, phase_name, metric = 2, "Tillväxtfas (ej lönsam än)", "ps"
+    elif not profitable:
+        phase, phase_name, metric = 6, "Förlust och krympande försäljning", "ps"
+    elif not growing:
+        phase, phase_name, metric = 5, "Mogen fas (krympande försäljning)", "pe"
+    elif returns_capital:
+        phase, phase_name, metric = 4, "Kapitalåterföringsfas", "pe"
+    else:
+        phase, phase_name, metric = 3, "Lönsam tillväxtfas", "pe"
+
+    base = ni if metric == "pe" else rev
+    if base is None:
+        return None
+    pts = {}
+    for dt in base.index:
+        if dt in sh.index and sh[dt] and sh[dt] > 0:
+            pts[pd.Timestamp(dt)] = float(base[dt]) / float(sh[dt]) * fx
+    # Rullande 12 mån från kvartalsdata som senaste punkt
+    qb = _fin_row(qinc, "Net Income Common Stockholders", "Net Income") if metric == "pe" else _fin_row(qinc, "Total Revenue", "Operating Revenue")
+    qs = _fin_row(qinc, "Diluted Average Shares", "Basic Average Shares")
+    if qb is not None and qs is not None and len(qb) >= 4:
+        last4 = qb.iloc[-4:]
+        if (last4.index[-1] - last4.index[0]).days < 330:
+            pts[pd.Timestamp(last4.index[-1])] = float(last4.sum()) / float(qs.iloc[-1]) * fx
+    if len(pts) < 2:
+        return None
+    ser = pd.Series(pts).sort_index()
+
+    try:
+        mh = tk.history(period="5y", interval="1mo", auto_adjust=False)["Close"].dropna()
+        if getattr(mh.index, "tz", None) is not None:
+            mh.index = mh.index.tz_localize(None)
+    except Exception:
+        return None
+    if len(mh) < 24:
+        return None
+    lag = pd.Timedelta(days=45)
+    xs = [pd.Timestamp(d).timestamp() for d in ser.index]
+    import numpy as _np
+    mults = []
+    for t, px in mh.items():
+        tt = t - lag
+        if tt < ser.index[0]:
+            continue
+        v = float(_np.interp(pd.Timestamp(tt).timestamp(), xs, ser.values))
+        if v <= 0:
+            continue
+        m = px / v
+        if 0 < m < (150 if metric == "pe" else 60):
+            mults.append(m)
+    if len(mults) < 18:
+        return None
+    hist_own = float(pd.Series(mults).median())
+    cur_v = float(ser.iloc[-1])
+    if cur_v <= 0:
+        return None
+    cur_own = float(mh.iloc[-1]) / cur_v
+    ratio = cur_own / hist_own
+    yahoo_now = pe if metric == "pe" else info.get("priceToSalesTrailing12Months")
+    now_disp = float(yahoo_now) if isinstance(yahoo_now, (int, float)) and yahoo_now > 0 else cur_own
+    hist_disp = now_disp / ratio
+    verdict = "cheap" if ratio < VAL_CHEAP else ("expensive" if ratio > VAL_EXPENSIVE else "fair")
+    flags = []
+    if metric == "pe" and isinstance(forward_pe, (int, float)) and isinstance(pe, (int, float)) and pe > 0 and forward_pe > pe * 1.10:
+        flags.append("earnings_falling")
+    return {
+        "phase": phase, "phase_name": phase_name, "metric": "P/E" if metric == "pe" else "P/S",
+        "current": round(now_disp, 1), "hist_median": round(hist_disp, 1),
+        "diff_pct": round((ratio - 1) * 100, 1), "verdict": verdict, "flags": flags,
+        "years": round(len(mults) / 12, 1),
+        "checks": {"growing": bool(growing), "profitable": bool(profitable), "returns_capital": returns_capital},
+    }
+
+
+def valuation_weight(val, sector):
+    """Måttlig poängpåverkan: billig +4, dyr -4, rimlig 0. Halveras för
+    cykliska sektorer; ingen bonus om vinsten väntas falla. Returnerar (vikt, text)."""
+    if not val:
+        return 0, None
+    v = val["verdict"]
+    w = 4 if v == "cheap" else (-4 if v == "expensive" else 0)
+    if w > 0 and "earnings_falling" in val["flags"]:
+        w = 0
+    if sector in CYCLICAL_SECTORS:
+        w = int(w / 2)
+    if not w:
+        return 0, None
+    word = "billig" if w > 0 else "dyr"
+    return w, (f"Värdering: {word} mot egen historik ({val['metric']} {val['current']} mot median "
+               f"{val['hist_median']}, {val['diff_pct']:+.0f} %)")
+
+
 def _fmp_get(endpoint: str, symbol: str):
     """Enkelt GET-anrop mot FMP:s stable-API. Returnerar None vid fel av
     något slag (saknad nyckel, kvot slut, premium-låst, nätverksfel) -
@@ -877,6 +1035,12 @@ def analyze_ticker(ticker: str):
     except Exception as e:
         print(f"  Kvartalstrend saknas/fel för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)
 
+    valuation = None
+    try:
+        valuation = compute_valuation(tk, info, pe, forward_pe, revenue_growth_yoy_pct, dividend_yield_pct, market_cap)
+    except Exception as e:
+        print(f"  Värdering saknas/fel för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)
+
     return {
         "ticker": ticker,
         "name": long_name,
@@ -922,6 +1086,7 @@ def analyze_ticker(ticker: str):
         "beta": round(beta, 2) if isinstance(beta, (int, float)) else None,
         "price_history_3m": price_history_3m,
         "price_history_1y": price_history_1y,
+        "valuation": valuation,
     }
 
 
@@ -1549,7 +1714,9 @@ def main():
                 rank = investtech_entry["rank"]
                 investtech_weight = 10 if rank <= 5 else (7 if rank <= 10 else 5)
 
-            total_extra = sector_weight + country_weight + investtech_weight + macro_weight
+            valuation_w, valuation_note = valuation_weight(d.get("valuation"), sector)
+            d["valuation_weight"] = valuation_w
+            total_extra = sector_weight + country_weight + investtech_weight + macro_weight + valuation_w
             buy_score, buy_reasons = score_buy_candidate(d, extra_weight=total_extra)
             growth_score, growth_reasons = score_growth_candidate(d, extra_weight=total_extra)
 
@@ -1569,6 +1736,10 @@ def main():
                 note = f"Investtech Topp 20 (plats #{investtech_entry['rank']}, teknisk poäng {investtech_entry['investtech_score']}) – teknisk medelfristig signal (1-6 mån)"
                 buy_reasons.append(note)
                 growth_reasons.append(note)
+
+            if valuation_note:
+                buy_reasons.append(valuation_note)
+                growth_reasons.append(valuation_note)
 
             for macro_note in macro_notes:
                 buy_reasons.append(macro_note)

@@ -542,6 +542,24 @@
     margin-top: 2px;
   }
   .stat-wide { grid-column: 1 / -1; }
+  /* --- Informationsruta: översikt + kategorier (v8.5) --- */
+  .dr-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 8px; margin: 4px 0 16px; }
+  .dr-sum-item { border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 10px; min-width: 0; }
+  .dr-sum-item.good { border-color: var(--up); background: color-mix(in srgb, var(--up) 7%, transparent); }
+  .dr-sum-item.bad { border-color: var(--down); background: color-mix(in srgb, var(--down) 7%, transparent); }
+  .dr-sum-label { font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: var(--text-faint); letter-spacing: .03em; }
+  .dr-sum-val { font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dr-sum-val small { font-size: 10px; font-weight: 400; color: var(--text-dim); }
+  .dr-sum-item.good .dr-sum-val { color: var(--up); } .dr-sum-item.bad .dr-sum-val { color: var(--down); }
+  .dr-sum-sub { font-size: 10.5px; color: var(--text-dim); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dr-sec { border-top: 1px solid var(--border); padding: 2px 0; }
+  .dr-sec > summary { cursor: pointer; list-style: none; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 600; letter-spacing: .05em; padding: 11px 0; display: flex; justify-content: space-between; align-items: center; }
+  .dr-sec > summary::-webkit-details-marker { display: none; }
+  .dr-sec > summary::after { content: '+'; font-size: 16px; color: var(--text-dim); }
+  .dr-sec[open] > summary::after { content: '−'; }
+  .dr-sec > .stat-grid { margin-bottom: 14px; }
+  .dr-sec-title { font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 600; letter-spacing: .05em; border-top: 1px solid var(--border); padding: 11px 0 8px; }
+  @media (max-width: 520px) { .dr-summary { grid-template-columns: repeat(2, 1fr); } }
   .stat-sub { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-faint); margin-top: 4px; line-height: 1.4; }
   .sma-trend { display: inline-block; margin: 0 2px; font-size: 13px; }
   .reasons { list-style: none; margin: 0; padding: 0; }
@@ -2128,6 +2146,45 @@ document.getElementById('drawer').addEventListener('click', (e) => {
   if (label && METRIC_GLOSSARY[label.textContent.trim()]) openGlossary(label.textContent.trim());
 });
 
+const DRAWER_SEC_KEY = 'screener-drawer-sections';
+function drawerSecState() {
+  try { return JSON.parse(localStorage.getItem(DRAWER_SEC_KEY) || '{}'); } catch (e) { return {}; }
+}
+function drawerSecOpen(key, dflt) {
+  const st = drawerSecState();
+  return (key in st ? st[key] : dflt) ? ' open' : '';
+}
+function drawerSummaryHtml(r) {
+  const tab = state.tab;
+  const score = tab === 'sell' ? r.sell_score : (tab === 'growth' ? r.growth_score : r.buy_score);
+  const scoreLabel = tab === 'sell' ? 'SÄLJPOÄNG' : (tab === 'growth' ? 'TILLVÄXTPOÄNG' : 'KÖPPOÄNG');
+  const scoreCls = score == null ? '' : (tab === 'sell' ? (score >= 65 ? 'bad' : score < 35 ? 'good' : '') : (score >= 65 ? 'good' : score < 35 ? 'bad' : ''));
+  const v = r.valuation;
+  const vMap = { cheap: ['BILLIG', 'good'], fair: ['RIMLIG', ''], expensive: ['DYR', 'bad'] };
+  const [vTxt, vCls] = v ? (vMap[v.verdict] || ['–', '']) : ['–', ''];
+  let trTxt = '–', trCls = '';
+  if (r.above_sma50 && r.above_sma200) { trTxt = 'UPPÅT'; trCls = 'good'; }
+  else if (r.above_sma50 === false && r.above_sma200 === false) { trTxt = 'NEDÅT'; trCls = 'bad'; }
+  else if (r.above_sma200 !== null && r.above_sma200 !== undefined) { trTxt = 'BLANDAD'; }
+  const rec = r.recommendation_key;
+  const recCls = rec === 'strong_buy' || rec === 'buy' ? 'good' : (rec === 'underperform' || rec === 'sell' || rec === 'strong_sell' ? 'bad' : '');
+  const recSv = { strong_buy: 'STARKT KÖP', buy: 'KÖP', hold: 'HÅLL', underperform: 'UNDERVIKT', sell: 'SÄLJ', strong_sell: 'STARKT SÄLJ' };
+  const box = (label, val, cls, sub) => `<div class="dr-sum-item ${cls}"><div class="dr-sum-label">${label}</div><div class="dr-sum-val">${val}</div>${sub ? `<div class="dr-sum-sub">${sub}</div>` : ''}</div>`;
+  return `<div class="dr-summary">
+    ${box('PRIS', `${fmtNum(r.price)} <small>${r.currency || ''}</small>`, '', '')}
+    ${box(scoreLabel, score ?? '–', scoreCls, '')}
+    ${box('VÄRDERING', vTxt, vCls, v ? `${v.metric} ${v.diff_pct > 0 ? '+' : ''}${fmtNum(v.diff_pct, 0)}% mot historik` : '')}
+    ${box('TREND', trTxt, trCls, r.rsi14 != null ? `RSI ${fmtNum(r.rsi14, 0)}` : '')}
+    ${box('ANALYTIKER', rec ? (recSv[rec] || rec.toUpperCase()) : '–', recCls, r.analyst_upside_pct != null ? `mål ${r.analyst_upside_pct > 0 ? '+' : ''}${fmtNum(r.analyst_upside_pct, 0)}%` : '')}
+  </div>`;
+}
+document.getElementById('drawer').addEventListener('toggle', (e) => {
+  const d = e.target;
+  if (!d.classList || !d.classList.contains('dr-sec')) return;
+  const st = drawerSecState(); st[d.dataset.sec] = d.open;
+  try { localStorage.setItem(DRAWER_SEC_KEY, JSON.stringify(st)); } catch (err) {}
+}, true);
+
 function openDrawer(ticker) {
   const r = state.data.results.find(x => x.ticker === ticker);
   if (!r) return;
@@ -2138,23 +2195,25 @@ function openDrawer(ticker) {
     <div class="tkr-line">${r.ticker} · ${marketFlag(r.market)} ${r.market}${r.is_holding ? ' · INNEHAV' : ''}</div>
     ${sparklineHtml(r, 'price_history_3m', 'KURS 3 MÅN')}
     ${sparklineHtml(r, 'price_history_1y', 'KURS 1 ÅR')}
-    <div class="stat-grid">
-      <div><div class="stat-label">PRIS</div><div class="stat-val">${fmtNum(r.price)} ${r.currency||''}</div></div>
+    ${drawerSummaryHtml(r)}
+    <details class="dr-sec" data-sec="val"${drawerSecOpen('val', true)}>
+      <summary>VÄRDERING</summary>
+      <div class="stat-grid">
       <div><div class="stat-label">P/E</div><div class="stat-val">${r.pe !== null ? fmtNum(r.pe,1) : '–'}${levelBadge(r.pe, 15, 40, ['LÅGT','NORMALT','HÖGT'])}</div>${peComparisonHtml(r)}</div>
-      <div><div class="stat-label">PEG-TAL</div><div class="stat-val">${r.peg_ratio !== null && r.peg_ratio !== undefined ? fmtNum(r.peg_ratio,2) : '–'}${levelBadge(r.peg_ratio, 1, 3, ['LÅGT','NORMALT','HÖGT'])}</div></div>
       <div><div class="stat-label">FORWARD P/E</div><div class="stat-val">${forwardPeHtml(r)}</div></div>
+      <div><div class="stat-label">PEG-TAL</div><div class="stat-val">${r.peg_ratio !== null && r.peg_ratio !== undefined ? fmtNum(r.peg_ratio,2) : '–'}${levelBadge(r.peg_ratio, 1, 3, ['LÅGT','NORMALT','HÖGT'])}</div></div>
+      <div><div class="stat-label">P/B</div><div class="stat-val">${r.pb !== null ? fmtNum(r.pb,2) : '–'}${levelBadge(r.pb, 1.5, 6, ['LÅGT','NORMALT','HÖGT'])}</div></div>
       ${valuationHtml(r)}
-      <div><div class="stat-label">RISKFRI RÄNTA</div><div class="stat-val">${r.risk_free_rate_pct !== null && r.risk_free_rate_pct !== undefined ? fmtNum(r.risk_free_rate_pct,2) + '%' : '–'}</div></div>
       <div><div class="stat-label">RISKPREMIE</div><div class="stat-val">${riskPremiumHtml(r)}</div></div>
+      <div><div class="stat-label">RISKFRI RÄNTA</div><div class="stat-val">${r.risk_free_rate_pct !== null && r.risk_free_rate_pct !== undefined ? fmtNum(r.risk_free_rate_pct,2) + '%' : '–'}</div></div>
+      <div><div class="stat-label">UTDELNING</div><div class="stat-val">${r.dividend_yield_pct !== null ? fmtNum(r.dividend_yield_pct,1) + '%' : '–'}</div></div>
+      </div>
+    </details>
+    <details class="dr-sec" data-sec="growth"${drawerSecOpen('growth', true)}>
+      <summary>TILLVÄXT & LÖNSAMHET</summary>
+      <div class="stat-grid">
       <div><div class="stat-label">INTÄKTSTILLVÄXT (YOY)</div><div class="stat-val">${r.revenue_growth_yoy_pct !== null && r.revenue_growth_yoy_pct !== undefined ? (r.revenue_growth_yoy_pct > 0 ? '+' : '') + fmtNum(r.revenue_growth_yoy_pct,1) + '%' : '–'}</div></div>
       <div><div class="stat-label">MARGINALTREND</div><div class="stat-val">${r.operating_margin_trend_pp !== null && r.operating_margin_trend_pp !== undefined ? (r.operating_margin_trend_pp > 0 ? '+' : '') + fmtNum(r.operating_margin_trend_pp,1) + 'pp' : '–'}</div></div>
-      <div><div class="stat-label">RSI14</div><div class="stat-val">${r.rsi14 !== null ? fmtNum(r.rsi14,0) : '–'}${levelBadge(r.rsi14, 35, 70, ['ÖVERSÅLT','NEUTRALT','ÖVERKÖPT'])}</div></div>
-      <div class="stat-wide"><div class="stat-label">SMA20 / SMA50 / SMA200</div><div class="stat-val">${smaTrendHtml(r)}</div></div>
-      <div><div class="stat-label">VOLYM</div><div class="stat-val">${fmtVol(r.volume_ratio)}</div></div>
-      <div><div class="stat-label">P/B</div><div class="stat-val">${r.pb !== null ? fmtNum(r.pb,2) : '–'}${levelBadge(r.pb, 1.5, 6, ['LÅGT','NORMALT','HÖGT'])}</div></div>
-      <div><div class="stat-label">UTDELNING</div><div class="stat-val">${r.dividend_yield_pct !== null ? fmtNum(r.dividend_yield_pct,1) + '%' : '–'}</div></div>
-      <div><div class="stat-label">SKULDSÄTTNING (D/E)</div><div class="stat-val">${r.debt_to_equity !== null ? fmtNum(r.debt_to_equity,0) : '–'}${levelBadge(r.debt_to_equity, 50, 150, ['LÅG','NORMAL','HÖG'])}</div></div>
-      <div><div class="stat-label">VOLATILITET (ÅR)</div><div class="stat-val">${r.volatility_pct !== null ? fmtNum(r.volatility_pct,0) + '%' : '–'}${levelBadge(r.volatility_pct, 20, 45, ['LÅG','NORMAL','HÖG'])}</div></div>
       <div><div class="stat-label">FCF-MARGINAL</div><div class="stat-val">${r.fcf_margin_pct !== null && r.fcf_margin_pct !== undefined ? fmtNum(r.fcf_margin_pct,0) + '%' : '–'}</div></div>
       <div class="stat-wide">
         <div class="stat-label">ROIC (FLERÅRSSNITT)</div>
@@ -2165,15 +2224,43 @@ function openDrawer(ticker) {
       </div>
       <div><div class="stat-label">SBC/INTÄKTER</div><div class="stat-val">${r.sbc_to_revenue_pct !== null && r.sbc_to_revenue_pct !== undefined ? fmtNum(r.sbc_to_revenue_pct,0) + '%' : '–'}</div></div>
       <div><div class="stat-label">CAPEX/AVSKRIVNINGAR</div><div class="stat-val">${r.capex_to_da !== null && r.capex_to_da !== undefined ? fmtNum(r.capex_to_da,1) + 'x' : '–'}</div></div>
+      </div>
+    </details>
+    <details class="dr-sec" data-sec="risk"${drawerSecOpen('risk', false)}>
+      <summary>RISK & FINANSIELL STYRKA</summary>
+      <div class="stat-grid">
+      <div><div class="stat-label">SKULDSÄTTNING (D/E)</div><div class="stat-val">${r.debt_to_equity !== null ? fmtNum(r.debt_to_equity,0) : '–'}${levelBadge(r.debt_to_equity, 50, 150, ['LÅG','NORMAL','HÖG'])}</div></div>
+      <div><div class="stat-label">VOLATILITET (ÅR)</div><div class="stat-val">${r.volatility_pct !== null ? fmtNum(r.volatility_pct,0) + '%' : '–'}${levelBadge(r.volatility_pct, 20, 45, ['LÅG','NORMAL','HÖG'])}</div></div>
       <div><div class="stat-label">BETA</div><div class="stat-val">${r.beta !== null ? fmtNum(r.beta,2) : '–'}</div></div>
+      <div><div class="stat-label">RÄNTEKÄNSLIGHET</div><div class="stat-val">${r.rate_beta !== null && r.rate_beta !== undefined ? (r.rate_beta > 0 ? '+' : '') + fmtNum(r.rate_beta,1) + '%' : '–'}</div><div class="stat-sub">per +1 pp i USA:s 10-årsränta</div></div>
+      </div>
+    </details>
+    <details class="dr-sec" data-sec="tech"${drawerSecOpen('tech', false)}>
+      <summary>TEKNISK ANALYS & TREND</summary>
+      <div class="stat-grid">
+      <div><div class="stat-label">RSI14</div><div class="stat-val">${r.rsi14 !== null ? fmtNum(r.rsi14,0) : '–'}${levelBadge(r.rsi14, 35, 70, ['ÖVERSÅLT','NEUTRALT','ÖVERKÖPT'])}</div></div>
+      <div class="stat-wide"><div class="stat-label">SMA20 / SMA50 / SMA200</div><div class="stat-val">${smaTrendHtml(r)}</div></div>
+      <div><div class="stat-label">VOLYM</div><div class="stat-val">${fmtVol(r.volume_ratio)}</div></div>
+      </div>
+    </details>
+    <details class="dr-sec" data-sec="analyst"${drawerSecOpen('analyst', false)}>
+      <summary>ANALYTIKER</summary>
+      <div class="stat-grid">
       <div><div class="stat-label">ANALYTIKER</div><div class="stat-val">${r.recommendation_key ? r.recommendation_key.replace('_',' ').toUpperCase() : '–'}</div></div>
       <div><div class="stat-label">KURSMÅL</div><div class="stat-val">${targetHtml(r)}</div></div>
       <div><div class="stat-label">ANTAL ANALYTIKER</div><div class="stat-val">${r.num_analysts ?? '–'}</div></div>
       ${analystBreakdownHtml(r)}
+      </div>
+    </details>
+    <details class="dr-sec" data-sec="sig"${drawerSecOpen('sig', false)}>
+      <summary>SIGNALHISTORIK</summary>
+      <div class="stat-grid">
       <div><div class="stat-label">DAGAR MED SIGNAL</div><div class="stat-val">${state.tab === 'sell' ? (r.sell_days_on_list ?? 0) : (state.tab === 'growth' ? '–' : (r.buy_days_on_list ?? 0))}</div></div>
       <div><div class="stat-label">FÖRÄNDRING SEDAN SENAST</div><div class="stat-val">${(() => { if (state.tab === 'growth') return '–'; const d = state.tab === 'sell' ? r.sell_score_delta : r.buy_score_delta; return d === null || d === undefined ? '–' : (d > 0 ? '+' : '') + d; })()}</div></div>
-    </div>
+      </div>
+    </details>
     ${r.data_source === 'yfinance+fmp' ? '<div class="pe-compare-footnote">Kassaflödesnyckeltal (Capex/DA, FCF-marginal, SBC) hämtade från Financial Modeling Prep.</div>' : ''}
+    <div class="dr-sec-title">${state.tab === 'sell' ? 'SKÄL TILL SÄLJPOÄNGEN' : 'SKÄL TILL POÄNGEN'}</div>
         <ul class="reasons">${reasons.length ? reasons.map(x => `<li>${x}</li>`).join('') : '<li>Inga särskilda signaler.</li>'}</ul>
     ${r.ai_writeup ? `
     <div class="ai-writeup">

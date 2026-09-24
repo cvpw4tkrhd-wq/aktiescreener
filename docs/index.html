@@ -1504,6 +1504,27 @@ function levelBadge(value, low, high, labels, highIsGood) {
   return `<span class="level-badge ${cls}">${label}</span>`;
 }
 
+function valuationHtml(r) {
+  const v = r.valuation;
+  if (!v) return `<div class="stat-wide"><div class="stat-label">VÄRDERING MOT EGEN HISTORIK</div><div class="stat-val">–</div><div class="stat-sub">Saknas – kräver minst ett par års bokslutsdata och kurshistorik från Yahoo Finance.</div></div>`;
+  const map = { cheap: ['BILLIG', 'level-good'], fair: ['RIMLIG', 'level-neutral'], expensive: ['DYR', 'level-bad'] };
+  const [label, cls] = map[v.verdict] || ['–', 'level-neutral'];
+  const c = v.checks || {};
+  const ck = (ok, txt) => `${ok ? '✓' : '✗'} ${txt}`;
+  const flags = [];
+  if ((v.flags || []).includes('earnings_falling')) flags.push('Forward P/E är klart högre än dagens – vinsten väntas falla, så ett lågt P/E kan vara missvisande.');
+  if (['Energy', 'Materials', 'Semiconductors'].includes(r.sector)) flags.push('Cyklisk sektor – P/E är ofta lägst på toppen av cykeln, tolka med försiktighet.');
+  if (v.metric === 'P/S') flags.push('Bolaget går med förlust, så pris/försäljning (P/S) används i stället för P/E.');
+  const w = r.valuation_weight;
+  const wTxt = w ? `Påverkar poängen: <b class="${w > 0 ? 'up-txt' : 'down-txt'}">${w > 0 ? '+' : ''}${w}</b>` : 'Påverkar inte poängen';
+  return `<div class="stat-wide">
+    <div class="stat-label">VÄRDERING MOT EGEN HISTORIK</div>
+    <div class="stat-val">${v.metric} ${fmtNum(v.current,1)} mot median ${fmtNum(v.hist_median,1)} (${v.diff_pct > 0 ? '+' : ''}${fmtNum(v.diff_pct,0)}%)<span class="level-badge ${cls}">${label}</span></div>
+    <div class="stat-sub">${escapeHtml(v.phase_name)} · ${ck(c.growing, 'växer')} · ${ck(c.profitable, 'lönsam')} · ${ck(c.returns_capital, 'utdelning/återköp')} · ${fmtNum(v.years,1)} års historik · ${wTxt}</div>
+    ${flags.map(f => `<div class="stat-sub" style="color:var(--down)">⚠ ${f}</div>`).join('')}
+  </div>`;
+}
+
 function forwardPeHtml(r) {
   if (r.forward_pe === null || r.forward_pe === undefined) return '–';
   const trend = r.forward_pe_trend_pct;
@@ -2060,6 +2081,7 @@ const METRIC_GLOSSARY = {
   'PRIS': { title: 'Pris', text: 'Aktuellt pris per aktie på börsen, i bolagets handelsvaluta.' },
   'P/E': { title: 'P/E-tal', text: 'Pris delat med vinst per aktie. Visar ungefär hur många års vinst du "betalar för" i aktiepriset. Lägre P/E kan betyda billigare aktie – men kan också betyda att marknaden väntar sig sämre vinst framöver. Jämförs bäst mot liknande bolag i samma bransch.' },
   'PEG-TAL': { title: 'PEG-tal', text: 'P/E-talet delat med förväntad vinsttillväxt. Sätter priset i relation till hur snabbt bolaget väntas växa – ett högt P/E kan vara rimligt för ett snabbväxande bolag men dyrt för ett som knappt växer alls. Under 1 brukar räknas som attraktivt, över 3 som dyrt. Bygger på analytikers tillväxtprognoser, som liksom kursmål är uppskattningar, inte fakta.' },
+  'VÄRDERING MOT EGEN HISTORIK': { title: 'Värdering mot egen historik', text: 'Första screening av om aktien är billig eller dyr jämfört med sig själv. Bolaget delas in i fas: växer försäljningen, är det lönsamt, och ger det tillbaka pengar via utdelning eller återköp. Lönsamma bolag jämförs på P/E, förlustbolag på P/S (pris/försäljning). Dagens tal jämförs med bolagets median de senaste ca 4 åren: mer än 15 % under = BILLIG, mer än 15 % över = DYR. Ger +4/−4 poäng (halverat för cykliska sektorer, ingen bonus om vinsten väntas falla). Tänk på att historiken inkluderar låg-ränteåren – med dagens högre räntor är ett något lägre P/E än snittet ofta motiverat.' },
   'FORWARD P/E': { title: 'Forward P/E', text: 'Samma princip som vanligt P/E, men baserat på FÖRVÄNTAD framtida vinst istället för senast rapporterade. Symbolen visar om forward P/E är klart lägre (▲, grönt – vinsttillväxt väntas) eller klart högre (▼, rött – vinstnedgång väntas) än det vanliga P/E-talet. Bygger på analytikeres vinstprognoser, inte facit.' },
   'RISKFRI RÄNTA': { title: 'Riskfri ränta', text: 'Vad en 10-årig statsobligation i bolagets hemland ger just nu - avkastningen du kan få praktiskt taget utan risk. Referenspunkten allt annat mäts mot: varför ta aktierisk för mindre än så? Statisk siffra, uppdateras bara när Claude uppdaterar referensfilen manuellt - inte i realtid.' },
   'RISKPREMIE': { title: 'Riskpremie', text: 'Aktiens vinstavkastning (100/P/E) minus riskfri ränta - hur mycket EXTRA avkastning aktien erbjuder för risken du tar jämfört med en säker placering. Negativ riskpremie (▼, rött) betyder att du får bättre avkastning helt riskfritt just nu, vilket är ett varningstecken. Hög riskpremie (▲, grönt) betyder gott om kompensation för risken - men bygger på dagens vinst, inte en garanti om framtiden.' },
@@ -2121,6 +2143,7 @@ function openDrawer(ticker) {
       <div><div class="stat-label">P/E</div><div class="stat-val">${r.pe !== null ? fmtNum(r.pe,1) : '–'}${levelBadge(r.pe, 15, 40, ['LÅGT','NORMALT','HÖGT'])}</div>${peComparisonHtml(r)}</div>
       <div><div class="stat-label">PEG-TAL</div><div class="stat-val">${r.peg_ratio !== null && r.peg_ratio !== undefined ? fmtNum(r.peg_ratio,2) : '–'}${levelBadge(r.peg_ratio, 1, 3, ['LÅGT','NORMALT','HÖGT'])}</div></div>
       <div><div class="stat-label">FORWARD P/E</div><div class="stat-val">${forwardPeHtml(r)}</div></div>
+      ${valuationHtml(r)}
       <div><div class="stat-label">RISKFRI RÄNTA</div><div class="stat-val">${r.risk_free_rate_pct !== null && r.risk_free_rate_pct !== undefined ? fmtNum(r.risk_free_rate_pct,2) + '%' : '–'}</div></div>
       <div><div class="stat-label">RISKPREMIE</div><div class="stat-val">${riskPremiumHtml(r)}</div></div>
       <div><div class="stat-label">INTÄKTSTILLVÄXT (YOY)</div><div class="stat-val">${r.revenue_growth_yoy_pct !== null && r.revenue_growth_yoy_pct !== undefined ? (r.revenue_growth_yoy_pct > 0 ? '+' : '') + fmtNum(r.revenue_growth_yoy_pct,1) + '%' : '–'}</div></div>

@@ -89,6 +89,21 @@ def load_investtech_top20():
     return {e["ticker"]: e for e in data.get("entries", [])}
 
 
+_SECTOR_RULES = []   # (sektor, vikt, faktornamn, marknader eller None = alla)
+GEO_CAP = 10          # tak för sammanlagd geopolitisk vikt per aktie (v8.8)
+
+
+def sector_weight_for(sector, market):
+    """Summerad sektorvikt för en aktie, med hänsyn till faktorer som bara
+    gäller vissa marknader (fältet `markets` i risk_factors.yml)."""
+    w, names = 0, []
+    for sec, weight, name, markets in _SECTOR_RULES:
+        if sec == sector and (markets is None or market in markets):
+            w += weight
+            names.append(f"{name} ({weight:+d})")
+    return w, names
+
+
 def load_risk_factors():
     """Läser redigerbara geopolitiska/makro-riskfaktorer och summerar vikt per
     sektor OCH per land. Returnerar (sector_weights, sector_factor_names,
@@ -101,8 +116,11 @@ def load_risk_factors():
     sector_factor_names = {}
     country_weights = {}
     country_factor_names = {}
+    _SECTOR_RULES.clear()
     for factor in data.get("factors") or []:
+        markets = factor.get("markets")
         for sector, weight in (factor.get("sectors") or {}).items():
+            _SECTOR_RULES.append((sector, weight, factor.get("name", "?"), set(markets) if markets else None))
             sector_weights[sector] = sector_weights.get(sector, 0) + weight
             sector_factor_names.setdefault(sector, []).append(f"{factor.get('name','?')} ({weight:+d})")
         for country, weight in (factor.get("countries") or {}).items():
@@ -373,13 +391,14 @@ def _category_scores(s, off, moff):
     parts = []
     hy, ig = _at(s.get("BAMLH0A0HYM2"), off), _at(s.get("BAMLC0A0CM"), off)
     if hy is not None:
-        h = _interp(hy, [(2, 100), (3.5, 90), (5, 65), (8, 20), (11, 5)])
-        hyc = _chg(s.get("BAMLH0A0HYM2"), 21, off)
-        if hyc is not None and hyc > 0.5:
-            h -= 10
+        # v8.8: brantare skala + gradvis straff för snabb vidgning (2 veckor)
+        h = _interp(hy, [(2.5, 100), (3.0, 90), (4.0, 65), (5.5, 30), (8, 5)])
+        hyc = _chg(s.get("BAMLH0A0HYM2"), 10, off)
+        if hyc is not None and hyc > 0:
+            h -= min(30, hyc * 40)
         parts.append(max(0, h))
     if ig is not None:
-        parts.append(_interp(ig, [(0.6, 100), (1.0, 90), (1.5, 65), (2.5, 20), (3.5, 5)]))
+        parts.append(_interp(ig, [(0.7, 100), (0.9, 85), (1.2, 60), (1.8, 25), (2.5, 5)]))
     if parts:
         out["credit"] = sum(parts) / len(parts)
     # 4. Realränta & inflationsförväntan
@@ -394,7 +413,7 @@ def _category_scores(s, off, moff):
     # 5. Obligationsvolatilitet
     mv = _at(s.get("MOVE"), off)
     if mv is not None:
-        out["vol"] = _interp(mv, [(60, 100), (80, 90), (100, 70), (130, 35), (180, 5)])
+        out["vol"] = _interp(mv, [(60, 100), (80, 85), (100, 60), (120, 35), (150, 10)])
     # 6. Europa & Norden (månadsdata från OECD via FRED)
     chs = [_chg(s.get(k), 1, moff) for k in ("IRLTLT01DEM156N", "IRLTLT01SEM156N")]
     chs = [c for c in chs if c is not None]
@@ -404,8 +423,8 @@ def _category_scores(s, off, moff):
 
 
 CATEGORY_META = [
-    ("rates", "Ränterörelse", 1.5), ("curve", "Räntekurva", 1.0), ("credit", "Kredit", 1.5),
-    ("real", "Realränta & inflation", 1.0), ("vol", "Obligationsvolatilitet", 1.0),
+    ("rates", "Ränterörelse", 1.5), ("curve", "Räntekurva", 0.75), ("credit", "Kredit", 1.5),
+    ("real", "Realränta & inflation", 0.75), ("vol", "Obligationsvolatilitet", 1.5),
     ("europe", "Europa & Norden", 0.5),
 ]
 
@@ -1583,10 +1602,20 @@ def score_growth_candidate(d, extra_weight=0):
     # OBS: volatilitet ger varken bonus eller straff här - hög volatilitet
     # är väntat för unga bolag, ingen egen signal i den här modellen.
 
+    # Kassaförbrukning räknas EN gång (v8.8): negativ FCF och kraftigt negativ
+    # ROIC mäter samma sak hos unga bolag. Sammanlagt högst -10, och bara -5
+    # om intäkterna växer mer än 15 %.
+    burn_fcf = d.get("fcf_margin_pct") is not None and d["fcf_margin_pct"] < 0
+    burn_roic = not d.get("roic_na") and d.get("roic_avg") is not None and d["roic_avg"] < -10
+    if burn_fcf or burn_roic:
+        fast_growth = (d.get("revenue_growth_yoy_pct") or 0) > 15
+        pen = 5 if fast_growth else 10
+        penalty += pen
+        what = " och ".join(x for x, on in (("negativt fritt kassaflöde", burn_fcf), (f"negativ ROIC ({d['roic_avg']:.0f}%)" if burn_roic else "", burn_roic)) if on)
+        reasons.append(f"Kassaförbrukning: {what} – vanligt i tillväxtfas, bevaka kassans räckvidd" + (" (mildrat av stark intäktstillväxt)" if fast_growth else ""))
     if d.get("fcf_margin_pct") is not None:
         if d["fcf_margin_pct"] < 0:
-            penalty += 10
-            reasons.append(f"Negativ FCF-marginal ({d['fcf_margin_pct']}%) – vanligt i tillväxtfas, men bevaka kassans räckvidd")
+            pass
         elif d["fcf_margin_pct"] > 15:
             bonus += 8
             reasons.append(f"Stark FCF-marginal ({d['fcf_margin_pct']}%) – ovanligt moget kassaflöde för bolagets storlek")
@@ -1602,9 +1631,7 @@ def score_growth_candidate(d, extra_weight=0):
         if d["roic_avg"] > 15:
             bonus += 8
             reasons.append(f"Stark genomsnittlig avkastning på investerat kapital (ROIC-snitt {d['roic_avg']:.1f}% över {d.get('roic_years',0)} år) – ovanligt moget för bolagets storlek")
-        elif d["roic_avg"] < -10:
-            penalty += 8
-            reasons.append(f"Kraftigt negativ genomsnittlig ROIC ({d['roic_avg']:.1f}%) – måttligt negativt är normalt i tillväxtfas, men den här nivån är en varningssignal")
+        # Kraftigt negativ ROIC räknas nu i kassaförbrukningen ovan (v8.8).
 
     if d.get("sbc_to_revenue_pct") is not None and d["sbc_to_revenue_pct"] > 15:
         penalty += 8
@@ -1764,8 +1791,13 @@ def main():
                     d["data_source"] = "yfinance+fmp"
 
             sector = entry.get("sector")
-            sector_weight = sector_weights.get(sector, 0) if sector else 0
+            sector_weight, sector_names = sector_weight_for(sector, entry["market"]) if sector else (0, [])
             country_weight = country_weights.get(entry["market"], 0)
+            # Tak: geopolitik får sammanlagt påverka högst ±GEO_CAP poäng (v8.8)
+            geo_raw = sector_weight + country_weight
+            geo_capped = max(-GEO_CAP, min(GEO_CAP, geo_raw))
+            if geo_capped != geo_raw:
+                sector_weight = geo_capped - country_weight
 
             investtech_entry = investtech_top20.get(ticker)
             investtech_weight = 0
@@ -1781,7 +1813,7 @@ def main():
 
             geopolitics_note = None
             if sector_weight:
-                geopolitics_note = ", ".join(sector_factor_names.get(sector, []))
+                geopolitics_note = ", ".join(sector_names) + (f" – begränsat till {sector_weight:+d} (tak ±{GEO_CAP})" if geo_capped != geo_raw else "")
                 buy_reasons.append(f"Geopolitik/makro ({sector}): {geopolitics_note}")
                 growth_reasons.append(f"Geopolitik/makro ({sector}): {geopolitics_note}")
 

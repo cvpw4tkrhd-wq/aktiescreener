@@ -1152,13 +1152,15 @@ function scoreSellSignal(d) {
     && d.debt_to_equity > 120 && d.above_sma50 === false;
 
   if (d.rsi14 !== null && d.rsi14 !== undefined && d.rsi14 > 70) {
-    score += 30; reasons.push(`RSI överköpt (${d.rsi14})`);
+    score += 15; reasons.push(`RSI överköpt (${d.rsi14})`);
   }
   if (d.cross_signal === 'death_cross') {
     score += 35; reasons.push('Death cross (SMA50 under SMA200)');
   }
   if (d.above_sma50 === false) {
-    score += 15; reasons.push('Pris under SMA50');
+    // v8.8: kortsiktig svaghet väger lätt, men mer när även långa trenden brutits
+    if (d.above_sma200 === false) { score += 15; reasons.push('Pris under både SMA50 och SMA200 – trenden är bruten'); }
+    else { score += 8; reasons.push('Pris under SMA50 (men över SMA200) – kortsiktig svaghet'); }
   }
   if (d.pe !== null && d.pe !== undefined && d.pe > 40) {
     score += 15; reasons.push(`Högt P/E (${d.pe}) – dyrt relativt vinst`);
@@ -2283,7 +2285,7 @@ const METRIC_GLOSSARY = {
   'PRIS': { title: 'Pris', text: 'Aktuellt pris per aktie på börsen, i bolagets handelsvaluta.' },
   'P/E': { title: 'P/E-tal', text: 'Pris delat med vinst per aktie. Visar ungefär hur många års vinst du "betalar för" i aktiepriset. Lägre P/E kan betyda billigare aktie – men kan också betyda att marknaden väntar sig sämre vinst framöver. Jämförs bäst mot liknande bolag i samma bransch.' },
   'PEG-TAL': { title: 'PEG-tal', text: 'P/E-talet delat med förväntad vinsttillväxt. Sätter priset i relation till hur snabbt bolaget väntas växa – ett högt P/E kan vara rimligt för ett snabbväxande bolag men dyrt för ett som knappt växer alls. Under 1 brukar räknas som attraktivt, över 3 som dyrt. Bygger på analytikers tillväxtprognoser, som liksom kursmål är uppskattningar, inte fakta.' },
-  'SHARPEKVOT': { title: 'Sharpekvot', text: 'Fondens avkastning det senaste året minus den riskfria räntan, delat med volatiliteten. Visar hur mycket extra avkastning du fått per enhet risk. Över 1 är bra, under 0 betyder att fonden gett mindre än en riskfri placering.' },
+  'SHARPEKVOT': { title: 'Sharpekvot', text: 'Fondens avkastning det senaste året minus den korta riskfria räntan (styrräntan i fondens valuta), delat med volatiliteten. Visar hur mycket extra avkastning du fått per enhet risk. Över 1 är bra, under 0 betyder att fonden gett mindre än en riskfri placering.' },
   'MAX FALL 1 ÅR': { title: 'Största fall (max drawdown)', text: 'Det största fallet från en toppnotering till en efterföljande botten det senaste året. Visar hur ont det kan göra att äga fonden i en nedgång.' },
   'RANK I KATEGORI': { title: 'Momentum-rank', text: 'Fondens placering bland jämförbara fonder (aktiefonder mot aktiefonder, räntefonder mot räntefonder) utifrån en blandning av 3, 6 och 12 månaders avkastning.' },
   'SMA50 / SMA200': { title: 'SMA50 mot SMA200', text: 'Golden cross = 50-dagarssnittet ligger över 200-dagarssnittet, en klassisk signal för uppåtgående trend. Death cross = tvärtom.' },
@@ -2427,7 +2429,7 @@ function renderFunds() {
   const tab = state.fundTab || 'promising';
   if (tab === 'mine') mountUploadPanel(up, 'f'); else up.innerHTML = '';
 
-  const intro = state.funds ? `<div class="fund-note">Poäng 0–100 för hur lovande fonden ser ut just nu: trend (30), momentum mot jämförbara fonder (25), riskjusterad avkastning (25), avgift (10) och makroläge (10). 75+ = lovande, under 50 = svag. Uppdaterad ${fmtDateTime(state.funds.generated_at)}. Inte finansiell rådgivning.</div>`
+  const intro = state.funds ? `<div class="fund-note">Poäng 0–100 för hur lovande fonden ser ut just nu: trend (35), momentum mot jämförbara fonder (25, hälften inom samma kategori), riskjusterad avkastning (25), avgift (10) och makroläge (5). 75+ = lovande, under 50 = svag. Uppdaterad ${fmtDateTime(state.funds.generated_at)}. Inte finansiell rådgivning.</div>`
     : `<div class="fund-note">Fonddata saknas ännu — den hämtas vid nästa schemalagda körning.</div>`;
   let html = intro;
   if (tab === 'promising') {
@@ -2481,7 +2483,7 @@ function openFundDrawer(ticker) {
     </div>
     <details class="dr-sec" data-sec="fscore"${drawerSecOpen('fscore', true)}>
       <summary>POÄNG PER OMRÅDE</summary>
-      <div class="bd-cats" style="margin:4px 0 14px">${partRow('trend', 'Trend', 30)}${partRow('momentum', 'Momentum', 25)}${partRow('risk', 'Riskjusterad avkastning', 25)}${partRow('cost', 'Avgift', 10)}${partRow('macro', 'Makroläge', 10)}</div>
+      <div class="bd-cats" style="margin:4px 0 14px">${partRow('trend', 'Trend', 35)}${partRow('momentum', 'Momentum', 25)}${partRow('risk', 'Riskjusterad avkastning', 25)}${partRow('cost', 'Avgift', 10)}${partRow('macro', 'Makroläge', 5)}</div>
     </details>
     <details class="dr-sec" data-sec="ftrend"${drawerSecOpen('ftrend', true)}>
       <summary>TREND & TEKNISK ANALYS</summary>
@@ -2490,6 +2492,7 @@ function openFundDrawer(ticker) {
         ${cell('SMA200', fmtNum(f.sma200), f.above_sma200 ? 'Kursen över' : 'Kursen under')}
         ${cell('SMA50 / SMA200', crossTxt, f.sma50_vs_200_pct != null ? `SMA50 ${f.sma50_vs_200_pct > 0 ? '+' : ''}${fmtNum(f.sma50_vs_200_pct, 1)}% mot SMA200` : '')}
         ${cell('RSI14', f.rsi14 != null ? fmtNum(f.rsi14, 0) : '–', '')}
+        ${cell('AVSTÅND TILL SMA200', f.sma200_dist_pct != null ? (f.sma200_dist_pct > 0 ? '+' : '') + fmtNum(f.sma200_dist_pct, 1) + '%' : '–', f.sma200_slope_pct != null ? `SMA200 ${f.sma200_slope_pct > 0 ? 'stiger' : 'faller'} ${fmtNum(Math.abs(f.sma200_slope_pct), 1)}%/mån` : '')}
       </div>
     </details>
     <details class="dr-sec" data-sec="fret"${drawerSecOpen('fret', true)}>
@@ -2504,7 +2507,7 @@ function openFundDrawer(ticker) {
       <div class="stat-grid">
         ${cell('VOLATILITET (ÅR)', f.volatility_pct != null ? fmtNum(f.volatility_pct, 1) + '%' : '–')}
         ${cell('MAX FALL 1 ÅR', f.max_drawdown_pct != null ? fmtNum(f.max_drawdown_pct, 1) + '%' : '–', 'största fall från topp')}
-        ${cell('SHARPEKVOT', f.sharpe != null ? fmtNum(f.sharpe, 2) : '–', 'avkastning över riskfri ränta per risk')}
+        ${cell('SHARPEKVOT', f.sharpe != null ? fmtNum(f.sharpe, 2) : '–', 'avkastning över styrräntan per risk')}
         ${cell('AVGIFT', f.fee_pct != null ? fmtNum(f.fee_pct, 2) + '%' : '–', f.fee_source || '')}
       </div>
     </details>
@@ -2818,7 +2821,7 @@ const MODULES = [
           <div class="lbl">I appen</div>
           <table>
             <tr><td>≥65 poäng</td><td>Flaggas KÖP (om analytikerkonsensus inte säger emot — mer om det senare)</td></tr>
-            <tr><td>≥50 säljpoäng</td><td>Flaggas SÄLJ för innehav du äger</td></tr>
+            <tr><td>≥40 säljpoäng</td><td>Flaggas SÄLJ för innehav du äger</td></tr>
             <tr><td>&lt;40 poäng</td><td>Visas inte som kandidat i USA/Europa/Norden-flikarna</td></tr>
           </table>
         </div>
@@ -3120,7 +3123,7 @@ const MODULES = [
         <div class="in-app">
           <div class="lbl">I appen</div>
           <table>
-            <tr><td>FCF-marginal &lt; 0</td><td>−15 poäng (standard), −10 (tillväxt, mer överseende)</td></tr>
+            <tr><td>FCF-marginal &lt; 0</td><td>−15 poäng (standard). Tillväxtmodellen: kassaförbrukning (negativ FCF och/eller ROIC under −10 %) räknas en gång, −10 — eller −5 om intäkterna växer mer än 15 %</td></tr>
             <tr><td>FCF-marginal &gt; 15%</td><td>+8 poäng</td></tr>
           </table>
         </div>

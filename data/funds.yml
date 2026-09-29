@@ -2,44 +2,47 @@
 # Varje fond: name, ticker (Yahoo Finance-kod), category, asset_class
 # (equity | bond | commodity | realestate), valfritt isin (för matchning mot
 # innehavsfilen), fee_pct (årlig avgift i %, fylls i manuellt om Yahoo saknar
-# den) och proxy/proxy_note när kursdata kommer från en närliggande andelsklass.
+# den – hämtade från Avanza 2026-09-29) och proxy/proxy_note när kursdata kommer från en närliggande andelsklass.
 # Listan säger ingenting om vem som äger vad – innehav läses bara i webbläsaren.
+# Kort riskfri ränta per valuta för Sharpekvoten (styrräntor, uppdateras vid
+# behov). USD hämtas automatiskt från 3-månadersräntan i results.json.
+short_rates: {SEK: 1.75, EUR: 2.50, NOK: 4.00, DKK: 2.10, GBP: 4.00}
 funds:
-  - {name: "Alfred Berg Gambak Global R", ticker: "0P0001VSIP.ST", isin: "NO0013583344", category: "Global", asset_class: equity}
-  - {name: "Avanza Zero", ticker: "0P00005U1J.ST", isin: "SE0001718388", category: "Sverige index", asset_class: equity}
-  - {name: "Evli Silver and Gold B", ticker: "0P00017LW4.F", isin: "FI4000188982", category: "Råvaror/ädelmetaller", asset_class: commodity}
-  - {name: "Finserve Global Defence & Security I SEK R", ticker: "0P0001D63M.ST", isin: "LU1822851538", category: "Tema: försvar", asset_class: equity}
-  - {name: "Franklin Biotechnology Discovery A acc USD", ticker: "FBDIX", isin: "LU0109394709", category: "Tema: bioteknik", asset_class: equity, proxy: true, proxy_note: "Andelsklassen LU0109394709 finns inte hos Yahoo. Kursdata från amerikanska systerfonden FBDIX (samma förvaltare och strategi) – trend och momentum blir i praktiken samma, men kursnivå och avgift skiljer sig."}
-  - {name: "Handelsbanken Global Momentum A1 SEK", ticker: "0P0001LS8Q.ST", isin: "SE0015382114", category: "Global", asset_class: equity}
-  - {name: "Länsförsäkringar Fastighetsfond A", ticker: "0P00000L2Q.ST", isin: "SE0000837338", category: "Fastigheter", asset_class: realestate}
-  - {name: "Länsförsäkringar Global Index", ticker: "0P0000YVZ3.ST", isin: "SE0005188836", category: "Global index", asset_class: equity}
-  - {name: "Länsförsäkringar Sverige Vision A", ticker: "0P00000L41.ST", isin: "SE0000837221", category: "Sverige", asset_class: equity}
-  - {name: "SEB Swedish Value Fund A", ticker: "0P00006P9H.ST", isin: "SE0001838004", category: "Sverige", asset_class: equity}
-  - {name: "Spiltan Aktiefond Investmentbolag", ticker: "0P0000ULAP.ST", isin: "SE0004297927", category: "Sverige", asset_class: equity}
-  - {name: "Swedbank Robur Technology A", ticker: "0P00000LCG.ST", isin: "SE0000538944", category: "Tema: teknik", asset_class: equity}
+  - {name: "Alfred Berg Gambak Global R", ticker: "0P0001VSIP.ST", isin: "NO0013583344", category: "Global", asset_class: equity, fee_pct: 1.59}
+  - {name: "Avanza Zero", ticker: "0P00005U1J.ST", isin: "SE0001718388", category: "Sverige index", asset_class: equity, fee_pct: 0.0}
+  - {name: "Evli Silver and Gold B", ticker: "0P00017LW4.F", isin: "FI4000188982", category: "Råvaror/ädelmetaller", asset_class: commodity, fee_pct: 2.01}
+  - {name: "Finserve Global Defence & Security I SEK R", ticker: "0P0001D63M.ST", isin: "LU1822851538", category: "Tema: försvar", asset_class: equity, fee_pct: 1.91}
+  - {name: "Franklin Biotechnology Discovery A acc USD", ticker: "FBDIX", isin: "LU0109394709", category: "Tema: bioteknik", asset_class: equity, proxy: true, proxy_note: "Andelsklassen LU0109394709 finns inte hos Yahoo. Kursdata från amerikanska systerfonden FBDIX (samma förvaltare och strategi) – trend och momentum blir i praktiken samma, men kursnivån skiljer sig. Avgiften avser din andelsklass (Avanza).", fee_pct: 1.9}
+  - {name: "Handelsbanken Global Momentum A1 SEK", ticker: "0P0001LS8Q.ST", isin: "SE0015382114", category: "Global", asset_class: equity, fee_pct: 0.73}
+  - {name: "Länsförsäkringar Fastighetsfond A", ticker: "0P00000L2Q.ST", isin: "SE0000837338", category: "Fastigheter", asset_class: realestate, fee_pct: 1.45}
+  - {name: "Länsförsäkringar Global Index", ticker: "0P0000YVZ3.ST", isin: "SE0005188836", category: "Global index", asset_class: equity, fee_pct: 0.21}
+  - {name: "Länsförsäkringar Sverige Vision A", ticker: "0P00000L41.ST", isin: "SE0000837221", category: "Sverige", asset_class: equity, fee_pct: 1.37}
+  - {name: "SEB Swedish Value Fund A", ticker: "0P00006P9H.ST", isin: "SE0001838004", category: "Sverige", asset_class: equity, fee_pct: 1.69}
+  - {name: "Spiltan Aktiefond Investmentbolag", ticker: "0P0000ULAP.ST", isin: "SE0004297927", category: "Sverige", asset_class: equity, fee_pct: 0.22}
+  - {name: "Swedbank Robur Technology A", ticker: "0P00000LCG.ST", isin: "SE0000538944", category: "Tema: teknik", asset_class: equity, fee_pct: 1.38}
   - {name: "iShares STOXX Europe 600 Banks UCITS ETF", ticker: "EXV1.DE", isin: "DE000A0F5UJ7", category: "Europa", asset_class: equity}
   # --- Jämförelsefonder ---
-  - {name: "Avanza Global", ticker: "0P0001ECQR.ST", category: "Global index", asset_class: equity}
-  - {name: "Avanza USA", ticker: "0P0001IVD1.ST", category: "USA", asset_class: equity}
-  - {name: "Swedbank Robur Access Global A", ticker: "0P00016L3S.ST", category: "Global index", asset_class: equity}
-  - {name: "AMF Aktiefond Global", ticker: "0P00000L33.ST", category: "Global", asset_class: equity}
-  - {name: "Swedbank Robur Globalfond A", ticker: "0P00000LDD.ST", category: "Global", asset_class: equity}
+  - {name: "Avanza Global", ticker: "0P0001ECQR.ST", category: "Global index", asset_class: equity, isin: "SE0011527613", fee_pct: 0.1}
+  - {name: "Avanza USA", ticker: "0P0001IVD1.ST", category: "USA", asset_class: equity, isin: "SE0012741163", fee_pct: 0.18}
+  - {name: "Swedbank Robur Access Global A", ticker: "0P00016L3S.ST", category: "Global index", asset_class: equity, isin: "SE0007074059", fee_pct: 0.24}
+  - {name: "AMF Aktiefond Global", ticker: "0P00000L33.ST", category: "Global", asset_class: equity, isin: "SE0000862278", fee_pct: 0.63}
+  - {name: "Swedbank Robur Globalfond A", ticker: "0P00000LDD.ST", category: "Global", asset_class: equity, isin: "SE0000542979", fee_pct: 1.4}
   - {name: "Handelsbanken Sverige Index A1", ticker: "0P00001DF8.ST", category: "Sverige index", asset_class: equity}
-  - {name: "Länsförsäkringar Sverige Index", ticker: "0P0000J1JM.ST", category: "Sverige index", asset_class: equity}
-  - {name: "Lannebo Sverige A", ticker: "0P00000KJK.ST", category: "Sverige", asset_class: equity}
-  - {name: "Spiltan Aktiefond Stabil", ticker: "0P00000HMU.ST", category: "Sverige", asset_class: equity}
-  - {name: "AMF Aktiefond Småbolag", ticker: "0P00000T7M.ST", category: "Sverige småbolag", asset_class: equity}
-  - {name: "Swedbank Robur Småbolagsfond Sverige A", ticker: "0P00000LEY.ST", category: "Sverige småbolag", asset_class: equity}
-  - {name: "Handelsbanken Svenska Småbolag A1", ticker: "0P00000F8N.ST", category: "Sverige småbolag", asset_class: equity}
-  - {name: "SEB Europafond Småbolag", ticker: "0P00000LQ6.ST", category: "Europa", asset_class: equity}
-  - {name: "Avanza Emerging Markets", ticker: "0P0001H4TL.ST", category: "Tillväxtmarknader", asset_class: equity}
-  - {name: "Länsförsäkringar Tillväxtmarknad Index A", ticker: "0P00013668.ST", category: "Tillväxtmarknader", asset_class: equity}
-  - {name: "Swedbank Robur Ny Teknik A", ticker: "0P00000K48.ST", category: "Tema: teknik", asset_class: equity}
-  - {name: "Handelsbanken Hälsovård Tema A1", ticker: "0P00000F5G.ST", category: "Tema: hälsovård", asset_class: equity}
+  - {name: "Länsförsäkringar Sverige Index", ticker: "0P0000J1JM.ST", category: "Sverige index", asset_class: equity, isin: "SE0002656611", fee_pct: 0.21}
+  - {name: "Lannebo Sverige A", ticker: "0P00000KJK.ST", category: "Sverige", asset_class: equity, isin: "SE0000740680", fee_pct: 1.99}
+  - {name: "Spiltan Aktiefond Stabil", ticker: "0P00000HMU.ST", category: "Sverige", asset_class: equity, isin: "SE0001015348", fee_pct: 1.54}
+  - {name: "AMF Aktiefond Småbolag", ticker: "0P00000T7M.ST", category: "Sverige småbolag", asset_class: equity, isin: "SE0001185000", fee_pct: 0.48}
+  - {name: "Swedbank Robur Småbolagsfond Sverige A", ticker: "0P00000LEY.ST", category: "Sverige småbolag", asset_class: equity, isin: "SE0000602302", fee_pct: 1.44}
+  - {name: "Handelsbanken Svenska Småbolag A1", ticker: "0P00000F8N.ST", category: "Sverige småbolag", asset_class: equity, isin: "SE0000356065", fee_pct: 1.71}
+  - {name: "SEB Europafond Småbolag", ticker: "0P00000LQ6.ST", category: "Europa", asset_class: equity, isin: "SE0000433252", fee_pct: 1.67}
+  - {name: "Avanza Emerging Markets", ticker: "0P0001H4TL.ST", category: "Tillväxtmarknader", asset_class: equity, isin: "SE0012454338", fee_pct: 0.3}
+  - {name: "Länsförsäkringar Tillväxtmarknad Index A", ticker: "0P00013668.ST", category: "Tillväxtmarknader", asset_class: equity, isin: "SE0005796331", fee_pct: 0.51}
+  - {name: "Swedbank Robur Ny Teknik A", ticker: "0P00000K48.ST", category: "Tema: teknik", asset_class: equity, isin: "SE0000709123", fee_pct: 1.44}
+  - {name: "Handelsbanken Hälsovård Tema A1", ticker: "0P00000F5G.ST", category: "Tema: hälsovård", asset_class: equity, isin: "SE0000735375", fee_pct: 1.6}
   - {name: "Carnegie Fastighetsfond Norden B", ticker: "0P00015U4Q.ST", category: "Fastigheter", asset_class: realestate}
-  - {name: "Spiltan Räntefond Sverige", ticker: "0P00009NT9.ST", category: "Räntefond", asset_class: bond}
-  - {name: "Länsförsäkringar Kort Räntefond", ticker: "0P00000L3H.ST", category: "Räntefond", asset_class: bond}
-  - {name: "Swedbank Robur Räntefond Kort A", ticker: "0P00000FQP.ST", category: "Räntefond", asset_class: bond}
-  - {name: "AMF Räntefond Lång", ticker: "0P00000K19.ST", category: "Räntefond", asset_class: bond}
-  - {name: "Lannebo Företagsobligationsfond A", ticker: "0P00000FUA.ST", category: "Räntefond", asset_class: bond}
+  - {name: "Spiltan Räntefond Sverige", ticker: "0P00009NT9.ST", category: "Räntefond", asset_class: bond, isin: "SE0002152140", fee_pct: 0.1}
+  - {name: "Länsförsäkringar Kort Räntefond", ticker: "0P00000L3H.ST", category: "Räntefond", asset_class: bond, isin: "SE0000837247", fee_pct: 0.2}
+  - {name: "Swedbank Robur Räntefond Kort A", ticker: "0P00000FQP.ST", category: "Räntefond", asset_class: bond, isin: "SE0000543043", fee_pct: 0.13}
+  - {name: "AMF Räntefond Lång", ticker: "0P00000K19.ST", category: "Räntefond", asset_class: bond, isin: "SE0000739187", fee_pct: 0.13}
+  - {name: "Lannebo Företagsobligationsfond A", ticker: "0P00000FUA.ST", category: "Räntefond", asset_class: bond, isin: "SE0001095506", fee_pct: 1.19}
   - {name: "SEB Företagsobligationsfond A", ticker: "0P0001H41U.ST", category: "Räntefond", asset_class: bond}

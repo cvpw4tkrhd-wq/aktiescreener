@@ -185,6 +185,23 @@
   .bd-hero.good .bd-score { color: var(--up); }
   .bd-hero.bad .bd-score { color: var(--down); }
   .bd-hero-txt { flex: 1; min-width: 200px; font-size: 13px; line-height: 1.45; }
+  .stab-gauge { width: 220px; max-width: 100%; text-align: center; }
+  .stab-gauge svg { width: 100%; height: auto; display: block; }
+  .stab-gauge-lbl { font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--text-dim); margin-top: -2px; }
+  .stab-needle { transform-origin: 110px 104px; animation: stabSwing .9s cubic-bezier(.3,1.4,.5,1) both; }
+  @keyframes stabSwing { from { transform: rotate(-75deg); } to { transform: rotate(0); } }
+  @media (prefers-reduced-motion: reduce) { .stab-needle { animation: none; } }
+  .stab-hist { border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px 10px; margin-bottom: 14px; }
+  .stab-hist-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .stab-toggle { display: flex; gap: 4px; }
+  .stab-toggle button { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 5px 9px; border: 1px solid var(--border); background: var(--panel-alt); color: var(--text-dim); border-radius: 6px; cursor: pointer; }
+  .stab-toggle button.active { background: var(--accent, var(--amber)); border-color: var(--accent, var(--amber)); color: var(--bg); }
+  .stab-readout { font-size: 12px; color: var(--text-dim); margin: 8px 0 6px; min-height: 17px; }
+  .stab-readout b { color: var(--text); }
+  .stab-chart { width: 100%; height: auto; display: block; }
+  .stab-dot.hl { r: 5; fill: var(--text); }
+  .stab-legend { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11px; color: var(--text-dim); margin-top: 4px; }
+  .stab-legend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 4px; vertical-align: -1px; }
   .bd-hero-txt b { font-size: 15px; }
   .bd-cats { display: grid; gap: 8px; margin-bottom: 14px; }
   .bd-cat { display: grid; grid-template-columns: 150px 1fr 44px; gap: 10px; align-items: center; font-size: 12px; }
@@ -1778,6 +1795,84 @@ function macroInvesttechSectionHtml() {
     </details>`;
 }
 
+
+// ===== Stabilitet: mätare och historik (v8.7) =====
+const STAB_ZONES = [[0, 30, 'var(--down)', 'Stressat'], [30, 50, '#e08a2e', 'Ostabilt'], [50, 70, '#c9b037', 'Blandat'], [70, 100, 'var(--up)', 'Stabilt']];
+function stabGaugeSvg(score, label) {
+  const cx = 110, cy = 104, r = 84, sw = 16;
+  const pt = (v, rad) => { const a = Math.PI * (1 - v / 100); return [cx + rad * Math.cos(a), cy - rad * Math.sin(a)]; };
+  const arc = (v0, v1) => { const [x0, y0] = pt(v0, r), [x1, y1] = pt(v1, r); return `M${x0.toFixed(1)},${y0.toFixed(1)} A${r},${r} 0 0 1 ${x1.toFixed(1)},${y1.toFixed(1)}`; };
+  const zones = STAB_ZONES.map(([a, b, c]) => `<path d="${arc(a + 0.6, b - 0.6)}" stroke="${c}" stroke-width="${sw}" fill="none" opacity="0.85"/>`).join('');
+  const ticks = [0, 30, 50, 70, 100].map(v => { const [x1, y1] = pt(v, r - sw / 2 - 2), [x2, y2] = pt(v, r - sw / 2 - 8); return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="var(--text-faint)" stroke-width="1.5"/>`; }).join('');
+  let needle = '';
+  if (score != null) {
+    const v = Math.max(0, Math.min(100, score));
+    const [nx, ny] = pt(v, r - 6);
+    needle = `<g class="stab-needle"><line x1="${cx}" y1="${cy}" x2="${nx.toFixed(1)}" y2="${ny.toFixed(1)}" stroke="var(--text)" stroke-width="3.5" stroke-linecap="round"/><circle cx="${cx}" cy="${cy}" r="7" fill="var(--text)"/></g>`;
+  }
+  return `<div class="stab-gauge"><svg viewBox="0 0 220 150" role="img" aria-label="Stabilitetsmätare ${score != null ? Math.round(score) : ''} av 100">
+    ${zones}${ticks}${needle}
+    <text x="14" y="122" font-size="10" fill="var(--text-dim)" text-anchor="start">Mycket</text><text x="14" y="134" font-size="10" fill="var(--text-dim)" text-anchor="start">instabilt</text>
+    <text x="206" y="122" font-size="10" fill="var(--text-dim)" text-anchor="end">Mycket</text><text x="206" y="134" font-size="10" fill="var(--text-dim)" text-anchor="end">stabilt</text>
+    <text x="${cx}" y="138" font-size="24" font-weight="700" text-anchor="middle" fill="var(--text)" font-family="IBM Plex Mono, monospace">${score != null ? Math.round(score) : '–'}</text>
+  </svg><div class="stab-gauge-lbl">${escapeHtml(label || '')}</div></div>`;
+}
+function stabView() { try { return localStorage.getItem('screener-stab-view') || 'week'; } catch (e) { return 'week'; } }
+function stabHistoryHtml(hist) {
+  if (!hist || hist.length < 4) return '';
+  const view = stabView();
+  let pts;
+  if (view === 'month') {
+    const byM = {};
+    hist.forEach(h => { byM[h.date.slice(0, 7)] = h; });
+    pts = Object.values(byM).slice(-24);
+  } else {
+    pts = hist.slice(-53);
+  }
+  const W = Math.max(300, Math.min(760, (document.getElementById('macroHost').clientWidth || window.innerWidth) - 60)), H = 200, L = 30, R = 10, T = 10, B = 26;
+  const iw = W - L - R, ih = H - T - B;
+  const x = i => L + (pts.length === 1 ? iw : i / (pts.length - 1) * iw);
+  const y = v => T + (1 - v / 100) * ih;
+  const bands = STAB_ZONES.map(([a, b, c]) => `<rect x="${L}" y="${y(b)}" width="${iw}" height="${y(a) - y(b)}" fill="${c}" opacity="0.10"/>`).join('');
+  const grid = [0, 30, 50, 70, 100].map(v => `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--border)" stroke-width="1"/><text x="${L - 5}" y="${y(v) + 3.5}" font-size="10" text-anchor="end" fill="var(--text-faint)">${v}</text>`).join('');
+  const line = pts.map((p, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(p.score).toFixed(1)}`).join(' ');
+  const area = `${line} L${x(pts.length - 1).toFixed(1)},${y(0)} L${x(0).toFixed(1)},${y(0)} Z`;
+  const MON = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
+  const seen = new Set(); const labels = []; let lastLx = -99;
+  const step = view === 'month' ? (W < 450 ? 6 : 3) : (W < 450 ? 3 : 2);
+  pts.forEach((p, i) => { const m = p.date.slice(0, 7); if (seen.has(m)) return; seen.add(m); const mi = +p.date.slice(5, 7) - 1; if (mi % step !== 0 && i !== 0) return; if (x(i) - lastLx < 42) return; lastLx = x(i); labels.push(`<text x="${x(i).toFixed(1)}" y="${H - 8}" font-size="10" text-anchor="middle" fill="var(--text-faint)">${MON[mi]}${mi === 0 || i === 0 ? ' ' + p.date.slice(2, 4) : ''}</text>`); });
+  const dots = pts.map((p, i) => `<circle class="stab-dot" data-i="${i}" cx="${x(i).toFixed(1)}" cy="${y(p.score).toFixed(1)}" r="${i === pts.length - 1 ? 4.5 : 2.2}" fill="${i === pts.length - 1 ? 'var(--text)' : 'var(--accent, var(--amber))'}"/>`).join('');
+  const hits = pts.map((p, i) => `<rect class="stab-hit" data-i="${i}" x="${(x(i) - iw / pts.length / 2).toFixed(1)}" y="${T}" width="${(iw / pts.length).toFixed(1)}" height="${ih}" fill="transparent"/>`).join('');
+  const last = pts[pts.length - 1];
+  const ago = (n) => { const target = new Date(last.date); target.setDate(target.getDate() - n); let best = null; for (const h of hist) { if (h.date <= target.toISOString().slice(0, 10)) best = h; } return best; };
+  const chg = (h) => h ? `${last.score - h.score >= 0 ? '+' : ''}${(last.score - h.score).toFixed(0)}` : '–';
+  const a3 = ago(91), a12 = ago(365);
+  const scores = pts.map(p => p.score); const mn = Math.min(...scores), mx = Math.max(...scores);
+  window.__stabPts = pts;
+  return `<div class="stab-hist">
+    <div class="stab-hist-head"><div class="mp-sub" style="margin:0">Stabilitetspoängen över tid</div>
+      <div class="stab-toggle"><button class="${view === 'week' ? 'active' : ''}" data-sv="week">VECKA · 1 ÅR</button><button class="${view === 'month' ? 'active' : ''}" data-sv="month">MÅNAD · 2 ÅR</button></div></div>
+    <div class="stab-readout" id="stabReadout">Senast ${escapeHtml(last.date)}: <b>${Math.round(last.score)}</b> · mot 3 mån sedan <b>${chg(a3)}</b> · mot 1 år sedan <b>${chg(a12)}</b> · spann i grafen ${Math.round(mn)}–${Math.round(mx)}</div>
+    <svg class="stab-chart" viewBox="0 0 ${W} ${H}">${bands}${grid}<path d="${line}" fill="none" stroke="var(--accent, var(--amber))" stroke-width="2" vector-effect="non-scaling-stroke"/>${dots}${labels.join('')}${hits}</svg>
+    <div class="stab-legend">${STAB_ZONES.map(([a, b, c, n]) => `<span><i style="background:${c}"></i>${n} ${a}–${b}</span>`).join('')}</div>
+  </div>`;
+}
+function wireStabHistory() {
+  const host = document.getElementById('macroHost');
+  host.querySelectorAll('.stab-toggle button').forEach(bn => bn.addEventListener('click', () => {
+    try { localStorage.setItem('screener-stab-view', bn.dataset.sv); } catch (e) {}
+    renderMacroPanel();
+  }));
+  const ro = document.getElementById('stabReadout'); if (!ro) return;
+  const orig = ro.innerHTML;
+  const show = i => { const p = (window.__stabPts || [])[+i]; if (!p) return; const cats = p.cats || {};
+    const nm = { rates: 'Ränterörelse', curve: 'Kurva', credit: 'Kredit', real: 'Realränta', vol: 'MOVE', europe: 'Europa' };
+    ro.innerHTML = `${escapeHtml(p.date)}: <b>${Math.round(p.score)}</b> · ` + Object.entries(nm).filter(([k]) => cats[k] != null).map(([k, n]) => `${n} ${cats[k]}`).join(' · ');
+    host.querySelectorAll('.stab-dot').forEach(d => d.classList.toggle('hl', d.dataset.i === String(i))); };
+  host.querySelectorAll('.stab-hit').forEach(r => { r.addEventListener('mouseenter', () => show(r.dataset.i)); r.addEventListener('click', () => show(r.dataset.i)); });
+  const svg = host.querySelector('.stab-chart'); if (svg) svg.addEventListener('mouseleave', () => { ro.innerHTML = orig; host.querySelectorAll('.stab-dot').forEach(d => d.classList.remove('hl')); });
+}
+
 function macroBondsHtml(part) {
   const b = (state.data && state.data.macro && state.data.macro.bonds) || null;
   if (!b || !b.yields || !b.yields.length) return '';
@@ -1794,7 +1889,7 @@ function macroBondsHtml(part) {
   const hero = `
     <div class="mp-title">Marknadsstabilitet — ränte- och kreditläge (uppdaterad ${escapeHtml(b.as_of || '–')})</div>
     <div class="bd-hero ${st.status === 'good' ? 'good' : st.status === 'bad' ? 'bad' : ''}">
-      <div class="bd-score">${st.score != null ? Math.round(st.score) : '–'}<span style="font-size:14px;color:var(--text-dim)">/100</span></div>
+      ${stabGaugeSvg(st.score, st.label)}
       <div class="bd-hero-txt"><b>${escapeHtml(st.label || '–')}</b> för aktier och fonder<br>${trendTxt}${trendSub}<br><span style="color:var(--text-dim)">${fundTxt}</span></div>
     </div>`;
   const cats = `<div class="bd-cats">${(b.categories || []).map(c => `
@@ -1820,7 +1915,7 @@ function macroBondsHtml(part) {
     ${stat('Tyskland & Sverige 10 år', sv(x.de_10y) + ' % · ' + sv(x.se_10y) + ' %', 'Månadsdata från OECD (' + escapeHtml((x.eu_as_of || '').slice(0, 7)) + '), släpar efter dagsdata.', '')}
   </div>`;
   if (part === 'rates') return `<div class="mp-section"><div class="mp-title">Räntor, kredit och inflation (uppdaterad ${escapeHtml(b.as_of || '–')})</div>${yBlock}${grid}${macroRateSensitivityHtml(b)}<div class="mp-caveat">Källor: FRED (statsräntor, spreadar, realränta), Yahoo Finance (MOVE), OECD via FRED (Tyskland/Sverige).</div></div>`;
-  return `<div class="mp-section">${hero}${cats}
+  return `<div class="mp-section">${hero}${stabHistoryHtml(b.history || [])}${cats}
     <div class="mp-caveat">Poängen (0–100, högre = stabilare) är en enkel, förklarbar sammanvägning av kategorierna ovan och påverkar alla aktiers poäng måttligt (+2 vid mycket stabilt, upp till −8 vid stress, ±2 för trend; totalt aldrig sämre än −12 med kreditspread/räntekurva). Källor: FRED (statsräntor, spreadar, realränta), Yahoo Finance (MOVE), OECD via FRED (Tyskland/Sverige). Trendpilen jämför mot värdena för cirka en månad sedan.</div></div>`;
 }
 
@@ -1905,6 +2000,7 @@ function renderMacroPanel() {
     : mt === 'breadth' ? macroBreadthSectionHtml() + macroInvesttechSectionHtml()
     : macroBondsHtml('stability') + ratesBlock;
   host.innerHTML = body.trim() ? `<div class="macro-panel">${body}</div>` : '';
+  wireStabHistory();
 }
 
 function renderPendingPanel() {

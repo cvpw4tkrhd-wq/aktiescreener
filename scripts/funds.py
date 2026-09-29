@@ -48,6 +48,7 @@ def _rsi(close, n=14):
 
 
 def fetch_fund(cfg, rf_rates):
+    """rf_rates: kort riskfri ränta per valuta (v8.8, tidigare 10-årsränta per land)."""
     tk = yf.Ticker(cfg["ticker"])
     h = tk.history(period="2y", auto_adjust=True)
     close = h["Close"].dropna() if len(h) else pd.Series(dtype=float)
@@ -69,15 +70,19 @@ def fetch_fund(cfg, rf_rates):
     vol = float(daily.tail(252).std() * math.sqrt(252) * 100)
     dd = float(((last_year / last_year.cummax()) - 1).min() * 100)
     ret_1y = _ret(close, 252)
-    rf = rf_rates.get(CCY_RF.get(ccy, "SE"), 3.0)
+    rf = rf_rates.get(ccy, rf_rates.get("SEK", 2.0))
     sharpe = (ret_1y - rf) / vol if ret_1y is not None and vol > 0 else None
     ytd_start = close[close.index < pd.Timestamp(close.index[-1].year, 1, 1)]
     ret_ytd = (price / float(ytd_start.iloc[-1]) - 1) * 100 if len(ytd_start) else None
+    sma200_series = close.rolling(200).mean()
+    sma200_slope = None
+    if len(sma200_series.dropna()) > 21:
+        sma200_slope = (float(sma200_series.iloc[-1]) / float(sma200_series.iloc[-22]) - 1) * 100
     cross = None
     if sma200:
         cross = "golden" if sma50 > sma200 else "death"
     fee = cfg.get("fee_pct")
-    fee_src = "manuellt angiven" if fee is not None else None
+    fee_src = "Avanza (2026-09)" if fee is not None else None
     if fee is None:
         ner, arer = info.get("netExpenseRatio"), info.get("annualReportExpenseRatio")
         if isinstance(ner, (int, float)) and 0 < ner < 5:
@@ -94,6 +99,8 @@ def fetch_fund(cfg, rf_rates):
         "above_sma50": price > sma50, "above_sma200": (price > sma200) if sma200 else None,
         "sma50_vs_200_pct": _clean((sma50 / sma200 - 1) * 100, 1) if sma200 else None,
         "cross": cross, "rsi14": _clean(_rsi(close), 1),
+        "sma200_dist_pct": _clean((price / sma200 - 1) * 100, 1) if sma200 else None,
+        "sma200_slope_pct": _clean(sma200_slope, 2),
         "ret_1m": _clean(_ret(close, 21), 1), "ret_3m": _clean(_ret(close, 63), 1),
         "ret_6m": _clean(_ret(close, 126), 1), "ret_1y": _clean(ret_1y, 1), "ret_ytd": _clean(ret_ytd, 1),
         "volatility_pct": _clean(vol, 1), "max_drawdown_pct": _clean(dd, 1), "sharpe": _clean(sharpe, 2),
@@ -148,31 +155,50 @@ def score_funds(funds, stab, breadth):
         num = sum(v * w for v, w in parts if v is not None)
         den = sum(w for v, w in parts if v is not None)
         return num / den if den else None
-    classes = {}
+    def rank_into(groups, key):
+        for lst in groups.values():
+            ranked = sorted([f for f in lst if blend(f) is not None], key=blend, reverse=True)
+            n = len(ranked)
+            for i, f in enumerate(ranked):
+                f[key] = (1 - i / (n - 1) if n > 1 else 0.5, i + 1, n)
+    classes, cats = {}, {}
     for f in funds:
-        cls = f["asset_class"] if f["asset_class"] == "bond" else "equity_like"
-        classes.setdefault(cls, []).append(f)
-    for cls, lst in classes.items():
-        ranked = sorted([f for f in lst if blend(f) is not None], key=blend, reverse=True)
-        n = len(ranked)
-        for i, f in enumerate(ranked):
-            f["_mom_pct"] = 1 - i / (n - 1) if n > 1 else 0.5
-            f["momentum_rank"] = f"{i + 1} av {n}"
+        classes.setdefault(f["asset_class"] if f["asset_class"] == "bond" else "equity_like", []).append(f)
+        cats.setdefault(f.get("category") or "?", []).append(f)
+    rank_into(classes, "_r_cls")
+    rank_into({k: v for k, v in cats.items() if len(v) >= 3}, "_r_cat")
+    # v8.8: hälften mot fonder i samma kategori (minst 3 st), hälften mot alla
+    # jämförbara – annars vinner bara den marknad som är hetast just nu.
+    for f in funds:
+        rc, rk = f.get("_r_cls"), f.get("_r_cat")
+        if rc is None:
+            continue
+        f["_mom_pct"] = (rc[0] + rk[0]) / 2 if rk else rc[0]
+        f["momentum_rank"] = f"{rk[1]} av {rk[2]} i kategorin" if rk else f"{rc[1]} av {rc[2]}"
 
     for f in funds:
         pos, neg = [], []
-        # Trend (30)
+        # Trend (35, v8.8): graderad i stället för ja/nej
         t = 0
-        if f["above_sma200"]:
-            t += 12; pos.append("Kursen ligger över SMA200 – långsiktig upptrend")
-        elif f["above_sma200"] is False:
-            neg.append("Kursen ligger under SMA200 – långsiktig nedtrend")
+        dist, slope = f.get("sma200_dist_pct"), f.get("sma200_slope_pct")
+        if dist is not None:
+            t += _lin(dist, -5, 15, 0, 14)
+            if dist > 0:
+                pos.append(f"Kursen {dist:.1f} % över SMA200 – långsiktig upptrend")
+            else:
+                neg.append(f"Kursen {abs(dist):.1f} % under SMA200 – långsiktig nedtrend")
+        if slope is not None:
+            t += _lin(slope, -2, 3, 0, 8)
+            if slope > 0.5:
+                pos.append(f"SMA200 stiger ({slope:+.1f} % senaste månaden)")
+            elif slope < -0.5:
+                neg.append(f"SMA200 faller ({slope:+.1f} % senaste månaden)")
         if f["above_sma50"]:
-            t += 8; pos.append("Kursen ligger över SMA50 – kortsiktig styrka")
+            t += 6; pos.append("Kursen ligger över SMA50 – kortsiktig styrka")
         else:
             neg.append("Kursen ligger under SMA50 – kortsiktig svaghet")
         if f["cross"] == "golden":
-            t += 6; pos.append("SMA50 över SMA200 (golden cross-läge)")
+            t += 3
         elif f["cross"] == "death":
             neg.append("SMA50 under SMA200 (death cross-läge)")
         rsi = f.get("rsi14")
@@ -193,7 +219,7 @@ def score_funds(funds, stab, breadth):
             neg.append(f"Svag avkastning jämfört med andra fonder (plats {f['momentum_rank']})")
         # Riskjusterad avkastning (25)
         sh, dd = f.get("sharpe"), f.get("max_drawdown_pct")
-        r_sh = _lin(sh, 0, 1.5, 0, 17) if sh is not None else 8.5
+        r_sh = _lin(sh, 0, 2.5, 0, 17) if sh is not None else 8.5
         r_dd = _lin(-dd, 10, 30, 8, 0) if dd is not None else 4
         if f["asset_class"] == "bond":
             r_dd = _lin(-dd, 2, 8, 8, 0) if dd is not None else 4
@@ -232,10 +258,12 @@ def score_funds(funds, stab, breadth):
                 pos.append(f"Bred uppgång på marknaden ({b:.0f}% av aktierna över SMA200)")
             elif b is not None and b < 40:
                 neg.append(f"Svag marknadsbredd ({b:.0f}% av aktierna över SMA200)")
-        mac = max(0, min(10, mac))
+        mac = max(0, min(10, mac)) / 2   # v8.8: makro väger 5 poäng
         total = round(t + m + r + c + mac)
         f["score"] = int(max(0, min(100, total)))
         f["score_parts"] = {"trend": round(t, 1), "momentum": round(m, 1), "risk": round(r, 1), "cost": round(c, 1), "macro": round(mac, 1)}
+        for k in ("_r_cls", "_r_cat"):
+            f.pop(k, None)
         f["label"] = "Lovande" if f["score"] >= 75 else ("Neutral" if f["score"] >= 50 else "Svag")
         f["reasons_pos"], f["reasons_neg"] = pos, neg
         f.pop("_mom_pct", None)
@@ -244,10 +272,15 @@ def score_funds(funds, stab, breadth):
 
 def main():
     cfg = yaml.safe_load(FUNDS_FILE.read_text(encoding="utf-8")) or {}
+    rf_rates = dict(cfg.get("short_rates") or {})
     try:
-        rf_rates = json.loads(RF_FILE.read_text(encoding="utf-8")).get("rates", {})
+        ys = (json.loads(RESULTS_FILE.read_text(encoding="utf-8")).get("macro") or {}).get("bonds", {}).get("yields", [])
+        m3 = next((y["value"] for y in ys if y.get("label") == "3M"), None)
+        if m3 is not None:
+            rf_rates["USD"] = m3
     except Exception:
-        rf_rates = {}
+        pass
+    rf_rates.setdefault("USD", 4.0)
     funds = []
     for c in cfg.get("funds", []):
         try:

@@ -327,7 +327,7 @@ def _chg(rows, n, off=0):
 
 def _fetch_move():
     try:
-        h = yf.Ticker("^MOVE").history(period="1y", auto_adjust=False).dropna(subset=["Close"])
+        h = yf.Ticker("^MOVE").history(period="3y", auto_adjust=False).dropna(subset=["Close"])
         return [(str(i.date()), float(v)) for i, v in h["Close"].items()] if len(h) else []
     except Exception as e:
         print(f"MOVE-hämtning misslyckades: {type(e).__name__}: {e}", file=sys.stderr)
@@ -424,15 +424,47 @@ def _sg(v, d=2):
     return "–" if v is None else f"{v:+.{d}f}".replace(".", ",")
 
 
+def compute_stability_history(s, weeks=104):
+    """Stabilitetspoängen bakåt i tiden, en punkt per vecka (fredagar), med
+    exakt samma formel som dagens poäng. Varje serie klipps vid respektive
+    datum så att bara data som fanns då används. Returnerar lista äldst först."""
+    import bisect
+    last = s["DGS10"][-1][0]
+    end = pd.Timestamp(last)
+    dates = pd.date_range(end=end, periods=weeks, freq="W-FRI")
+    dates = [d for d in dates if d <= end]
+    if not dates or dates[-1] != end:
+        dates.append(end)
+    keys = {k: [r[0] for r in v] for k, v in s.items() if v}
+    out = []
+    for d in dates:
+        ds = d.strftime("%Y-%m-%d")
+        st = {}
+        for k, rows in s.items():
+            if not rows:
+                st[k] = []
+                continue
+            i = bisect.bisect_right(keys[k], ds)
+            st[k] = rows[:i]
+        cats = _category_scores(st, 0, 0)
+        if len(cats) < 5:
+            continue
+        tot = _overall(cats)
+        if tot is None:
+            continue
+        out.append({"date": ds, "score": tot, "cats": {k: round(v) for k, v in cats.items()}})
+    return out
+
+
 def compute_bond_dashboard():
     """Ränteöversikt (3 mån-30 år), kurvform, kredit, realränta, MOVE, Europa
     samt en stabilitetspoäng per kategori + totalt. Endast visning - påverkar
     inte aktiernas poäng. Returnerar (dashboard, dgs10_rader)."""
     s = {}
     for _, sid in BOND_SERIES:
-        s[sid] = fetch_fred_series(sid, lookback_days=500)
+        s[sid] = fetch_fred_series(sid, lookback_days=800)
     for sid in ("T10Y2Y", "T10Y3M", "BAMLH0A0HYM2", "BAMLC0A0CM", "DFII10", "T10YIE"):
-        s[sid] = fetch_fred_series(sid, lookback_days=500)
+        s[sid] = fetch_fred_series(sid, lookback_days=800)
     for sid in ("IRLTLT01DEM156N", "IRLTLT01SEM156N"):
         s[sid] = fetch_fred_series(sid, lookback_days=60)
     s["MOVE"] = _fetch_move()
@@ -488,7 +520,19 @@ def compute_bond_dashboard():
         "hy_chg_1m": _chg(s["BAMLH0A0HYM2"], 21), "ig_chg_1m": _chg(s["BAMLC0A0CM"], 21),
         "move_chg_1m": None if not s["MOVE"] or len(s["MOVE"]) < 22 else round(s["MOVE"][-1][1] - s["MOVE"][-22][1], 1),
     }
+    try:
+        history = compute_stability_history(s)
+    except Exception as e:
+        print(f"Stabilitetshistorik misslyckades: {type(e).__name__}: {e}", file=sys.stderr)
+        history = []
+    if history and total is not None:
+        now_pt = {"date": s["DGS10"][-1][0], "score": total, "cats": {k: round(v) for k, v in cats_now.items()}}
+        if history[-1]["date"] == now_pt["date"]:
+            history[-1] = now_pt
+        else:
+            history.append(now_pt)
     return {"as_of": s["DGS10"][-1][0], "yields": yields, "extras": extras, "categories": categories,
+            "history": history,
             "stability": {"score": total, "prev_score": prev_total, "delta": delta, "trend": trend,
                           "label": label, "status": status}}, s["DGS10"]
 

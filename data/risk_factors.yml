@@ -13,6 +13,9 @@
 # Sektorer som används i watchlist.yml: Industrials, Technology, Consumer,
 # Financials, RealEstate, Semiconductors, Energy, Healthcare, Materials,
 # Telecom. Länder (marknadskoder): SE, US, DE, NL, GB.
+# Valfritt fält `markets: ["SE", ...]` begränsar en faktors SEKTORVIKTER till
+# bolag noterade på de marknaderna (citera koderna – NO tolkas annars som falskt).
+# Sammanlagd geopolitisk vikt per aktie begränsas i koden till ±10 (v8.8).
 
 factors:
   - name: "Iran-konflikten / Hormuzsundet"
@@ -32,6 +35,8 @@ factors:
   - name: "USA-tullar mot Sverige/EU"
     updated: 2026-09-07
     summary: "USA infört breda tullar (ca 10% generellt på de flesta varor, 50% på stål/aluminium, upp till 100% på läkemedel utanför EU-avtalet som annars tak:ar tullen vid 15%). Träffar exportberoende svenska industribolag (Volvo, Atlas Copco, Sandvik m.fl.) och läkemedelsbolag. Flera analytiker (JP Morgan, Handelsbanken) bedömer effekten som 'hanterbar' snarare än allvarlig, delvis eftersom storbolag investerar i amerikansk produktion för att undvika tullarna - därför måttlig vikt."
+    # Gäller bara bolag noterade i EU/EES (v8.8) – amerikanska bolag drabbas inte av USA:s egna tullar.
+    markets: ["SE", "FI", "NO", "DK", "DE", "NL"]
     sectors:
       Industrials: -5
       Healthcare: -5

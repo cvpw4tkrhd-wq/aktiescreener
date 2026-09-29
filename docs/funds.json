@@ -1,8 +1,8 @@
 {
- "generated_at": "2026-09-29T09:09:12.178607+00:00",
- "version": "8.7",
+ "generated_at": "2026-09-29T18:08:58.287294+00:00",
+ "version": "8.8",
  "count": 37,
- "stability_score": 65.1,
+ "stability_score": 58.4,
  "funds": [
   {
    "name": "Alfred Berg Gambak Global R",
@@ -22,6 +22,8 @@
    "sma50_vs_200_pct": 9.4,
    "cross": "golden",
    "rsi14": 65.2,
+   "sma200_dist_pct": 12.5,
+   "sma200_slope_pct": 2.47,
    "ret_1m": 4.7,
    "ret_3m": 0.2,
    "ret_6m": 21.6,
@@ -29,9 +31,9 @@
    "ret_ytd": 29.5,
    "volatility_pct": 15.7,
    "max_drawdown_pct": -7.6,
-   "sharpe": 2.31,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 2.4,
+   "fee_pct": 1.59,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     109.14,
     108.99,
@@ -273,24 +275,26 @@
     147.07,
     147.63
    ],
-   "momentum_rank": "7 av 31",
-   "score": 86,
+   "momentum_rank": "2 av 4 i kategorin",
+   "score": 78,
    "score_parts": {
-    "trend": 30,
-    "momentum": 20.0,
-    "risk": 25,
-    "cost": 5,
-    "macro": 6.0
+    "trend": 32.4,
+    "momentum": 18.3,
+    "risk": 24.3,
+    "cost": 0,
+    "macro": 3.0
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 12.5 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+2.5 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
-    "Stark avkastning jämfört med andra fonder (plats 7 av 31)",
-    "Bra riskjusterad avkastning (Sharpe 2.31)"
+    "Stark avkastning jämfört med andra fonder (plats 2 av 4 i kategorin)",
+    "Bra riskjusterad avkastning (Sharpe 2.40)"
    ],
-   "reasons_neg": []
+   "reasons_neg": [
+    "Hög avgift (1.59%)"
+   ]
   },
   {
    "name": "Avanza Zero",
@@ -310,6 +314,8 @@
    "sma50_vs_200_pct": 6.1,
    "cross": "golden",
    "rsi14": 51.5,
+   "sma200_dist_pct": 7.0,
+   "sma200_slope_pct": 2.0,
    "ret_1m": -0.4,
    "ret_3m": 4.3,
    "ret_6m": 16.1,
@@ -317,9 +323,9 @@
    "ret_ytd": 15.6,
    "volatility_pct": 14.6,
    "max_drawdown_pct": -10.6,
-   "sharpe": 1.63,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 1.72,
+   "fee_pct": 0.0,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     450.17,
     453.36,
@@ -567,21 +573,23 @@
     573.82,
     568.91
    ],
-   "momentum_rank": "18 av 31",
-   "score": 78,
+   "momentum_rank": "1 av 3 i kategorin",
+   "score": 79,
    "score_parts": {
-    "trend": 30,
-    "momentum": 10.8,
-    "risk": 24.8,
-    "cost": 5,
-    "macro": 7.1
+    "trend": 27.8,
+    "momentum": 17.9,
+    "risk": 19.5,
+    "cost": 10,
+    "macro": 3.6
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 7.0 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+2.0 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
-    "Bra riskjusterad avkastning (Sharpe 1.63)",
+    "Stark avkastning jämfört med andra fonder (plats 1 av 3 i kategorin)",
+    "Bra riskjusterad avkastning (Sharpe 1.72)",
+    "Låg avgift (0.00%)",
     "Bred uppgång på marknaden (71% av aktierna över SMA200)"
    ],
    "reasons_neg": []
@@ -604,6 +612,8 @@
    "sma50_vs_200_pct": 0.7,
    "cross": "golden",
    "rsi14": 50.7,
+   "sma200_dist_pct": 8.2,
+   "sma200_slope_pct": 3.71,
    "ret_1m": -2.2,
    "ret_3m": 11.4,
    "ret_6m": -2.0,
@@ -611,9 +621,9 @@
    "ret_ytd": 14.0,
    "volatility_pct": 49.8,
    "max_drawdown_pct": -35.8,
-   "sharpe": 1.57,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 1.59,
+   "fee_pct": 2.01,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     857.62,
     848.53,
@@ -852,24 +862,25 @@
     1272.84
    ],
    "momentum_rank": "2 av 31",
-   "score": 81,
+   "score": 68,
    "score_parts": {
-    "trend": 30,
+    "trend": 30.2,
     "momentum": 24.2,
-    "risk": 17,
-    "cost": 5,
-    "macro": 5
+    "risk": 10.8,
+    "cost": 0,
+    "macro": 2.5
    },
-   "label": "Lovande",
+   "label": "Neutral",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 8.2 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+3.7 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
     "Stark avkastning jämfört med andra fonder (plats 2 av 31)",
-    "Bra riskjusterad avkastning (Sharpe 1.57)"
+    "Bra riskjusterad avkastning (Sharpe 1.59)"
    ],
    "reasons_neg": [
-    "Stort fall från toppen senaste året (-36%)"
+    "Stort fall från toppen senaste året (-36%)",
+    "Hög avgift (2.01%)"
    ]
   },
   {
@@ -890,6 +901,8 @@
    "sma50_vs_200_pct": -3.1,
    "cross": "death",
    "rsi14": 51.0,
+   "sma200_dist_pct": -3.9,
+   "sma200_slope_pct": 0.24,
    "ret_1m": -1.4,
    "ret_3m": -1.5,
    "ret_6m": -7.2,
@@ -897,9 +910,9 @@
    "ret_ytd": 5.9,
    "volatility_pct": 21.6,
    "max_drawdown_pct": -18.0,
-   "sharpe": -0.06,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 0.0,
+   "fee_pct": 1.91,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     317.72,
     317.1,
@@ -1146,22 +1159,22 @@
     304.57
    ],
    "momentum_rank": "29 av 31",
-   "score": 22,
+   "score": 18,
    "score_parts": {
-    "trend": 4,
+    "trend": 8.4,
     "momentum": 1.7,
     "risk": 4.8,
-    "cost": 5,
-    "macro": 6.0
+    "cost": 0,
+    "macro": 3.0
    },
    "label": "Svag",
    "reasons_pos": [],
    "reasons_neg": [
-    "Kursen ligger under SMA200 – långsiktig nedtrend",
+    "Kursen 3.9 % under SMA200 – långsiktig nedtrend",
     "Kursen ligger under SMA50 – kortsiktig svaghet",
     "SMA50 under SMA200 (death cross-läge)",
     "Svag avkastning jämfört med andra fonder (plats 29 av 31)",
-    "Sämre än riskfri ränta senaste året (Sharpe -0.06)"
+    "Hög avgift (1.91%)"
    ]
   },
   {
@@ -1171,7 +1184,7 @@
    "category": "Tema: bioteknik",
    "asset_class": "equity",
    "proxy": true,
-   "proxy_note": "Andelsklassen LU0109394709 finns inte hos Yahoo. Kursdata från amerikanska systerfonden FBDIX (samma förvaltare och strategi) – trend och momentum blir i praktiken samma, men kursnivå och avgift skiljer sig.",
+   "proxy_note": "Andelsklassen LU0109394709 finns inte hos Yahoo. Kursdata från amerikanska systerfonden FBDIX (samma förvaltare och strategi) – trend och momentum blir i praktiken samma, men kursnivån skiljer sig. Avgiften avser din andelsklass (Avanza).",
    "currency": "USD",
    "price": 187.67,
    "as_of": "2026-09-28",
@@ -1182,6 +1195,8 @@
    "sma50_vs_200_pct": 10.9,
    "cross": "golden",
    "rsi14": 35.4,
+   "sma200_dist_pct": 4.3,
+   "sma200_slope_pct": 2.18,
    "ret_1m": -10.2,
    "ret_3m": -4.8,
    "ret_6m": 16.7,
@@ -1189,9 +1204,9 @@
    "ret_ytd": 13.2,
    "volatility_pct": 24.2,
    "max_drawdown_pct": -12.7,
-   "sharpe": 1.76,
-   "fee_pct": 1.01,
-   "fee_source": "Yahoo Finance",
+   "sharpe": 1.78,
+   "fee_pct": 1.9,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     132.48,
     133.92,
@@ -1446,23 +1461,24 @@
     187.67
    ],
    "momentum_rank": "6 av 31",
-   "score": 73,
+   "score": 59,
    "score_parts": {
-    "trend": 18,
+    "trend": 16.2,
     "momentum": 20.8,
-    "risk": 23.9,
-    "cost": 4,
-    "macro": 6.0
+    "risk": 19.0,
+    "cost": 0,
+    "macro": 3.0
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
-    "SMA50 över SMA200 (golden cross-läge)",
+    "Kursen 4.3 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+2.2 % senaste månaden)",
     "Stark avkastning jämfört med andra fonder (plats 6 av 31)",
-    "Bra riskjusterad avkastning (Sharpe 1.76)"
+    "Bra riskjusterad avkastning (Sharpe 1.78)"
    ],
    "reasons_neg": [
-    "Kursen ligger under SMA50 – kortsiktig svaghet"
+    "Kursen ligger under SMA50 – kortsiktig svaghet",
+    "Hög avgift (1.90%)"
    ]
   },
   {
@@ -1483,6 +1499,8 @@
    "sma50_vs_200_pct": 10.0,
    "cross": "golden",
    "rsi14": 61.1,
+   "sma200_dist_pct": 14.5,
+   "sma200_slope_pct": 2.83,
    "ret_1m": 5.4,
    "ret_3m": -2.0,
    "ret_6m": 29.2,
@@ -1490,9 +1508,9 @@
    "ret_ytd": 33.6,
    "volatility_pct": 18.4,
    "max_drawdown_pct": -12.1,
-   "sharpe": 1.92,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 1.99,
+   "fee_pct": 0.73,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     168.78,
     169.79,
@@ -1736,22 +1754,22 @@
     227.97,
     227.35
    ],
-   "momentum_rank": "5 av 31",
-   "score": 87,
+   "momentum_rank": "1 av 4 i kategorin",
+   "score": 88,
    "score_parts": {
-    "trend": 30,
-    "momentum": 21.7,
-    "risk": 24.2,
-    "cost": 5,
-    "macro": 6.0
+    "trend": 34.4,
+    "momentum": 23.3,
+    "risk": 20.7,
+    "cost": 7,
+    "macro": 3.0
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 14.5 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+2.8 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
-    "Stark avkastning jämfört med andra fonder (plats 5 av 31)",
-    "Bra riskjusterad avkastning (Sharpe 1.92)"
+    "Stark avkastning jämfört med andra fonder (plats 1 av 4 i kategorin)",
+    "Bra riskjusterad avkastning (Sharpe 1.99)"
    ],
    "reasons_neg": []
   },
@@ -1773,6 +1791,8 @@
    "sma50_vs_200_pct": -2.4,
    "cross": "death",
    "rsi14": 23.0,
+   "sma200_dist_pct": -10.0,
+   "sma200_slope_pct": -0.93,
    "ret_1m": -8.4,
    "ret_3m": -6.6,
    "ret_6m": -3.3,
@@ -1780,9 +1800,9 @@
    "ret_ytd": -13.7,
    "volatility_pct": 17.9,
    "max_drawdown_pct": -18.9,
-   "sharpe": -0.9,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": -0.82,
+   "fee_pct": 1.45,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     5921.72,
     5985.89,
@@ -2030,24 +2050,25 @@
     5251.42
    ],
    "momentum_rank": "30 av 31",
-   "score": 19,
+   "score": 16,
    "score_parts": {
-    "trend": 2,
+    "trend": 3.7,
     "momentum": 0.8,
     "risk": 4.4,
-    "cost": 5,
-    "macro": 6.5
+    "cost": 4,
+    "macro": 2.9
    },
    "label": "Svag",
    "reasons_pos": [
     "RSI 23 – kortsiktigt översåld, kan vara läge att öka"
    ],
    "reasons_neg": [
-    "Kursen ligger under SMA200 – långsiktig nedtrend",
+    "Kursen 10.0 % under SMA200 – långsiktig nedtrend",
+    "SMA200 faller (-0.9 % senaste månaden)",
     "Kursen ligger under SMA50 – kortsiktig svaghet",
     "SMA50 under SMA200 (death cross-läge)",
     "Svag avkastning jämfört med andra fonder (plats 30 av 31)",
-    "Sämre än riskfri ränta senaste året (Sharpe -0.90)"
+    "Sämre än riskfri ränta senaste året (Sharpe -0.82)"
    ]
   },
   {
@@ -2068,6 +2089,8 @@
    "sma50_vs_200_pct": 8.5,
    "cross": "golden",
    "rsi14": 68.4,
+   "sma200_dist_pct": 12.8,
+   "sma200_slope_pct": 1.5,
    "ret_1m": 4.8,
    "ret_3m": 6.6,
    "ret_6m": 22.7,
@@ -2075,9 +2098,9 @@
    "ret_ytd": 18.7,
    "volatility_pct": 12.0,
    "max_drawdown_pct": -7.8,
-   "sharpe": 1.8,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 1.91,
+   "fee_pct": 0.21,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     511.94,
     512.45,
@@ -2318,21 +2341,22 @@
     617.96,
     621.46
    ],
-   "momentum_rank": "15 av 31",
-   "score": 79,
+   "momentum_rank": "2 av 3 i kategorin",
+   "score": 78,
    "score_parts": {
-    "trend": 30,
-    "momentum": 13.3,
-    "risk": 25,
-    "cost": 5,
-    "macro": 6.0
+    "trend": 31.1,
+    "momentum": 12.9,
+    "risk": 21.0,
+    "cost": 10,
+    "macro": 3.0
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 12.8 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+1.5 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
-    "Bra riskjusterad avkastning (Sharpe 1.80)"
+    "Bra riskjusterad avkastning (Sharpe 1.91)",
+    "Låg avgift (0.21%)"
    ],
    "reasons_neg": []
   },
@@ -2354,6 +2378,8 @@
    "sma50_vs_200_pct": 5.3,
    "cross": "golden",
    "rsi14": 50.4,
+   "sma200_dist_pct": 5.6,
+   "sma200_slope_pct": 1.44,
    "ret_1m": -0.0,
    "ret_3m": 3.5,
    "ret_6m": 15.4,
@@ -2361,9 +2387,9 @@
    "ret_ytd": 10.5,
    "volatility_pct": 12.6,
    "max_drawdown_pct": -10.4,
-   "sharpe": 1.42,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 1.53,
+   "fee_pct": 1.37,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     3188.23,
     3210.87,
@@ -2610,24 +2636,26 @@
     3895.3,
     3872.2
    ],
-   "momentum_rank": "22 av 31",
-   "score": 74,
+   "momentum_rank": "4 av 5 i kategorin",
+   "score": 59,
    "score_parts": {
-    "trend": 30,
-    "momentum": 7.5,
-    "risk": 23.9,
-    "cost": 5,
-    "macro": 7.1
+    "trend": 25.9,
+    "momentum": 6.9,
+    "risk": 18.2,
+    "cost": 4,
+    "macro": 3.6
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 5.6 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+1.4 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
-    "Bra riskjusterad avkastning (Sharpe 1.42)",
+    "Bra riskjusterad avkastning (Sharpe 1.53)",
     "Bred uppgång på marknaden (71% av aktierna över SMA200)"
    ],
-   "reasons_neg": []
+   "reasons_neg": [
+    "Svag avkastning jämfört med andra fonder (plats 4 av 5 i kategorin)"
+   ]
   },
   {
    "name": "SEB Swedish Value Fund A",
@@ -2647,6 +2675,8 @@
    "sma50_vs_200_pct": 8.1,
    "cross": "golden",
    "rsi14": 55.6,
+   "sma200_dist_pct": 9.7,
+   "sma200_slope_pct": 2.3,
    "ret_1m": 0.9,
    "ret_3m": 6.2,
    "ret_6m": 20.6,
@@ -2654,9 +2684,9 @@
    "ret_ytd": 19.3,
    "volatility_pct": 14.9,
    "max_drawdown_pct": -11.1,
-   "sharpe": 1.89,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 1.98,
+   "fee_pct": 1.69,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     571.94,
     571.44,
@@ -2907,25 +2937,27 @@
     744.52,
     749.33
    ],
-   "momentum_rank": "9 av 31",
-   "score": 85,
+   "momentum_rank": "2 av 5 i kategorin",
+   "score": 73,
    "score_parts": {
-    "trend": 30,
-    "momentum": 18.3,
-    "risk": 24.6,
-    "cost": 5,
-    "macro": 7.1
+    "trend": 30.2,
+    "momentum": 18.5,
+    "risk": 21.0,
+    "cost": 0,
+    "macro": 3.6
    },
-   "label": "Lovande",
+   "label": "Neutral",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 9.7 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+2.3 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
-    "Stark avkastning jämfört med andra fonder (plats 9 av 31)",
-    "Bra riskjusterad avkastning (Sharpe 1.89)",
+    "Stark avkastning jämfört med andra fonder (plats 2 av 5 i kategorin)",
+    "Bra riskjusterad avkastning (Sharpe 1.98)",
     "Bred uppgång på marknaden (71% av aktierna över SMA200)"
    ],
-   "reasons_neg": []
+   "reasons_neg": [
+    "Hög avgift (1.69%)"
+   ]
   },
   {
    "name": "Spiltan Aktiefond Investmentbolag",
@@ -2945,6 +2977,8 @@
    "sma50_vs_200_pct": 7.2,
    "cross": "golden",
    "rsi14": 53.0,
+   "sma200_dist_pct": 7.9,
+   "sma200_slope_pct": 1.75,
    "ret_1m": -1.0,
    "ret_3m": 4.0,
    "ret_6m": 17.1,
@@ -2952,9 +2986,9 @@
    "ret_ytd": 15.0,
    "volatility_pct": 16.6,
    "max_drawdown_pct": -12.1,
-   "sharpe": 1.37,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 1.45,
+   "fee_pct": 0.22,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     798.26,
     802.35,
@@ -3205,21 +3239,22 @@
     1015.02,
     1009.14
    ],
-   "momentum_rank": "19 av 31",
-   "score": 75,
+   "momentum_rank": "3 av 5 i kategorin",
+   "score": 70,
    "score_parts": {
-    "trend": 30,
-    "momentum": 10.0,
-    "risk": 22.7,
-    "cost": 5,
-    "macro": 7.1
+    "trend": 28.0,
+    "momentum": 11.2,
+    "risk": 17.0,
+    "cost": 10,
+    "macro": 3.6
    },
-   "label": "Lovande",
+   "label": "Neutral",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 7.9 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+1.8 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
-    "Bra riskjusterad avkastning (Sharpe 1.37)",
+    "Bra riskjusterad avkastning (Sharpe 1.45)",
+    "Låg avgift (0.22%)",
     "Bred uppgång på marknaden (71% av aktierna över SMA200)"
    ],
    "reasons_neg": []
@@ -3242,6 +3277,8 @@
    "sma50_vs_200_pct": 15.5,
    "cross": "golden",
    "rsi14": 72.8,
+   "sma200_dist_pct": 26.7,
+   "sma200_slope_pct": 3.04,
    "ret_1m": 11.0,
    "ret_3m": 7.7,
    "ret_6m": 48.0,
@@ -3249,9 +3286,9 @@
    "ret_ytd": 46.7,
    "volatility_pct": 25.9,
    "max_drawdown_pct": -15.5,
-   "sharpe": 1.87,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 1.93,
+   "fee_pct": 1.38,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     1392.54,
     1388.16,
@@ -3494,21 +3531,21 @@
     2010.35
    ],
    "momentum_rank": "1 av 31",
-   "score": 85,
+   "score": 82,
    "score_parts": {
-    "trend": 26,
+    "trend": 31,
     "momentum": 25.0,
-    "risk": 22.8,
-    "cost": 5,
-    "macro": 6.0
+    "risk": 18.9,
+    "cost": 4,
+    "macro": 3.0
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 26.7 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+3.0 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
     "Stark avkastning jämfört med andra fonder (plats 1 av 31)",
-    "Bra riskjusterad avkastning (Sharpe 1.87)"
+    "Bra riskjusterad avkastning (Sharpe 1.93)"
    ],
    "reasons_neg": []
   },
@@ -3521,23 +3558,25 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "EUR",
-   "price": 42.62,
+   "price": 42.15,
    "as_of": "2026-09-29",
-   "sma50": 42.31,
-   "sma200": 37.28,
-   "above_sma50": true,
+   "sma50": 42.3,
+   "sma200": 37.27,
+   "above_sma50": false,
    "above_sma200": true,
    "sma50_vs_200_pct": 13.5,
    "cross": "golden",
-   "rsi14": 52.6,
-   "ret_1m": 0.6,
-   "ret_3m": 7.5,
-   "ret_6m": 33.5,
-   "ret_1y": 42.8,
-   "ret_ytd": 25.0,
-   "volatility_pct": 22.0,
+   "rsi14": 48.0,
+   "sma200_dist_pct": 13.1,
+   "sma200_slope_pct": 3.27,
+   "ret_1m": -0.5,
+   "ret_3m": 6.3,
+   "ret_6m": 32.1,
+   "ret_1y": 41.2,
+   "ret_ytd": 23.6,
+   "volatility_pct": 22.1,
    "max_drawdown_pct": -16.0,
-   "sharpe": 1.77,
+   "sharpe": 1.76,
    "fee_pct": 0.46,
    "fee_source": "Yahoo Finance",
    "price_history_1y": [
@@ -3792,31 +3831,32 @@
     42.15,
     41.87,
     42.38,
-    42.62
+    42.15
    ],
-   "momentum_rank": "3 av 31",
-   "score": 89,
+   "momentum_rank": "4 av 31",
+   "score": 78,
    "score_parts": {
-    "trend": 30,
-    "momentum": 23.3,
-    "risk": 22.6,
+    "trend": 27.7,
+    "momentum": 22.5,
+    "risk": 17.6,
     "cost": 7,
-    "macro": 6.2
+    "macro": 3.1
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
-    "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
-    "Stark avkastning jämfört med andra fonder (plats 3 av 31)",
-    "Bra riskjusterad avkastning (Sharpe 1.77)"
+    "Kursen 13.1 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+3.3 % senaste månaden)",
+    "Stark avkastning jämfört med andra fonder (plats 4 av 31)",
+    "Bra riskjusterad avkastning (Sharpe 1.76)"
    ],
-   "reasons_neg": []
+   "reasons_neg": [
+    "Kursen ligger under SMA50 – kortsiktig svaghet"
+   ]
   },
   {
    "name": "Avanza Global",
    "ticker": "0P0001ECQR.ST",
-   "isin": null,
+   "isin": "SE0011527613",
    "category": "Global index",
    "asset_class": "equity",
    "proxy": false,
@@ -3831,6 +3871,8 @@
    "sma50_vs_200_pct": 8.7,
    "cross": "golden",
    "rsi14": 67.6,
+   "sma200_dist_pct": 13.0,
+   "sma200_slope_pct": 1.59,
    "ret_1m": 4.5,
    "ret_3m": 6.7,
    "ret_6m": 22.3,
@@ -3838,9 +3880,9 @@
    "ret_ytd": 19.5,
    "volatility_pct": 11.7,
    "max_drawdown_pct": -7.1,
-   "sharpe": 1.77,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 1.88,
+   "fee_pct": 0.1,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     222.12,
     222.32,
@@ -4082,28 +4124,31 @@
     270.11,
     271.72
    ],
-   "momentum_rank": "16 av 31",
-   "score": 79,
+   "momentum_rank": "3 av 3 i kategorin",
+   "score": 71,
    "score_parts": {
-    "trend": 30,
-    "momentum": 12.5,
-    "risk": 25,
-    "cost": 5,
-    "macro": 6.0
+    "trend": 31.3,
+    "momentum": 6.2,
+    "risk": 20.8,
+    "cost": 10,
+    "macro": 3.0
    },
-   "label": "Lovande",
+   "label": "Neutral",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 13.0 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+1.6 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
-    "Bra riskjusterad avkastning (Sharpe 1.77)"
+    "Bra riskjusterad avkastning (Sharpe 1.88)",
+    "Låg avgift (0.10%)"
    ],
-   "reasons_neg": []
+   "reasons_neg": [
+    "Svag avkastning jämfört med andra fonder (plats 3 av 3 i kategorin)"
+   ]
   },
   {
    "name": "Avanza USA",
    "ticker": "0P0001IVD1.ST",
-   "isin": null,
+   "isin": "SE0012741163",
    "category": "USA",
    "asset_class": "equity",
    "proxy": false,
@@ -4118,6 +4163,8 @@
    "sma50_vs_200_pct": 9.3,
    "cross": "golden",
    "rsi14": 69.5,
+   "sma200_dist_pct": 14.7,
+   "sma200_slope_pct": 1.62,
    "ret_1m": 5.9,
    "ret_3m": 8.2,
    "ret_6m": 25.6,
@@ -4125,9 +4172,9 @@
    "ret_ytd": 20.9,
    "volatility_pct": 14.1,
    "max_drawdown_pct": -9.2,
-   "sharpe": 1.54,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 1.64,
+   "fee_pct": 0.18,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     216.81,
     217.05,
@@ -4370,28 +4417,29 @@
     267.14
    ],
    "momentum_rank": "10 av 31",
-   "score": 83,
+   "score": 82,
    "score_parts": {
-    "trend": 30,
+    "trend": 32.6,
     "momentum": 17.5,
-    "risk": 25,
-    "cost": 5,
-    "macro": 5.3
+    "risk": 19.2,
+    "cost": 10,
+    "macro": 2.6
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 14.7 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+1.6 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
     "Stark avkastning jämfört med andra fonder (plats 10 av 31)",
-    "Bra riskjusterad avkastning (Sharpe 1.54)"
+    "Bra riskjusterad avkastning (Sharpe 1.64)",
+    "Låg avgift (0.18%)"
    ],
    "reasons_neg": []
   },
   {
    "name": "Swedbank Robur Access Global A",
    "ticker": "0P00016L3S.ST",
-   "isin": null,
+   "isin": "SE0007074059",
    "category": "Global index",
    "asset_class": "equity",
    "proxy": false,
@@ -4406,6 +4454,8 @@
    "sma50_vs_200_pct": 8.9,
    "cross": "golden",
    "rsi14": 68.5,
+   "sma200_dist_pct": 13.0,
+   "sma200_slope_pct": 1.73,
    "ret_1m": 4.5,
    "ret_3m": 6.6,
    "ret_6m": 22.1,
@@ -4413,9 +4463,9 @@
    "ret_ytd": 20.4,
    "volatility_pct": 11.1,
    "max_drawdown_pct": -5.9,
-   "sharpe": 2.03,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 2.15,
+   "fee_pct": 0.24,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     341.85,
     342.18,
@@ -4657,28 +4707,30 @@
     419.88,
     421.67
    ],
-   "momentum_rank": "14 av 31",
-   "score": 80,
+   "momentum_rank": "1 av 3 i kategorin",
+   "score": 87,
    "score_parts": {
-    "trend": 30,
-    "momentum": 14.2,
-    "risk": 25,
-    "cost": 5,
-    "macro": 6.0
+    "trend": 31.6,
+    "momentum": 19.6,
+    "risk": 22.6,
+    "cost": 10,
+    "macro": 3.0
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 13.0 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+1.7 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
-    "Bra riskjusterad avkastning (Sharpe 2.03)"
+    "Stark avkastning jämfört med andra fonder (plats 1 av 3 i kategorin)",
+    "Bra riskjusterad avkastning (Sharpe 2.15)",
+    "Låg avgift (0.24%)"
    ],
    "reasons_neg": []
   },
   {
    "name": "AMF Aktiefond Global",
    "ticker": "0P00000L33.ST",
-   "isin": null,
+   "isin": "SE0000862278",
    "category": "Global",
    "asset_class": "equity",
    "proxy": false,
@@ -4693,6 +4745,8 @@
    "sma50_vs_200_pct": 8.1,
    "cross": "golden",
    "rsi14": 68.4,
+   "sma200_dist_pct": 12.4,
+   "sma200_slope_pct": 1.67,
    "ret_1m": 4.7,
    "ret_3m": 6.4,
    "ret_6m": 23.1,
@@ -4700,9 +4754,9 @@
    "ret_ytd": 19.9,
    "volatility_pct": 11.1,
    "max_drawdown_pct": -5.8,
-   "sharpe": 2.09,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 2.21,
+   "fee_pct": 0.63,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     406.23,
     405.74,
@@ -4946,28 +5000,28 @@
     498.22,
     499.48
    ],
-   "momentum_rank": "11 av 31",
-   "score": 83,
+   "momentum_rank": "3 av 4 i kategorin",
+   "score": 77,
    "score_parts": {
-    "trend": 30,
-    "momentum": 16.7,
-    "risk": 25,
-    "cost": 5,
-    "macro": 6.0
+    "trend": 31.1,
+    "momentum": 12.5,
+    "risk": 23.0,
+    "cost": 7,
+    "macro": 3.0
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 12.4 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+1.7 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
-    "Bra riskjusterad avkastning (Sharpe 2.09)"
+    "Bra riskjusterad avkastning (Sharpe 2.21)"
    ],
    "reasons_neg": []
   },
   {
    "name": "Swedbank Robur Globalfond A",
    "ticker": "0P00000LDD.ST",
-   "isin": null,
+   "isin": "SE0000542979",
    "category": "Global",
    "asset_class": "equity",
    "proxy": false,
@@ -4982,6 +5036,8 @@
    "sma50_vs_200_pct": 8.2,
    "cross": "golden",
    "rsi14": 65.1,
+   "sma200_dist_pct": 11.2,
+   "sma200_slope_pct": 1.44,
    "ret_1m": 3.7,
    "ret_3m": 3.0,
    "ret_6m": 20.1,
@@ -4989,9 +5045,9 @@
    "ret_ytd": 18.1,
    "volatility_pct": 11.7,
    "max_drawdown_pct": -8.0,
-   "sharpe": 1.94,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 2.05,
+   "fee_pct": 1.4,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     207.75,
     207.88,
@@ -5234,23 +5290,25 @@
     253.83,
     253.18
    ],
-   "momentum_rank": "17 av 31",
-   "score": 78,
+   "momentum_rank": "4 av 4 i kategorin",
+   "score": 65,
    "score_parts": {
-    "trend": 30,
-    "momentum": 11.7,
-    "risk": 25,
-    "cost": 5,
-    "macro": 6.0
+    "trend": 29.8,
+    "momentum": 5.8,
+    "risk": 21.9,
+    "cost": 4,
+    "macro": 3.0
    },
-   "label": "Lovande",
+   "label": "Neutral",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 11.2 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+1.4 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
-    "Bra riskjusterad avkastning (Sharpe 1.94)"
+    "Bra riskjusterad avkastning (Sharpe 2.05)"
    ],
-   "reasons_neg": []
+   "reasons_neg": [
+    "Svag avkastning jämfört med andra fonder (plats 4 av 4 i kategorin)"
+   ]
   },
   {
    "name": "Handelsbanken Sverige Index A1",
@@ -5270,6 +5328,8 @@
    "sma50_vs_200_pct": 5.4,
    "cross": "golden",
    "rsi14": 53.6,
+   "sma200_dist_pct": 6.3,
+   "sma200_slope_pct": 1.6,
    "ret_1m": -0.5,
    "ret_3m": 2.6,
    "ret_6m": 15.5,
@@ -5277,7 +5337,7 @@
    "ret_ytd": 13.4,
    "volatility_pct": 15.8,
    "max_drawdown_pct": -10.9,
-   "sharpe": 1.17,
+   "sharpe": 1.26,
    "fee_pct": 0.8,
    "fee_source": "Yahoo Finance",
    "price_history_1y": [
@@ -5530,31 +5590,31 @@
     607.45,
     609.5
    ],
-   "momentum_rank": "23 av 31",
-   "score": 72,
+   "momentum_rank": "3 av 3 i kategorin",
+   "score": 57,
    "score_parts": {
-    "trend": 30,
-    "momentum": 6.7,
-    "risk": 20.9,
+    "trend": 26.7,
+    "momentum": 3.3,
+    "risk": 16.2,
     "cost": 7,
-    "macro": 7.1
+    "macro": 3.6
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 6.3 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+1.6 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
-    "Bra riskjusterad avkastning (Sharpe 1.17)",
+    "Bra riskjusterad avkastning (Sharpe 1.26)",
     "Bred uppgång på marknaden (71% av aktierna över SMA200)"
    ],
    "reasons_neg": [
-    "Svag avkastning jämfört med andra fonder (plats 23 av 31)"
+    "Svag avkastning jämfört med andra fonder (plats 3 av 3 i kategorin)"
    ]
   },
   {
    "name": "Länsförsäkringar Sverige Index",
    "ticker": "0P0000J1JM.ST",
-   "isin": null,
+   "isin": "SE0002656611",
    "category": "Sverige index",
    "asset_class": "equity",
    "proxy": false,
@@ -5569,6 +5629,8 @@
    "sma50_vs_200_pct": 5.4,
    "cross": "golden",
    "rsi14": 51.5,
+   "sma200_dist_pct": 6.1,
+   "sma200_slope_pct": 1.76,
    "ret_1m": -0.1,
    "ret_3m": 3.0,
    "ret_6m": 15.9,
@@ -5576,9 +5638,9 @@
    "ret_ytd": 13.8,
    "volatility_pct": 15.0,
    "max_drawdown_pct": -11.4,
-   "sharpe": 1.33,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 1.42,
+   "fee_pct": 0.21,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     573.52,
     578.23,
@@ -5825,21 +5887,22 @@
     719.38,
     714.11
    ],
-   "momentum_rank": "21 av 31",
-   "score": 73,
+   "momentum_rank": "2 av 3 i kategorin",
+   "score": 68,
    "score_parts": {
-    "trend": 30,
-    "momentum": 8.3,
-    "risk": 22.5,
-    "cost": 5,
-    "macro": 7.1
+    "trend": 26.8,
+    "momentum": 10.4,
+    "risk": 17.1,
+    "cost": 10,
+    "macro": 3.6
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 6.1 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+1.8 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
-    "Bra riskjusterad avkastning (Sharpe 1.33)",
+    "Bra riskjusterad avkastning (Sharpe 1.42)",
+    "Låg avgift (0.21%)",
     "Bred uppgång på marknaden (71% av aktierna över SMA200)"
    ],
    "reasons_neg": []
@@ -5847,7 +5910,7 @@
   {
    "name": "Lannebo Sverige A",
    "ticker": "0P00000KJK.ST",
-   "isin": null,
+   "isin": "SE0000740680",
    "category": "Sverige",
    "asset_class": "equity",
    "proxy": false,
@@ -5862,6 +5925,8 @@
    "sma50_vs_200_pct": 6.7,
    "cross": "golden",
    "rsi14": 56.9,
+   "sma200_dist_pct": 9.4,
+   "sma200_slope_pct": 2.02,
    "ret_1m": 1.5,
    "ret_3m": 7.8,
    "ret_6m": 20.7,
@@ -5869,9 +5934,9 @@
    "ret_ytd": 16.6,
    "volatility_pct": 15.0,
    "max_drawdown_pct": -10.1,
-   "sharpe": 1.9,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 1.99,
+   "fee_pct": 1.99,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     74.33,
     73.75,
@@ -6120,30 +6185,32 @@
     96.42,
     95.79
    ],
-   "momentum_rank": "8 av 31",
-   "score": 86,
+   "momentum_rank": "1 av 5 i kategorin",
+   "score": 77,
    "score_parts": {
-    "trend": 30,
-    "momentum": 19.2,
-    "risk": 25.0,
-    "cost": 5,
-    "macro": 7.1
+    "trend": 29.5,
+    "momentum": 22.1,
+    "risk": 21.5,
+    "cost": 0,
+    "macro": 3.6
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 9.4 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+2.0 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
-    "Stark avkastning jämfört med andra fonder (plats 8 av 31)",
-    "Bra riskjusterad avkastning (Sharpe 1.90)",
+    "Stark avkastning jämfört med andra fonder (plats 1 av 5 i kategorin)",
+    "Bra riskjusterad avkastning (Sharpe 1.99)",
     "Bred uppgång på marknaden (71% av aktierna över SMA200)"
    ],
-   "reasons_neg": []
+   "reasons_neg": [
+    "Hög avgift (1.99%)"
+   ]
   },
   {
    "name": "Spiltan Aktiefond Stabil",
    "ticker": "0P00000HMU.ST",
-   "isin": null,
+   "isin": "SE0001015348",
    "category": "Sverige",
    "asset_class": "equity",
    "proxy": false,
@@ -6158,6 +6225,8 @@
    "sma50_vs_200_pct": 2.5,
    "cross": "golden",
    "rsi14": 55.0,
+   "sma200_dist_pct": 3.6,
+   "sma200_slope_pct": 0.46,
    "ret_1m": 1.3,
    "ret_3m": 3.5,
    "ret_6m": 12.2,
@@ -6165,9 +6234,9 @@
    "ret_ytd": 3.9,
    "volatility_pct": 14.3,
    "max_drawdown_pct": -10.7,
-   "sharpe": 0.37,
-   "fee_pct": 1.72,
-   "fee_source": "Yahoo Finance",
+   "sharpe": 0.47,
+   "fee_pct": 1.54,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     1246.93,
     1252.59,
@@ -6415,31 +6484,30 @@
     1357.27,
     1367.31
    ],
-   "momentum_rank": "25 av 31",
-   "score": 54,
+   "momentum_rank": "5 av 5 i kategorin",
+   "score": 40,
    "score_parts": {
-    "trend": 30,
-    "momentum": 5.0,
-    "risk": 11.9,
+    "trend": 23.0,
+    "momentum": 2.5,
+    "risk": 10.9,
     "cost": 0,
-    "macro": 7.1
+    "macro": 3.6
    },
-   "label": "Neutral",
+   "label": "Svag",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 3.6 % över SMA200 – långsiktig upptrend",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
     "Bred uppgång på marknaden (71% av aktierna över SMA200)"
    ],
    "reasons_neg": [
-    "Svag avkastning jämfört med andra fonder (plats 25 av 31)",
-    "Hög avgift (1.72%)"
+    "Svag avkastning jämfört med andra fonder (plats 5 av 5 i kategorin)",
+    "Hög avgift (1.54%)"
    ]
   },
   {
    "name": "AMF Aktiefond Småbolag",
    "ticker": "0P00000T7M.ST",
-   "isin": null,
+   "isin": "SE0001185000",
    "category": "Sverige småbolag",
    "asset_class": "equity",
    "proxy": false,
@@ -6454,6 +6522,8 @@
    "sma50_vs_200_pct": 4.3,
    "cross": "golden",
    "rsi14": 55.7,
+   "sma200_dist_pct": 5.8,
+   "sma200_slope_pct": 0.28,
    "ret_1m": 0.4,
    "ret_3m": 5.5,
    "ret_6m": 16.3,
@@ -6461,9 +6531,9 @@
    "ret_ytd": 3.9,
    "volatility_pct": 16.1,
    "max_drawdown_pct": -17.8,
-   "sharpe": -0.13,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": -0.05,
+   "fee_pct": 0.48,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     1190.4,
     1190.57,
@@ -6713,31 +6783,30 @@
     1245.77,
     1251.85
    ],
-   "momentum_rank": "28 av 31",
-   "score": 49,
+   "momentum_rank": "3 av 3 i kategorin",
+   "score": 41,
    "score_parts": {
-    "trend": 30,
-    "momentum": 2.5,
+    "trend": 24.2,
+    "momentum": 1.2,
     "risk": 4.9,
-    "cost": 5,
-    "macro": 7.1
+    "cost": 7,
+    "macro": 3.6
    },
    "label": "Svag",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 5.8 % över SMA200 – långsiktig upptrend",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
     "Bred uppgång på marknaden (71% av aktierna över SMA200)"
    ],
    "reasons_neg": [
-    "Svag avkastning jämfört med andra fonder (plats 28 av 31)",
-    "Sämre än riskfri ränta senaste året (Sharpe -0.13)"
+    "Svag avkastning jämfört med andra fonder (plats 3 av 3 i kategorin)",
+    "Sämre än riskfri ränta senaste året (Sharpe -0.05)"
    ]
   },
   {
    "name": "Swedbank Robur Småbolagsfond Sverige A",
    "ticker": "0P00000LEY.ST",
-   "isin": null,
+   "isin": "SE0000602302",
    "category": "Sverige småbolag",
    "asset_class": "equity",
    "proxy": false,
@@ -6752,6 +6821,8 @@
    "sma50_vs_200_pct": 4.6,
    "cross": "golden",
    "rsi14": 51.3,
+   "sma200_dist_pct": 5.3,
+   "sma200_slope_pct": 0.74,
    "ret_1m": 0.6,
    "ret_3m": 3.2,
    "ret_6m": 18.0,
@@ -6759,9 +6830,9 @@
    "ret_ytd": 6.7,
    "volatility_pct": 15.5,
    "max_drawdown_pct": -13.9,
-   "sharpe": -0.1,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": -0.01,
+   "fee_pct": 1.44,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     237.81,
     238.09,
@@ -7009,31 +7080,30 @@
     255.28,
     252.14
    ],
-   "momentum_rank": "27 av 31",
-   "score": 52,
+   "momentum_rank": "2 av 3 i kategorin",
+   "score": 47,
    "score_parts": {
-    "trend": 30,
-    "momentum": 3.3,
+    "trend": 24.6,
+    "momentum": 7.9,
     "risk": 6.4,
-    "cost": 5,
-    "macro": 7.1
+    "cost": 4,
+    "macro": 3.6
    },
-   "label": "Neutral",
+   "label": "Svag",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 5.3 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+0.7 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
     "Bred uppgång på marknaden (71% av aktierna över SMA200)"
    ],
    "reasons_neg": [
-    "Svag avkastning jämfört med andra fonder (plats 27 av 31)",
-    "Sämre än riskfri ränta senaste året (Sharpe -0.10)"
+    "Sämre än riskfri ränta senaste året (Sharpe -0.01)"
    ]
   },
   {
    "name": "Handelsbanken Svenska Småbolag A1",
    "ticker": "0P00000F8N.ST",
-   "isin": null,
+   "isin": "SE0000356065",
    "category": "Sverige småbolag",
    "asset_class": "equity",
    "proxy": false,
@@ -7048,6 +7118,8 @@
    "sma50_vs_200_pct": 5.8,
    "cross": "golden",
    "rsi14": 50.8,
+   "sma200_dist_pct": 6.3,
+   "sma200_slope_pct": 0.88,
    "ret_1m": -0.9,
    "ret_3m": 7.7,
    "ret_6m": 20.4,
@@ -7055,9 +7127,9 @@
    "ret_ytd": 6.3,
    "volatility_pct": 16.5,
    "max_drawdown_pct": -14.8,
-   "sharpe": 0.19,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 0.27,
+   "fee_pct": 1.71,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     2287.2,
     2294.02,
@@ -7306,30 +7378,30 @@
     2513.41,
     2518.67
    ],
-   "momentum_rank": "24 av 31",
-   "score": 56,
+   "momentum_rank": "1 av 3 i kategorin",
+   "score": 52,
    "score_parts": {
-    "trend": 30,
-    "momentum": 5.8,
-    "risk": 8.2,
-    "cost": 5,
-    "macro": 7.1
+    "trend": 25.5,
+    "momentum": 15.4,
+    "risk": 7.9,
+    "cost": 0,
+    "macro": 3.6
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 6.3 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+0.9 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
     "Bred uppgång på marknaden (71% av aktierna över SMA200)"
    ],
    "reasons_neg": [
-    "Svag avkastning jämfört med andra fonder (plats 24 av 31)"
+    "Hög avgift (1.71%)"
    ]
   },
   {
    "name": "SEB Europafond Småbolag",
    "ticker": "0P00000LQ6.ST",
-   "isin": null,
+   "isin": "SE0000433252",
    "category": "Europa",
    "asset_class": "equity",
    "proxy": false,
@@ -7344,6 +7416,8 @@
    "sma50_vs_200_pct": 5.6,
    "cross": "golden",
    "rsi14": 56.3,
+   "sma200_dist_pct": 6.9,
+   "sma200_slope_pct": 0.31,
    "ret_1m": -0.5,
    "ret_3m": 7.1,
    "ret_6m": 20.0,
@@ -7351,9 +7425,9 @@
    "ret_ytd": 3.4,
    "volatility_pct": 13.0,
    "max_drawdown_pct": -16.8,
-   "sharpe": -0.26,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": -0.16,
+   "fee_pct": 1.67,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     113.06,
     112.85,
@@ -7604,29 +7678,29 @@
     117.18
    ],
    "momentum_rank": "26 av 31",
-   "score": 51,
+   "score": 38,
    "score_parts": {
-    "trend": 30,
+    "trend": 25.0,
     "momentum": 4.2,
     "risk": 5.3,
-    "cost": 5,
-    "macro": 6.2
+    "cost": 0,
+    "macro": 3.1
    },
-   "label": "Neutral",
+   "label": "Svag",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
-    "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)"
+    "Kursen 6.9 % över SMA200 – långsiktig upptrend",
+    "Kursen ligger över SMA50 – kortsiktig styrka"
    ],
    "reasons_neg": [
     "Svag avkastning jämfört med andra fonder (plats 26 av 31)",
-    "Sämre än riskfri ränta senaste året (Sharpe -0.26)"
+    "Sämre än riskfri ränta senaste året (Sharpe -0.16)",
+    "Hög avgift (1.67%)"
    ]
   },
   {
    "name": "Avanza Emerging Markets",
    "ticker": "0P0001H4TL.ST",
-   "isin": null,
+   "isin": "SE0012454338",
    "category": "Tillväxtmarknader",
    "asset_class": "equity",
    "proxy": false,
@@ -7641,6 +7715,8 @@
    "sma50_vs_200_pct": 10.5,
    "cross": "golden",
    "rsi14": 68.4,
+   "sma200_dist_pct": 18.3,
+   "sma200_slope_pct": 3.12,
    "ret_1m": 6.4,
    "ret_3m": 4.6,
    "ret_6m": 29.7,
@@ -7648,9 +7724,9 @@
    "ret_ytd": 35.8,
    "volatility_pct": 24.2,
    "max_drawdown_pct": -13.4,
-   "sharpe": 1.79,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 1.85,
+   "fee_pct": 0.3,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     146.86,
     148.63,
@@ -7865,29 +7941,30 @@
     204.25,
     205.58
    ],
-   "momentum_rank": "4 av 31",
-   "score": 87,
+   "momentum_rank": "3 av 31",
+   "score": 91,
    "score_parts": {
-    "trend": 30,
-    "momentum": 22.5,
-    "risk": 23.6,
-    "cost": 5,
-    "macro": 6.0
+    "trend": 35,
+    "momentum": 23.3,
+    "risk": 19.2,
+    "cost": 10,
+    "macro": 3.0
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 18.3 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+3.1 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
-    "Stark avkastning jämfört med andra fonder (plats 4 av 31)",
-    "Bra riskjusterad avkastning (Sharpe 1.79)"
+    "Stark avkastning jämfört med andra fonder (plats 3 av 31)",
+    "Bra riskjusterad avkastning (Sharpe 1.85)",
+    "Låg avgift (0.30%)"
    ],
    "reasons_neg": []
   },
   {
    "name": "Länsförsäkringar Tillväxtmarknad Index A",
    "ticker": "0P00013668.ST",
-   "isin": null,
+   "isin": "SE0005796331",
    "category": "Tillväxtmarknader",
    "asset_class": "equity",
    "proxy": false,
@@ -7902,6 +7979,8 @@
    "sma50_vs_200_pct": 4.8,
    "cross": "golden",
    "rsi14": 68.8,
+   "sma200_dist_pct": 12.5,
+   "sma200_slope_pct": 1.4,
    "ret_1m": 6.6,
    "ret_3m": 2.5,
    "ret_6m": 21.1,
@@ -7909,9 +7988,9 @@
    "ret_ytd": 23.0,
    "volatility_pct": 21.1,
    "max_drawdown_pct": -14.4,
-   "sharpe": 1.28,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 1.35,
+   "fee_pct": 0.51,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     217.52,
     220.1,
@@ -8152,27 +8231,27 @@
     268.2
    ],
    "momentum_rank": "13 av 31",
-   "score": 77,
+   "score": 71,
    "score_parts": {
-    "trend": 30,
+    "trend": 30.7,
     "momentum": 15.0,
-    "risk": 20.7,
-    "cost": 5,
-    "macro": 6.0
+    "risk": 15.4,
+    "cost": 7,
+    "macro": 3.0
    },
-   "label": "Lovande",
+   "label": "Neutral",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 12.5 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+1.4 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
-    "Bra riskjusterad avkastning (Sharpe 1.28)"
+    "Bra riskjusterad avkastning (Sharpe 1.35)"
    ],
    "reasons_neg": []
   },
   {
    "name": "Swedbank Robur Ny Teknik A",
    "ticker": "0P00000K48.ST",
-   "isin": null,
+   "isin": "SE0000709123",
    "category": "Tema: teknik",
    "asset_class": "equity",
    "proxy": false,
@@ -8187,6 +8266,8 @@
    "sma50_vs_200_pct": 10.1,
    "cross": "golden",
    "rsi14": 63.5,
+   "sma200_dist_pct": 15.6,
+   "sma200_slope_pct": 1.88,
    "ret_1m": 5.6,
    "ret_3m": -0.4,
    "ret_6m": 34.9,
@@ -8194,9 +8275,9 @@
    "ret_ytd": 28.8,
    "volatility_pct": 23.0,
    "max_drawdown_pct": -15.8,
-   "sharpe": 0.83,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 0.89,
+   "fee_pct": 1.44,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     1148.55,
     1131.59,
@@ -8442,26 +8523,26 @@
     1361.59
    ],
    "momentum_rank": "12 av 31",
-   "score": 72,
+   "score": 68,
    "score_parts": {
-    "trend": 30,
+    "trend": 33.2,
     "momentum": 15.8,
-    "risk": 15.1,
-    "cost": 5,
-    "macro": 6.0
+    "risk": 11.7,
+    "cost": 4,
+    "macro": 3.0
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
-    "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)"
+    "Kursen 15.6 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+1.9 % senaste månaden)",
+    "Kursen ligger över SMA50 – kortsiktig styrka"
    ],
    "reasons_neg": []
   },
   {
    "name": "Handelsbanken Hälsovård Tema A1",
    "ticker": "0P00000F5G.ST",
-   "isin": null,
+   "isin": "SE0000735375",
    "category": "Tema: hälsovård",
    "asset_class": "equity",
    "proxy": false,
@@ -8476,6 +8557,8 @@
    "sma50_vs_200_pct": 5.3,
    "cross": "golden",
    "rsi14": 64.1,
+   "sma200_dist_pct": 10.0,
+   "sma200_slope_pct": 0.81,
    "ret_1m": 1.9,
    "ret_3m": 13.1,
    "ret_6m": 13.8,
@@ -8483,9 +8566,9 @@
    "ret_ytd": 9.5,
    "volatility_pct": 15.6,
    "max_drawdown_pct": -14.3,
-   "sharpe": 1.13,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 1.22,
+   "fee_pct": 1.6,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     388.53,
     393.44,
@@ -8727,22 +8810,24 @@
     473.13
    ],
    "momentum_rank": "20 av 31",
-   "score": 69,
+   "score": 55,
    "score_parts": {
-    "trend": 30,
+    "trend": 28.0,
     "momentum": 9.2,
-    "risk": 19.1,
-    "cost": 5,
-    "macro": 6.0
+    "risk": 14.6,
+    "cost": 0,
+    "macro": 3.0
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 10.0 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+0.8 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
-    "Bra riskjusterad avkastning (Sharpe 1.13)"
+    "Bra riskjusterad avkastning (Sharpe 1.22)"
    ],
-   "reasons_neg": []
+   "reasons_neg": [
+    "Hög avgift (1.60%)"
+   ]
   },
   {
    "name": "Carnegie Fastighetsfond Norden B",
@@ -8762,6 +8847,8 @@
    "sma50_vs_200_pct": -2.8,
    "cross": "death",
    "rsi14": 26.1,
+   "sma200_dist_pct": -10.3,
+   "sma200_slope_pct": -0.96,
    "ret_1m": -8.8,
    "ret_3m": -7.3,
    "ret_6m": -5.0,
@@ -8769,7 +8856,7 @@
    "ret_ytd": -14.4,
    "volatility_pct": 18.2,
    "max_drawdown_pct": -19.5,
-   "sharpe": -0.89,
+   "sharpe": -0.82,
    "fee_pct": null,
    "fee_source": null,
    "price_history_1y": [
@@ -9023,30 +9110,31 @@
     246.36
    ],
    "momentum_rank": "31 av 31",
-   "score": 18,
+   "score": 16,
    "score_parts": {
-    "trend": 2,
+    "trend": 3.7,
     "momentum": 0.0,
     "risk": 4.2,
     "cost": 5,
-    "macro": 6.5
+    "macro": 2.9
    },
    "label": "Svag",
    "reasons_pos": [
     "RSI 26 – kortsiktigt översåld, kan vara läge att öka"
    ],
    "reasons_neg": [
-    "Kursen ligger under SMA200 – långsiktig nedtrend",
+    "Kursen 10.3 % under SMA200 – långsiktig nedtrend",
+    "SMA200 faller (-1.0 % senaste månaden)",
     "Kursen ligger under SMA50 – kortsiktig svaghet",
     "SMA50 under SMA200 (death cross-läge)",
     "Svag avkastning jämfört med andra fonder (plats 31 av 31)",
-    "Sämre än riskfri ränta senaste året (Sharpe -0.89)"
+    "Sämre än riskfri ränta senaste året (Sharpe -0.82)"
    ]
   },
   {
    "name": "Spiltan Räntefond Sverige",
    "ticker": "0P00009NT9.ST",
-   "isin": null,
+   "isin": "SE0002152140",
    "category": "Räntefond",
    "asset_class": "bond",
    "proxy": false,
@@ -9061,6 +9149,8 @@
    "sma50_vs_200_pct": 0.9,
    "cross": "golden",
    "rsi14": 88.0,
+   "sma200_dist_pct": 1.1,
+   "sma200_slope_pct": 0.24,
    "ret_1m": 0.1,
    "ret_3m": 0.6,
    "ret_6m": 1.6,
@@ -9068,9 +9158,9 @@
    "ret_ytd": 2.1,
    "volatility_pct": 0.3,
    "max_drawdown_pct": -0.2,
-   "sharpe": -1.1,
+   "sharpe": 3.36,
    "fee_pct": 0.1,
-   "fee_source": "Yahoo Finance",
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     148.64,
     148.67,
@@ -9321,32 +9411,31 @@
     152.6,
     152.62
    ],
-   "momentum_rank": "1 av 6",
-   "score": 76,
+   "momentum_rank": "1 av 6 i kategorin",
+   "score": 80,
    "score_parts": {
-    "trend": 26,
+    "trend": 16.9,
     "momentum": 25.0,
-    "risk": 8,
+    "risk": 25,
     "cost": 10,
-    "macro": 6.5
+    "macro": 2.9
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 1.1 % över SMA200 – långsiktig upptrend",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
-    "Stark avkastning jämfört med andra fonder (plats 1 av 6)",
+    "Stark avkastning jämfört med andra fonder (plats 1 av 6 i kategorin)",
+    "Bra riskjusterad avkastning (Sharpe 3.36)",
     "Låg avgift (0.10%)"
    ],
    "reasons_neg": [
-    "RSI 88 – kortsiktigt överköpt",
-    "Sämre än riskfri ränta senaste året (Sharpe -1.10)"
+    "RSI 88 – kortsiktigt överköpt"
    ]
   },
   {
    "name": "Länsförsäkringar Kort Räntefond",
    "ticker": "0P00000L3H.ST",
-   "isin": null,
+   "isin": "SE0000837247",
    "category": "Räntefond",
    "asset_class": "bond",
    "proxy": false,
@@ -9361,6 +9450,8 @@
    "sma50_vs_200_pct": 0.7,
    "cross": "golden",
    "rsi14": 85.2,
+   "sma200_dist_pct": 0.9,
+   "sma200_slope_pct": 0.2,
    "ret_1m": 0.1,
    "ret_3m": 0.5,
    "ret_6m": 1.3,
@@ -9368,9 +9459,9 @@
    "ret_ytd": 1.7,
    "volatility_pct": 0.2,
    "max_drawdown_pct": -0.1,
-   "sharpe": -3.61,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 4.28,
+   "fee_pct": 0.2,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     115.61,
     115.62,
@@ -9617,31 +9708,31 @@
     118.3,
     118.31
    ],
-   "momentum_rank": "2 av 6",
-   "score": 66,
+   "momentum_rank": "2 av 6 i kategorin",
+   "score": 75,
    "score_parts": {
-    "trend": 26,
+    "trend": 16.7,
     "momentum": 20.0,
-    "risk": 8,
-    "cost": 5,
-    "macro": 6.5
+    "risk": 25,
+    "cost": 10,
+    "macro": 2.9
    },
-   "label": "Neutral",
+   "label": "Lovande",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 0.9 % över SMA200 – långsiktig upptrend",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)",
-    "Stark avkastning jämfört med andra fonder (plats 2 av 6)"
+    "Stark avkastning jämfört med andra fonder (plats 2 av 6 i kategorin)",
+    "Bra riskjusterad avkastning (Sharpe 4.28)",
+    "Låg avgift (0.20%)"
    ],
    "reasons_neg": [
-    "RSI 85 – kortsiktigt överköpt",
-    "Sämre än riskfri ränta senaste året (Sharpe -3.61)"
+    "RSI 85 – kortsiktigt överköpt"
    ]
   },
   {
    "name": "Swedbank Robur Räntefond Kort A",
    "ticker": "0P00000FQP.ST",
-   "isin": null,
+   "isin": "SE0000543043",
    "category": "Räntefond",
    "asset_class": "bond",
    "proxy": false,
@@ -9656,6 +9747,8 @@
    "sma50_vs_200_pct": 0.6,
    "cross": "golden",
    "rsi14": 69.9,
+   "sma200_dist_pct": 0.8,
+   "sma200_slope_pct": 0.17,
    "ret_1m": 0.1,
    "ret_3m": 0.4,
    "ret_6m": 1.0,
@@ -9663,9 +9756,9 @@
    "ret_ytd": 1.4,
    "volatility_pct": 0.3,
    "max_drawdown_pct": -0.1,
-   "sharpe": -3.6,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 1.36,
+   "fee_pct": 0.13,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     110.64,
     110.65,
@@ -9907,29 +10000,28 @@
     112.8,
     112.8
    ],
-   "momentum_rank": "3 av 6",
-   "score": 65,
+   "momentum_rank": "3 av 6 i kategorin",
+   "score": 66,
    "score_parts": {
-    "trend": 30,
+    "trend": 20.5,
     "momentum": 15.0,
-    "risk": 8,
-    "cost": 5,
-    "macro": 6.5
+    "risk": 17.2,
+    "cost": 10,
+    "macro": 2.9
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
+    "Kursen 0.8 % över SMA200 – långsiktig upptrend",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "SMA50 över SMA200 (golden cross-läge)"
+    "Bra riskjusterad avkastning (Sharpe 1.36)",
+    "Låg avgift (0.13%)"
    ],
-   "reasons_neg": [
-    "Sämre än riskfri ränta senaste året (Sharpe -3.60)"
-   ]
+   "reasons_neg": []
   },
   {
    "name": "AMF Räntefond Lång",
    "ticker": "0P00000K19.ST",
-   "isin": null,
+   "isin": "SE0000739187",
    "category": "Räntefond",
    "asset_class": "bond",
    "proxy": false,
@@ -9944,6 +10036,8 @@
    "sma50_vs_200_pct": 0.3,
    "cross": "golden",
    "rsi14": 34.5,
+   "sma200_dist_pct": -0.5,
+   "sma200_slope_pct": 0.1,
    "ret_1m": -1.2,
    "ret_3m": -1.9,
    "ret_6m": 0.9,
@@ -9951,9 +10045,9 @@
    "ret_ytd": 0.3,
    "volatility_pct": 2.4,
    "max_drawdown_pct": -2.3,
-   "sharpe": -1.09,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": -0.55,
+   "fee_pct": 0.13,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     157.78,
     157.83,
@@ -10202,30 +10296,30 @@
     158.7,
     158.7
    ],
-   "momentum_rank": "5 av 6",
-   "score": 30,
+   "momentum_rank": "5 av 6 i kategorin",
+   "score": 35,
    "score_parts": {
-    "trend": 6,
+    "trend": 9.5,
     "momentum": 5.0,
     "risk": 7.6,
-    "cost": 5,
-    "macro": 6.5
+    "cost": 10,
+    "macro": 2.9
    },
    "label": "Svag",
    "reasons_pos": [
-    "SMA50 över SMA200 (golden cross-läge)"
+    "Låg avgift (0.13%)"
    ],
    "reasons_neg": [
-    "Kursen ligger under SMA200 – långsiktig nedtrend",
+    "Kursen 0.5 % under SMA200 – långsiktig nedtrend",
     "Kursen ligger under SMA50 – kortsiktig svaghet",
-    "Svag avkastning jämfört med andra fonder (plats 5 av 6)",
-    "Sämre än riskfri ränta senaste året (Sharpe -1.09)"
+    "Svag avkastning jämfört med andra fonder (plats 5 av 6 i kategorin)",
+    "Sämre än riskfri ränta senaste året (Sharpe -0.55)"
    ]
   },
   {
    "name": "Lannebo Företagsobligationsfond A",
    "ticker": "0P00000FUA.ST",
-   "isin": null,
+   "isin": "SE0001095506",
    "category": "Räntefond",
    "asset_class": "bond",
    "proxy": false,
@@ -10240,6 +10334,8 @@
    "sma50_vs_200_pct": 1.0,
    "cross": "golden",
    "rsi14": 34.1,
+   "sma200_dist_pct": 0.4,
+   "sma200_slope_pct": 0.23,
    "ret_1m": -0.8,
    "ret_3m": -0.4,
    "ret_6m": 1.1,
@@ -10247,9 +10343,9 @@
    "ret_ytd": 1.4,
    "volatility_pct": 1.7,
    "max_drawdown_pct": -2.0,
-   "sharpe": -0.68,
-   "fee_pct": null,
-   "fee_source": null,
+   "sharpe": 0.09,
+   "fee_pct": 1.19,
+   "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
     133.5,
     133.5,
@@ -10491,23 +10587,21 @@
     136.61,
     136.06
    ],
-   "momentum_rank": "4 av 6",
-   "score": 48,
+   "momentum_rank": "4 av 6 i kategorin",
+   "score": 36,
    "score_parts": {
-    "trend": 18,
+    "trend": 10.3,
     "momentum": 10.0,
-    "risk": 8,
-    "cost": 5,
-    "macro": 6.5
+    "risk": 8.6,
+    "cost": 4,
+    "macro": 2.9
    },
    "label": "Svag",
    "reasons_pos": [
-    "Kursen ligger över SMA200 – långsiktig upptrend",
-    "SMA50 över SMA200 (golden cross-läge)"
+    "Kursen 0.4 % över SMA200 – långsiktig upptrend"
    ],
    "reasons_neg": [
-    "Kursen ligger under SMA50 – kortsiktig svaghet",
-    "Sämre än riskfri ränta senaste året (Sharpe -0.68)"
+    "Kursen ligger under SMA50 – kortsiktig svaghet"
    ]
   },
   {
@@ -10528,6 +10622,8 @@
    "sma50_vs_200_pct": -0.0,
    "cross": "death",
    "rsi14": 31.4,
+   "sma200_dist_pct": -0.9,
+   "sma200_slope_pct": 0.0,
    "ret_1m": -1.2,
    "ret_3m": -1.7,
    "ret_6m": 0.5,
@@ -10535,7 +10631,7 @@
    "ret_ytd": -0.7,
    "volatility_pct": 2.1,
    "max_drawdown_pct": -2.4,
-   "sharpe": -1.71,
+   "sharpe": -1.07,
    "fee_pct": null,
    "fee_source": null,
    "price_history_1y": [
@@ -10786,23 +10882,23 @@
     161.76,
     161.62
    ],
-   "momentum_rank": "6 av 6",
-   "score": 19,
+   "momentum_rank": "6 av 6 i kategorin",
+   "score": 21,
    "score_parts": {
-    "trend": 0,
+    "trend": 6.1,
     "momentum": 0.0,
     "risk": 7.5,
     "cost": 5,
-    "macro": 6.5
+    "macro": 2.9
    },
    "label": "Svag",
    "reasons_pos": [],
    "reasons_neg": [
-    "Kursen ligger under SMA200 – långsiktig nedtrend",
+    "Kursen 0.9 % under SMA200 – långsiktig nedtrend",
     "Kursen ligger under SMA50 – kortsiktig svaghet",
     "SMA50 under SMA200 (death cross-läge)",
-    "Svag avkastning jämfört med andra fonder (plats 6 av 6)",
-    "Sämre än riskfri ränta senaste året (Sharpe -1.71)"
+    "Svag avkastning jämfört med andra fonder (plats 6 av 6 i kategorin)",
+    "Sämre än riskfri ränta senaste året (Sharpe -1.07)"
    ]
   }
  ]

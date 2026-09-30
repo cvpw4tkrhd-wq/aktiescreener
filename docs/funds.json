@@ -1,6 +1,6 @@
 {
- "generated_at": "2026-09-30T08:30:06.698645+00:00",
- "version": "9.2",
+ "generated_at": "2026-09-30T09:51:29.193815+00:00",
+ "version": "9.3",
  "count": 37,
  "stability_score": 57.8,
  "funds": [
@@ -3560,7 +3560,7 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "EUR",
-   "price": 42.58,
+   "price": 42.37,
    "as_of": "2026-09-30",
    "sma50": 42.34,
    "sma200": 37.32,
@@ -3568,17 +3568,17 @@
    "above_sma200": true,
    "sma50_vs_200_pct": 13.4,
    "cross": "golden",
-   "rsi14": 52.4,
-   "sma200_dist_pct": 14.1,
+   "rsi14": 50.1,
+   "sma200_dist_pct": 13.5,
    "sma200_slope_pct": 3.26,
-   "ret_1m": 0.8,
-   "ret_3m": 5.6,
-   "ret_6m": 27.5,
-   "ret_1y": 43.8,
-   "ret_ytd": 24.9,
+   "ret_1m": 0.3,
+   "ret_3m": 5.1,
+   "ret_6m": 26.8,
+   "ret_1y": 43.1,
+   "ret_ytd": 24.2,
    "volatility_pct": 22.0,
    "max_drawdown_pct": -16.0,
-   "sharpe": 1.88,
+   "sharpe": 1.84,
    "fee_pct": 0.46,
    "fee_source": "Yahoo Finance",
    "price_history_1y": [
@@ -3833,24 +3833,24 @@
     41.87,
     42.38,
     42.37,
-    42.58
+    42.37
    ],
    "momentum_rank": "4 av 31",
    "score": 85,
    "score_parts": {
-    "trend": 34.4,
+    "trend": 34.0,
     "momentum": 22.5,
-    "risk": 18.4,
+    "risk": 18.1,
     "cost": 7,
     "macro": 3.1
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen 14.1 % över SMA200 – långsiktig upptrend",
+    "Kursen 13.5 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+3.3 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
     "Stark avkastning jämfört med andra fonder (plats 4 av 31)",
-    "Bra riskjusterad avkastning (Sharpe 1.88)"
+    "Bra riskjusterad avkastning (Sharpe 1.84)"
    ],
    "reasons_neg": []
   },

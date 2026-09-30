@@ -185,6 +185,13 @@
   .bd-hero.good .bd-score { color: var(--up); }
   .bd-hero.bad .bd-score { color: var(--down); }
   .bd-hero-txt { flex: 1; min-width: 200px; font-size: 13px; line-height: 1.45; }
+  .reason-grp { border-left: 3px solid var(--border); padding: 2px 0 2px 12px; margin: 8px 0 12px; }
+  .reason-grp.pos { border-left-color: var(--up); }
+  .reason-grp.neg { border-left-color: var(--down); }
+  .reason-grp-title { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .06em; color: var(--text-dim); margin-bottom: 4px; }
+  .reason-grp.pos .reason-grp-title { color: var(--up); }
+  .reason-grp.neg .reason-grp-title { color: var(--down); }
+  .reason-grp .reasons { margin-top: 0; }
   .stab-gauge { width: 220px; max-width: 100%; text-align: center; }
   .stab-gauge svg { width: 100%; height: auto; display: block; }
   .stab-gauge-lbl { font-family: 'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--text-dim); margin-top: -2px; }
@@ -1144,6 +1151,12 @@ function findHoldingMatch(entryTicker, entryName, holdings) {
 function scoreSellSignal(d) {
   let score = 0;
   const reasons = [];
+  // v9.1: varje skäl får ett tecken (+1 höjer säljpoängen, −1 sänker) genom att
+  // push läser av hur score ändrats sedan föregående skäl.
+  reasons.signs = [];
+  let _lastScore = 0;
+  const _push = Array.prototype.push;
+  reasons.push = (txt) => { _push.call(reasons, txt); reasons.signs.push(Math.sign(score - _lastScore)); _lastScore = score; return reasons.length; };
 
   // Beräknas först: om bolaget redan visar tecken på finansiell stress
   // (utebliven vinst + hög skuldsättning + nedåttrend) ska en "förbättrad"
@@ -1359,6 +1372,7 @@ function applyHoldingsToResults() {
     const { score, reasons } = scoreSellSignal(r);
     r.sell_score = score;
     r.sell_reasons = reasons;
+    r.sell_reason_signs = reasons.signs;
     const { days, delta } = updateSellHistory(sellHistory, r.ticker, score, todayStr);
     r.sell_days_on_list = days;
     r.sell_score_delta = delta;
@@ -2295,7 +2309,7 @@ const METRIC_GLOSSARY = {
   'AVSTÅND TILL SMA200': { title: 'Avstånd till SMA200', text: 'Hur långt kursen ligger över eller under sitt 200-dagarssnitt, och om snittet stiger eller faller. Fondpoängens trenddel graderas efter båda – längre över ett stigande SMA200 ger fler poäng.' },
   'VÄRDERING MOT EGEN HISTORIK': { title: 'Värdering mot egen historik', text: 'Första screening av om aktien är billig eller dyr jämfört med sig själv. Bolaget delas in i fas: växer försäljningen, är det lönsamt, och ger det tillbaka pengar via utdelning eller återköp. Lönsamma bolag jämförs på P/E, förlustbolag på P/S (pris/försäljning). Dagens tal jämförs med bolagets median de senaste ca 4 åren: mer än 15 % under = BILLIG, mer än 15 % över = DYR. Ger ±3 poäng vid 15–30 % avvikelse och ±6 vid över 30 % (halverat för cykliska sektorer, ingen bonus om vinsten väntas falla). Tänk på att historiken inkluderar låg-ränteåren – med dagens högre räntor är ett något lägre P/E än snittet ofta motiverat.' },
   'FORWARD P/E': { title: 'Forward P/E', text: 'Samma princip som vanligt P/E, men baserat på FÖRVÄNTAD framtida vinst istället för senast rapporterade. Symbolen visar om forward P/E är klart lägre (▲, grönt – vinsttillväxt väntas) eller klart högre (▼, rött – vinstnedgång väntas) än det vanliga P/E-talet. Bygger på analytikeres vinstprognoser, inte facit.' },
-  'RISKFRI RÄNTA': { title: 'Riskfri ränta', text: 'Vad en 10-årig statsobligation i bolagets hemland ger just nu - avkastningen du kan få praktiskt taget utan risk. Referenspunkten allt annat mäts mot: varför ta aktierisk för mindre än så? Statisk siffra, uppdateras bara när Claude uppdaterar referensfilen manuellt - inte i realtid.' },
+  'RISKFRI RÄNTA': { title: 'Riskfri ränta', text: 'Vad en 10-årig statsobligation i bolagets hemland ger just nu - avkastningen du kan få praktiskt taget utan risk. Referenspunkten allt annat mäts mot: varför ta aktierisk för mindre än så? Hämtas automatiskt vid varje körning från FRED (USA dagligen, övriga länder OECD:s månadsdata, som släpar någon månad).' },
   'RISKPREMIE': { title: 'Riskpremie', text: 'Aktiens vinstavkastning (100/P/E) minus riskfri ränta - hur mycket EXTRA avkastning aktien erbjuder för risken du tar jämfört med en säker placering. Negativ riskpremie (▼, rött) betyder att du får bättre avkastning helt riskfritt just nu, vilket är ett varningstecken. Hög riskpremie (▲, grönt) betyder gott om kompensation för risken - men bygger på dagens vinst, inte en garanti om framtiden.' },
   'ROIC (FLERÅRSSNITT)': { title: 'ROIC - avkastning på investerat kapital (flerårssnitt)', text: 'Hur effektivt bolaget omvandlar kapital - eget och lånat, minus kassa - till vinst, oavsett hur det är finansierat. Ett av de tydligaste kvalitetsmåtten för att skilja genuint bra bolag från medelmåttiga. Räknas som ett snitt över de räkenskapsår Yahoo Finance ger tillgång till, normalt cirka 3-4 år (inte tio) - kräver minst 3 år för att visas alls. Snitt över 15% räknas som starkt, under 6% som svagt. Ett stabilt sämsta-år över 8% ger extra plus; stora svängningar mellan åren ger avdrag. Visas som "Ej tillämpligt" för banker, försäkringsbolag och fastighetsbolag/REIT, vars kapitalstruktur gör måttet missvisande. Beräknat från resultat- och balansräkning, kan saknas för mindre/utländska bolag.' },
   'INTÄKTSTILLVÄXT (YOY)': { title: 'Intäktstillväxt (år över år)', text: 'Hur mycket bolagets intäkter vuxit senaste kvartalet jämfört med samma kvartal förra året (undviker säsongseffekter, t.ex. att julhandel alltid är starkare än sommaren). Skiljer på bolag som konsekvent växer och bolag som bara råkar se billiga ut just nu.' },
@@ -2530,6 +2544,17 @@ function openFundDrawer(ticker) {
   document.querySelectorAll('#drawer .stat-label').forEach(el => { const k = el.textContent.trim(); if (METRIC_GLOSSARY[k]) { el.classList.add('has-glossary'); el.dataset.gk = k; } });
 }
 
+// v9.1: skälen delas upp efter om de höjde eller sänkte poängen
+function reasonGroupsHtml(reasons, signs, isSell) {
+  if (!reasons || !reasons.length) return '<ul class="reasons"><li>Inga särskilda signaler.</li></ul>';
+  if (!signs || signs.length !== reasons.length) return `<ul class="reasons">${reasons.map(x => `<li>${x}</li>`).join('')}</ul>`;
+  const grp = s => reasons.filter((_, i) => signs[i] === s);
+  const block = (list, title, cls) => list.length ? `<div class="reason-grp ${cls}"><div class="reason-grp-title">${title} <span class="count">[${list.length}]</span></div><ul class="reasons">${list.map(x => `<li>${x}</li>`).join('')}</ul></div>` : '';
+  return block(grp(1), isSell ? 'TALAR FÖR ATT SÄLJA' : 'TALAR FÖR', isSell ? 'neg' : 'pos')
+    + block(grp(-1), isSell ? 'TALAR EMOT ATT SÄLJA' : 'TALAR EMOT', isSell ? 'pos' : 'neg')
+    + block(grp(0), 'ÖVRIGT – PÅVERKAR INTE POÄNGEN', 'neu');
+}
+
 function openDrawer(ticker) {
   const r = state.data.results.find(x => x.ticker === ticker);
   if (!r) return;
@@ -2606,7 +2631,7 @@ function openDrawer(ticker) {
     </details>
     ${r.data_source === 'yfinance+fmp' ? '<div class="pe-compare-footnote">Kassaflödesnyckeltal (Capex/DA, FCF-marginal, SBC) hämtade från Financial Modeling Prep.</div>' : ''}
     <div class="dr-sec-title">${state.tab === 'sell' ? 'SKÄL TILL SÄLJPOÄNGEN' : 'SKÄL TILL POÄNGEN'}</div>
-        <ul class="reasons">${reasons.length ? reasons.map(x => `<li>${x}</li>`).join('') : '<li>Inga särskilda signaler.</li>'}</ul>
+    ${reasonGroupsHtml(reasons, state.tab === 'sell' ? r.sell_reason_signs : (state.tab === 'growth' ? r.growth_reason_signs : r.buy_reason_signs), state.tab === 'sell')}
     ${r.ai_writeup ? `
     <div class="ai-writeup">
       <div class="stat-label">AI-KVALITETSANALYS <span class="ai-writeup-date">(${fmtDate(r.ai_writeup.generated_at)})</span></div>

@@ -1756,7 +1756,7 @@ function macroGeopoliticsSectionHtml() {
         <div class="geo-name">${escapeHtml(window.APP_LANG === 'en' && f.name_en ? f.name_en : f.name)}</div>
         <div class="geo-meta">Uppdaterad ${escapeHtml(f.updated || '–')}${ageDays !== null ? ` (${ageDays} d sedan)` : ''}${stale ? ' <span class="chip stale">Kan vara inaktuell – be Claude göra en avstämning</span>' : ''}</div>
         <div class="geo-sum">${escapeHtml(window.APP_LANG === 'en' && f.summary_en ? f.summary_en : (f.summary || ''))}</div>
-        <div>${chips}</div>
+        <div>${chips || '<span class="dim" style="font-size:12px">Påverkar inte poängen – bevakas</span>'}</div>
         ${safeUrl ? `<div class="geo-src"><a href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer">Källa</a></div>` : ''}
       </div>`;
   }).join('');

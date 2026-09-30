@@ -362,6 +362,7 @@
   .fund-cat-banner .fcb-name { font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--text); }
   .fund-cat-banner .fcb-meta { font-size: 12px; color: var(--text-dim); white-space: nowrap; }
   .fund-cat-banner + .table-scroll { margin-top: 4px; }
+  .hidden-note { font-size: 12px; color: var(--text-faint); padding: 12px 18px 16px; text-align: center; }
   .fund-cat-banner .fcb-left { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
   .fund-cat-banner .fcb-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
   .fund-cat-banner .fcb-sub { font-size: 11.5px; color: var(--text-dim); }
@@ -2162,14 +2163,14 @@ function render() {
   let rows = state.data.results || [];
 
   const NORDIC_MARKETS = ['SE', 'NO', 'DK', 'FI'];
-  const MIN_CANDIDATE_SCORE = 40; // USA/Europa/Norden ska visa köpkandidater, inte alla screenade aktier
+  const MIN_CANDIDATE_SCORE = 50; // v9.6: aktier under 50 döljs i USA/Europa/Norden (bevakas fortfarande)
   const notHeld = rows.filter(r => !r.is_holding && (r.buy_score ?? 0) >= MIN_CANDIDATE_SCORE);
   const usRows = notHeld.filter(r => r.market === 'US');
   const nordicRowsAll = notHeld.filter(r => NORDIC_MARKETS.includes(r.market));
   const euRowsAll = notHeld.filter(r => r.market !== 'US' && !NORDIC_MARKETS.includes(r.market));
   const sellRowsAll = rows.filter(r => r.is_holding);
 
-  const MIN_GROWTH_SCORE = 40;
+  const MIN_GROWTH_SCORE = 50;
   const growthRowsAll = rows.filter(r => !r.is_holding && r.growth_candidate && (r.growth_score ?? 0) >= MIN_GROWTH_SCORE);
 
   document.getElementById('usCount').textContent = usRows.length ? `[${usRows.length}]` : '';
@@ -2192,6 +2193,13 @@ function render() {
   const sellRows = sellRowsAll;
 
   const host = document.getElementById('tableHost');
+  const allNotHeld = rows.filter(r => !r.is_holding);
+  const tabPool = state.tab === 'us' ? allNotHeld.filter(r => r.market === 'US')
+    : state.tab === 'nordic' ? allNotHeld.filter(r => NORDIC_MARKETS.includes(r.market))
+    : state.tab === 'eu' ? allNotHeld.filter(r => r.market !== 'US' && !NORDIC_MARKETS.includes(r.market))
+    : state.tab === 'growth' ? allNotHeld.filter(r => r.growth_candidate) : [];
+  const hiddenN = tabPool.filter(r => ((state.tab === 'growth' ? r.growth_score : r.buy_score) ?? 0) < (state.tab === 'growth' ? MIN_GROWTH_SCORE : MIN_CANDIDATE_SCORE)).length;
+  const hiddenNote = hiddenN ? `<div class="hidden-note">${hiddenN === 1 ? '1 aktie under 50 poäng är dold – den bevakas fortfarande och visas här när poängen stiger.' : `${hiddenN} aktier under 50 poäng är dolda – de bevakas fortfarande och visas här när poängen stiger.`}</div>` : '';
   const activeRows = state.tab === 'sell' ? sellRows : (state.tab === 'us' ? usRows : (state.tab === 'nordic' ? nordicRows : (state.tab === 'growth' ? growthRows : euRows)));
   const sorted = sortRows(activeRows, state.sort);
 
@@ -2203,9 +2211,9 @@ function render() {
         ? 'Inga innehav matchade mot bevakningslistan. Kontrollera att aktierna finns i data/watchlist.yml.'
         : 'Ladda upp din holdings.csv ovan för att se dina innehav.';
     } else {
-      emptyMsg = 'Ingen data ännu. Kör workflowen i GitHub Actions.';
+      emptyMsg = hiddenN ? 'Inga aktier når 50 poäng just nu.' : 'Ingen data ännu. Kör workflowen i GitHub Actions.';
     }
-    host.innerHTML = `<div class="empty">${emptyMsg}</div>`;
+    host.innerHTML = `<div class="empty">${emptyMsg}</div>` + hiddenNote;
     return;
   }
 
@@ -2263,9 +2271,9 @@ function render() {
       html += `<div class="section-divider">TILLVÄXTBOLAG BLAND DINA INNEHAV <span class="count">[${growthHoldings.length}]</span></div>
         <div class="table-scroll"><table>${theadHtml}<tbody>${growthHoldings.map(buildRowHtml).join('')}</tbody></table></div>`;
     }
-    host.innerHTML = html;
+    host.innerHTML = html + hiddenNote;
   } else {
-    host.innerHTML = `<div class="table-scroll"><table>${theadHtml}<tbody>${sorted.map(buildRowHtml).join('')}</tbody></table></div>`;
+    host.innerHTML = `<div class="table-scroll"><table>${theadHtml}<tbody>${sorted.map(buildRowHtml).join('')}</tbody></table></div>` + hiddenNote;
   }
 
   host.querySelectorAll('tbody tr').forEach(tr => {
@@ -2461,13 +2469,13 @@ function catClimatePill(cc) {
   const arrow = ch == null ? '' : (ch >= 3 ? ` ▲${ch}` : (ch <= -3 ? ` ▼${Math.abs(ch)}` : ' ►'));
   return `<span class="cat-pill ${catClimateCls(cc.score)}" title="Kategoriläge 0–100, förändring mot för en månad sedan">${escapeHtml(cc.label.toUpperCase())} ${cc.score}${arrow}</span>`;
 }
-function fundCatBannerHtml(c, list, nProm) {
+function fundCatBannerHtml(c, list, nProm, hid = 0) {
   const cc = ((state.funds && state.funds.categories) || {})[c];
   const tip = cc ? [...(cc.reasons_pos || []).map(x => '+ ' + x), ...(cc.reasons_neg || []).map(x => '− ' + x)].join('\n') : '';
   const sub = cc ? `<div class="fcb-sub">Mätt på ${escapeHtml(cc.proxy || '')}${cc.ret_3m != null ? ` · 3 mån ${cc.ret_3m > 0 ? '+' : ''}${fmtNum(cc.ret_3m, 1)}%` : ''}${cc.ret_1y != null ? ` · 1 år ${cc.ret_1y > 0 ? '+' : ''}${fmtNum(cc.ret_1y, 1)}%` : ''}</div>` : '';
   return `<div class="fund-cat-banner ${cc ? 'cc-' + catClimateCls(cc.score) : ''}" title="${escapeHtml(tip)}">
     <div class="fcb-left"><span class="fcb-name">${escapeHtml(c)}</span>${sub}</div>
-    <div class="fcb-right">${catClimatePill(cc)}<span class="fcb-meta">${list.length} ${list.length === 1 ? 'fond' : 'fonder'}${nProm ? ` · ${nProm} lovande` : ''}</span></div>
+    <div class="fcb-right">${catClimatePill(cc)}<span class="fcb-meta">${list.length} ${list.length === 1 ? 'fond' : 'fonder'}${nProm ? ` · ${nProm} lovande` : ''}${hid ? ` · ${hid} ${hid === 1 ? 'dold' : 'dolda'}` : ''}</span></div>
   </div>`;
 }
 
@@ -2480,12 +2488,13 @@ function renderFunds() {
   const ownedSet = new Set(matches.filter(m => m.f).map(m => m.f.ticker));
   const promising = funds.filter(f => (f.score ?? 0) >= 75).sort((a, b) => b.score - a.score);
   document.getElementById('fundPromCount').textContent = promising.length ? `[${promising.length}]` : '';
-  document.getElementById('fundAllCount').textContent = funds.length ? `[${funds.length}]` : '';
+  const nVisible = funds.filter(f => (f.score ?? 0) >= 50).length;
+  document.getElementById('fundAllCount').textContent = nVisible ? `[${nVisible}]` : '';
   document.getElementById('fundMineCount').textContent = owned.length ? `[${owned.length}]` : '';
   const tab = state.fundTab || 'promising';
   if (tab === 'mine') mountUploadPanel(up, 'f'); else up.innerHTML = '';
 
-  const intro = state.funds ? `<div class="fund-note">Poäng 0–100 för hur lovande fonden ser ut just nu: trend (35), momentum mot jämförbara fonder (25, hälften inom samma kategori), riskjusterad avkastning (25), avgift (10) och makroläge (5). 75+ = lovande, under 50 = svag. Uppdaterad ${fmtDateTime(state.funds.generated_at)}. Inte finansiell rådgivning.</div>`
+  const intro = state.funds ? `<div class="fund-note">Poäng 0–100 för hur lovande fonden ser ut just nu: trend (35), momentum mot jämförbara fonder (25, hälften inom samma kategori), riskjusterad avkastning (25), avgift (10) och kategoriläge (5). 75+ = lovande. Fonder under 50 poäng döljs i listorna men bevakas fortfarande – dina egna fonder visas alltid. Uppdaterad ${fmtDateTime(state.funds.generated_at)}. Inte finansiell rådgivning.</div>`
     : `<div class="fund-note">Fonddata saknas ännu — den hämtas vid nästa schemalagda körning.</div>`;
   let html = intro;
   if (tab === 'promising') {
@@ -2494,9 +2503,12 @@ function renderFunds() {
     const byCat = {};
     funds.forEach(f => (byCat[f.category || 'Övrigt'] = byCat[f.category || 'Övrigt'] || []).push(f));
     Object.keys(byCat).sort((a, b) => a.localeCompare(b, 'sv')).forEach(c => {
-      const list = byCat[c].sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+      // v9.6: fonder under 50 poäng döljs (bevakas fortfarande)
+      const all = byCat[c].sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+      const list = all.filter(f => (f.score ?? 0) >= 50);
+      const hid = all.length - list.length;
       const nProm = list.filter(f => (f.score ?? 0) >= 75).length;
-      html += fundCatBannerHtml(c, list, nProm) + fundTableHtml(list, ownedSet);
+      html += fundCatBannerHtml(c, list, nProm, hid) + fundTableHtml(list, ownedSet);
     });
   } else {
     if (!owned.length) {
@@ -2541,7 +2553,7 @@ function openFundDrawer(ticker) {
     </div>
     <details class="dr-sec" data-sec="fscore"${drawerSecOpen('fscore', true)}>
       <summary>POÄNG PER OMRÅDE</summary>
-      <div class="bd-cats" style="margin:4px 0 14px">${partRow('trend', 'Trend', 35)}${partRow('momentum', 'Momentum', 25)}${partRow('risk', 'Riskjusterad avkastning', 25)}${partRow('cost', 'Avgift', 10)}${partRow('macro', 'Makroläge', 5)}</div>
+      <div class="bd-cats" style="margin:4px 0 14px">${partRow('trend', 'Trend', 35)}${partRow('momentum', 'Momentum', 25)}${partRow('risk', 'Riskjusterad avkastning', 25)}${partRow('cost', 'Avgift', 10)}${partRow('macro', 'Kategoriläge', 5)}</div>
     </details>
     <details class="dr-sec" data-sec="ftrend"${drawerSecOpen('ftrend', true)}>
       <summary>TREND & TEKNISK ANALYS</summary>
@@ -2892,7 +2904,7 @@ const MODULES_SV = [
           <table>
             <tr><td>≥65 poäng</td><td>Flaggas KÖP (om analytikerkonsensus inte säger emot — mer om det senare)</td></tr>
             <tr><td>≥40 säljpoäng</td><td>Flaggas SÄLJ för innehav du äger</td></tr>
-            <tr><td>&lt;40 poäng</td><td>Visas inte som kandidat i USA/Europa/Norden-flikarna</td></tr>
+            <tr><td>&lt;50 poäng</td><td>Döljs i USA/Europa/Norden/Tillväxt (bevakas fortfarande, dina innehav visas alltid)</td></tr>
           </table>
         </div>
       `
@@ -3451,7 +3463,7 @@ const MODULES_SV = [
 {
   title: "Modul 7 — Fonder & marknadsstabilitet",
   lessons: [
-    { id: "fondpoang", title: "Fondpoängen — hur lovande ser en fond ut just nu?", body: `<div class="analogy"><div class="lbl">Liknelse</div><p>Att välja fond är lite som att välja buss: alla bussar på samma linje (samma kategori) kör ungefär samma väg, men vissa går i tid, har låg biljettpris och en lugn förare. Fondpoängen jämför bussar på samma linje med varandra, inte en stadsbuss med ett tåg.</p></div><p>Varje fond får en poäng 0–100 som sätts ihop av fem delar. Jämförelser görs så långt det går <strong>inom samma kategori</strong> — en svensk indexfond mot andra svenska indexfonder, en räntefond mot andra räntefonder.</p><div class="in-app"><div class="lbl">I appen</div><table><tr><td>Trend (35)</td><td>Hur långt över/under SMA200 kursen ligger, om SMA200 stiger eller faller, kurs över SMA50, golden cross och RSI</td></tr><tr><td>Momentum (25)</td><td>Blandad avkastning 3/6/12 mån – hälften rankad inom kategorin, hälften mot alla jämförbara fonder</td></tr><tr><td>Riskjusterad avkastning (25)</td><td>Sharpekvot mot styrräntan och största fall senaste året</td></tr><tr><td>Avgift (10)</td><td>≤0,3 % ger full pott, över 1,5 % ger noll</td></tr><tr><td>Makroläge (5)</td><td>Stabilitetspoängen för ränte- och fastighetsfonder, marknadsbredden för aktiefonder</td></tr><tr><td>≥75 / &lt;50</td><td>Lovande / svag</td></tr></table></div><h3 class="sub">Kategoriläge — medvind eller motvind för branschen</h3><p>Under <strong>Alla fonder</strong> visar varje kategoribanner ett eget läge 0–100: <strong>Medvind</strong> (65+), <strong>Neutralt</strong> (45–64) eller <strong>Motvind</strong> (under 45), plus pil för förändringen senaste månaden. Det mäts inte på fonderna själva utan på ett marknadsindex för kategorin – t.ex. OMXS30 för svenska indexfonder, S&amp;P 500 för USA och guld/silver för ädelmetallfonder – med trend (40), momentum (40) och risk (20). För räntefonder används stabilitetspoängen. Läget påverkar inte fondpoängen, utan visar om hela branschen har vind i ryggen just nu.</p><div class="callout-warn"><strong>Kom ihåg:</strong> fondpoängen mäter hur fonden ser ut <em>just nu</em> – trend och momentum vänder. Den säger ingenting om förvaltarens skicklighet på lång sikt och är inte finansiell rådgivning.</div>` },
+    { id: "fondpoang", title: "Fondpoängen — hur lovande ser en fond ut just nu?", body: `<div class="analogy"><div class="lbl">Liknelse</div><p>Att välja fond är lite som att välja buss: alla bussar på samma linje (samma kategori) kör ungefär samma väg, men vissa går i tid, har låg biljettpris och en lugn förare. Fondpoängen jämför bussar på samma linje med varandra, inte en stadsbuss med ett tåg.</p></div><p>Varje fond får en poäng 0–100 som sätts ihop av fem delar. Jämförelser görs så långt det går <strong>inom samma kategori</strong> — en svensk indexfond mot andra svenska indexfonder, en räntefond mot andra räntefonder.</p><div class="in-app"><div class="lbl">I appen</div><table><tr><td>Trend (35)</td><td>Hur långt över/under SMA200 kursen ligger, om SMA200 stiger eller faller, kurs över SMA50, golden cross och RSI</td></tr><tr><td>Momentum (25)</td><td>Blandad avkastning 3/6/12 mån – hälften rankad inom kategorin, hälften mot alla jämförbara fonder</td></tr><tr><td>Riskjusterad avkastning (25)</td><td>Sharpekvot mot styrräntan och största fall senaste året</td></tr><tr><td>Avgift (10)</td><td>≤0,3 % ger full pott, över 1,5 % ger noll</td></tr><tr><td>Kategoriläge (5)</td><td>Hur kategorins marknadsindex ser ut (medvind/motvind), stabilitetspoängen för räntefonder</td></tr><tr><td>≥75 / &lt;50</td><td>Lovande / döljs i listorna</td></tr></table></div><h3 class="sub">Kategoriläge — medvind eller motvind för branschen</h3><p>Under <strong>Alla fonder</strong> visar varje kategoribanner ett eget läge 0–100: <strong>Medvind</strong> (65+), <strong>Neutralt</strong> (45–64) eller <strong>Motvind</strong> (under 45), plus pil för förändringen senaste månaden. Det mäts inte på fonderna själva utan på ett marknadsindex för kategorin – t.ex. OMXS30 för svenska indexfonder, S&amp;P 500 för USA och guld/silver för ädelmetallfonder – med trend (40), momentum (40) och risk (20). För räntefonder används stabilitetspoängen. Läget står för 5 av fondpoängens 100 poäng och visar om hela branschen har vind i ryggen just nu.</p><div class="callout-warn"><strong>Kom ihåg:</strong> fondpoängen mäter hur fonden ser ut <em>just nu</em> – trend och momentum vänder. Den säger ingenting om förvaltarens skicklighet på lång sikt och är inte finansiell rådgivning.</div>` },
     { id: "stabilitet", title: "Stabilitetsmätaren — ränte- och kreditläget i en siffra", body: `<p>Under <strong>MAKRO → STABILITET</strong> visar en mätare med nål hur stabilt ränte- och kreditläget är, från mycket instabilt (vänster) till mycket stabilt (höger). Poängen 0–100 väger ihop sex kategorier: ränterörelse, räntekurva, kredit, realränta och inflation, obligationsvolatilitet (MOVE) samt Europa och Norden.</p><p>Grafen under mätaren visar hur poängen rört sig vecka för vecka eller månad för månad. Historiken räknas fram med exakt samma formel och bara med data som fanns vid respektive datum.</p><div class="in-app"><div class="lbl">I appen</div><table><tr><td>70–100 Stabilt</td><td>+2 poäng på alla aktier vid ≥80</td></tr><tr><td>50–70 Blandat</td><td>0 till −2 poäng</td></tr><tr><td>30–50 Ostabilt</td><td>−4 till −6 poäng</td></tr><tr><td>0–30 Stressat</td><td>−8 poäng</td></tr><tr><td>Trend ±5 på en månad</td><td>±2 poäng extra</td></tr></table></div>` }
   ]
 }

@@ -169,6 +169,8 @@ def load_geopolitics_export(sector_weights, country_weights):
                 "name": str(fac.get("name", "?")),
                 "updated": str(fac.get("updated")) if fac.get("updated") is not None else None,
                 "summary": fac.get("summary"),
+                "name_en": fac.get("name_en"),
+                "summary_en": fac.get("summary_en"),
                 "sectors": dict(fac.get("sectors") or {}),
                 "countries": dict(fac.get("countries") or {}),
                 "source_url": fac.get("source_url"),

@@ -148,7 +148,7 @@ def macro_context():
     return stab, breadth
 
 
-def score_funds(funds, stab, breadth):
+def score_funds(funds, stab, breadth, categories=None):
     # Momentum: blandad avkastning rankad inom jämförbar klass
     def blend(f):
         parts = [(f.get("ret_3m"), .3), (f.get("ret_6m"), .3), (f.get("ret_1y"), .4)]
@@ -240,25 +240,18 @@ def score_funds(funds, stab, breadth):
                 pos.append(f"Låg avgift ({fee:.2f}%)")
             elif fee > 1.5:
                 neg.append(f"Hög avgift ({fee:.2f}%)")
-        # Makro (10)
-        if f["asset_class"] in ("bond", "realestate"):
-            mac = stab / 10 if stab is not None else 5
-            if stab is not None and stab >= 70:
-                pos.append(f"Stabilt ränteläge ({stab:.0f}/100) gynnar räntekänsliga fonder")
-            elif stab is not None and stab < 50:
-                neg.append(f"Oroligt ränteläge ({stab:.0f}/100) – räntekänsliga fonder utsatta")
-        elif f["asset_class"] == "commodity":
-            mac = 5
+        # Kategoriläge (5, v9.6): kategorins marknadsindex – medvind/motvind.
+        # Räntefonder mäts på stabilitetspoängen (via category_proxies).
+        cc = (categories or {}).get(f.get("category"))
+        if cc is not None:
+            mac = cc["score"] / 10
+            if cc["score"] >= 65:
+                pos.append(f"Medvind för kategorin ({cc['proxy']}: {cc['score']}/100)")
+            elif cc["score"] < 45:
+                neg.append(f"Motvind för kategorin ({cc['proxy']}: {cc['score']}/100)")
         else:
-            b = breadth.get(region_of(f.get("category")))
-            if b is None:
-                b = breadth.get("all")
-            mac = b / 10 if b is not None else 5
-            if b is not None and b >= 65:
-                pos.append(f"Bred uppgång på marknaden ({b:.0f}% av aktierna över SMA200)")
-            elif b is not None and b < 40:
-                neg.append(f"Svag marknadsbredd ({b:.0f}% av aktierna över SMA200)")
-        mac = max(0, min(10, mac)) / 2   # v8.8: makro väger 5 poäng
+            mac = 5
+        mac = max(0, min(10, mac)) / 2   # väger 5 poäng
         total = round(t + m + r + c + mac)
         f["score"] = int(max(0, min(100, total)))
         f["score_parts"] = {"trend": round(t, 1), "momentum": round(m, 1), "risk": round(r, 1), "cost": round(c, 1), "macro": round(mac, 1)}
@@ -374,7 +367,7 @@ def main():
     except Exception:
         stab_hist = []
     categories = compute_category_climate(cfg, stab, stab_hist)
-    score_funds(funds, stab, breadth)
+    score_funds(funds, stab, breadth, categories)
     version = VERSION_FILE.read_text().strip() if VERSION_FILE.exists() else None
     out = {"generated_at": datetime.now(timezone.utc).isoformat(), "version": version,
            "count": len(funds), "stability_score": stab, "categories": categories, "funds": funds}

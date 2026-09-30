@@ -7,6 +7,25 @@
 # Kort riskfri ränta per valuta för Sharpekvoten (styrräntor, uppdateras vid
 # behov). USD hämtas automatiskt från 3-månadersräntan i results.json.
 short_rates: {SEK: 1.75, EUR: 2.50, NOK: 4.00, DKK: 2.10, GBP: 4.00}
+# Kategoriläge (v9.5): varje fondkategori mäts mot ett marknadsindex för att
+# visa om branschen/marknaden har medvind eller motvind just nu. Flera tickers
+# ger ett snitt. source: stability = appens stabilitetspoäng för räntor/kredit.
+category_proxies:
+  "Sverige": {name: "OMX Stockholm All-Share", tickers: ["^OMXSPI"]}
+  "Sverige index": {name: "OMXS30", tickers: ["^OMX"]}
+  "Sverige småbolag": {name: "XACT Småbolag", tickers: ["XACT-SMABOLAG.ST"]}
+  "Global": {name: "MSCI ACWI (världen)", tickers: ["ACWI"]}
+  "Global index": {name: "MSCI ACWI (världen)", tickers: ["ACWI"]}
+  "Europa": {name: "STOXX Europe 600", tickers: ["^STOXX"]}
+  "USA": {name: "S&P 500", tickers: ["^GSPC"]}
+  "Tillväxtmarknader": {name: "MSCI Emerging Markets", tickers: ["EEM"]}
+  "Tema: teknik": {name: "Teknikaktier (XLK)", tickers: ["XLK"]}
+  "Tema: bioteknik": {name: "Bioteknikaktier (XBI)", tickers: ["XBI"]}
+  "Tema: hälsovård": {name: "Hälsovårdsaktier (XLV)", tickers: ["XLV"]}
+  "Tema: försvar": {name: "Försvarsaktier (VanEck Defense)", tickers: ["DFEN.DE"]}
+  "Fastigheter": {name: "Europeiska fastighetsbolag (IPRP)", tickers: ["IPRP.L"]}
+  "Råvaror/ädelmetaller": {name: "Guld och silver (snitt)", tickers: ["GC=F", "SI=F"]}
+  "Räntefond": {name: "Stabilitetspoängen (räntor & kredit)", source: stability}
 funds:
   - {name: "Alfred Berg Gambak Global R", ticker: "0P0001VSIP.ST", isin: "NO0013583344", category: "Global", asset_class: equity, fee_pct: 1.59}
   - {name: "Avanza Zero", ticker: "0P00005U1J.ST", isin: "SE0001718388", category: "Sverige index", asset_class: equity, fee_pct: 0.0}

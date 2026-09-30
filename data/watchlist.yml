@@ -1040,3 +1040,8 @@ stocks:
   sector: Industrials
   country: Finland
   market: FI
+- ticker: MTRS.ST
+  name: Munters Group
+  sector: Industrials
+  country: Sverige
+  market: SE

@@ -13,13 +13,16 @@
 # Sektorer som används i watchlist.yml: Industrials, Technology, Consumer,
 # Financials, RealEstate, Semiconductors, Energy, Healthcare, Materials,
 # Telecom. Länder (marknadskoder): SE, US, DE, NL, GB.
+# Valfria fält `name_en`/`summary_en` visas när appen körs på engelska (v9.2).
 # Valfritt fält `markets: ["SE", ...]` begränsar en faktors SEKTORVIKTER till
 # bolag noterade på de marknaderna (citera koderna – NO tolkas annars som falskt).
 # Sammanlagd geopolitisk vikt per aktie begränsas i koden till ±10 (v8.8).
 
 factors:
   - name: "Iran-konflikten / Hormuzsundet"
+    name_en: "Iran conflict / Strait of Hormuz"
     updated: 2026-09-21
+    summary_en: "The war between the US/Israel and Iran has been going on since 28 February 2026 and the Strait of Hormuz has since been largely blocked – before the war the strait carried about a quarter of the world's seaborne oil trade and a fifth of LNG. The oil price rose towards about 99 dollars on 8 September after reports of another Iranian attack on US ships, and Goldman Sachs raised its Brent forecasts the same day (85 dollars for December 2026) and warns of over 120 dollars in 2027 if Gulf production stays about 4 million barrels/day below pre-war levels; the bank expects the shipping disruption to continue into 2027. Disrupts oil flows and drives up prices of critical materials (e.g. tungsten) that the semiconductor industry depends on. Higher oil prices benefit energy companies, while rising rates weigh on rate-sensitive real estate companies."
     summary: "Kriget mellan USA/Israel och Iran har pågått sedan 28 februari 2026 och Hormuzsundet har sedan dess i huvudsak varit blockerat - sundet stod före kriget för ca en fjärdedel av världens sjöburna oljehandel och en femtedel av LNG. Oljepriset steg mot ca 99 dollar den 8 september efter uppgifter om ytterligare en iransk attack mot amerikanska fartyg, och Goldman Sachs höjde samma dag sina Brent-prognoser (85 dollar för december 2026) och varnar för över 120 dollar under 2027 om Gulf-produktionen förblir ca 4 miljoner fat/dag under förkrigsnivån; banken räknar med att sjöfartsstörningarna fortsätter in i 2027. Stör oljeflöden och driver upp priser på kritiska material (t.ex. volfram) som halvledarindustrin är beroende av. Högre oljepris gynnar energibolag, medan stigande räntor pressar räntekänsliga fastighetsbolag."
     sectors:
       Semiconductors: -10
@@ -27,13 +30,17 @@ factors:
       RealEstate: -5
     source_url: "https://www.cnbc.com/2026/09/08/oil-prices-today-brent-wti-hormuz-iran-war.html"
   - name: "USA-Kina teknikrivalitet / exportkontroller"
-    updated: 2026-09-02
-    summary: "Fortsatta amerikanska exportrestriktioner mot Kina och osäkerhet kring handelspolitik skapar press på halvledarbolag, enligt bl.a. Deloittes och BlackRocks 2026-analyser."
+    name_en: "US-China tech rivalry / export controls"
+    updated: 2026-09-30
+    summary: "Den ettåriga paus i exportkontroller för avancerade chip och kritiska mineraler som USA och Kina kom överens om vid APEC-mötet i Busan håller på att löpa ut, och det är oklart om det kommande toppmötet mellan Trump och Xi förlänger den. Nvidias H200 säljs till Kina bara med licens från handelsdepartementet (BIS) i varje enskilt fall. Den så kallade dotterbolagsregeln är pausad till 9 november 2026, och i kongressen drivs ett lagförslag om exportstopp för utrustning till chiptillverkning som kan leda till motåtgärder från EU om det används mot nederländsk utrustning (berör ASML). Osäkerheten ligger kvar för halvledarbolag."
+    summary_en: "The one-year pause on export controls for advanced chips and critical minerals that the US and China agreed at the APEC meeting in Busan is about to expire, and it is unclear whether the upcoming Trump–Xi summit will extend it. Nvidia's H200 is sold to China only under case-by-case licences from the Commerce Department (BIS). The so-called affiliates rule is paused until 9 November 2026, and Congress is pushing a bill to stop exports of chipmaking equipment that could trigger EU countermeasures if used against Dutch equipment (affects ASML). Uncertainty remains for semiconductor companies."
     sectors:
       Semiconductors: -10
-    source_url: "https://www.deloitte.com/us/en/insights/industry/technology/technology-media-telecom-outlooks/semiconductor-industry-outlook.html"
+    source_url: "https://www.globsec.org/what-we-do/commentaries/xi-coming-mineral-and-chips-export-controls-loom"
   - name: "USA-tullar mot Sverige/EU"
+    name_en: "US tariffs on Sweden/EU"
     updated: 2026-09-07
+    summary_en: "The US has introduced broad tariffs (about 10% generally on most goods, 50% on steel/aluminium, up to 100% on pharmaceuticals outside the EU agreement, which otherwise caps the tariff at 15%). Hits export-dependent Swedish industrial companies (Volvo, Atlas Copco, Sandvik etc.) and pharmaceutical companies. Several analysts (JP Morgan, Handelsbanken) judge the effect as 'manageable' rather than serious, partly because large companies are investing in US production to avoid the tariffs – hence a moderate weight."
     summary: "USA infört breda tullar (ca 10% generellt på de flesta varor, 50% på stål/aluminium, upp till 100% på läkemedel utanför EU-avtalet som annars tak:ar tullen vid 15%). Träffar exportberoende svenska industribolag (Volvo, Atlas Copco, Sandvik m.fl.) och läkemedelsbolag. Flera analytiker (JP Morgan, Handelsbanken) bedömer effekten som 'hanterbar' snarare än allvarlig, delvis eftersom storbolag investerar i amerikansk produktion för att undvika tullarna - därför måttlig vikt."
     # Gäller bara bolag noterade i EU/EES (v8.8) – amerikanska bolag drabbas inte av USA:s egna tullar.
     markets: ["SE", "FI", "NO", "DK", "DE", "NL"]
@@ -42,7 +49,9 @@ factors:
       Healthcare: -5
     source_url: "https://ostsvenskahandelskammaren.se/internationell-handel/trump-tullar-och-handelspolitik-det-har-galler/"
   - name: "ECB-räntehöjning (Irankrigsdriven inflation)"
+    name_en: "ECB rate hike (Iran-war-driven inflation)"
     updated: 2026-09-21
+    summary_en: "On 10 September 2026 the ECB raised its policy rates by 0.25 percentage points – the deposit rate is now 2.50% (from 2.25%), the second hike this year, citing inflationary pressure from the Middle East conflict. The ECB now expects about 3.0% inflation in 2026 and 2.5% in 2027, and several forecasters (including Deutsche Bank) expect another hike in December. Raises financing costs for companies in the euro area and the UK (where the Bank of England is pushed in the same direction). Sweden deliberately diverges – the Riksbank held at 1.75% in August and Swedish CPIF inflation was only 0.7% in August, so no weight is set on SE."
     summary: "ECB höjde den 10 september 2026 sina styrräntor med 0,25 procentenheter - inlåningsräntan är nu 2,50% (från 2,25%), årets andra höjning, med hänvisning till att konflikten i Mellanöstern skapar inflationstryck. ECB räknar nu med ca 3,0% inflation 2026 och 2,5% 2027, och flera bedömare (bl.a. Deutsche Bank) räknar med ytterligare en höjning i december. Ökar finansieringskostnader för bolag i euroområdet och Storbritannien (där Bank of England pressas i samma riktning). Sverige avviker medvetet - Riksbanken låg kvar på 1,75% i augusti, svensk KPIF-inflation var bara 0,7% i augusti och nästa besked kommer 24 september, så ingen vikt sätts på SE."
     countries:
       DE: -3

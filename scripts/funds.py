@@ -270,6 +270,85 @@ def score_funds(funds, stab, breadth):
     return funds
 
 
+# ===== Kategoriläge (v9.5) =====
+def _climate_score(close):
+    """Poäng 0-100 för hur ett marknadsindex ser ut: trend 40, momentum 40, risk 20."""
+    if len(close) < 230:
+        return None
+    price = float(close.iloc[-1])
+    sma50 = float(close.rolling(50).mean().iloc[-1])
+    s200 = close.rolling(200).mean()
+    sma200 = float(s200.iloc[-1])
+    dist = (price / sma200 - 1) * 100
+    slope = (sma200 / float(s200.iloc[-22]) - 1) * 100
+    r3, r6, r12 = _ret(close, 63), _ret(close, 126), _ret(close, 252)
+    last_year = close.tail(252)
+    dd = (price / float(last_year.max()) - 1) * 100
+    vol = float(close.pct_change().dropna().tail(252).std() * math.sqrt(252) * 100)
+    trend = _lin(dist, -8, 12, 0, 20) + _lin(slope, -2, 3, 0, 12) + (8 if price > sma50 else 0)
+    mom = (_lin(r3, -10, 10, 0, 15) if r3 is not None else 7.5) + (_lin(r6, -15, 15, 0, 12) if r6 is not None else 6) \
+        + (_lin(r12, -20, 25, 0, 13) if r12 is not None else 6.5)
+    risk = _lin(dd, -20, 0, 0, 12) + _lin(-vol, -35, -12, 0, 8)
+    return {"score": round(trend + mom + risk, 1), "dist": dist, "slope": slope, "above50": price > sma50,
+            "r3": r3, "r12": r12, "dd": dd, "vol": vol}
+
+
+def _climate_label(sc):
+    return "Medvind" if sc >= 65 else ("Neutralt" if sc >= 45 else "Motvind")
+
+
+def compute_category_climate(cfg, stab, stab_hist):
+    out = {}
+    for cat, pc in (cfg.get("category_proxies") or {}).items():
+        try:
+            if pc.get("source") == "stability":
+                if stab is None:
+                    continue
+                prev = None
+                if stab_hist:
+                    target = pd.Timestamp(stab_hist[-1]["date"]) - pd.Timedelta(days=28)
+                    older = [h for h in stab_hist if pd.Timestamp(h["date"]) <= target]
+                    prev = older[-1]["score"] if older else None
+                sc = round(stab)
+                pos, neg = [], []
+                (pos if sc >= 65 else neg if sc < 45 else pos).append(f"Stabilitetspoängen för räntor och kredit är {sc}/100")
+                out[cat] = {"score": sc, "label": _climate_label(sc), "proxy": pc.get("name"), "tickers": [],
+                            "change_1m": round(stab - prev) if prev is not None else None,
+                            "reasons_pos": pos if sc >= 45 else [], "reasons_neg": neg}
+                continue
+            now, ago, metrics = [], [], []
+            for tk in pc.get("tickers") or []:
+                h = yf.Ticker(tk).history(period="2y", auto_adjust=True)["Close"].dropna()
+                a, b = _climate_score(h), _climate_score(h.iloc[:-21])
+                if a:
+                    now.append(a["score"]); metrics.append(a)
+                if b:
+                    ago.append(b["score"])
+            if not now:
+                continue
+            sc = round(sum(now) / len(now))
+            m = {k: sum(x[k] for x in metrics) / len(metrics) for k in ("dist", "slope", "r3", "r12", "dd", "vol") if all(x[k] is not None for x in metrics)}
+            pos, neg = [], []
+            if "dist" in m:
+                (pos if m["dist"] > 0 else neg).append(f"Indexet ligger {abs(m['dist']):.1f} % {'över' if m['dist'] > 0 else 'under'} SMA200")
+            if "slope" in m and abs(m["slope"]) >= 0.5:
+                (pos if m["slope"] > 0 else neg).append(f"SMA200 {'stiger' if m['slope'] > 0 else 'faller'} ({m['slope']:+.1f} % senaste månaden)")
+            if "r3" in m:
+                (pos if m["r3"] > 0 else neg).append(f"{m['r3']:+.1f} % senaste 3 månaderna")
+            if "r12" in m:
+                (pos if m["r12"] > 0 else neg).append(f"{m['r12']:+.1f} % senaste året")
+            if "dd" in m and m["dd"] < -10:
+                neg.append(f"{m['dd']:.0f} % från årets högsta")
+            out[cat] = {"score": sc, "label": _climate_label(sc), "proxy": pc.get("name"), "tickers": pc.get("tickers"),
+                        "change_1m": round(sc - sum(ago) / len(ago)) if ago else None,
+                        "ret_3m": _clean(m.get("r3"), 1), "ret_1y": _clean(m.get("r12"), 1),
+                        "sma200_dist_pct": _clean(m.get("dist"), 1), "drawdown_pct": _clean(m.get("dd"), 1),
+                        "reasons_pos": pos, "reasons_neg": neg}
+        except Exception as e:
+            print(f"  Kategoriläge {cat}: {type(e).__name__}: {e}", file=sys.stderr)
+    return out
+
+
 def main():
     cfg = yaml.safe_load(FUNDS_FILE.read_text(encoding="utf-8")) or {}
     rf_rates = dict(cfg.get("short_rates") or {})
@@ -290,10 +369,15 @@ def main():
         except Exception as e:
             print(f"  {c.get('ticker')}: {type(e).__name__}: {e}", file=sys.stderr)
     stab, breadth = macro_context()
+    try:
+        stab_hist = ((json.loads(RESULTS_FILE.read_text(encoding="utf-8")).get("macro") or {}).get("bonds") or {}).get("history") or []
+    except Exception:
+        stab_hist = []
+    categories = compute_category_climate(cfg, stab, stab_hist)
     score_funds(funds, stab, breadth)
     version = VERSION_FILE.read_text().strip() if VERSION_FILE.exists() else None
     out = {"generated_at": datetime.now(timezone.utc).isoformat(), "version": version,
-           "count": len(funds), "stability_score": stab, "funds": funds}
+           "count": len(funds), "stability_score": stab, "categories": categories, "funds": funds}
     OUT_FILE.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"Fonder: {len(funds)} av {len(cfg.get('funds', []))} skrivna till {OUT_FILE.name}")
 

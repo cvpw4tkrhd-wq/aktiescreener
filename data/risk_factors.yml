@@ -58,6 +58,14 @@ factors:
       NL: -3
       GB: -3
     source_url: "https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260910~314e508016.sv.html"
+  - name: "Ryssland/NATO – hybridhot och gränsincidenter"
+    name_en: "Russia/NATO – hybrid threats and border incidents"
+    updated: 2026-09-30
+    # Ingen vikt – visas bara som bevakning (godkänt 2026-09-30). Ingen tydlig,
+    # mätbar kurseffekt ännu; läggs vikt senare krävs nytt godkännande.
+    summary: "En rysk Mi-8-helikopter kränkte den 23 september polskt luftrum vid Braniewo nära Kaliningrad, vilket ISW beskriver som en tydlig upptrappning av Rysslands aggressiva beteende mot NATO-länder. Europeiska underrättelsetjänster varnar för att Ryssland kan agera öppet aggressivt mot NATO under de närmaste månaderna, medan baltiska företrädare betonar att det inte finns tecken på förberedelser för ett nära förestående angrepp. Den hybrida kampanjen fortsätter – tyska myndigheter har formellt pekat ut Ryssland för drönarattacken mot Leipzigs flygplats i augusti. Ingen vikt sätts eftersom ingen tydlig effekt på aktiekurserna syns ännu."
+    summary_en: "On 23 September a Russian Mi-8 helicopter violated Polish airspace at Braniewo near Kaliningrad, which ISW describes as a marked escalation of Russia's aggressive behaviour towards NATO states. European intelligence services warn that Russia may act openly aggressively against NATO in the coming months, while Baltic officials stress that there are no signs of preparations for an imminent attack. The hybrid campaign continues – German authorities have formally blamed Russia for the drone attack on Leipzig airport in August. No weight is set because no clear effect on stock prices is visible yet."
+    source_url: "https://www.kyivpost.com/post/85279"
 
 # Exempel (inaktivt, bara för referens):
 # factors:

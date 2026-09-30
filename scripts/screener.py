@@ -64,15 +64,39 @@ RISK_FACTORS_FILE = DATA_DIR / "risk_factors.yml"
 RISK_FREE_RATES_FILE = DATA_DIR / "risk_free_rates.json"
 
 
+RISK_FREE_FRED = {"US": "DGS10", "SE": "IRLTLT01SEM156N", "DE": "IRLTLT01DEM156N", "NL": "IRLTLT01NLM156N",
+                  "FI": "IRLTLT01FIM156N", "GB": "IRLTLT01GBM156N", "NO": "IRLTLT01NOM156N", "DK": "IRLTLT01DKM156N"}
+_RF_LIVE = None
+
+
+def _risk_free_live():
+    """Hämtar 10-årsräntor per land från FRED (USA dagligen, övriga OECD-månadsdata)
+    en gång per körning (v9.1). Returnerar ({land: ränta}, {land: datum})."""
+    global _RF_LIVE
+    if _RF_LIVE is None:
+        rates, dates = {}, {}
+        for cc, sid in RISK_FREE_FRED.items():
+            try:
+                rows = fetch_fred_series(sid, lookback_days=6)
+                if rows:
+                    rates[cc] = round(float(rows[-1][1]), 2)
+                    dates[cc] = rows[-1][0]
+            except Exception as e:
+                print(f"  Riskfri ränta {cc} ({sid}) misslyckades: {type(e).__name__}: {e}", file=sys.stderr)
+        _RF_LIVE = (rates, dates)
+    return _RF_LIVE
+
+
 def load_risk_free_rates():
-    """Läser landsspecifika riskfria räntor (10-åriga statsobligationer).
-    Returnerar {marknadskod: ränta_i_procent}. Statisk referensfil, inte
-    live-hämtad - uppdateras manuellt via Claude när du ber om en avstämning."""
-    if not RISK_FREE_RATES_FILE.exists():
-        return {}
-    with open(RISK_FREE_RATES_FILE, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    return data.get("rates") or {}
+    """Riskfri ränta (10-årig statsobligation) per marknad. Hämtas automatiskt
+    från FRED vid varje körning (v9.1); referensfilen används bara som reserv
+    för länder där hämtningen misslyckas."""
+    base = {}
+    if RISK_FREE_RATES_FILE.exists():
+        with open(RISK_FREE_RATES_FILE, "r", encoding="utf-8") as f:
+            base = json.load(f).get("rates") or {}
+    live, _ = _risk_free_live()
+    return {**base, **live}
 
 
 INVESTTECH_TOP20_FILE = DATA_DIR / "investtech_top20.json"
@@ -156,17 +180,15 @@ def load_geopolitics_export(sector_weights, country_weights):
 
 
 def load_risk_free_export():
-    """Riskfria räntor + metadata för visning i MAKRO-panelen."""
+    """Riskfria räntor + metadata för visning i MAKRO-panelen (samma värden som poängen använder)."""
     try:
-        if not RISK_FREE_RATES_FILE.exists():
-            return None
-        with open(RISK_FREE_RATES_FILE, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        return {
-            "rates": data.get("rates") or {},
-            "last_updated": data.get("_last_updated"),
-            "source": data.get("_source"),
-        }
+        rates = load_risk_free_rates()
+        _, dates = _risk_free_live()
+        live_n = len(dates)
+        last = max(dates.values()) if dates else None
+        src = ("FRED: US 10-årsränta (daglig) och OECD:s månadsdata för övriga länder"
+               + ("" if live_n == len(RISK_FREE_FRED) else " – vissa länder från reservfilen"))
+        return {"rates": rates, "last_updated": last, "source": src, "dates": dates}
     except Exception as e:
         print(f"  Riskfri-export misslyckades (ignoreras): {type(e).__name__}: {e}", file=sys.stderr)
         return None
@@ -1162,6 +1184,28 @@ def analyze_ticker(ticker: str):
     }
 
 
+class SignedReasons(list):
+    """Lista med skäl som också minns om varje skäl höjde (+1) eller sänkte (-1)
+    poängen (v9.1). Poängfunktionerna ändrar alltid `bonus`/`penalty` precis före
+    reasons.append(), så tecknet läses av som skillnaden sedan föregående skäl."""
+    def __init__(self):
+        super().__init__()
+        self.signs = []
+        self._last = (0, 0)
+
+    def append(self, item, sign=None):
+        if sign is None:
+            loc = sys._getframe(1).f_locals
+            # roic_adj samlas separat och läggs på bonus/penalty först efteråt
+            b = (loc.get("bonus", 0) or 0) + max(0, loc.get("roic_adj", 0) or 0)
+            p = (loc.get("penalty", 0) or 0) + max(0, -(loc.get("roic_adj", 0) or 0))
+            db, dp = b - self._last[0], p - self._last[1]
+            self._last = (b, p)
+            sign = 1 if db > dp else (-1 if dp > db else 0)
+        super().append(item)
+        self.signs.append(sign)
+
+
 def score_buy_candidate(d, extra_weight=0):
     """Poängmodell (0-100) för köpvärdhet. Inte finansiell rådgivning -
     tänkt som ett första filter, inte en slutgiltig sanning.
@@ -1180,7 +1224,7 @@ def score_buy_candidate(d, extra_weight=0):
     negativ, som ska vägas in i samma dämpning som resten av bonusarna."""
     bonus = 0
     penalty = 0
-    reasons = []
+    reasons = SignedReasons()
 
     if d["pe"] is not None:
         if 0 < d["pe"] < 15:
@@ -1446,7 +1490,7 @@ def score_growth_candidate(d, extra_weight=0):
       viktas bort bara för att lyfta potential."""
     bonus = 0
     penalty = 0
-    reasons = []
+    reasons = SignedReasons()
 
     if d["pe"] is not None:
         if 0 < d["pe"] < 15:
@@ -1814,32 +1858,38 @@ def main():
             geopolitics_note = None
             if sector_weight:
                 geopolitics_note = ", ".join(sector_names) + (f" – begränsat till {sector_weight:+d} (tak ±{GEO_CAP})" if geo_capped != geo_raw else "")
-                buy_reasons.append(f"Geopolitik/makro ({sector}): {geopolitics_note}")
-                growth_reasons.append(f"Geopolitik/makro ({sector}): {geopolitics_note}")
+                sg = 1 if sector_weight > 0 else -1
+                buy_reasons.append(f"Geopolitik/makro ({sector}): {geopolitics_note}", sign=sg)
+                growth_reasons.append(f"Geopolitik/makro ({sector}): {geopolitics_note}", sign=sg)
 
             geopolitics_country_note = None
             if country_weight:
                 geopolitics_country_note = ", ".join(country_factor_names.get(entry["market"], []))
-                buy_reasons.append(f"Geopolitik/makro ({entry.get('country')}): {geopolitics_country_note}")
-                growth_reasons.append(f"Geopolitik/makro ({entry.get('country')}): {geopolitics_country_note}")
+                sg = 1 if country_weight > 0 else -1
+                buy_reasons.append(f"Geopolitik/makro ({entry.get('country')}): {geopolitics_country_note}", sign=sg)
+                growth_reasons.append(f"Geopolitik/makro ({entry.get('country')}): {geopolitics_country_note}", sign=sg)
 
             if investtech_entry:
                 note = f"Investtech Topp 20 (plats #{investtech_entry['rank']}, teknisk poäng {investtech_entry['investtech_score']}) – teknisk medelfristig signal (1-6 mån)"
-                buy_reasons.append(note)
-                growth_reasons.append(note)
+                buy_reasons.append(note, sign=1)
+                growth_reasons.append(note, sign=1)
 
             if valuation_note:
-                buy_reasons.append(valuation_note)
-                growth_reasons.append(valuation_note)
+                vs = 1 if valuation_w > 0 else (-1 if valuation_w < 0 else 0)
+                buy_reasons.append(valuation_note, sign=vs)
+                growth_reasons.append(valuation_note, sign=vs)
 
             for macro_note in macro_notes:
-                buy_reasons.append(macro_note)
-                growth_reasons.append(macro_note)
+                ms = 1 if macro_weight > 0 else (-1 if macro_weight < 0 else 0)
+                buy_reasons.append(macro_note, sign=ms)
+                growth_reasons.append(macro_note, sign=ms)
 
             d["buy_score"] = buy_score
-            d["buy_reasons"] = buy_reasons
+            d["buy_reasons"] = list(buy_reasons)
+            d["buy_reason_signs"] = list(buy_reasons.signs)
             d["growth_score"] = growth_score
-            d["growth_reasons"] = growth_reasons
+            d["growth_reasons"] = list(growth_reasons)
+            d["growth_reason_signs"] = list(growth_reasons.signs)
             d["investtech_rank"] = investtech_entry["rank"] if investtech_entry else None
             # Exponerar den använda sektor- och landsvikten (+ förklaringstexter)
             # så att webbläsaren kan räkna ut en identisk geopolitik-justering

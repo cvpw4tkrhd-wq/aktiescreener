@@ -1,0 +1,25 @@
+# Rapportkomplettering (v9.7)
+#
+# När ett bolag nyss har rapporterat tar det ofta några dagar innan Yahoo
+# Finance har lagt in det nya kvartalet. Under tiden räknar appen på gamla
+# siffror. Här kan rapporterade siffror läggas in så att P/E, PEG, tillväxt,
+# marginaltrend, FCF-marginal, ROIC och värdering mot egen historik bygger
+# på den nya rapporten direkt.
+#
+# Kompletteringen upphör AUTOMATISKT när Yahoo har ett kvartal som slutar
+# senast 10 dagar före period_end – då används Yahoos egna siffror igen och
+# posten kan tas bort. Belopp i miljoner i bolagets rapportvaluta.
+overrides:
+  MU:
+    source: "Micron 8-K, pressmeddelande 30 sep 2026 (räkenskapsår 2026, Q4)"
+    report_date: 2026-09-30
+    period_end: 2026-09-03
+    ttm_eps: 74.33             # GAAP, utspädd, räkenskapsåret 2026 = de fyra senaste kvartalen
+    ttm_revenue: 133188
+    ttm_fcf: 58963             # operativt kassaflöde 89 675 − investeringar 30 712
+    shares_diluted: 1147
+    q_revenue: 54229           # Q4 FY26
+    q_revenue_year_ago: 11315  # Q4 FY25
+    q_op_margin: 80.7          # rörelsemarginal Q4 FY26, GAAP
+    q_op_margin_year_ago: 32.3
+    fy_roic_pct: 59.0          # rörelseresultat 99 340 × (1 − skattesats 14,8 %) / (skulder 5 179 + eget kapital 138 378)

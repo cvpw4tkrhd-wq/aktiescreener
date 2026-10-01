@@ -1,6 +1,6 @@
 {
- "generated_at": "2026-10-01T09:16:33.637249+00:00",
- "version": "9.7",
+ "generated_at": "2026-10-01T13:39:51.571611+00:00",
+ "version": "9.8",
  "count": 37,
  "stability_score": 56.9,
  "categories": {
@@ -12,55 +12,55 @@
     "^OMXSPI"
    ],
    "change_1m": -12,
-   "ret_3m": 0.1,
-   "ret_1y": 14.1,
+   "ret_3m": 0.2,
+   "ret_1y": 14.2,
    "sma200_dist_pct": 2.8,
-   "drawdown_pct": -3.1,
+   "drawdown_pct": -3.0,
    "reasons_pos": [
     "Indexet ligger 2.8 % över SMA200",
     "SMA200 stiger (+1.1 % senaste månaden)",
-    "+0.1 % senaste 3 månaderna",
-    "+14.1 % senaste året"
+    "+0.2 % senaste 3 månaderna",
+    "+14.2 % senaste året"
    ],
    "reasons_neg": []
   },
   "Sverige index": {
-   "score": 68,
+   "score": 67,
    "label": "Medvind",
    "proxy": "OMXS30",
    "tickers": [
     "^OMX"
    ],
    "change_1m": -12,
-   "ret_3m": 0.4,
-   "ret_1y": 22.5,
-   "sma200_dist_pct": 4.1,
-   "drawdown_pct": -2.7,
+   "ret_3m": 0.1,
+   "ret_1y": 22.2,
+   "sma200_dist_pct": 3.8,
+   "drawdown_pct": -2.9,
    "reasons_pos": [
-    "Indexet ligger 4.1 % över SMA200",
+    "Indexet ligger 3.8 % över SMA200",
     "SMA200 stiger (+1.7 % senaste månaden)",
-    "+0.4 % senaste 3 månaderna",
-    "+22.5 % senaste året"
+    "+0.1 % senaste 3 månaderna",
+    "+22.2 % senaste året"
    ],
    "reasons_neg": []
   },
   "Sverige småbolag": {
-   "score": 64,
-   "label": "Neutralt",
+   "score": 73,
+   "label": "Medvind",
    "proxy": "XACT Småbolag",
    "tickers": [
     "XACT-SMABOLAG.ST"
    ],
-   "change_1m": -8,
-   "ret_3m": 0.9,
-   "ret_1y": 10.5,
-   "sma200_dist_pct": 3.9,
-   "drawdown_pct": -2.2,
+   "change_1m": 1,
+   "ret_3m": 1.4,
+   "ret_1y": 11.1,
+   "sma200_dist_pct": 4.4,
+   "drawdown_pct": -1.7,
    "reasons_pos": [
-    "Indexet ligger 3.9 % över SMA200",
+    "Indexet ligger 4.4 % över SMA200",
     "SMA200 stiger (+0.8 % senaste månaden)",
-    "+0.9 % senaste 3 månaderna",
-    "+10.5 % senaste året"
+    "+1.4 % senaste 3 månaderna",
+    "+11.1 % senaste året"
    ],
    "reasons_neg": []
   },
@@ -71,16 +71,16 @@
    "tickers": [
     "ACWI"
    ],
-   "change_1m": -12,
+   "change_1m": -10,
    "ret_3m": 1.7,
-   "ret_1y": 17.1,
+   "ret_1y": 16.7,
    "sma200_dist_pct": 5.4,
-   "drawdown_pct": -2.3,
+   "drawdown_pct": -2.2,
    "reasons_pos": [
     "Indexet ligger 5.4 % över SMA200",
     "SMA200 stiger (+1.5 % senaste månaden)",
     "+1.7 % senaste 3 månaderna",
-    "+17.1 % senaste året"
+    "+16.7 % senaste året"
    ],
    "reasons_neg": []
   },
@@ -91,38 +91,38 @@
    "tickers": [
     "ACWI"
    ],
-   "change_1m": -12,
+   "change_1m": -10,
    "ret_3m": 1.7,
-   "ret_1y": 17.1,
+   "ret_1y": 16.7,
    "sma200_dist_pct": 5.4,
-   "drawdown_pct": -2.3,
+   "drawdown_pct": -2.2,
    "reasons_pos": [
     "Indexet ligger 5.4 % över SMA200",
     "SMA200 stiger (+1.5 % senaste månaden)",
     "+1.7 % senaste 3 månaderna",
-    "+17.1 % senaste året"
+    "+16.7 % senaste året"
    ],
    "reasons_neg": []
   },
   "Europa": {
-   "score": 56,
+   "score": 57,
    "label": "Neutralt",
    "proxy": "STOXX Europe 600",
    "tickers": [
     "^STOXX"
    ],
-   "change_1m": -14,
-   "ret_3m": -3.5,
-   "ret_1y": 13.0,
-   "sma200_dist_pct": 0.7,
-   "drawdown_pct": -5.0,
+   "change_1m": -12,
+   "ret_3m": -3.0,
+   "ret_1y": 13.5,
+   "sma200_dist_pct": 1.2,
+   "drawdown_pct": -4.5,
    "reasons_pos": [
-    "Indexet ligger 0.7 % över SMA200",
+    "Indexet ligger 1.2 % över SMA200",
     "SMA200 stiger (+1.1 % senaste månaden)",
-    "+13.0 % senaste året"
+    "+13.5 % senaste året"
    ],
    "reasons_neg": [
-    "-3.5 % senaste 3 månaderna"
+    "-3.0 % senaste 3 månaderna"
    ]
   },
   "USA": {
@@ -132,96 +132,97 @@
    "tickers": [
     "^GSPC"
    ],
-   "change_1m": -1,
-   "ret_3m": 2.2,
-   "ret_1y": 14.9,
-   "sma200_dist_pct": 6.0,
-   "drawdown_pct": -1.9,
+   "change_1m": 1,
+   "ret_3m": 2.6,
+   "ret_1y": 14.8,
+   "sma200_dist_pct": 6.3,
+   "drawdown_pct": -1.6,
    "reasons_pos": [
-    "Indexet ligger 6.0 % över SMA200",
+    "Indexet ligger 6.3 % över SMA200",
     "SMA200 stiger (+1.3 % senaste månaden)",
-    "+2.2 % senaste 3 månaderna",
-    "+14.9 % senaste året"
+    "+2.6 % senaste 3 månaderna",
+    "+14.8 % senaste året"
    ],
    "reasons_neg": []
   },
   "Tillväxtmarknader": {
-   "score": 78,
+   "score": 79,
    "label": "Medvind",
    "proxy": "MSCI Emerging Markets",
    "tickers": [
     "EEM"
    ],
-   "change_1m": 3,
-   "ret_3m": 0.5,
-   "ret_1y": 28.0,
+   "change_1m": 4,
+   "ret_3m": 1.8,
+   "ret_1y": 27.6,
    "sma200_dist_pct": 6.6,
-   "drawdown_pct": -6.2,
+   "drawdown_pct": -6.1,
    "reasons_pos": [
     "Indexet ligger 6.6 % över SMA200",
     "SMA200 stiger (+2.4 % senaste månaden)",
-    "+0.5 % senaste 3 månaderna",
-    "+28.0 % senaste året"
+    "+1.8 % senaste 3 månaderna",
+    "+27.6 % senaste året"
    ],
    "reasons_neg": []
   },
   "Tema: teknik": {
-   "score": 91,
+   "score": 94,
    "label": "Medvind",
    "proxy": "Teknikaktier (XLK)",
    "tickers": [
     "XLK"
    ],
-   "change_1m": 11,
-   "ret_3m": 5.6,
-   "ret_1y": 40.4,
-   "sma200_dist_pct": 19.3,
-   "drawdown_pct": -1.0,
+   "change_1m": 17,
+   "ret_3m": 9.4,
+   "ret_1y": 40.7,
+   "sma200_dist_pct": 20.1,
+   "drawdown_pct": -0.2,
    "reasons_pos": [
-    "Indexet ligger 19.3 % över SMA200",
+    "Indexet ligger 20.1 % över SMA200",
     "SMA200 stiger (+3.1 % senaste månaden)",
-    "+5.6 % senaste 3 månaderna",
-    "+40.4 % senaste året"
+    "+9.4 % senaste 3 månaderna",
+    "+40.7 % senaste året"
    ],
    "reasons_neg": []
   },
   "Tema: bioteknik": {
-   "score": 75,
+   "score": 82,
    "label": "Medvind",
    "proxy": "Bioteknikaktier (XBI)",
    "tickers": [
     "XBI"
    ],
-   "change_1m": -17,
-   "ret_3m": 0.7,
-   "ret_1y": 59.3,
-   "sma200_dist_pct": 13.9,
-   "drawdown_pct": -7.0,
+   "change_1m": -10,
+   "ret_3m": -1.4,
+   "ret_1y": 58.6,
+   "sma200_dist_pct": 14.2,
+   "drawdown_pct": -6.7,
    "reasons_pos": [
-    "Indexet ligger 13.9 % över SMA200",
+    "Indexet ligger 14.2 % över SMA200",
     "SMA200 stiger (+3.1 % senaste månaden)",
-    "+0.7 % senaste 3 månaderna",
-    "+59.3 % senaste året"
+    "+58.6 % senaste året"
    ],
-   "reasons_neg": []
+   "reasons_neg": [
+    "-1.4 % senaste 3 månaderna"
+   ]
   },
   "Tema: hälsovård": {
-   "score": 85,
+   "score": 83,
    "label": "Medvind",
    "proxy": "Hälsovårdsaktier (XLV)",
    "tickers": [
     "XLV"
    ],
-   "change_1m": -5,
-   "ret_3m": 6.0,
-   "ret_1y": 26.0,
-   "sma200_dist_pct": 8.4,
+   "change_1m": -9,
+   "ret_3m": 3.2,
+   "ret_1y": 23.0,
+   "sma200_dist_pct": 8.3,
    "drawdown_pct": -3.8,
    "reasons_pos": [
-    "Indexet ligger 8.4 % över SMA200",
+    "Indexet ligger 8.3 % över SMA200",
     "SMA200 stiger (+1.2 % senaste månaden)",
-    "+6.0 % senaste 3 månaderna",
-    "+26.0 % senaste året"
+    "+3.2 % senaste 3 månaderna",
+    "+23.0 % senaste året"
    ],
    "reasons_neg": []
   },
@@ -234,14 +235,14 @@
    ],
    "change_1m": -9,
    "ret_3m": -4.1,
-   "ret_1y": -5.9,
+   "ret_1y": -5.8,
    "sma200_dist_pct": -7.5,
    "drawdown_pct": -19.4,
    "reasons_pos": [],
    "reasons_neg": [
     "Indexet ligger 7.5 % under SMA200",
     "-4.1 % senaste 3 månaderna",
-    "-5.9 % senaste året",
+    "-5.8 % senaste året",
     "-19 % från årets högsta"
    ]
   },
@@ -253,39 +254,39 @@
     "IPRP.L"
    ],
    "change_1m": -8,
-   "ret_3m": -15.3,
-   "ret_1y": -15.0,
-   "sma200_dist_pct": -15.5,
-   "drawdown_pct": -26.0,
+   "ret_3m": -14.3,
+   "ret_1y": -14.0,
+   "sma200_dist_pct": -14.5,
+   "drawdown_pct": -25.1,
    "reasons_pos": [],
    "reasons_neg": [
-    "Indexet ligger 15.5 % under SMA200",
+    "Indexet ligger 14.5 % under SMA200",
     "SMA200 faller (-1.0 % senaste månaden)",
-    "-15.3 % senaste 3 månaderna",
-    "-15.0 % senaste året",
-    "-26 % från årets högsta"
+    "-14.3 % senaste 3 månaderna",
+    "-14.0 % senaste året",
+    "-25 % från årets högsta"
    ]
   },
   "Råvaror/ädelmetaller": {
-   "score": 27,
+   "score": 28,
    "label": "Motvind",
    "proxy": "Guld och silver (snitt)",
    "tickers": [
     "GC=F",
     "SI=F"
    ],
-   "change_1m": -10,
-   "ret_3m": 0.8,
-   "ret_1y": 19.7,
-   "sma200_dist_pct": -12.2,
-   "drawdown_pct": -34.2,
+   "change_1m": -9,
+   "ret_3m": 1.5,
+   "ret_1y": 20.6,
+   "sma200_dist_pct": -11.6,
+   "drawdown_pct": -33.8,
    "reasons_pos": [
     "SMA200 stiger (+0.9 % senaste månaden)",
-    "+0.8 % senaste 3 månaderna",
-    "+19.7 % senaste året"
+    "+1.5 % senaste 3 månaderna",
+    "+20.6 % senaste året"
    ],
    "reasons_neg": [
-    "Indexet ligger 12.2 % under SMA200",
+    "Indexet ligger 11.6 % under SMA200",
     "-34 % från årets högsta"
    ]
   },
@@ -301,8 +302,115 @@
    "reasons_neg": []
   }
  },
+ "reference": {
+  "name": "Avanza Global",
+  "ticker": "0P0001ECQR.ST",
+  "sectors": {
+   "Technology": 0.3152,
+   "Financials": 0.1649,
+   "Consumer": 0.1595,
+   "Industrials": 0.0983,
+   "Healthcare": 0.0974,
+   "Communication": 0.0939,
+   "Materials": 0.0304,
+   "RealEstate": 0.0252,
+   "Utilities": 0.0145,
+   "Energy": 0.0007
+  }
+ },
  "funds": [
   {
+   "top_holdings": [
+    {
+     "s": "NVDA",
+     "n": "NVIDIA Corp",
+     "p": 0.0451,
+     "w": "NVDA",
+     "k": "nvidia"
+    },
+    {
+     "s": "GOOG",
+     "n": "Alphabet Inc Class C",
+     "p": 0.042,
+     "w": "GOOGL",
+     "k": "alphabet"
+    },
+    {
+     "s": "AAPL",
+     "n": "Apple Inc",
+     "p": 0.0392,
+     "w": "AAPL",
+     "k": "apple"
+    },
+    {
+     "s": "AVGO",
+     "n": "Broadcom Inc",
+     "p": 0.0216,
+     "w": "AVGO",
+     "k": "broadcom"
+    },
+    {
+     "s": "AMZN",
+     "n": "Amazon.com Inc",
+     "p": 0.0204,
+     "w": "AMZN",
+     "k": "amazoncom"
+    },
+    {
+     "s": "JNJ",
+     "n": "Johnson & Johnson",
+     "p": 0.0173,
+     "w": "JNJ",
+     "k": "johnsonjohnson"
+    },
+    {
+     "s": "MSFT",
+     "n": "Microsoft Corp",
+     "p": 0.0161,
+     "w": "MSFT",
+     "k": "microsoft"
+    },
+    {
+     "s": "MU",
+     "n": "Micron Technology Inc",
+     "p": 0.0161,
+     "w": "MU",
+     "k": "microntechnology"
+    },
+    {
+     "s": "ASML.AS",
+     "n": "ASML Holding NV",
+     "p": 0.0154,
+     "w": "ASML.AS",
+     "k": "asml"
+    },
+    {
+     "s": "JPM",
+     "n": "JPMorgan Chase & Co",
+     "p": 0.0143,
+     "w": "JPM",
+     "k": "jpmorganchase"
+    }
+   ],
+   "top_coverage": 0.248,
+   "sectors": {
+    "Technology": 0.2916,
+    "Financials": 0.2191,
+    "Industrials": 0.1344,
+    "Consumer": 0.1138,
+    "Healthcare": 0.09,
+    "Communication": 0.0489,
+    "Energy": 0.0383,
+    "Utilities": 0.0283,
+    "Materials": 0.0244,
+    "RealEstate": 0.0111
+   },
+   "assets": {
+    "stock": 0.989,
+    "bond": 0.0,
+    "cash": 0.011,
+    "other": 0.0
+   },
    "name": "Alfred Berg Gambak Global R",
    "ticker": "0P0001VSIP.ST",
    "isin": "NO0013583344",
@@ -596,6 +704,97 @@
    ]
   },
   {
+   "top_holdings": [
+    {
+     "s": "INVE B",
+     "n": "Investor AB Class B",
+     "p": 0.0921,
+     "w": "INVE-B.ST",
+     "k": "investor"
+    },
+    {
+     "s": "ATCO-A.ST",
+     "n": "Atlas Copco AB Class A",
+     "p": 0.083,
+     "w": "ATCO-A.ST",
+     "k": "atlascopco"
+    },
+    {
+     "s": "VOLV-B.ST",
+     "n": "Volvo AB Class B",
+     "p": 0.0713,
+     "w": "VOLV-B.ST",
+     "k": "volvo"
+    },
+    {
+     "s": "SAND.ST",
+     "n": "Sandvik AB",
+     "p": 0.0549,
+     "w": "SAND.ST",
+     "k": "sandvik"
+    },
+    {
+     "s": "SEB-A.ST",
+     "n": "Skandinaviska Enskilda Banken AB Class A",
+     "p": 0.0538,
+     "w": "SEB-A.ST",
+     "k": "skandinaviskaenskildabanken"
+    },
+    {
+     "s": "SWED-A.ST",
+     "n": "Swedbank AB Class A",
+     "p": 0.053,
+     "w": "SWED-A.ST",
+     "k": "swedbank"
+    },
+    {
+     "s": "ABBN.SW",
+     "n": "ABB Ltd",
+     "p": 0.0503,
+     "w": null,
+     "k": "abb"
+    },
+    {
+     "s": "EQT.ST",
+     "n": "EQT AB Ordinary Shares",
+     "p": 0.0488,
+     "w": null,
+     "k": "eqt"
+    },
+    {
+     "s": "ASSA-B.ST",
+     "n": "Assa Abloy AB Class B",
+     "p": 0.0458,
+     "w": null,
+     "k": "assaabloy"
+    },
+    {
+     "s": "SAAB-B.ST",
+     "n": "Saab AB Class B",
+     "p": 0.0392,
+     "w": null,
+     "k": "saab"
+    }
+   ],
+   "top_coverage": 0.592,
+   "sectors": {
+    "Industrials": 0.4586,
+    "Financials": 0.2988,
+    "Consumer": 0.0727,
+    "Technology": 0.0665,
+    "Communication": 0.0395,
+    "Healthcare": 0.0383,
+    "Materials": 0.0255,
+    "RealEstate": 0.0,
+    "Utilities": 0.0,
+    "Energy": 0.0
+   },
+   "assets": {
+    "stock": 0.9888,
+    "bond": 0.0,
+    "cash": 0.0112,
+    "other": 0.0
+   },
    "name": "Avanza Zero",
    "ticker": "0P00005U1J.ST",
    "isin": "SE0001718388",
@@ -873,7 +1072,7 @@
     567.69
    ],
    "momentum_rank": "1 av 3 i kategorin",
-   "score": 79,
+   "score": 78,
    "score_parts": {
     "trend": 27.4,
     "momentum": 17.9,
@@ -889,11 +1088,102 @@
     "Stark avkastning jämfört med andra fonder (plats 1 av 3 i kategorin)",
     "Bra riskjusterad avkastning (Sharpe 1.77)",
     "Låg avgift (0.00%)",
-    "Medvind för kategorin (OMXS30: 68/100)"
+    "Medvind för kategorin (OMXS30: 67/100)"
    ],
    "reasons_neg": []
   },
   {
+   "top_holdings": [
+    {
+     "s": "HAR.JO",
+     "n": "Harmony Gold Mining Co Ltd",
+     "p": 0.0336,
+     "w": null,
+     "k": "harmonygoldmining"
+    },
+    {
+     "s": "PAAS.TO",
+     "n": "Pan American Silver Corp",
+     "p": 0.033,
+     "w": null,
+     "k": "panamericansilver"
+    },
+    {
+     "s": "ELD.TO",
+     "n": "Eldorado Gold Corp",
+     "p": 0.0329,
+     "w": null,
+     "k": "eldoradogold"
+    },
+    {
+     "s": "TXG.TO",
+     "n": "Torex Gold Resources Inc",
+     "p": 0.0326,
+     "w": null,
+     "k": "torexgoldresources"
+    },
+    {
+     "s": "FVI.TO",
+     "n": "Fortuna Mining Corp",
+     "p": 0.0325,
+     "w": null,
+     "k": "fortunamining"
+    },
+    {
+     "s": "SSRM.TO",
+     "n": "SSR Mining Inc",
+     "p": 0.0324,
+     "w": null,
+     "k": "ssrmining"
+    },
+    {
+     "s": "CG.TO",
+     "n": "Centerra Gold Inc",
+     "p": 0.0324,
+     "w": null,
+     "k": "centerragold"
+    },
+    {
+     "s": "IMG.TO",
+     "n": "Iamgold Corp",
+     "p": 0.0324,
+     "w": null,
+     "k": "iamgold"
+    },
+    {
+     "s": "NEM",
+     "n": "Newmont Corp",
+     "p": 0.0319,
+     "w": "NEM",
+     "k": "newmont"
+    },
+    {
+     "s": "SVM.TO",
+     "n": "Silvercorp Metals Inc",
+     "p": 0.0313,
+     "w": null,
+     "k": "silvercorpmetals"
+    }
+   ],
+   "top_coverage": 0.325,
+   "sectors": {
+    "Materials": 0.995,
+    "Financials": 0.005,
+    "RealEstate": 0.0,
+    "Consumer": 0.0,
+    "Technology": 0.0,
+    "Communication": 0.0,
+    "Utilities": 0.0,
+    "Industrials": 0.0,
+    "Energy": 0.0,
+    "Healthcare": 0.0
+   },
+   "assets": {
+    "stock": 0.9695,
+    "bond": 0.0,
+    "cash": 0.0103,
+    "other": 0.0202
+   },
    "name": "Evli Silver and Gold B",
    "ticker": "0P00017LW4.F",
    "isin": "FI4000188982",
@@ -1179,10 +1469,101 @@
    "reasons_neg": [
     "Stort fall från toppen senaste året (-36%)",
     "Hög avgift (2.01%)",
-    "Motvind för kategorin (Guld och silver (snitt): 27/100)"
+    "Motvind för kategorin (Guld och silver (snitt): 28/100)"
    ]
   },
   {
+   "top_holdings": [
+    {
+     "s": "RR.L",
+     "n": "Rolls-Royce Holdings PLC",
+     "p": 0.0439,
+     "w": null,
+     "k": "rollsroyce"
+    },
+    {
+     "s": "S63.SI",
+     "n": "Singapore Technologies Engineering Ltd",
+     "p": 0.0392,
+     "w": null,
+     "k": "singaporetechnologiesengineering"
+    },
+    {
+     "s": "HWM",
+     "n": "Howmet Aerospace Inc",
+     "p": 0.0379,
+     "w": null,
+     "k": "howmetaerospace"
+    },
+    {
+     "s": "GE",
+     "n": "GE Aerospace",
+     "p": 0.0328,
+     "w": "GE",
+     "k": "geaerospace"
+    },
+    {
+     "s": "012450.KQ",
+     "n": "Hanwha Aerospace Co Ltd",
+     "p": 0.0326,
+     "w": null,
+     "k": "hanwhaaerospace"
+    },
+    {
+     "s": "KOG.OL",
+     "n": "Kongsberg Gruppen ASA",
+     "p": 0.029,
+     "w": null,
+     "k": "kongsberggruppen"
+    },
+    {
+     "s": "IDR.MC",
+     "n": "Indra Sistemas SA SHS Class -A-",
+     "p": 0.0287,
+     "w": null,
+     "k": "indrasistemasshs"
+    },
+    {
+     "s": "BITTI.HE",
+     "n": "Bittium Corp",
+     "p": 0.0285,
+     "w": null,
+     "k": "bittium"
+    },
+    {
+     "s": "RTX",
+     "n": "RTX Corp",
+     "p": 0.0271,
+     "w": "RTX",
+     "k": "rtx"
+    },
+    {
+     "s": "RHM.DE",
+     "n": "Rheinmetall AG",
+     "p": 0.027,
+     "w": null,
+     "k": "rheinmetall"
+    }
+   ],
+   "top_coverage": 0.327,
+   "sectors": {
+    "Industrials": 0.7507,
+    "Technology": 0.2202,
+    "Energy": 0.0243,
+    "Communication": 0.0048,
+    "RealEstate": 0.0,
+    "Consumer": 0.0,
+    "Materials": 0.0,
+    "Financials": 0.0,
+    "Utilities": 0.0,
+    "Healthcare": 0.0
+   },
+   "assets": {
+    "stock": 1.0,
+    "bond": 0.0,
+    "cash": 0.0,
+    "other": 0.0
+   },
    "name": "Finserve Global Defence & Security I SEK R",
    "ticker": "0P0001D63M.ST",
    "isin": "LU1822851538",
@@ -1480,6 +1861,97 @@
    ]
   },
   {
+   "top_holdings": [
+    {
+     "s": "JAZZ",
+     "n": "Jazz Pharmaceuticals PLC",
+     "p": 0.0506,
+     "w": null,
+     "k": "jazzpharmaceuticals"
+    },
+    {
+     "s": "AMGN",
+     "n": "Amgen Inc",
+     "p": 0.0465,
+     "w": null,
+     "k": "amgen"
+    },
+    {
+     "s": "ARGX",
+     "n": "argenx SE ADR",
+     "p": 0.0415,
+     "w": null,
+     "k": "argenx"
+    },
+    {
+     "s": "GILD",
+     "n": "Gilead Sciences Inc",
+     "p": 0.0411,
+     "w": "GILD",
+     "k": "gileadsciences"
+    },
+    {
+     "s": "VRTX",
+     "n": "Vertex Pharmaceuticals Inc",
+     "p": 0.0383,
+     "w": null,
+     "k": "vertexpharmaceuticals"
+    },
+    {
+     "s": "REGN",
+     "n": "Regeneron Pharmaceuticals Inc",
+     "p": 0.0374,
+     "w": null,
+     "k": "regeneronpharmaceuticals"
+    },
+    {
+     "s": "RVMD",
+     "n": "Revolution Medicines Inc Ordinary Shares",
+     "p": 0.0313,
+     "w": null,
+     "k": "revolutionmedicines"
+    },
+    {
+     "s": "AZN.L",
+     "n": "AstraZeneca PLC",
+     "p": 0.0272,
+     "w": "AZN.L",
+     "k": "astrazeneca"
+    },
+    {
+     "s": "ASND",
+     "n": "Ascendis Pharma AS",
+     "p": 0.0268,
+     "w": null,
+     "k": "ascendispharma"
+    },
+    {
+     "s": "AMLX",
+     "n": "Amylyx Pharmaceuticals Inc",
+     "p": 0.0257,
+     "w": null,
+     "k": "amylyxpharmaceuticals"
+    }
+   ],
+   "top_coverage": 0.366,
+   "sectors": {
+    "Healthcare": 0.9972,
+    "Financials": 0.0028,
+    "RealEstate": 0.0,
+    "Consumer": 0.0,
+    "Materials": 0.0,
+    "Technology": 0.0,
+    "Communication": 0.0,
+    "Utilities": 0.0,
+    "Industrials": 0.0,
+    "Energy": 0.0
+   },
+   "assets": {
+    "stock": 0.9771,
+    "bond": 0.0,
+    "cash": 0.0023,
+    "other": 0.0206
+   },
    "name": "Franklin Biotechnology Discovery A acc USD",
    "ticker": "FBDIX",
    "isin": "LU0109394709",
@@ -1770,14 +2242,14 @@
     "momentum": 11.7,
     "risk": 17.2,
     "cost": 0,
-    "macro": 3.8
+    "macro": 4.1
    },
    "label": "Svag",
    "reasons_pos": [
     "Kursen 3.6 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+2.0 % senaste månaden)",
     "Bra riskjusterad avkastning (Sharpe 1.52)",
-    "Medvind för kategorin (Bioteknikaktier (XBI): 75/100)"
+    "Medvind för kategorin (Bioteknikaktier (XBI): 82/100)"
    ],
    "reasons_neg": [
     "Kursen ligger under SMA50 – kortsiktig svaghet",
@@ -1785,6 +2257,97 @@
    ]
   },
   {
+   "top_holdings": [
+    {
+     "s": "NVDA",
+     "n": "NVIDIA Corp",
+     "p": 0.0446,
+     "w": "NVDA",
+     "k": "nvidia"
+    },
+    {
+     "s": "AAPL",
+     "n": "Apple Inc",
+     "p": 0.0363,
+     "w": "AAPL",
+     "k": "apple"
+    },
+    {
+     "s": "GOOGL",
+     "n": "Alphabet Inc Class A",
+     "p": 0.0341,
+     "w": "GOOGL",
+     "k": "alphabet"
+    },
+    {
+     "s": "MU",
+     "n": "Micron Technology Inc",
+     "p": 0.0301,
+     "w": "MU",
+     "k": "microntechnology"
+    },
+    {
+     "s": "JNJ",
+     "n": "Johnson & Johnson",
+     "p": 0.0277,
+     "w": "JNJ",
+     "k": "johnsonjohnson"
+    },
+    {
+     "s": "MSFT",
+     "n": "Microsoft Corp",
+     "p": 0.0276,
+     "w": "MSFT",
+     "k": "microsoft"
+    },
+    {
+     "s": "GOOG",
+     "n": "Alphabet Inc Class C",
+     "p": 0.0276,
+     "w": "GOOGL",
+     "k": "alphabet"
+    },
+    {
+     "s": "SNDK",
+     "n": "SanDisk Corp Ordinary Shares",
+     "p": 0.0234,
+     "w": null,
+     "k": "sandisk"
+    },
+    {
+     "s": "WDC",
+     "n": "Western Digital Corp",
+     "p": 0.0211,
+     "w": null,
+     "k": "westerndigital"
+    },
+    {
+     "s": "TD",
+     "n": "The Toronto-Dominion Bank",
+     "p": 0.0211,
+     "w": null,
+     "k": "torontodominionbank"
+    }
+   ],
+   "top_coverage": 0.294,
+   "sectors": {
+    "Technology": 0.3646,
+    "Financials": 0.1686,
+    "Industrials": 0.1263,
+    "Communication": 0.1016,
+    "Healthcare": 0.0838,
+    "Consumer": 0.0806,
+    "RealEstate": 0.0302,
+    "Materials": 0.0266,
+    "Utilities": 0.0176,
+    "Energy": 0.0
+   },
+   "assets": {
+    "stock": 0.9984,
+    "bond": 0.0,
+    "cash": 0.0016,
+    "other": 0.0
+   },
    "name": "Handelsbanken Global Momentum A1 SEK",
    "ticker": "0P0001LS8Q.ST",
    "isin": "SE0015382114",
@@ -2079,6 +2642,97 @@
    "reasons_neg": []
   },
   {
+   "top_holdings": [
+    {
+     "s": "SAGA B",
+     "n": "AB Sagax Class B",
+     "p": 0.0911,
+     "w": null,
+     "k": "sagax"
+    },
+    {
+     "s": "BALD-B.ST",
+     "n": "Fastighets AB Balder Class B",
+     "p": 0.0881,
+     "w": "BALD-B.ST",
+     "k": "fastighetsbalder"
+    },
+    {
+     "s": "CATE.ST",
+     "n": "Catena AB",
+     "p": 0.0608,
+     "w": null,
+     "k": "catena"
+    },
+    {
+     "s": "CAST.ST",
+     "n": "Castellum AB",
+     "p": 0.0519,
+     "w": null,
+     "k": "castellum"
+    },
+    {
+     "s": "ALTRA.ST",
+     "n": "Altra Fastigheter AB",
+     "p": 0.0516,
+     "w": null,
+     "k": "altrafastigheter"
+    },
+    {
+     "s": "WIHL.ST",
+     "n": "Wihlborgs Fastigheter AB",
+     "p": 0.0499,
+     "w": null,
+     "k": "wihlborgsfastigheter"
+    },
+    {
+     "s": "PNDX-B.ST",
+     "n": "Pandox AB Class B",
+     "p": 0.0471,
+     "w": null,
+     "k": "pandox"
+    },
+    {
+     "s": "NP3.ST",
+     "n": "NP3 Fastigheter AB",
+     "p": 0.0436,
+     "w": null,
+     "k": "np3fastigheter"
+    },
+    {
+     "s": "CTPNV.AS",
+     "n": "CTP NV Ordinary Shares",
+     "p": 0.0434,
+     "w": null,
+     "k": "ctp"
+    },
+    {
+     "s": "LOGI-B.ST",
+     "n": "Logistea AB Class B",
+     "p": 0.0431,
+     "w": null,
+     "k": "logistea"
+    }
+   ],
+   "top_coverage": 0.571,
+   "sectors": {
+    "RealEstate": 1.0,
+    "Consumer": 0.0,
+    "Materials": 0.0,
+    "Technology": 0.0,
+    "Communication": 0.0,
+    "Financials": 0.0,
+    "Utilities": 0.0,
+    "Industrials": 0.0,
+    "Energy": 0.0,
+    "Healthcare": 0.0
+   },
+   "assets": {
+    "stock": 0.9748,
+    "bond": 0.0,
+    "cash": 0.0252,
+    "other": 0.0
+   },
    "name": "Länsförsäkringar Fastighetsfond A",
    "ticker": "0P00000L2Q.ST",
    "isin": "SE0000837338",
@@ -2378,6 +3032,97 @@
    ]
   },
   {
+   "top_holdings": [
+    {
+     "s": "NVDA",
+     "n": "NVIDIA Corp",
+     "p": 0.0614,
+     "w": "NVDA",
+     "k": "nvidia"
+    },
+    {
+     "s": "AAPL",
+     "n": "Apple Inc",
+     "p": 0.0561,
+     "w": "AAPL",
+     "k": "apple"
+    },
+    {
+     "s": "MSFT",
+     "n": "Microsoft Corp",
+     "p": 0.0432,
+     "w": "MSFT",
+     "k": "microsoft"
+    },
+    {
+     "s": "AMZN",
+     "n": "Amazon.com Inc",
+     "p": 0.0303,
+     "w": "AMZN",
+     "k": "amazoncom"
+    },
+    {
+     "s": "GOOGL",
+     "n": "Alphabet Inc Class A",
+     "p": 0.0238,
+     "w": "GOOGL",
+     "k": "alphabet"
+    },
+    {
+     "s": "AVGO",
+     "n": "Broadcom Inc",
+     "p": 0.0201,
+     "w": "AVGO",
+     "k": "broadcom"
+    },
+    {
+     "s": "GOOG",
+     "n": "Alphabet Inc Class C",
+     "p": 0.0187,
+     "w": "GOOGL",
+     "k": "alphabet"
+    },
+    {
+     "s": "META",
+     "n": "Meta Platforms Inc Class A",
+     "p": 0.0152,
+     "w": "META",
+     "k": "metaplatforms"
+    },
+    {
+     "s": "TSLA",
+     "n": "Tesla Inc",
+     "p": 0.0125,
+     "w": "TSLA",
+     "k": "tesla"
+    },
+    {
+     "s": "JPM",
+     "n": "JPMorgan Chase & Co",
+     "p": 0.0116,
+     "w": "JPM",
+     "k": "jpmorganchase"
+    }
+   ],
+   "top_coverage": 0.293,
+   "sectors": {
+    "Technology": 0.3317,
+    "Financials": 0.1719,
+    "Consumer": 0.1378,
+    "Healthcare": 0.1003,
+    "Industrials": 0.0942,
+    "Communication": 0.0877,
+    "Materials": 0.0288,
+    "RealEstate": 0.0177,
+    "Utilities": 0.0171,
+    "Energy": 0.0128
+   },
+   "assets": {
+    "stock": 0.9962,
+    "bond": 0.0,
+    "cash": 0.0033,
+    "other": 0.0005
+   },
    "name": "Länsförsäkringar Global Index",
    "ticker": "0P0000YVZ3.ST",
    "isin": "SE0005188836",
@@ -2668,6 +3413,97 @@
    "reasons_neg": []
   },
   {
+   "top_holdings": [
+    {
+     "s": "INVE B",
+     "n": "Investor AB Class B",
+     "p": 0.076,
+     "w": "INVE-B.ST",
+     "k": "investor"
+    },
+    {
+     "s": "ASSA-B.ST",
+     "n": "Assa Abloy AB Class B",
+     "p": 0.0576,
+     "w": null,
+     "k": "assaabloy"
+    },
+    {
+     "s": "ATCO B",
+     "n": "Atlas Copco AB Class B",
+     "p": 0.0542,
+     "w": "ATCO-A.ST",
+     "k": "atlascopco"
+    },
+    {
+     "s": "VOLV-B.ST",
+     "n": "Volvo AB Class B",
+     "p": 0.0472,
+     "w": "VOLV-B.ST",
+     "k": "volvo"
+    },
+    {
+     "s": "SEB-A.ST",
+     "n": "Skandinaviska Enskilda Banken AB Class A",
+     "p": 0.0471,
+     "w": "SEB-A.ST",
+     "k": "skandinaviskaenskildabanken"
+    },
+    {
+     "s": "AZN.L",
+     "n": "AstraZeneca PLC",
+     "p": 0.0467,
+     "w": "AZN.L",
+     "k": "astrazeneca"
+    },
+    {
+     "s": "ERIC-B.ST",
+     "n": "Telefonaktiebolaget L M Ericsson Class B",
+     "p": 0.0466,
+     "w": "ERIC-B.ST",
+     "k": "telefonaktiebolagetlmericsson"
+    },
+    {
+     "s": "HEXA-B.ST",
+     "n": "Hexagon AB Class B",
+     "p": 0.0446,
+     "w": null,
+     "k": "hexagon"
+    },
+    {
+     "s": "SWED-A.ST",
+     "n": "Swedbank AB Class A",
+     "p": 0.0413,
+     "w": "SWED-A.ST",
+     "k": "swedbank"
+    },
+    {
+     "s": "NDA-SE.ST",
+     "n": "Nordea Bank Abp",
+     "p": 0.0319,
+     "w": "NDA-SE.ST",
+     "k": "nordeabank"
+    }
+   ],
+   "top_coverage": 0.493,
+   "sectors": {
+    "Industrials": 0.3181,
+    "Financials": 0.2689,
+    "Technology": 0.1126,
+    "Consumer": 0.1023,
+    "Healthcare": 0.08,
+    "Materials": 0.0689,
+    "RealEstate": 0.0462,
+    "Communication": 0.003,
+    "Utilities": 0.0,
+    "Energy": 0.0
+   },
+   "assets": {
+    "stock": 0.9356,
+    "bond": 0.0,
+    "cash": 0.0644,
+    "other": 0.0
+   },
    "name": "Länsförsäkringar Sverige Vision A",
    "ticker": "0P00000L41.ST",
    "isin": "SE0000837221",
@@ -2964,6 +3800,90 @@
    ]
   },
   {
+   "top_holdings": [
+    {
+     "s": "SWED-A.ST",
+     "n": "Swedbank AB Class A",
+     "p": 0.1114,
+     "w": "SWED-A.ST",
+     "k": "swedbank"
+    },
+    {
+     "s": "NDA-SE.ST",
+     "n": "Nordea Bank Abp",
+     "p": 0.0978,
+     "w": "NDA-SE.ST",
+     "k": "nordeabank"
+    },
+    {
+     "s": "INVE B",
+     "n": "Investor AB Class B",
+     "p": 0.0881,
+     "w": "INVE-B.ST",
+     "k": "investor"
+    },
+    {
+     "s": "VOLV-B.ST",
+     "n": "Volvo AB Class B",
+     "p": 0.0859,
+     "w": "VOLV-B.ST",
+     "k": "volvo"
+    },
+    {
+     "s": "8TRA",
+     "n": "Traton SE",
+     "p": 0.082,
+     "w": null,
+     "k": "traton"
+    },
+    {
+     "s": "SEB-A.ST",
+     "n": "Skandinaviska Enskilda Banken AB Class A",
+     "p": 0.0782,
+     "w": "SEB-A.ST",
+     "k": "skandinaviskaenskildabanken"
+    },
+    {
+     "s": "ERIC-B.ST",
+     "n": "Telefonaktiebolaget L M Ericsson Class B",
+     "p": 0.0689,
+     "w": "ERIC-B.ST",
+     "k": "telefonaktiebolagetlmericsson"
+    },
+    {
+     "s": "SKF-B.ST",
+     "n": "SKF AB Class B",
+     "p": 0.0632,
+     "w": null,
+     "k": "skf"
+    },
+    {
+     "s": "ESSITY-B.ST",
+     "n": "Essity AB Class B",
+     "p": 0.0398,
+     "w": "ESSITY-B.ST",
+     "k": "essity"
+    }
+   ],
+   "top_coverage": 0.715,
+   "sectors": {
+    "Financials": 0.4716,
+    "Industrials": 0.3001,
+    "Technology": 0.1216,
+    "Consumer": 0.0539,
+    "Materials": 0.0317,
+    "Healthcare": 0.0212,
+    "RealEstate": 0.0,
+    "Communication": 0.0,
+    "Utilities": 0.0,
+    "Energy": 0.0
+   },
+   "assets": {
+    "stock": 0.9841,
+    "bond": 0.0,
+    "cash": 0.0159,
+    "other": 0.0
+   },
    "name": "SEB Swedish Value Fund A",
    "ticker": "0P00006P9H.ST",
    "isin": "SE0001838004",
@@ -3265,6 +4185,97 @@
    ]
   },
   {
+   "top_holdings": [
+    {
+     "s": "INVE B",
+     "n": "Investor AB Class B",
+     "p": 0.2624,
+     "w": "INVE-B.ST",
+     "k": "investor"
+    },
+    {
+     "s": "INDU C",
+     "n": "Industrivarden AB Class C",
+     "p": 0.1832,
+     "w": null,
+     "k": "industrivarden"
+    },
+    {
+     "s": "LUND-B.ST",
+     "n": "L E Lundbergforetagen AB Class B",
+     "p": 0.0834,
+     "w": "LUND-B.ST",
+     "k": "lelundbergforetagen"
+    },
+    {
+     "s": "INDT.ST",
+     "n": "Indutrade AB",
+     "p": 0.0434,
+     "w": null,
+     "k": "indutrade"
+    },
+    {
+     "s": "AZN.L",
+     "n": "AstraZeneca PLC",
+     "p": 0.0428,
+     "w": "AZN.L",
+     "k": "astrazeneca"
+    },
+    {
+     "s": "LIFCO-B.ST",
+     "n": "Lifco AB Class B",
+     "p": 0.0417,
+     "w": null,
+     "k": "lifco"
+    },
+    {
+     "s": "HEXA-B.ST",
+     "n": "Hexagon AB Class B",
+     "p": 0.0413,
+     "w": null,
+     "k": "hexagon"
+    },
+    {
+     "s": "XACTOS.ST",
+     "n": "XACT OMXS30 ESG ETF",
+     "p": 0.0286,
+     "w": null,
+     "k": "xactomxs30esgetf"
+    },
+    {
+     "s": "EQT.ST",
+     "n": "EQT AB Ordinary Shares",
+     "p": 0.028,
+     "w": null,
+     "k": "eqt"
+    },
+    {
+     "s": "LATO-B.ST",
+     "n": "Investment AB Latour Class B",
+     "p": 0.0263,
+     "w": "LATO-B.ST",
+     "k": "investmentlatour"
+    }
+   ],
+   "top_coverage": 0.781,
+   "sectors": {
+    "Financials": 0.5518,
+    "Industrials": 0.3341,
+    "Healthcare": 0.0444,
+    "Technology": 0.0439,
+    "Materials": 0.0137,
+    "Consumer": 0.0112,
+    "Communication": 0.0009,
+    "RealEstate": 0.0,
+    "Utilities": 0.0,
+    "Energy": 0.0
+   },
+   "assets": {
+    "stock": 0.9885,
+    "bond": 0.0,
+    "cash": 0.0115,
+    "other": 0.0
+   },
    "name": "Spiltan Aktiefond Investmentbolag",
    "ticker": "0P0000ULAP.ST",
    "isin": "SE0004297927",
@@ -3566,6 +4577,97 @@
    ]
   },
   {
+   "top_holdings": [
+    {
+     "s": "NVDA",
+     "n": "NVIDIA Corp",
+     "p": 0.0845,
+     "w": "NVDA",
+     "k": "nvidia"
+    },
+    {
+     "s": "MSFT",
+     "n": "Microsoft Corp",
+     "p": 0.0794,
+     "w": "MSFT",
+     "k": "microsoft"
+    },
+    {
+     "s": "AVGO",
+     "n": "Broadcom Inc",
+     "p": 0.0773,
+     "w": "AVGO",
+     "k": "broadcom"
+    },
+    {
+     "s": "MU",
+     "n": "Micron Technology Inc",
+     "p": 0.05,
+     "w": "MU",
+     "k": "microntechnology"
+    },
+    {
+     "s": "AMD",
+     "n": "Advanced Micro Devices Inc",
+     "p": 0.0491,
+     "w": "AMD",
+     "k": "advancedmicrodevices"
+    },
+    {
+     "s": "AAPL",
+     "n": "Apple Inc",
+     "p": 0.0469,
+     "w": "AAPL",
+     "k": "apple"
+    },
+    {
+     "s": "2330.TW",
+     "n": "Taiwan Semiconductor Manufacturing Co Ltd",
+     "p": 0.0445,
+     "w": null,
+     "k": "taiwansemiconductormanufacturing"
+    },
+    {
+     "s": "ADI",
+     "n": "Analog Devices Inc",
+     "p": 0.0347,
+     "w": null,
+     "k": "analogdevices"
+    },
+    {
+     "s": "AMAT",
+     "n": "Applied Materials Inc",
+     "p": 0.0319,
+     "w": "AMAT",
+     "k": "appliedmaterials"
+    },
+    {
+     "s": "LRCX",
+     "n": "Lam Research Corp",
+     "p": 0.0302,
+     "w": "LRCX",
+     "k": "lamresearch"
+    }
+   ],
+   "top_coverage": 0.528,
+   "sectors": {
+    "Technology": 0.9298,
+    "Communication": 0.0407,
+    "Consumer": 0.0182,
+    "Healthcare": 0.0063,
+    "Industrials": 0.005,
+    "RealEstate": 0.0,
+    "Materials": 0.0,
+    "Financials": 0.0,
+    "Utilities": 0.0,
+    "Energy": 0.0
+   },
+   "assets": {
+    "stock": 0.9995,
+    "bond": 0.0,
+    "cash": 0.0005,
+    "other": 0.0
+   },
    "name": "Swedbank Robur Technology A",
    "ticker": "0P00000LCG.ST",
    "isin": "SE0000538944",
@@ -3843,7 +4945,7 @@
     "momentum": 24.2,
     "risk": 18.2,
     "cost": 4,
-    "macro": 4.5
+    "macro": 4.7
    },
    "label": "Lovande",
    "reasons_pos": [
@@ -3852,11 +4954,102 @@
     "Kursen ligger över SMA50 – kortsiktig styrka",
     "Stark avkastning jämfört med andra fonder (plats 2 av 31)",
     "Bra riskjusterad avkastning (Sharpe 1.82)",
-    "Medvind för kategorin (Teknikaktier (XLK): 91/100)"
+    "Medvind för kategorin (Teknikaktier (XLK): 94/100)"
    ],
    "reasons_neg": []
   },
   {
+   "top_holdings": [
+    {
+     "s": "HSBA.L",
+     "n": "HSBC Holdings PLC",
+     "p": 0.1438,
+     "w": "HSBA.L",
+     "k": "hsbc"
+    },
+    {
+     "s": "SAN.MC",
+     "n": "Banco Santander SA",
+     "p": 0.0873,
+     "w": null,
+     "k": "bancosantander"
+    },
+    {
+     "s": "BBVA.MC",
+     "n": "Banco Bilbao Vizcaya Argentaria SA",
+     "p": 0.0662,
+     "w": null,
+     "k": "bancobilbaovizcayaargentaria"
+    },
+    {
+     "s": "UCG.MI",
+     "n": "UniCredit SpA",
+     "p": 0.0595,
+     "w": null,
+     "k": "unicredit"
+    },
+    {
+     "s": "BNP.PA",
+     "n": "BNP Paribas Act. Cat.A",
+     "p": 0.0501,
+     "w": null,
+     "k": "bnpparibasactcat"
+    },
+    {
+     "s": "ISP.MI",
+     "n": "Intesa Sanpaolo",
+     "p": 0.0489,
+     "w": null,
+     "k": "intesasanpaolo"
+    },
+    {
+     "s": "INGA.AS",
+     "n": "ING Groep NV",
+     "p": 0.0418,
+     "w": null,
+     "k": "inggroep"
+    },
+    {
+     "s": "BARC.L",
+     "n": "Barclays PLC",
+     "p": 0.0369,
+     "w": null,
+     "k": "barclays"
+    },
+    {
+     "s": "LLOY.L",
+     "n": "Lloyds Banking Group PLC",
+     "p": 0.035,
+     "w": null,
+     "k": "lloydsbanking"
+    },
+    {
+     "s": "DBK.DE",
+     "n": "Deutsche Bank AG",
+     "p": 0.0311,
+     "w": null,
+     "k": "deutschebank"
+    }
+   ],
+   "top_coverage": 0.601,
+   "sectors": {
+    "Financials": 1.0,
+    "RealEstate": 0.0,
+    "Consumer": 0.0,
+    "Materials": 0.0,
+    "Technology": 0.0,
+    "Communication": 0.0,
+    "Utilities": 0.0,
+    "Industrials": 0.0,
+    "Energy": 0.0,
+    "Healthcare": 0.0
+   },
+   "assets": {
+    "stock": 0.9927,
+    "bond": 0.0,
+    "cash": 0.0073,
+    "other": 0.0
+   },
    "name": "iShares STOXX Europe 600 Banks UCITS ETF",
    "ticker": "EXV1.DE",
    "isin": "DE000A0F5UJ7",
@@ -3865,25 +5058,25 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "EUR",
-   "price": 40.75,
+   "price": 40.92,
    "as_of": "2026-10-01",
    "sma50": 42.32,
-   "sma200": 37.36,
+   "sma200": 37.37,
    "above_sma50": false,
    "above_sma200": true,
    "sma50_vs_200_pct": 13.3,
    "cross": "golden",
-   "rsi14": 36.3,
-   "sma200_dist_pct": 9.1,
+   "rsi14": 37.4,
+   "sma200_dist_pct": 9.5,
    "sma200_slope_pct": 3.22,
-   "ret_1m": -3.4,
-   "ret_3m": 0.6,
-   "ret_6m": 23.5,
-   "ret_1y": 37.3,
-   "ret_ytd": 19.5,
-   "volatility_pct": 22.3,
+   "ret_1m": -3.0,
+   "ret_3m": 1.0,
+   "ret_6m": 24.0,
+   "ret_1y": 37.9,
+   "ret_ytd": 20.0,
+   "volatility_pct": 22.2,
    "max_drawdown_pct": -16.0,
-   "sharpe": 1.56,
+   "sharpe": 1.59,
    "fee_pct": 0.46,
    "fee_source": "Yahoo Finance",
    "price_history_1y": [
@@ -4138,29 +5331,120 @@
     42.38,
     42.37,
     42.15,
-    40.75
+    40.92
    ],
    "momentum_rank": "6 av 31",
    "score": 68,
    "score_parts": {
-    "trend": 20.9,
+    "trend": 21.1,
     "momentum": 20.8,
-    "risk": 16.2,
+    "risk": 16.4,
     "cost": 7,
-    "macro": 2.8
+    "macro": 2.9
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen 9.1 % över SMA200 – långsiktig upptrend",
+    "Kursen 9.5 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+3.2 % senaste månaden)",
     "Stark avkastning jämfört med andra fonder (plats 6 av 31)",
-    "Bra riskjusterad avkastning (Sharpe 1.56)"
+    "Bra riskjusterad avkastning (Sharpe 1.59)"
    ],
    "reasons_neg": [
     "Kursen ligger under SMA50 – kortsiktig svaghet"
    ]
   },
   {
+   "top_holdings": [
+    {
+     "s": "AAPL",
+     "n": "Apple Inc",
+     "p": 0.0558,
+     "w": "AAPL",
+     "k": "apple"
+    },
+    {
+     "s": "NVDA",
+     "n": "NVIDIA Corp",
+     "p": 0.0519,
+     "w": "NVDA",
+     "k": "nvidia"
+    },
+    {
+     "s": "MSFT",
+     "n": "Microsoft Corp",
+     "p": 0.0433,
+     "w": "MSFT",
+     "k": "microsoft"
+    },
+    {
+     "s": "AMZN",
+     "n": "Amazon.com Inc",
+     "p": 0.0372,
+     "w": "AMZN",
+     "k": "amazoncom"
+    },
+    {
+     "s": "GOOGL",
+     "n": "Alphabet Inc Class A",
+     "p": 0.0263,
+     "w": "GOOGL",
+     "k": "alphabet"
+    },
+    {
+     "s": "GOOG",
+     "n": "Alphabet Inc Class C",
+     "p": 0.0211,
+     "w": "GOOGL",
+     "k": "alphabet"
+    },
+    {
+     "s": "AVGO",
+     "n": "Broadcom Inc",
+     "p": 0.0174,
+     "w": "AVGO",
+     "k": "broadcom"
+    },
+    {
+     "s": "META",
+     "n": "Meta Platforms Inc Class A",
+     "p": 0.0153,
+     "w": "META",
+     "k": "metaplatforms"
+    },
+    {
+     "s": "AMD",
+     "n": "Advanced Micro Devices Inc",
+     "p": 0.0135,
+     "w": "AMD",
+     "k": "advancedmicrodevices"
+    },
+    {
+     "s": "MU",
+     "n": "Micron Technology Inc",
+     "p": 0.0133,
+     "w": "MU",
+     "k": "microntechnology"
+    }
+   ],
+   "top_coverage": 0.295,
+   "sectors": {
+    "Technology": 0.3152,
+    "Financials": 0.1649,
+    "Consumer": 0.1595,
+    "Industrials": 0.0983,
+    "Healthcare": 0.0974,
+    "Communication": 0.0939,
+    "Materials": 0.0304,
+    "RealEstate": 0.0252,
+    "Utilities": 0.0145,
+    "Energy": 0.0007
+   },
+   "assets": {
+    "stock": 0.9866,
+    "bond": 0.0,
+    "cash": 0.0128,
+    "other": 0.0006
+   },
    "name": "Avanza Global",
    "ticker": "0P0001ECQR.ST",
    "isin": "SE0011527613",
@@ -4452,6 +5736,97 @@
    "reasons_neg": []
   },
   {
+   "top_holdings": [
+    {
+     "s": "AAPL",
+     "n": "Apple Inc",
+     "p": 0.0756,
+     "w": "AAPL",
+     "k": "apple"
+    },
+    {
+     "s": "NVDA",
+     "n": "NVIDIA Corp",
+     "p": 0.0714,
+     "w": "NVDA",
+     "k": "nvidia"
+    },
+    {
+     "s": "MSFT",
+     "n": "Microsoft Corp",
+     "p": 0.0594,
+     "w": "MSFT",
+     "k": "microsoft"
+    },
+    {
+     "s": "AMZN",
+     "n": "Amazon.com Inc",
+     "p": 0.0495,
+     "w": "AMZN",
+     "k": "amazoncom"
+    },
+    {
+     "s": "GOOGL",
+     "n": "Alphabet Inc Class A",
+     "p": 0.0355,
+     "w": "GOOGL",
+     "k": "alphabet"
+    },
+    {
+     "s": "GOOG",
+     "n": "Alphabet Inc Class C",
+     "p": 0.0284,
+     "w": "GOOGL",
+     "k": "alphabet"
+    },
+    {
+     "s": "AVGO",
+     "n": "Broadcom Inc",
+     "p": 0.026,
+     "w": "AVGO",
+     "k": "broadcom"
+    },
+    {
+     "s": "META",
+     "n": "Meta Platforms Inc Class A",
+     "p": 0.0223,
+     "w": "META",
+     "k": "metaplatforms"
+    },
+    {
+     "s": "MU",
+     "n": "Micron Technology Inc",
+     "p": 0.0184,
+     "w": "MU",
+     "k": "microntechnology"
+    },
+    {
+     "s": "AMD",
+     "n": "Advanced Micro Devices Inc",
+     "p": 0.017,
+     "w": "AMD",
+     "k": "advancedmicrodevices"
+    }
+   ],
+   "top_coverage": 0.403,
+   "sectors": {
+    "Technology": 0.3892,
+    "Consumer": 0.1621,
+    "Financials": 0.1183,
+    "Communication": 0.1125,
+    "Healthcare": 0.097,
+    "Industrials": 0.0701,
+    "RealEstate": 0.0212,
+    "Materials": 0.0184,
+    "Utilities": 0.0113,
+    "Energy": 0.0
+   },
+   "assets": {
+    "stock": 0.9876,
+    "bond": 0.0,
+    "cash": 0.0124,
+    "other": 0.0
+   },
    "name": "Avanza USA",
    "ticker": "0P0001IVD1.ST",
    "isin": "SE0012741163",
@@ -4744,6 +6119,97 @@
    "reasons_neg": []
   },
   {
+   "top_holdings": [
+    {
+     "s": "NVDA",
+     "n": "NVIDIA Corp",
+     "p": 0.0543,
+     "w": "NVDA",
+     "k": "nvidia"
+    },
+    {
+     "s": "AAPL",
+     "n": "Apple Inc",
+     "p": 0.0502,
+     "w": "AAPL",
+     "k": "apple"
+    },
+    {
+     "s": "MSFT",
+     "n": "Microsoft Corp",
+     "p": 0.0392,
+     "w": "MSFT",
+     "k": "microsoft"
+    },
+    {
+     "s": "AMZN",
+     "n": "Amazon.com Inc",
+     "p": 0.0271,
+     "w": "AMZN",
+     "k": "amazoncom"
+    },
+    {
+     "s": "GOOG",
+     "n": "Alphabet Inc Class C",
+     "p": 0.0199,
+     "w": "GOOGL",
+     "k": "alphabet"
+    },
+    {
+     "s": "GOOGL",
+     "n": "Alphabet Inc Class A",
+     "p": 0.0185,
+     "w": "GOOGL",
+     "k": "alphabet"
+    },
+    {
+     "s": "AVGO",
+     "n": "Broadcom Inc",
+     "p": 0.0178,
+     "w": "AVGO",
+     "k": "broadcom"
+    },
+    {
+     "s": "META",
+     "n": "Meta Platforms Inc Class A",
+     "p": 0.0135,
+     "w": "META",
+     "k": "metaplatforms"
+    },
+    {
+     "s": "MU",
+     "n": "Micron Technology Inc",
+     "p": 0.0117,
+     "w": "MU",
+     "k": "microntechnology"
+    },
+    {
+     "s": "TSLA",
+     "n": "Tesla Inc",
+     "p": 0.0109,
+     "w": "TSLA",
+     "k": "tesla"
+    }
+   ],
+   "top_coverage": 0.263,
+   "sectors": {
+    "Technology": 0.3141,
+    "Financials": 0.1794,
+    "Consumer": 0.1259,
+    "Industrials": 0.11,
+    "Healthcare": 0.0907,
+    "Communication": 0.0846,
+    "Materials": 0.0504,
+    "Utilities": 0.0247,
+    "RealEstate": 0.0202,
+    "Energy": 0.0
+   },
+   "assets": {
+    "stock": 1.0006,
+    "bond": 0.0,
+    "cash": -0.0014,
+    "other": 0.0008
+   },
    "name": "Swedbank Robur Access Global A",
    "ticker": "0P00016L3S.ST",
    "isin": "SE0007074059",
@@ -5036,6 +6502,97 @@
    "reasons_neg": []
   },
   {
+   "top_holdings": [
+    {
+     "s": "NVDA",
+     "n": "NVIDIA Corp",
+     "p": 0.0658,
+     "w": "NVDA",
+     "k": "nvidia"
+    },
+    {
+     "s": "MSFT",
+     "n": "Microsoft Corp",
+     "p": 0.0541,
+     "w": "MSFT",
+     "k": "microsoft"
+    },
+    {
+     "s": "GOOG",
+     "n": "Alphabet Inc Class C",
+     "p": 0.0479,
+     "w": "GOOGL",
+     "k": "alphabet"
+    },
+    {
+     "s": "AAPL",
+     "n": "Apple Inc",
+     "p": 0.0407,
+     "w": "AAPL",
+     "k": "apple"
+    },
+    {
+     "s": "TSM",
+     "n": "Taiwan Semiconductor Manufacturing Co Ltd ADR",
+     "p": 0.0294,
+     "w": null,
+     "k": "taiwansemiconductormanufacturing"
+    },
+    {
+     "s": "8316.T",
+     "n": "Sumitomo Mitsui Financial Group Inc",
+     "p": 0.0283,
+     "w": null,
+     "k": "sumitomomitsuifinancial"
+    },
+    {
+     "s": "AMZN",
+     "n": "Amazon.com Inc",
+     "p": 0.0268,
+     "w": "AMZN",
+     "k": "amazoncom"
+    },
+    {
+     "s": "INGA.AS",
+     "n": "ING Groep NV",
+     "p": 0.0263,
+     "w": null,
+     "k": "inggroep"
+    },
+    {
+     "s": "BAC",
+     "n": "Bank of America Corp",
+     "p": 0.0254,
+     "w": "BAC",
+     "k": "bankofamerica"
+    },
+    {
+     "s": "LLY",
+     "n": "Eli Lilly and Co",
+     "p": 0.0223,
+     "w": "LLY",
+     "k": "elilillyand"
+    }
+   ],
+   "top_coverage": 0.367,
+   "sectors": {
+    "Technology": 0.312,
+    "Financials": 0.1915,
+    "Consumer": 0.1215,
+    "Industrials": 0.1001,
+    "Communication": 0.0916,
+    "Healthcare": 0.0836,
+    "Energy": 0.0327,
+    "Materials": 0.0312,
+    "RealEstate": 0.0193,
+    "Utilities": 0.0165
+   },
+   "assets": {
+    "stock": 0.9887,
+    "bond": 0.0,
+    "cash": 0.0113,
+    "other": 0.0
+   },
    "name": "AMF Aktiefond Global",
    "ticker": "0P00000L33.ST",
    "isin": "SE0000862278",
@@ -5329,6 +6886,97 @@
    "reasons_neg": []
   },
   {
+   "top_holdings": [
+    {
+     "s": "GOOG",
+     "n": "Alphabet Inc Class C",
+     "p": 0.0525,
+     "w": "GOOGL",
+     "k": "alphabet"
+    },
+    {
+     "s": "2330.TW",
+     "n": "Taiwan Semiconductor Manufacturing Co Ltd",
+     "p": 0.0484,
+     "w": null,
+     "k": "taiwansemiconductormanufacturing"
+    },
+    {
+     "s": "MSFT",
+     "n": "Microsoft Corp",
+     "p": 0.0452,
+     "w": "MSFT",
+     "k": "microsoft"
+    },
+    {
+     "s": "NVDA",
+     "n": "NVIDIA Corp",
+     "p": 0.0435,
+     "w": "NVDA",
+     "k": "nvidia"
+    },
+    {
+     "s": "AMZN",
+     "n": "Amazon.com Inc",
+     "p": 0.0362,
+     "w": "AMZN",
+     "k": "amazoncom"
+    },
+    {
+     "s": "AAPL",
+     "n": "Apple Inc",
+     "p": 0.0323,
+     "w": "AAPL",
+     "k": "apple"
+    },
+    {
+     "s": "AVGO",
+     "n": "Broadcom Inc",
+     "p": 0.0231,
+     "w": "AVGO",
+     "k": "broadcom"
+    },
+    {
+     "s": "IBE.MC",
+     "n": "Iberdrola SA",
+     "p": 0.0214,
+     "w": null,
+     "k": "iberdrola"
+    },
+    {
+     "s": "ADI",
+     "n": "Analog Devices Inc",
+     "p": 0.0213,
+     "w": null,
+     "k": "analogdevices"
+    },
+    {
+     "s": "EMR",
+     "n": "Emerson Electric Co",
+     "p": 0.0196,
+     "w": null,
+     "k": "emersonelectric"
+    }
+   ],
+   "top_coverage": 0.343,
+   "sectors": {
+    "Technology": 0.385,
+    "Financials": 0.1793,
+    "Industrials": 0.1063,
+    "Healthcare": 0.102,
+    "Consumer": 0.0865,
+    "Communication": 0.0529,
+    "Utilities": 0.0307,
+    "Materials": 0.0295,
+    "RealEstate": 0.0279,
+    "Energy": 0.0
+   },
+   "assets": {
+    "stock": 0.994,
+    "bond": 0.0,
+    "cash": 0.006,
+    "other": 0.0
+   },
    "name": "Swedbank Robur Globalfond A",
    "ticker": "0P00000LDD.ST",
    "isin": "SE0000542979",
@@ -5620,6 +7268,97 @@
    ]
   },
   {
+   "top_holdings": [
+    {
+     "s": "INVE B",
+     "n": "Investor AB Class B",
+     "p": 0.1001,
+     "w": "INVE-B.ST",
+     "k": "investor"
+    },
+    {
+     "s": "ATCO-A.ST",
+     "n": "Atlas Copco AB Class A",
+     "p": 0.0848,
+     "w": "ATCO-A.ST",
+     "k": "atlascopco"
+    },
+    {
+     "s": "VOLV-B.ST",
+     "n": "Volvo AB Class B",
+     "p": 0.0627,
+     "w": "VOLV-B.ST",
+     "k": "volvo"
+    },
+    {
+     "s": "SAND.ST",
+     "n": "Sandvik AB",
+     "p": 0.0403,
+     "w": "SAND.ST",
+     "k": "sandvik"
+    },
+    {
+     "s": "SWED-A.ST",
+     "n": "Swedbank AB Class A",
+     "p": 0.0372,
+     "w": "SWED-A.ST",
+     "k": "swedbank"
+    },
+    {
+     "s": "ABBN.SW",
+     "n": "ABB Ltd",
+     "p": 0.0357,
+     "w": null,
+     "k": "abb"
+    },
+    {
+     "s": "ASSA-B.ST",
+     "n": "Assa Abloy AB Class B",
+     "p": 0.0351,
+     "w": null,
+     "k": "assaabloy"
+    },
+    {
+     "s": "SEB-A.ST",
+     "n": "Skandinaviska Enskilda Banken AB Class A",
+     "p": 0.0342,
+     "w": "SEB-A.ST",
+     "k": "skandinaviskaenskildabanken"
+    },
+    {
+     "s": "ERIC-B.ST",
+     "n": "Telefonaktiebolaget L M Ericsson Class B",
+     "p": 0.0284,
+     "w": "ERIC-B.ST",
+     "k": "telefonaktiebolagetlmericsson"
+    },
+    {
+     "s": "EPI-A.ST",
+     "n": "Epiroc AB Ordinary Shares - Class A",
+     "p": 0.0268,
+     "w": null,
+     "k": "epiroc"
+    }
+   ],
+   "top_coverage": 0.485,
+   "sectors": {
+    "Industrials": 0.4372,
+    "Financials": 0.2645,
+    "Healthcare": 0.0686,
+    "Technology": 0.0632,
+    "Consumer": 0.0594,
+    "Materials": 0.0459,
+    "RealEstate": 0.0338,
+    "Communication": 0.0273,
+    "Utilities": 0.0002,
+    "Energy": 0.0
+   },
+   "assets": {
+    "stock": 0.9999,
+    "bond": 0.0,
+    "cash": 0.0001,
+    "other": 0.0
+   },
    "name": "Handelsbanken Sverige Index A1",
    "ticker": "0P00001DF8.ST",
    "isin": null,
@@ -5901,7 +7640,7 @@
     606.41
    ],
    "momentum_rank": "3 av 3 i kategorin",
-   "score": 57,
+   "score": 56,
    "score_parts": {
     "trend": 26.2,
     "momentum": 3.8,
@@ -5915,13 +7654,104 @@
     "SMA200 stiger (+1.6 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
     "Bra riskjusterad avkastning (Sharpe 1.26)",
-    "Medvind för kategorin (OMXS30: 68/100)"
+    "Medvind för kategorin (OMXS30: 67/100)"
    ],
    "reasons_neg": [
     "Svag avkastning jämfört med andra fonder (plats 3 av 3 i kategorin)"
    ]
   },
   {
+   "top_holdings": [
+    {
+     "s": "INVE B",
+     "n": "Investor AB Class B",
+     "p": 0.0905,
+     "w": "INVE-B.ST",
+     "k": "investor"
+    },
+    {
+     "s": "VOLV-B.ST",
+     "n": "Volvo AB Class B",
+     "p": 0.0617,
+     "w": "VOLV-B.ST",
+     "k": "volvo"
+    },
+    {
+     "s": "ATCO-A.ST",
+     "n": "Atlas Copco AB Class A",
+     "p": 0.0587,
+     "w": "ATCO-A.ST",
+     "k": "atlascopco"
+    },
+    {
+     "s": "SAND.ST",
+     "n": "Sandvik AB",
+     "p": 0.0443,
+     "w": "SAND.ST",
+     "k": "sandvik"
+    },
+    {
+     "s": "SWED-A.ST",
+     "n": "Swedbank AB Class A",
+     "p": 0.0412,
+     "w": "SWED-A.ST",
+     "k": "swedbank"
+    },
+    {
+     "s": "ABBN.SW",
+     "n": "ABB Ltd",
+     "p": 0.0395,
+     "w": null,
+     "k": "abb"
+    },
+    {
+     "s": "SEB-A.ST",
+     "n": "Skandinaviska Enskilda Banken AB Class A",
+     "p": 0.0389,
+     "w": "SEB-A.ST",
+     "k": "skandinaviskaenskildabanken"
+    },
+    {
+     "s": "ASSA-B.ST",
+     "n": "Assa Abloy AB Class B",
+     "p": 0.0386,
+     "w": null,
+     "k": "assaabloy"
+    },
+    {
+     "s": "ERIC-B.ST",
+     "n": "Telefonaktiebolaget L M Ericsson Class B",
+     "p": 0.0309,
+     "w": "ERIC-B.ST",
+     "k": "telefonaktiebolagetlmericsson"
+    },
+    {
+     "s": "ATCO B",
+     "n": "Atlas Copco AB Class B",
+     "p": 0.0302,
+     "w": "ATCO-A.ST",
+     "k": "atlascopco"
+    }
+   ],
+   "top_coverage": 0.474,
+   "sectors": {
+    "Industrials": 0.44,
+    "Financials": 0.2683,
+    "Healthcare": 0.0626,
+    "Technology": 0.0618,
+    "Consumer": 0.0592,
+    "Materials": 0.0461,
+    "RealEstate": 0.0332,
+    "Communication": 0.0287,
+    "Utilities": 0.0001,
+    "Energy": 0.0
+   },
+   "assets": {
+    "stock": 0.9971,
+    "bond": 0.0,
+    "cash": 0.0029,
+    "other": 0.0
+   },
    "name": "Länsförsäkringar Sverige Index",
    "ticker": "0P0000J1JM.ST",
    "isin": "SE0002656611",
@@ -6213,11 +8043,102 @@
     "Kursen ligger över SMA50 – kortsiktig styrka",
     "Bra riskjusterad avkastning (Sharpe 1.41)",
     "Låg avgift (0.21%)",
-    "Medvind för kategorin (OMXS30: 68/100)"
+    "Medvind för kategorin (OMXS30: 67/100)"
    ],
    "reasons_neg": []
   },
   {
+   "top_holdings": [
+    {
+     "s": "ERIC-B.ST",
+     "n": "Telefonaktiebolaget L M Ericsson Class B",
+     "p": 0.0747,
+     "w": "ERIC-B.ST",
+     "k": "telefonaktiebolagetlmericsson"
+    },
+    {
+     "s": "SKF-B.ST",
+     "n": "SKF AB Class B",
+     "p": 0.0707,
+     "w": null,
+     "k": "skf"
+    },
+    {
+     "s": "VOLV-B.ST",
+     "n": "Volvo AB Class B",
+     "p": 0.0691,
+     "w": "VOLV-B.ST",
+     "k": "volvo"
+    },
+    {
+     "s": "ALIV SDB",
+     "n": "Autoliv Inc SEDR",
+     "p": 0.0655,
+     "w": null,
+     "k": "autolivsedr"
+    },
+    {
+     "s": "SCA B",
+     "n": "Svenska Cellulosa AB Class B",
+     "p": 0.0537,
+     "w": null,
+     "k": "svenskacellulosa"
+    },
+    {
+     "s": "ELUX B",
+     "n": "Electrolux AB Class B",
+     "p": 0.0534,
+     "w": null,
+     "k": "electrolux"
+    },
+    {
+     "s": "HPOL-B.ST",
+     "n": "Hexpol AB Class B",
+     "p": 0.0489,
+     "w": "HPOL-B.ST",
+     "k": "hexpol"
+    },
+    {
+     "s": "SEB-A.ST",
+     "n": "Skandinaviska Enskilda Banken AB Class A",
+     "p": 0.0485,
+     "w": "SEB-A.ST",
+     "k": "skandinaviskaenskildabanken"
+    },
+    {
+     "s": "NDA-SE.ST",
+     "n": "Nordea Bank Abp",
+     "p": 0.0483,
+     "w": "NDA-SE.ST",
+     "k": "nordeabank"
+    },
+    {
+     "s": "TREL-B.ST",
+     "n": "Trelleborg AB Class B",
+     "p": 0.0466,
+     "w": null,
+     "k": "trelleborg"
+    }
+   ],
+   "top_coverage": 0.579,
+   "sectors": {
+    "Industrials": 0.2868,
+    "Healthcare": 0.1815,
+    "Consumer": 0.1725,
+    "Financials": 0.1354,
+    "Technology": 0.1169,
+    "Materials": 0.1069,
+    "RealEstate": 0.0,
+    "Communication": 0.0,
+    "Utilities": 0.0,
+    "Energy": 0.0
+   },
+   "assets": {
+    "stock": 0.9598,
+    "bond": 0.0,
+    "cash": 0.0402,
+    "other": 0.0
+   },
    "name": "Lannebo Sverige A",
    "ticker": "0P00000KJK.ST",
    "isin": "SE0000740680",
@@ -6515,6 +8436,97 @@
    ]
   },
   {
+   "top_holdings": [
+    {
+     "s": "INVE-A.ST",
+     "n": "Investor AB Class A",
+     "p": 0.0662,
+     "w": "INVE-B.ST",
+     "k": "investor"
+    },
+    {
+     "s": "LUND-B.ST",
+     "n": "L E Lundbergforetagen AB Class B",
+     "p": 0.0634,
+     "w": "LUND-B.ST",
+     "k": "lelundbergforetagen"
+    },
+    {
+     "s": "LATO-B.ST",
+     "n": "Investment AB Latour Class B",
+     "p": 0.0475,
+     "w": "LATO-B.ST",
+     "k": "investmentlatour"
+    },
+    {
+     "s": "INDT.ST",
+     "n": "Indutrade AB",
+     "p": 0.0464,
+     "w": null,
+     "k": "indutrade"
+    },
+    {
+     "s": "ASSA-B.ST",
+     "n": "Assa Abloy AB Class B",
+     "p": 0.045,
+     "w": null,
+     "k": "assaabloy"
+    },
+    {
+     "s": "BEIJ-B.ST",
+     "n": "Beijer Ref AB Class B",
+     "p": 0.0448,
+     "w": null,
+     "k": "beijerref"
+    },
+    {
+     "s": "LIFCO-B.ST",
+     "n": "Lifco AB Class B",
+     "p": 0.0448,
+     "w": null,
+     "k": "lifco"
+    },
+    {
+     "s": "VOLV-B.ST",
+     "n": "Volvo AB Class B",
+     "p": 0.0446,
+     "w": "VOLV-B.ST",
+     "k": "volvo"
+    },
+    {
+     "s": "ATCO-A.ST",
+     "n": "Atlas Copco AB Class A",
+     "p": 0.0424,
+     "w": "ATCO-A.ST",
+     "k": "atlascopco"
+    },
+    {
+     "s": "ABBN.SW",
+     "n": "ABB Ltd",
+     "p": 0.0416,
+     "w": null,
+     "k": "abb"
+    }
+   ],
+   "top_coverage": 0.487,
+   "sectors": {
+    "Industrials": 0.5668,
+    "Financials": 0.1541,
+    "Consumer": 0.1061,
+    "Healthcare": 0.0633,
+    "Technology": 0.0576,
+    "RealEstate": 0.0297,
+    "Materials": 0.0224,
+    "Communication": 0.0,
+    "Utilities": 0.0,
+    "Energy": 0.0
+   },
+   "assets": {
+    "stock": 0.919,
+    "bond": 0.0672,
+    "cash": 0.0138,
+    "other": 0.0
+   },
    "name": "Spiltan Aktiefond Stabil",
    "ticker": "0P00000HMU.ST",
    "isin": "SE0001015348",
@@ -6812,6 +8824,97 @@
    ]
   },
   {
+   "top_holdings": [
+    {
+     "s": "SAVE.ST",
+     "n": "Nordnet AB (publ) Ordinary Shares",
+     "p": 0.0522,
+     "w": null,
+     "k": "nordnet"
+    },
+    {
+     "s": "BEIJ-B.ST",
+     "n": "Beijer Ref AB Class B",
+     "p": 0.0445,
+     "w": null,
+     "k": "beijerref"
+    },
+    {
+     "s": "GETI-B.ST",
+     "n": "Getinge AB Class B",
+     "p": 0.0441,
+     "w": null,
+     "k": "getinge"
+    },
+    {
+     "s": "TREL-B.ST",
+     "n": "Trelleborg AB Class B",
+     "p": 0.042,
+     "w": null,
+     "k": "trelleborg"
+    },
+    {
+     "s": "SAGA B",
+     "n": "AB Sagax Class B",
+     "p": 0.0386,
+     "w": null,
+     "k": "sagax"
+    },
+    {
+     "s": "SECT-B.ST",
+     "n": "Sectra AB Class B",
+     "p": 0.0381,
+     "w": null,
+     "k": "sectra"
+    },
+    {
+     "s": "ADDT-B.ST",
+     "n": "Addtech AB Class B",
+     "p": 0.0376,
+     "w": "ADDT-B.ST",
+     "k": "addtech"
+    },
+    {
+     "s": "SWEC B",
+     "n": "Sweco AB Class B",
+     "p": 0.0372,
+     "w": null,
+     "k": "sweco"
+    },
+    {
+     "s": "AZA.ST",
+     "n": "Avanza Bank Holding AB",
+     "p": 0.0351,
+     "w": null,
+     "k": "avanzabank"
+    },
+    {
+     "s": "MYCR.ST",
+     "n": "Mycronic AB",
+     "p": 0.033,
+     "w": null,
+     "k": "mycronic"
+    }
+   ],
+   "top_coverage": 0.402,
+   "sectors": {
+    "Industrials": 0.3861,
+    "Healthcare": 0.2268,
+    "RealEstate": 0.1226,
+    "Consumer": 0.1035,
+    "Financials": 0.0937,
+    "Technology": 0.061,
+    "Materials": 0.0063,
+    "Communication": 0.0,
+    "Utilities": 0.0,
+    "Energy": 0.0
+   },
+   "assets": {
+    "stock": 0.9833,
+    "bond": 0.0,
+    "cash": 0.0167,
+    "other": 0.0
+   },
    "name": "AMF Aktiefond Småbolag",
    "ticker": "0P00000T7M.ST",
    "isin": "SE0001185000",
@@ -7092,22 +9195,114 @@
     1255.74
    ],
    "momentum_rank": "2 av 3 i kategorin",
-   "score": 48,
+   "score": 49,
    "score_parts": {
     "trend": 24.4,
     "momentum": 8.8,
     "risk": 4.9,
     "cost": 7,
-    "macro": 3.2
+    "macro": 3.6
    },
    "label": "Svag",
    "reasons_pos": [
     "Kursen 6.1 % över SMA200 – långsiktig upptrend",
-    "Kursen ligger över SMA50 – kortsiktig styrka"
+    "Kursen ligger över SMA50 – kortsiktig styrka",
+    "Medvind för kategorin (XACT Småbolag: 73/100)"
    ],
    "reasons_neg": []
   },
   {
+   "top_holdings": [
+    {
+     "s": "MYCR.ST",
+     "n": "Mycronic AB",
+     "p": 0.0493,
+     "w": null,
+     "k": "mycronic"
+    },
+    {
+     "s": "SAVE.ST",
+     "n": "Nordnet AB (publ) Ordinary Shares",
+     "p": 0.0479,
+     "w": null,
+     "k": "nordnet"
+    },
+    {
+     "s": "AZA.ST",
+     "n": "Avanza Bank Holding AB",
+     "p": 0.0474,
+     "w": null,
+     "k": "avanzabank"
+    },
+    {
+     "s": "LOOMIS.ST",
+     "n": "Loomis AB Class B",
+     "p": 0.0446,
+     "w": null,
+     "k": "loomis"
+    },
+    {
+     "s": "LAGR-B.ST",
+     "n": "Lagercrantz Group AB Class B",
+     "p": 0.037,
+     "w": "LAGR-B.ST",
+     "k": "lagercrantz"
+    },
+    {
+     "s": "ALV",
+     "n": "Autoliv Inc",
+     "p": 0.0346,
+     "w": "ALV.DE",
+     "k": "autoliv"
+    },
+    {
+     "s": "GRNG.ST",
+     "n": "Granges AB Shs 144A/Reg S",
+     "p": 0.0312,
+     "w": null,
+     "k": "grangesshs144as"
+    },
+    {
+     "s": "OEM-B.ST",
+     "n": "OEM International AB Class B",
+     "p": 0.0292,
+     "w": null,
+     "k": "oeminternational"
+    },
+    {
+     "s": "WIHL.ST",
+     "n": "Wihlborgs Fastigheter AB",
+     "p": 0.0288,
+     "w": null,
+     "k": "wihlborgsfastigheter"
+    },
+    {
+     "s": "CATE.ST",
+     "n": "Catena AB",
+     "p": 0.0282,
+     "w": null,
+     "k": "catena"
+    }
+   ],
+   "top_coverage": 0.378,
+   "sectors": {
+    "Industrials": 0.3914,
+    "Healthcare": 0.1408,
+    "Consumer": 0.1396,
+    "Financials": 0.1284,
+    "RealEstate": 0.0941,
+    "Materials": 0.0531,
+    "Technology": 0.0349,
+    "Communication": 0.0176,
+    "Utilities": 0.0,
+    "Energy": 0.0
+   },
+   "assets": {
+    "stock": 0.9814,
+    "bond": 0.0,
+    "cash": 0.0186,
+    "other": 0.0
+   },
    "name": "Swedbank Robur Småbolagsfond Sverige A",
    "ticker": "0P00000LEY.ST",
    "isin": "SE0000602302",
@@ -7385,25 +9580,117 @@
     253.1
    ],
    "momentum_rank": "3 av 3 i kategorin",
-   "score": 41,
+   "score": 42,
    "score_parts": {
     "trend": 24.9,
     "momentum": 2.1,
     "risk": 7.1,
     "cost": 4,
-    "macro": 3.2
+    "macro": 3.6
    },
    "label": "Svag",
    "reasons_pos": [
     "Kursen 5.7 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+0.8 % senaste månaden)",
-    "Kursen ligger över SMA50 – kortsiktig styrka"
+    "Kursen ligger över SMA50 – kortsiktig styrka",
+    "Medvind för kategorin (XACT Småbolag: 73/100)"
    ],
    "reasons_neg": [
     "Svag avkastning jämfört med andra fonder (plats 3 av 3 i kategorin)"
    ]
   },
   {
+   "top_holdings": [
+    {
+     "s": "SKF-B.ST",
+     "n": "SKF AB Class B",
+     "p": 0.0399,
+     "w": null,
+     "k": "skf"
+    },
+    {
+     "s": "SSAB B",
+     "n": "SSAB AB (publ) Class B",
+     "p": 0.0354,
+     "w": null,
+     "k": "ssab"
+    },
+    {
+     "s": "ADDT-B.ST",
+     "n": "Addtech AB Class B",
+     "p": 0.0327,
+     "w": "ADDT-B.ST",
+     "k": "addtech"
+    },
+    {
+     "s": "BEIJ-B.ST",
+     "n": "Beijer Ref AB Class B",
+     "p": 0.0305,
+     "w": null,
+     "k": "beijerref"
+    },
+    {
+     "s": "SAVE.ST",
+     "n": "Nordnet AB (publ) Ordinary Shares",
+     "p": 0.0296,
+     "w": null,
+     "k": "nordnet"
+    },
+    {
+     "s": "TREL-B.ST",
+     "n": "Trelleborg AB Class B",
+     "p": 0.0293,
+     "w": null,
+     "k": "trelleborg"
+    },
+    {
+     "s": "BALD-B.ST",
+     "n": "Fastighets AB Balder Class B",
+     "p": 0.026,
+     "w": "BALD-B.ST",
+     "k": "fastighetsbalder"
+    },
+    {
+     "s": "MTG B",
+     "n": "Modern Times Group MTG AB Class B",
+     "p": 0.0248,
+     "w": null,
+     "k": "moderntimesmtg"
+    },
+    {
+     "s": "SKA-B.ST",
+     "n": "Skanska AB Class B",
+     "p": 0.0245,
+     "w": "SKA-B.ST",
+     "k": "skanska"
+    },
+    {
+     "s": "INDT.ST",
+     "n": "Indutrade AB",
+     "p": 0.0244,
+     "w": null,
+     "k": "indutrade"
+    }
+   ],
+   "top_coverage": 0.297,
+   "sectors": {
+    "Industrials": 0.3948,
+    "Healthcare": 0.1265,
+    "Consumer": 0.1092,
+    "Financials": 0.1067,
+    "RealEstate": 0.0868,
+    "Technology": 0.0667,
+    "Communication": 0.0553,
+    "Materials": 0.054,
+    "Utilities": 0.0,
+    "Energy": 0.0
+   },
+   "assets": {
+    "stock": 0.9951,
+    "bond": 0.0,
+    "cash": 0.0049,
+    "other": 0.0
+   },
    "name": "Handelsbanken Svenska Småbolag A1",
    "ticker": "0P00000F8N.ST",
    "isin": "SE0000356065",
@@ -7689,19 +9976,111 @@
     "momentum": 15.4,
     "risk": 8.5,
     "cost": 0,
-    "macro": 3.2
+    "macro": 3.6
    },
    "label": "Neutral",
    "reasons_pos": [
     "Kursen 6.5 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+0.9 % senaste månaden)",
-    "Kursen ligger över SMA50 – kortsiktig styrka"
+    "Kursen ligger över SMA50 – kortsiktig styrka",
+    "Medvind för kategorin (XACT Småbolag: 73/100)"
    ],
    "reasons_neg": [
     "Hög avgift (1.71%)"
    ]
   },
   {
+   "top_holdings": [
+    {
+     "s": "ACKB.BR",
+     "n": "Ackermans & Van Haaren NV",
+     "p": 0.032,
+     "w": null,
+     "k": "ackermansvanhaaren"
+    },
+    {
+     "s": "SOF.BR",
+     "n": "Sofina SA",
+     "p": 0.0302,
+     "w": null,
+     "k": "sofina"
+    },
+    {
+     "s": "ELIS.PA",
+     "n": "Elis SA",
+     "p": 0.0274,
+     "w": null,
+     "k": "elis"
+    },
+    {
+     "s": "DLG.MI",
+     "n": "De'Longhi SpA",
+     "p": 0.0272,
+     "w": null,
+     "k": "longhi"
+    },
+    {
+     "s": "MF.PA",
+     "n": "Wendel SE",
+     "p": 0.0272,
+     "w": null,
+     "k": "wendel"
+    },
+    {
+     "s": "STB.OL",
+     "n": "Storebrand ASA",
+     "p": 0.0253,
+     "w": null,
+     "k": "storebrand"
+    },
+    {
+     "s": "IMI.L",
+     "n": "IMI PLC",
+     "p": 0.0252,
+     "w": null,
+     "k": "imi"
+    },
+    {
+     "s": "KBCA.BR",
+     "n": "KBC Ancora SA",
+     "p": 0.0237,
+     "w": null,
+     "k": "kbcancora"
+    },
+    {
+     "s": "SCT.L",
+     "n": "Softcat PLC",
+     "p": 0.0229,
+     "w": null,
+     "k": "softcat"
+    },
+    {
+     "s": "JYSK.CO",
+     "n": "Jyske Bank AS",
+     "p": 0.0222,
+     "w": null,
+     "k": "jyskebank"
+    }
+   ],
+   "top_coverage": 0.263,
+   "sectors": {
+    "Industrials": 0.3407,
+    "Financials": 0.1784,
+    "Consumer": 0.1655,
+    "Healthcare": 0.1031,
+    "RealEstate": 0.086,
+    "Materials": 0.0796,
+    "Technology": 0.0467,
+    "Communication": 0.0,
+    "Utilities": 0.0,
+    "Energy": 0.0
+   },
+   "assets": {
+    "stock": 0.9601,
+    "bond": 0.0,
+    "cash": 0.0399,
+    "other": 0.0
+   },
    "name": "SEB Europafond Småbolag",
    "ticker": "0P00000LQ6.ST",
    "isin": "SE0000433252",
@@ -7988,7 +10367,7 @@
     "momentum": 3.3,
     "risk": 5.3,
     "cost": 0,
-    "macro": 2.8
+    "macro": 2.9
    },
    "label": "Svag",
    "reasons_pos": [
@@ -8002,6 +10381,26 @@
    ]
   },
   {
+   "top_holdings": [],
+   "top_coverage": null,
+   "sectors": {
+    "Technology": 0.3865,
+    "Financials": 0.2063,
+    "Consumer": 0.119,
+    "Communication": 0.0697,
+    "Industrials": 0.0623,
+    "Materials": 0.0598,
+    "Energy": 0.0374,
+    "Healthcare": 0.0289,
+    "Utilities": 0.0198,
+    "RealEstate": 0.0104
+   },
+   "assets": {
+    "stock": 0.9994,
+    "bond": 0.0,
+    "cash": 0.0003,
+    "other": 0.0003
+   },
    "name": "Avanza Emerging Markets",
    "ticker": "0P0001H4TL.ST",
    "isin": "SE0012454338",
@@ -8249,7 +10648,7 @@
     "momentum": 23.3,
     "risk": 18.5,
     "cost": 10,
-    "macro": 3.9
+    "macro": 4.0
    },
    "label": "Lovande",
    "reasons_pos": [
@@ -8259,11 +10658,102 @@
     "Stark avkastning jämfört med andra fonder (plats 3 av 31)",
     "Bra riskjusterad avkastning (Sharpe 1.74)",
     "Låg avgift (0.30%)",
-    "Medvind för kategorin (MSCI Emerging Markets: 78/100)"
+    "Medvind för kategorin (MSCI Emerging Markets: 79/100)"
    ],
    "reasons_neg": []
   },
   {
+   "top_holdings": [
+    {
+     "s": "2330.TW",
+     "n": "Taiwan Semiconductor Manufacturing Co Ltd",
+     "p": 0.1595,
+     "w": null,
+     "k": "taiwansemiconductormanufacturing"
+    },
+    {
+     "s": "005930.KQ",
+     "n": "Samsung Electronics Co Ltd",
+     "p": 0.0784,
+     "w": null,
+     "k": "samsungelectronics"
+    },
+    {
+     "s": "000660.KQ",
+     "n": "SK hynix Inc",
+     "p": 0.0594,
+     "w": null,
+     "k": "skhynix"
+    },
+    {
+     "s": "0700.HK",
+     "n": "Tencent Holdings Ltd",
+     "p": 0.0313,
+     "w": null,
+     "k": "tencent"
+    },
+    {
+     "s": "9988.HK",
+     "n": "Alibaba Group Holding Ltd Ordinary Shares",
+     "p": 0.0214,
+     "w": null,
+     "k": "alibaba"
+    },
+    {
+     "s": "2454.TW",
+     "n": "MediaTek Inc",
+     "p": 0.0157,
+     "w": null,
+     "k": "mediatek"
+    },
+    {
+     "s": "2308.TW",
+     "n": "Delta Electronics Inc",
+     "p": 0.01,
+     "w": null,
+     "k": "deltaelectronics"
+    },
+    {
+     "s": "005935",
+     "n": "Samsung Electronics Co Ltd Participating Preferred",
+     "p": 0.0096,
+     "w": null,
+     "k": "samsungelectronicsparticipatingpreferred"
+    },
+    {
+     "s": "2317.TW",
+     "n": "Hon Hai Precision Industry Co Ltd",
+     "p": 0.0085,
+     "w": null,
+     "k": "honhaiprecisionindustry"
+    },
+    {
+     "s": "HDFCBANK.NS",
+     "n": "HDFC Bank Ltd",
+     "p": 0.0072,
+     "w": null,
+     "k": "hdfcbank"
+    }
+   ],
+   "top_coverage": 0.401,
+   "sectors": {
+    "Technology": 0.4533,
+    "Financials": 0.2015,
+    "Consumer": 0.1097,
+    "Communication": 0.0663,
+    "Industrials": 0.0563,
+    "Materials": 0.0516,
+    "Healthcare": 0.0293,
+    "Utilities": 0.0123,
+    "Energy": 0.0103,
+    "RealEstate": 0.0093
+   },
+   "assets": {
+    "stock": 0.9808,
+    "bond": 0.0,
+    "cash": 0.018,
+    "other": 0.0012
+   },
    "name": "Länsförsäkringar Tillväxtmarknad Index A",
    "ticker": "0P00013668.ST",
    "isin": "SE0005796331",
@@ -8537,7 +11027,7 @@
     "momentum": 13.3,
     "risk": 14.5,
     "cost": 7,
-    "macro": 3.9
+    "macro": 4.0
    },
    "label": "Neutral",
    "reasons_pos": [
@@ -8545,11 +11035,102 @@
     "SMA200 stiger (+1.5 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
     "Bra riskjusterad avkastning (Sharpe 1.22)",
-    "Medvind för kategorin (MSCI Emerging Markets: 78/100)"
+    "Medvind för kategorin (MSCI Emerging Markets: 79/100)"
    ],
    "reasons_neg": []
   },
   {
+   "top_holdings": [
+    {
+     "s": "MYCR.ST",
+     "n": "Mycronic AB",
+     "p": 0.0619,
+     "w": null,
+     "k": "mycronic"
+    },
+    {
+     "s": "HMS.ST",
+     "n": "HMS Networks AB",
+     "p": 0.0506,
+     "w": null,
+     "k": "hmsnetworks"
+    },
+    {
+     "s": "NCAB.ST",
+     "n": "NCAB Group AB",
+     "p": 0.0454,
+     "w": null,
+     "k": "ncab"
+    },
+    {
+     "s": "HEXA-B.ST",
+     "n": "Hexagon AB Class B",
+     "p": 0.0445,
+     "w": null,
+     "k": "hexagon"
+    },
+    {
+     "s": "ASMDEE-B.ST",
+     "n": "Asmodee Group AB Ordinary Shares - Class B",
+     "p": 0.0414,
+     "w": "ASMDEE-B.ST",
+     "k": "asmodee"
+    },
+    {
+     "s": "SILEX.ST",
+     "n": "Silex Microsystem AB (publ)",
+     "p": 0.0368,
+     "w": null,
+     "k": "silexmicrosystem"
+    },
+    {
+     "s": "SNDK",
+     "n": "SanDisk Corp Ordinary Shares",
+     "p": 0.0361,
+     "w": null,
+     "k": "sandisk"
+    },
+    {
+     "s": "LAGR-B.ST",
+     "n": "Lagercrantz Group AB Class B",
+     "p": 0.0337,
+     "w": "LAGR-B.ST",
+     "k": "lagercrantz"
+    },
+    {
+     "s": "MTG B",
+     "n": "Modern Times Group MTG AB Class B",
+     "p": 0.0332,
+     "w": null,
+     "k": "moderntimesmtg"
+    },
+    {
+     "s": "TSM",
+     "n": "Taiwan Semiconductor Manufacturing Co Ltd ADR",
+     "p": 0.0282,
+     "w": null,
+     "k": "taiwansemiconductormanufacturing"
+    }
+   ],
+   "top_coverage": 0.412,
+   "sectors": {
+    "Technology": 0.6785,
+    "Communication": 0.1368,
+    "Industrials": 0.1137,
+    "Consumer": 0.0428,
+    "Healthcare": 0.0282,
+    "RealEstate": 0.0,
+    "Materials": 0.0,
+    "Financials": 0.0,
+    "Utilities": 0.0,
+    "Energy": 0.0
+   },
+   "assets": {
+    "stock": 0.9915,
+    "bond": 0.0,
+    "cash": -0.002,
+    "other": 0.0105
+   },
    "name": "Swedbank Robur Ny Teknik A",
    "ticker": "0P00000K48.ST",
    "isin": "SE0000709123",
@@ -8828,18 +11409,109 @@
     "momentum": 14.2,
     "risk": 11.3,
     "cost": 4,
-    "macro": 4.5
+    "macro": 4.7
    },
    "label": "Neutral",
    "reasons_pos": [
     "Kursen 14.7 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+2.0 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "Medvind för kategorin (Teknikaktier (XLK): 91/100)"
+    "Medvind för kategorin (Teknikaktier (XLK): 94/100)"
    ],
    "reasons_neg": []
   },
   {
+   "top_holdings": [
+    {
+     "s": "LLY",
+     "n": "Eli Lilly and Co",
+     "p": 0.0958,
+     "w": "LLY",
+     "k": "elilillyand"
+    },
+    {
+     "s": "JNJ",
+     "n": "Johnson & Johnson",
+     "p": 0.0892,
+     "w": "JNJ",
+     "k": "johnsonjohnson"
+    },
+    {
+     "s": "ABBV",
+     "n": "AbbVie Inc",
+     "p": 0.0673,
+     "w": "ABBV",
+     "k": "abbvie"
+    },
+    {
+     "s": "UNH",
+     "n": "UnitedHealth Group Inc",
+     "p": 0.0564,
+     "w": "UNH",
+     "k": "unitedhealth"
+    },
+    {
+     "s": "AZN.L",
+     "n": "AstraZeneca PLC",
+     "p": 0.0512,
+     "w": "AZN.L",
+     "k": "astrazeneca"
+    },
+    {
+     "s": "MRK",
+     "n": "Merck & Co Inc",
+     "p": 0.046,
+     "w": "MRK",
+     "k": "merck"
+    },
+    {
+     "s": "TMO",
+     "n": "Thermo Fisher Scientific Inc",
+     "p": 0.0401,
+     "w": "TMO",
+     "k": "thermofisherscientific"
+    },
+    {
+     "s": "ROP.SW",
+     "n": "Roche Holding AG Ordinary Shares new",
+     "p": 0.031,
+     "w": null,
+     "k": "rochenew"
+    },
+    {
+     "s": "GILD",
+     "n": "Gilead Sciences Inc",
+     "p": 0.0241,
+     "w": "GILD",
+     "k": "gileadsciences"
+    },
+    {
+     "s": "HCA",
+     "n": "HCA Healthcare Inc",
+     "p": 0.0227,
+     "w": null,
+     "k": "hcahealthcare"
+    }
+   ],
+   "top_coverage": 0.524,
+   "sectors": {
+    "Healthcare": 1.0,
+    "RealEstate": 0.0,
+    "Consumer": 0.0,
+    "Materials": 0.0,
+    "Technology": 0.0,
+    "Communication": 0.0,
+    "Financials": 0.0,
+    "Utilities": 0.0,
+    "Industrials": 0.0,
+    "Energy": 0.0
+   },
+   "assets": {
+    "stock": 0.9778,
+    "bond": 0.0,
+    "cash": 0.0222,
+    "other": 0.0
+   },
    "name": "Handelsbanken Hälsovård Tema A1",
    "ticker": "0P00000F5G.ST",
    "isin": "SE0000735375",
@@ -9125,13 +11797,104 @@
     "SMA200 stiger (+0.8 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
     "Bra riskjusterad avkastning (Sharpe 1.23)",
-    "Medvind för kategorin (Hälsovårdsaktier (XLV): 85/100)"
+    "Medvind för kategorin (Hälsovårdsaktier (XLV): 83/100)"
    ],
    "reasons_neg": [
     "Hög avgift (1.60%)"
    ]
   },
   {
+   "top_holdings": [
+    {
+     "s": "BALD-B.ST",
+     "n": "Fastighets AB Balder Class B",
+     "p": 0.0858,
+     "w": "BALD-B.ST",
+     "k": "fastighetsbalder"
+    },
+    {
+     "s": "SAGA B",
+     "n": "AB Sagax Class B",
+     "p": 0.0741,
+     "w": null,
+     "k": "sagax"
+    },
+    {
+     "s": "ALTRA.ST",
+     "n": "Altra Fastigheter AB",
+     "p": 0.07,
+     "w": null,
+     "k": "altrafastigheter"
+    },
+    {
+     "s": "PNDX-B.ST",
+     "n": "Pandox AB Class B",
+     "p": 0.0579,
+     "w": null,
+     "k": "pandox"
+    },
+    {
+     "s": "CAST.ST",
+     "n": "Castellum AB",
+     "p": 0.0529,
+     "w": null,
+     "k": "castellum"
+    },
+    {
+     "s": "NP3.ST",
+     "n": "NP3 Fastigheter AB",
+     "p": 0.0444,
+     "w": null,
+     "k": "np3fastigheter"
+    },
+    {
+     "s": "PLAZ-B.ST",
+     "n": "Platzer Fastigheter Holding AB Class B",
+     "p": 0.0441,
+     "w": null,
+     "k": "platzerfastigheter"
+    },
+    {
+     "s": "SLP-B.ST",
+     "n": "Swedish Logistic Property AB Class B",
+     "p": 0.0439,
+     "w": null,
+     "k": "swedishlogisticproperty"
+    },
+    {
+     "s": "LOGI-B.ST",
+     "n": "Logistea AB Class B",
+     "p": 0.0435,
+     "w": null,
+     "k": "logistea"
+    },
+    {
+     "s": "CATE.ST",
+     "n": "Catena AB",
+     "p": 0.0431,
+     "w": null,
+     "k": "catena"
+    }
+   ],
+   "top_coverage": 0.56,
+   "sectors": {
+    "RealEstate": 0.9859,
+    "Consumer": 0.0115,
+    "Industrials": 0.0026,
+    "Materials": 0.0,
+    "Technology": 0.0,
+    "Communication": 0.0,
+    "Financials": 0.0,
+    "Utilities": 0.0,
+    "Energy": 0.0,
+    "Healthcare": 0.0
+   },
+   "assets": {
+    "stock": 0.9629,
+    "bond": 0.0,
+    "cash": 0.0371,
+    "other": 0.0
+   },
    "name": "Carnegie Fastighetsfond Norden B",
    "ticker": "0P00015U4Q.ST",
    "isin": null,
@@ -9436,6 +12199,26 @@
    ]
   },
   {
+   "top_holdings": [],
+   "top_coverage": null,
+   "sectors": {
+    "RealEstate": 1.0,
+    "Consumer": 0.0,
+    "Materials": 0.0,
+    "Technology": 0.0,
+    "Communication": 0.0,
+    "Financials": 0.0,
+    "Utilities": 0.0,
+    "Industrials": 0.0,
+    "Energy": 0.0,
+    "Healthcare": 0.0
+   },
+   "assets": {
+    "stock": 0.0,
+    "bond": 0.8443,
+    "cash": 0.1522,
+    "other": 0.0035
+   },
    "name": "Spiltan Räntefond Sverige",
    "ticker": "0P00009NT9.ST",
    "isin": "SE0002152140",
@@ -9738,6 +12521,15 @@
    ]
   },
   {
+   "top_holdings": [],
+   "top_coverage": null,
+   "sectors": null,
+   "assets": {
+    "stock": 0.0,
+    "bond": 0.8354,
+    "cash": 0.1646,
+    "other": 0.0
+   },
    "name": "Länsförsäkringar Kort Räntefond",
    "ticker": "0P00000L3H.ST",
    "isin": "SE0000837247",
@@ -10035,6 +12827,15 @@
    ]
   },
   {
+   "top_holdings": [],
+   "top_coverage": null,
+   "sectors": null,
+   "assets": {
+    "stock": 0.0,
+    "bond": 0.3972,
+    "cash": 0.8004,
+    "other": -0.1976
+   },
    "name": "Swedbank Robur Räntefond Kort A",
    "ticker": "0P00000FQP.ST",
    "isin": "SE0000543043",
@@ -10324,6 +13125,58 @@
    "reasons_neg": []
   },
   {
+   "top_holdings": [
+    {
+     "s": "SGB2YU26",
+     "n": "Swedish 2 year Goverment Bond Future Sept 26",
+     "p": 0.1494,
+     "w": null,
+     "k": "swedish2yeargovermentbondfuturesept26"
+    },
+    {
+     "s": "NDH5YU26",
+     "n": "Swedish 5 year Nordea Bond Future Sept 26",
+     "p": 0.0751,
+     "w": null,
+     "k": "swedish5yearnordeabondfuturesept26"
+    },
+    {
+     "s": "STH2YU26",
+     "n": "Swedish 2 Year Stadshypotek Future Sept 26",
+     "p": 0.0724,
+     "w": null,
+     "k": "swedish2yearstadshypotekfuturesept26"
+    },
+    {
+     "s": "STH5YU26",
+     "n": "Swedish 5 Year Stadshypotek Future Sept 26",
+     "p": 0.0663,
+     "w": null,
+     "k": "swedish5yearstadshypotekfuturesept26"
+    },
+    {
+     "s": "SGB5YU26",
+     "n": "Swedish 5 year Goverment Bond Future Sept 26",
+     "p": 0.0444,
+     "w": null,
+     "k": "swedish5yeargovermentbondfuturesept26"
+    },
+    {
+     "s": "NDH2YU26",
+     "n": "Swedish 2 year Nordea Bond Future Sept 26",
+     "p": 0.0402,
+     "w": null,
+     "k": "swedish2yearnordeabondfuturesept26"
+    }
+   ],
+   "top_coverage": 0.448,
+   "sectors": null,
+   "assets": {
+    "stock": 0.0,
+    "bond": 1.3223,
+    "cash": -0.3223,
+    "other": 0.0
+   },
    "name": "AMF Räntefond Lång",
    "ticker": "0P00000K19.ST",
    "isin": "SE0000739187",
@@ -10623,6 +13476,26 @@
    ]
   },
   {
+   "top_holdings": [],
+   "top_coverage": null,
+   "sectors": {
+    "Communication": 1.0,
+    "RealEstate": 0.0,
+    "Consumer": 0.0,
+    "Materials": 0.0,
+    "Technology": 0.0,
+    "Financials": 0.0,
+    "Utilities": 0.0,
+    "Industrials": 0.0,
+    "Energy": 0.0,
+    "Healthcare": 0.0
+   },
+   "assets": {
+    "stock": 0.0,
+    "bond": 0.9335,
+    "cash": 0.0665,
+    "other": 0.0
+   },
    "name": "Lannebo Företagsobligationsfond A",
    "ticker": "0P00000FUA.ST",
    "isin": "SE0001095506",
@@ -10911,6 +13784,41 @@
    ]
   },
   {
+   "top_holdings": [
+    {
+     "s": "FGBMU26",
+     "n": "Euro Bobl Future Sept 26",
+     "p": 0.1618,
+     "w": null,
+     "k": "euroboblfuturesept26"
+    },
+    {
+     "s": "FGBLU26",
+     "n": "Euro Bund Future Sept 26",
+     "p": 0.0127,
+     "w": null,
+     "k": "eurobundfuturesept26"
+    }
+   ],
+   "top_coverage": 0.174,
+   "sectors": {
+    "Technology": 0.993,
+    "Financials": 0.007,
+    "RealEstate": 0.0,
+    "Consumer": 0.0,
+    "Materials": 0.0,
+    "Communication": 0.0,
+    "Utilities": 0.0,
+    "Industrials": 0.0,
+    "Energy": 0.0,
+    "Healthcare": 0.0
+   },
+   "assets": {
+    "stock": 0.0,
+    "bond": 1.0743,
+    "cash": -0.0772,
+    "other": 0.0029
+   },
    "name": "SEB Företagsobligationsfond A",
    "ticker": "0P0001H41U.ST",
    "isin": null,

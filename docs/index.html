@@ -363,6 +363,47 @@
   .fund-cat-banner .fcb-meta { font-size: 12px; color: var(--text-dim); white-space: nowrap; }
   .fund-cat-banner + .table-scroll { margin-top: 4px; }
   .report-ov { font-size: 12px; line-height: 1.45; color: var(--text-dim); background: var(--panel-alt); border: 1px solid var(--border); border-radius: 8px; padding: 8px 11px; margin: -6px 0 14px; }
+  /* ANALYS-fliken (v9.8) */
+  .pf-stack { display: flex; height: 18px; border-radius: 9px; overflow: hidden; background: var(--panel-alt); margin: 8px 0 6px; }
+  .pf-seg { height: 100%; }
+  .pf-track { position: relative; display: flex; height: 14px; background: var(--panel-alt); border-radius: 7px; }
+  .pf-track.slim { height: 8px; border-radius: 4px; margin: 5px 0 4px; }
+  .pf-track .pf-seg:first-child { border-radius: 7px 0 0 7px; } .pf-track.slim .pf-seg:first-child { border-radius: 4px 0 0 4px; }
+  .pf-seg.c-direct, .pf-legend i.c-direct { background: var(--accent, var(--amber)); }
+  .pf-seg.c-fund, .pf-legend i.c-fund { background: color-mix(in srgb, var(--accent, var(--amber)) 38%, var(--panel-alt)); }
+  .pf-seg.c-bond, .pf-legend i.c-bond { background: var(--text-faint); }
+  .pf-seg.c-other, .pf-legend i.c-other { background: var(--border); }
+  .pf-seg.c-good, .pf-legend i.c-good { background: var(--up); }
+  .pf-seg.c-neu, .pf-legend i.c-neu { background: var(--border); }
+  .pf-seg.c-bad, .pf-legend i.c-bad { background: var(--down); }
+  .pf-legend i.c-ref { background: var(--text); width: 3px; height: 11px; border-radius: 1px; }
+  .pf-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11.5px; color: var(--text-dim); }
+  .pf-legend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+  .pf-cells { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 10px; margin-top: 16px; }
+  .pf-cell { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+  .pf-cell-l { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: .05em; color: var(--text-faint); }
+  .pf-cell-v { font-family: 'IBM Plex Mono', monospace; font-size: 20px; font-weight: 700; margin-top: 3px; }
+  .pf-cell-s { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .pf-note { font-size: 12.5px; line-height: 1.5; color: var(--text-dim); margin: 6px 0 4px; }
+  .pf-obs { margin: 6px 0; padding: 8px 12px; font-size: 13px; line-height: 1.45; border-left: 3px solid var(--border); background: var(--panel-alt); border-radius: 0 8px 8px 0; }
+  .pf-obs.bad { border-left-color: var(--down); }
+  .pf-det { border-top: 1px solid var(--border); } .pf-det:first-of-type { border-top: none; }
+  .pf-row { display: grid; grid-template-columns: minmax(84px, 130px) 1fr minmax(64px, 96px); gap: 10px; align-items: center; padding: 9px 0; cursor: pointer; list-style: none; }
+  .pf-row::-webkit-details-marker { display: none; }
+  .pf-lab { font-size: 13px; }
+  .pf-num { font-family: 'IBM Plex Mono', monospace; font-size: 13px; text-align: right; white-space: nowrap; }
+  .pf-diff { display: block; font-size: 10.5px; color: var(--text-faint); }
+  .pf-diff.over { color: var(--amber); } .pf-diff.under { color: var(--text-dim); }
+  .pf-ref { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--text); }
+  .pf-body { padding: 0 0 10px 6px; }
+  .pf-contrib { display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--text-dim); padding: 2px 0; }
+  .pf-contrib em { font-style: normal; font-size: 10px; border: 1px solid var(--border); border-radius: 4px; padding: 0 4px; }
+  .pf-crow { display: grid; grid-template-columns: 22px 1fr minmax(76px, 110px); gap: 10px; align-items: start; padding: 9px 0; border-top: 1px solid var(--border); }
+  .pf-crow:first-of-type { border-top: none; }
+  .pf-crow.clickable { cursor: pointer; }
+  .pf-rank { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-faint); padding-top: 1px; }
+  .pf-cname { font-size: 13.5px; } .pf-csub { font-size: 11px; color: var(--text-dim); line-height: 1.4; }
+  .pf-crow .pf-num { padding-top: 1px; }
   .hidden-note { font-size: 12px; color: var(--text-faint); padding: 12px 18px 16px; text-align: center; }
   .fund-cat-banner .fcb-left { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
   .fund-cat-banner .fcb-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
@@ -940,6 +981,7 @@
     <button class="mtab" data-main="macro">MAKRO</button>
     <button class="mtab active" data-main="stocks">AKTIER</button>
     <button class="mtab" data-main="funds">FONDER</button>
+    <button class="mtab" data-main="analysis">ANALYS</button>
     <button class="mtab" data-main="guide">GUIDE</button>
   </nav>
 
@@ -959,6 +1001,16 @@
   <div class="panel" id="fundPanel" style="display:none;">
     <div id="fundUploadHost"></div>
     <div id="fundHost"></div>
+  </div>
+
+  <div class="tabs subtabs" id="analysisTabs" style="display:none;">
+    <div class="tab active" data-atab="overview">ÖVERSIKT</div>
+    <div class="tab" data-atab="sectors">BRANSCHER</div>
+    <div class="tab" data-atab="companies">TOPPBOLAG</div>
+  </div>
+  <div class="panel" id="analysisPanel" style="display:none;">
+    <div id="analysisUploadHost"></div>
+    <div id="analysisHost"></div>
   </div>
 
   <div class="tabs subtabs" id="tabsRow">
@@ -1023,7 +1075,7 @@
 </div>
 
 <script>
-const state = { data: null, tab: 'us', sort: 'score_desc', holdings: {}, holdingsUploadedAt: null, main: 'stocks', macroTab: 'stability', fundTab: 'promising', funds: null };
+const state = { data: null, tab: 'us', sort: 'score_desc', holdings: {}, holdingsUploadedAt: null, main: 'stocks', macroTab: 'stability', fundTab: 'promising', analysisTab: 'overview', funds: null };
 
 // ===== Innehav: allt sker lokalt i webbläsaren, inget skickas till servern =====
 
@@ -1062,6 +1114,7 @@ function buildHoldingsFromRows(rows) {
   const landIdx = findIdx(['land', 'country']);
   const typIdx = findIdx(['typ', 'type']);
   const isinIdx = findIdx(['isin']);
+  const valueIdx = findIdx(['marknadsvärde', 'marknadsvarde', 'marknadsvärde (sek)', 'market value', 'värde']);
 
   const holdings = {};
   for (let i = 1; i < rows.length; i++) {
@@ -1084,12 +1137,26 @@ function buildHoldingsFromRows(rows) {
       const n = parseFloat(qtyRaw.replace(',', '.').replace(/\s/g, ''));
       if (!isNaN(n)) qty = n;
     }
+    // Marknadsvärde i kronor (v9.8) – används bara för vikterna i ANALYS-fliken
+    let value = null;
+    const valRaw = cell(valueIdx);
+    if (valRaw) {
+      const n = parseFloat(valRaw.replace(/\s/g, '').replace(',', '.'));
+      if (!isNaN(n) && n >= 0) value = n;
+    }
+    // Samma värdepapper på flera konton (t.ex. ISK och KF) summeras
+    const put = (k, rec) => {
+      const old = holdings[k];
+      if (!old) { holdings[k] = rec; return; }
+      old.quantity = (old.quantity == null && rec.quantity == null) ? null : (old.quantity || 0) + (rec.quantity || 0);
+      old.value = (old.value == null && rec.value == null) ? null : (old.value || 0) + (rec.value || 0);
+    };
     if (isFund) {
-      holdings['FUND:' + (isin || name)] = { kind: 'fund', raw_name: name, raw_ticker: ticker, isin, fund_type: typ, quantity: qty };
+      put('FUND:' + (isin || name), { kind: 'fund', raw_name: name, raw_ticker: ticker, isin, fund_type: typ, quantity: qty, value });
       continue;
     }
     const key = (ticker || name).trim();
-    holdings[key] = { kind: 'stock', raw_name: name, raw_ticker: ticker, isin, quantity: qty, guessed_ticker: guessYahooTicker(ticker, marknad, land) };
+    put(key, { kind: 'stock', raw_name: name, raw_ticker: ticker, isin, quantity: qty, value, guessed_ticker: guessYahooTicker(ticker, marknad, land) });
   }
   return holdings;
 }
@@ -1370,6 +1437,7 @@ function applyHoldingsToResults() {
   for (const r of results) {
     r.is_holding = false;
     r.quantity = undefined;
+    r.holding_value = undefined;
     r.sell_score = undefined;
     r.sell_reasons = undefined;
     r.sell_days_on_list = undefined;
@@ -1389,6 +1457,7 @@ function applyHoldingsToResults() {
     matchedRefs.add(hd);
     r.is_holding = true;
     r.quantity = hd.quantity;
+    r.holding_value = hd.value;
     const { score, reasons } = scoreSellSignal(r);
     r.sell_score = score;
     r.sell_reasons = reasons;
@@ -1453,7 +1522,7 @@ document.getElementById('sortSelect').addEventListener('change', e => { state.so
 const NAV_KEY = 'screener-nav';
 function loadNav() { try { return JSON.parse(localStorage.getItem(NAV_KEY) || '{}'); } catch (e) { return {}; } }
 function saveNav() {
-  try { localStorage.setItem(NAV_KEY, JSON.stringify({ main: state.main, macroTab: state.macroTab, fundTab: state.fundTab, tab: state.tab })); } catch (e) {}
+  try { localStorage.setItem(NAV_KEY, JSON.stringify({ main: state.main, macroTab: state.macroTab, fundTab: state.fundTab, analysisTab: state.analysisTab, tab: state.tab })); } catch (e) {}
 }
 function markActive(sel, attr, val) {
   document.querySelectorAll(sel).forEach(t => t.classList.toggle('active', t.dataset[attr] === val));
@@ -1465,11 +1534,13 @@ function setMain(main, opts = {}) {
   show('macroTabs', main === 'macro'); show('macroPanelWrap', main === 'macro');
   show('tabsRow', main === 'stocks'); show('dataPanel', main === 'stocks');
   show('fundTabs', main === 'funds'); show('fundPanel', main === 'funds');
+  show('analysisTabs', main === 'analysis'); show('analysisPanel', main === 'analysis');
   show('guideHost', main === 'guide');
   if (main !== 'stocks') document.getElementById('summaryHost').innerHTML = '';
   if (main === 'macro') renderMacroPanel();
   if (main === 'stocks') render();
   if (main === 'funds') renderFunds();
+  if (main === 'analysis') renderAnalysis();
   if (main === 'guide') initGuideOnce();
   saveNav();
   if (!opts.keepScroll) window.scrollTo(0, 0);
@@ -1477,6 +1548,9 @@ function setMain(main, opts = {}) {
 document.querySelectorAll('#mainNav .mtab').forEach(b => b.addEventListener('click', () => setMain(b.dataset.main)));
 document.querySelectorAll('#macroTabs .tab').forEach(t => t.addEventListener('click', () => {
   state.macroTab = t.dataset.mtab; markActive('#macroTabs .tab', 'mtab', state.macroTab); renderMacroPanel(); saveNav();
+}));
+document.querySelectorAll('#analysisTabs .tab').forEach(t => t.addEventListener('click', () => {
+  state.analysisTab = t.dataset.atab; markActive('#analysisTabs .tab', 'atab', state.analysisTab); renderAnalysis(); saveNav();
 }));
 document.querySelectorAll('#fundTabs .tab').forEach(t => t.addEventListener('click', () => {
   state.fundTab = t.dataset.ftab; markActive('#fundTabs .tab', 'ftab', state.fundTab); renderFunds(); saveNav();
@@ -1720,9 +1794,10 @@ async function load() {
   const nav = loadNav();
   if (nav.macroTab) { state.macroTab = nav.macroTab; markActive('#macroTabs .tab', 'mtab', state.macroTab); }
   if (nav.fundTab) { state.fundTab = nav.fundTab; markActive('#fundTabs .tab', 'ftab', state.fundTab); }
+  if (nav.analysisTab) { state.analysisTab = nav.analysisTab; markActive('#analysisTabs .tab', 'atab', state.analysisTab); }
   if (nav.tab && document.querySelector(`#tabsRow .tab[data-tab="${nav.tab}"]`)) { state.tab = nav.tab; markActive('#tabsRow .tab', 'tab', state.tab); }
   await loadFunds();
-  setMain(['macro', 'stocks', 'funds', 'guide'].includes(nav.main) ? nav.main : 'stocks', { keepScroll: true });
+  setMain(['macro', 'stocks', 'funds', 'analysis', 'guide'].includes(nav.main) ? nav.main : 'stocks', { keepScroll: true });
 }
 
 const SECTOR_SV = { Semiconductors: 'Halvledare', Energy: 'Energi', RealEstate: 'Fastigheter', Industrials: 'Industri', Healthcare: 'Hälsovård', Technology: 'Teknik', Consumer: 'Konsument', Financials: 'Finans', Materials: 'Material', Telecom: 'Telekom' };
@@ -2068,7 +2143,7 @@ function renderUploadPanel() {
   mountUploadPanel(el, 's');
 }
 
-function mountUploadPanel(el, sfx) {
+function mountUploadPanel(el, sfx, compact = false) {
   const all = Object.values(state.holdings || {});
   const hasHoldings = state.holdingsUploadedAt && all.length > 0;
   const nStocks = all.filter(h => h.kind !== 'fund').length, nFunds = all.length - nStocks;
@@ -2083,11 +2158,13 @@ function mountUploadPanel(el, sfx) {
         ${hasHoldings ? `<button class="iconbtn" id="clearHoldingsBtn_${sfx}">TA BORT</button>` : ''}
       </div>
       <div class="upload-note ${hasHoldings ? 'uploaded' : ''}">
-        ${hasHoldings
+        ${hasHoldings && compact
+          ? `Uppladdad ${fmtDateTime(state.holdingsUploadedAt)}: ${nStocks} aktier och ${nFunds} fonder.`
+          : hasHoldings
           ? `Uppladdad ${fmtDateTime(state.holdingsUploadedAt)}: ${nStocks} aktier och ${nFunds} fonder. Samma fil används för Aktier → Mina innehav och Fonder → Mina fonder. Bearbetas och sparas bara i den här webbläsaren, skickas aldrig till någon server och syns inte för andra som besöker sidan.`
           : 'CSV- eller Excel-export (.csv/.xlsx) från Avanza eller Nordnet med både aktier och fonder. Samma fil används för aktier och fonder. Bearbetas helt i din egen webbläsare — filen skickas aldrig till någon server och sparas bara lokalt på den här enheten.'}
       </div>
-      ${hasHoldings ? `
+      ${hasHoldings && !compact ? `
       <button class="iconbtn" id="diagToggleBtn_${sfx}" style="margin-top:10px;">VISA VAD SOM FAKTISKT LÄSTES IN (${all.length} rader)</button>
       <div id="diagList_${sfx}" style="display:none; margin-top:10px;">${diagRows}</div>` : ''}
     </div>`;
@@ -2139,7 +2216,7 @@ function handleClearHoldings() {
   rerenderCurrent();
 }
 function rerenderCurrent() {
-  if (state.main === 'funds') renderFunds(); else render();
+  if (state.main === 'funds') renderFunds(); else if (state.main === 'analysis') renderAnalysis(); else render();
 }
 
 function sortRows(rows, key) {
@@ -2462,6 +2539,266 @@ function fundTableHtml(list, ownedSet) {
   return `<div class="table-scroll"><table><thead><tr><th>Fond</th><th class="num">Trend</th><th class="num">3 mån</th><th class="num">1 år</th><th class="num">Risk</th><th class="num">Poäng</th><th class="num"></th></tr></thead>
     <tbody>${list.map(f => fundRowHtml(f, ownedSet.has(f.ticker))).join('')}</tbody></table></div>`;
 }
+// ===== ANALYS: portföljanalys över aktier och fonder (v9.8) =====
+// All beräkning sker i webbläsaren med din uppladdade fil. Fondernas innehåll
+// (funds.json) är publik data för alla fonder i listan och visar inget om vad
+// just du äger. Inga belopp visas – bara andelar.
+const PF_SECTORS = ['Technology', 'Communication', 'Consumer', 'Financials', 'Healthcare', 'Industrials', 'Energy', 'Materials', 'RealEstate', 'Utilities'];
+const PF_SECTOR_SV = { Technology: 'Teknik', Communication: 'Kommunikation', Consumer: 'Konsument', Financials: 'Finans', Healthcare: 'Hälsovård', Industrials: 'Industri', Energy: 'Energi', Materials: 'Material', RealEstate: 'Fastigheter', Utilities: 'Kraftförsörjning', Unknown: 'Okänd bransch' };
+// Bevakningslistans 10 branscher läggs på samma skala som Yahoos 11 (halvledare ingår i teknik)
+const PF_WATCH_SECTOR = { Industrials: 'Industrials', Technology: 'Technology', Semiconductors: 'Technology', Consumer: 'Consumer', Financials: 'Financials', RealEstate: 'RealEstate', Energy: 'Energy', Healthcare: 'Healthcare', Materials: 'Materials', Telecom: 'Communication' };
+const PF_STOP = new Set(['inc', 'corp', 'corporation', 'ltd', 'limited', 'plc', 'ab', 'publ', 'abp', 'asa', 'oyj', 'class', 'a', 'b', 'c', 'ord', 'ordinary', 'shares', 'share', 'sa', 'nv', 'se', 'ag', 'co', 'company', 'the', 'adr', 'series', 'holding', 'holdings', 'group', 'spa', 'bv', 'as', 'de', 'cv', 'reg', 'registered', 'namen', 'akt']);
+// Samma regler som norm_name() i scripts/funds.py – ändra båda tillsammans
+function normCompanyName(name) {
+  const s = String(name || '').normalize('NFKD').replace(/[^\x00-\x7f]/g, '').toLowerCase();
+  return (s.match(/[a-z0-9]+/g) || []).filter(t => !PF_STOP.has(t)).join('');
+}
+const pfT = (sv, en) => (window.APP_LANG === 'en' ? en : sv);
+const PF_SECTOR_EN = { Technology: 'Technology', Communication: 'Communication', Consumer: 'Consumer', Financials: 'Financials', Healthcare: 'Healthcare', Industrials: 'Industrials', Energy: 'Energy', Materials: 'Materials', RealEstate: 'Real estate', Utilities: 'Utilities', Unknown: 'Unknown sector' };
+const pfSec = k => (window.APP_LANG === 'en' ? PF_SECTOR_EN : PF_SECTOR_SV)[k] || k;
+const pfPct = (v, d = 1) => { const s = (v * 100).toFixed(d); return (window.APP_LANG === 'en' ? s : s.replace('.', ',')) + '%'; };
+
+function computePortfolio() {
+  const results = (state.data && state.data.results) || [];
+  const funds = (state.funds && state.funds.funds) || [];
+  const ref = (state.funds && state.funds.reference) || null;
+  const cats = (state.funds && state.funds.categories) || {};
+
+  const stockRows = [], fundRows = [];
+  let noValue = 0;
+  for (const r of results) {
+    if (!r.is_holding) continue;
+    if (!(r.holding_value > 0)) { noValue++; continue; }
+    stockRows.push({ key: r.ticker, name: r.watchlist_name || r.name || r.ticker, ticker: r.ticker, sector: PF_WATCH_SECTOR[r.sector] || 'Unknown',
+      value: r.holding_value, geo: (r.sector_weight || 0) + (r.country_weight || 0), geoSector: r.sector, inList: true });
+  }
+  for (const p of (state.pendingHoldings || [])) {
+    if (!(p.value > 0)) { noValue++; continue; }
+    stockRows.push({ key: 'n:' + normCompanyName(p.raw_name), name: p.raw_name, ticker: p.raw_ticker, sector: 'Unknown', value: p.value, geo: null, inList: false });
+  }
+  for (const h of fundHoldings()) {
+    if (!(h.value > 0)) { noValue++; continue; }
+    const f = findFundForHolding(h, funds);
+    fundRows.push({ name: f ? f.name : h.raw_name, f, value: h.value, category: f ? f.category : null });
+  }
+  const sum = (a, fn) => a.reduce((s, x) => s + fn(x), 0);
+  const total = sum(stockRows, x => x.value) + sum(fundRows, x => x.value);
+  if (!(total > 0)) return { total: 0, noValue, stockRows, fundRows };
+
+  // Tillgångsslag
+  const assets = { directStock: sum(stockRows, x => x.value), fundStock: 0, bond: 0, cash: 0, other: 0 };
+  for (const fr of fundRows) {
+    const a = fr.f && fr.f.assets ? fr.f.assets : { stock: 0, bond: 0, cash: 0, other: 1 };
+    assets.fundStock += fr.value * (a.stock || 0); assets.bond += fr.value * (a.bond || 0);
+    assets.cash += fr.value * (a.cash || 0); assets.other += fr.value * (a.other || 0);
+  }
+
+  // Branscher (aktiedelen: direkta aktier + aktiedelen i fonder)
+  const direct = {}, via = {}, contrib = {};
+  const addC = (s, name, amt, kind) => { (contrib[s] = contrib[s] || []).push({ name, amt, kind }); };
+  for (const sr of stockRows) { direct[sr.sector] = (direct[sr.sector] || 0) + sr.value; addC(sr.sector, sr.name, sr.value, 'stock'); }
+  for (const fr of fundRows) {
+    const stockPart = fr.value * (fr.f && fr.f.assets ? (fr.f.assets.stock || 0) : 0);
+    if (stockPart <= 0) continue;
+    const sec = fr.f && fr.f.sectors;
+    if (!sec) { via.Unknown = (via.Unknown || 0) + stockPart; addC('Unknown', fr.name, stockPart, 'fund'); continue; }
+    for (const [s, w] of Object.entries(sec)) { const amt = stockPart * w; via[s] = (via[s] || 0) + amt; addC(s, fr.name, amt, 'fund'); }
+  }
+  const eq = sum(Object.values(direct), x => x) + sum(Object.values(via), x => x);
+  const sectors = [...new Set([...Object.keys(direct), ...Object.keys(via)])].map(s => ({
+    key: s, direct: (direct[s] || 0) / eq, via: (via[s] || 0) / eq, total: ((direct[s] || 0) + (via[s] || 0)) / eq,
+    ref: ref && ref.sectors ? (ref.sectors[s] || 0) : null,
+    contrib: (contrib[s] || []).sort((a, b) => b.amt - a.amt).map(c => ({ ...c, share: c.amt / eq })),
+  })).sort((a, b) => b.total - a.total);
+
+  // Bolag (hela portföljen): direkt + via fondernas tio största innehav
+  const comp = new Map();
+  const bump = (key, name, ticker, inList) => { if (!comp.has(key)) comp.set(key, { key, name, ticker, inList, direct: 0, viaFunds: [] }); return comp.get(key); };
+  for (const sr of stockRows) { const c = bump(sr.key, sr.name, sr.ticker, sr.inList); c.direct += sr.value; c.inList = sr.inList; c.name = sr.name; }
+  let coveredFund = 0, fundTotalWithData = 0;
+  for (const fr of fundRows) {
+    const th = fr.f && fr.f.top_holdings;
+    if (!th || !th.length) continue;
+    fundTotalWithData += fr.value; coveredFund += fr.value * (fr.f.top_coverage || 0);
+    for (const hh of th) {
+      const key = hh.w || ('n:' + hh.k);
+      const c = bump(key, hh.n, hh.w || hh.s, !!hh.w);
+      c.viaFunds.push({ fund: fr.name, amt: fr.value * hh.p });
+    }
+  }
+  const companies = [...comp.values()].map(c => {
+    const viaAmt = sum(c.viaFunds, x => x.amt);
+    return { ...c, directShare: c.direct / total, viaShare: viaAmt / total, total: (c.direct + viaAmt) / total, both: c.direct > 0 && viaAmt > 0, viaFunds: c.viaFunds.sort((a, b) => b.amt - a.amt) };
+  }).sort((a, b) => b.total - a.total);
+
+  // Koppling till världsläget
+  const geoShare = { head: 0, neutral: 0, tail: 0, base: 0, headNames: [] };
+  for (const sr of stockRows) {
+    if (sr.geo == null) continue;
+    geoShare.base += sr.value;
+    if (sr.geo < 0) { geoShare.head += sr.value; geoShare.headNames.push({ name: sr.name, v: sr.value, geo: sr.geo }); }
+    else if (sr.geo > 0) geoShare.tail += sr.value; else geoShare.neutral += sr.value;
+  }
+  geoShare.headNames.sort((a, b) => b.v - a.v);
+  const catShare = { head: 0, neutral: 0, tail: 0, base: 0 };
+  for (const fr of fundRows) {
+    const cc = fr.category ? cats[fr.category] : null;
+    if (!cc) continue;
+    catShare.base += fr.value;
+    if (cc.score >= 65) catShare.tail += fr.value; else if (cc.score < 45) catShare.head += fr.value; else catShare.neutral += fr.value;
+  }
+  return { total, noValue, stockRows, fundRows, assets, sectors, eq, companies, coveredFund, fundTotalWithData, geoShare, catShare, ref, cats };
+}
+
+function pfStack(parts) {
+  const segs = parts.filter(p => p.v > 0.0005).map(p => `<div class="pf-seg ${p.cls}" style="width:${(p.v * 100).toFixed(2)}%" title="${escapeHtml(p.label)} ${pfPct(p.v)}"></div>`).join('');
+  const leg = parts.filter(p => p.v > 0.0005).map(p => `<span><i class="${p.cls}"></i>${escapeHtml(p.label)} ${pfPct(p.v)}</span>`).join('');
+  return `<div class="pf-stack">${segs}</div><div class="pf-legend">${leg}</div>`;
+}
+
+function pfObservations(P) {
+  const obs = [];
+  const topS = P.sectors.find(s => s.key !== 'Unknown');
+  if (topS && topS.total >= 0.30) {
+    const refTxt = topS.ref != null ? pfT(` (världsindex: ${pfPct(topS.ref, 0)})`, ` (world index: ${pfPct(topS.ref, 0)})`) : '';
+    obs.push({ cls: 'bad', txt: pfT(`${pfSec(topS.key)} står för ${pfPct(topS.total, 0)} av aktiedelen${refTxt} – hög koncentration till en bransch.`,
+      `${pfSec(topS.key)} accounts for ${pfPct(topS.total, 0)} of the equity part${refTxt} – high concentration in one sector.`) });
+  }
+  for (const s of P.sectors) {
+    if (s.key === 'Unknown' || s.ref == null || (s === topS && topS.total >= 0.30)) continue;
+    if (s.total - s.ref >= 0.08) obs.push({ cls: 'info', txt: pfT(`${pfSec(s.key)} är överviktad: ${pfPct(s.total, 0)} mot ${pfPct(s.ref, 0)} i världsindex.`,
+      `${pfSec(s.key)} is overweight: ${pfPct(s.total, 0)} vs ${pfPct(s.ref, 0)} in the world index.`) });
+  }
+  if (P.ref && P.ref.sectors) {
+    const miss = PF_SECTORS.filter(k => (P.ref.sectors[k] || 0) >= 0.03 && !(P.sectors.find(s => s.key === k) && P.sectors.find(s => s.key === k).total >= 0.005));
+    if (miss.length) {
+      const share = pfPct(miss.reduce((a, k) => a + P.ref.sectors[k], 0), 0);
+      obs.push({ cls: 'info', txt: pfT(`Ingen exponering alls mot: ${miss.map(k => pfSec(k).toLowerCase()).join(', ')} (som tillsammans är ${share} av världsindex).`,
+        `No exposure at all to: ${miss.map(k => pfSec(k).toLowerCase()).join(', ')} (together ${share} of the world index).`) });
+    }
+  }
+  for (const c of P.companies.filter(c => c.total >= 0.08).slice(0, 3)) {
+    const det = c.both ? pfT(` (direkt ${pfPct(c.directShare)}, via fonder ${pfPct(c.viaShare)})`, ` (direct ${pfPct(c.directShare)}, via funds ${pfPct(c.viaShare)})`) : '';
+    obs.push({ cls: 'bad', txt: pfT(`${c.name} utgör minst ${pfPct(c.total)} av portföljen${det}.`, `${c.name} makes up at least ${pfPct(c.total)} of the portfolio${det}.`) });
+  }
+  const both = P.companies.filter(c => c.both);
+  if (both.length) {
+    const ex = both.slice(0, 3).map(c => c.name).join(', ');
+    obs.push({ cls: 'info', txt: pfT(`${both.length} bolag ägs både direkt och via fonder, t.ex. ${ex}.`, `${both.length} ${both.length === 1 ? 'company is' : 'companies are'} owned both directly and via funds, e.g. ${ex}.`) });
+  }
+  const multi = P.companies.filter(c => !c.both && c.viaFunds.length >= 3 && c.total >= 0.01);
+  if (multi.length) {
+    const ex = multi.slice(0, 3).map(c => c.name).join(', ');
+    obs.push({ cls: 'info', txt: pfT(`${ex} ligger i tre eller fler av dina fonder – samma bolag ger flera fonder liknande utveckling.`, `${ex} are in three or more of your funds – the same company gives several funds similar performance.`) });
+  }
+  const nonEq = (P.assets.bond + P.assets.cash + P.assets.other) / P.total;
+  if (nonEq >= 0.3) obs.push({ cls: 'info', txt: pfT(`${pfPct(nonEq, 0)} av portföljen ligger inte i aktier (räntor, kassa och övrigt).`, `${pfPct(nonEq, 0)} of the portfolio is not in stocks (bonds, cash and other).`) });
+  const noData = P.fundRows.filter(f => !f.f);
+  if (noData.length) {
+    const nm = noData.map(f => f.name).join(', ');
+    obs.push({ cls: 'info', txt: pfT(`${noData.length} ${noData.length === 1 ? 'fond saknar' : 'fonder saknar'} innehållsdata och räknas som övrigt: ${nm}.`,
+      `${noData.length} ${noData.length === 1 ? 'fund has' : 'funds have'} no holdings data and ${noData.length === 1 ? 'is' : 'are'} counted as other: ${nm}.`) });
+  }
+  return obs;
+}
+
+function renderAnalysis() {
+  const host = document.getElementById('analysisHost');
+  const up = document.getElementById('analysisUploadHost');
+  mountUploadPanel(up, 'a', true);
+  const hasHold = Object.keys(state.holdings || {}).length > 0;
+  if (!hasHold) { host.innerHTML = `<div class="fund-note" data-noi18n>${pfT('Ladda upp din innehavsfil ovan – samma fil som för aktier och fonder. Analysen visar hur dina aktier och fonder tillsammans fördelar sig på branscher och bolag.', 'Upload your holdings file above – the same file as for stocks and funds. The analysis shows how your stocks and funds together are spread across sectors and companies.')}</div>`; return; }
+  if (!state.funds) { host.innerHTML = `<div class="fund-note" data-noi18n>${pfT('Fonddata saknas ännu – den hämtas vid nästa schemalagda körning.', 'Fund data is not available yet – it will be fetched at the next scheduled run.')}</div>`; return; }
+  const P = computePortfolio();
+  if (!(P.total > 0)) {
+    host.innerHTML = `<div class="fund-note" data-noi18n>${pfT('Filen saknar marknadsvärden, så vikterna kan inte räknas. Ladda upp exportfilen igen – den ska ha kolumnen Marknadsvärde (Avanza-exporten har den).', 'The file has no market values, so the weights cannot be calculated. Upload the export file again – it needs the Market value column (the Avanza export has it).')}</div>`;
+    return;
+  }
+  const tab = state.analysisTab || 'overview';
+  const noVal = P.noValue ? pfT(` ${P.noValue} innehav saknar marknadsvärde och ingår inte.`, ` ${P.noValue} holdings have no market value and are not included.`) : '';
+  const caveat = `<div class="mp-caveat" data-noi18n>${pfT('Räknas i din webbläsare på din fil – inga belopp visas och inget skickas någonstans. Fondernas innehåll kommer från Yahoo Finance: branschfördelning för hela fonden men bara de tio största innehaven, så bolagssiffrorna är minimum. Branscherna är en grov indelning (halvledare ingår i teknik). Inte finansiell rådgivning.', 'Calculated in your browser on your file – no amounts are shown and nothing is sent anywhere. Fund holdings come from Yahoo Finance: sector breakdown for the whole fund but only the ten largest holdings, so the company figures are minimums. Sectors are a rough classification (semiconductors are included in technology). Not financial advice.')}${noVal}</div>`;
+  let html = '';
+  if (tab === 'sectors') html = pfSectorsHtml(P);
+  else if (tab === 'companies') html = pfCompaniesHtml(P);
+  else html = pfOverviewHtml(P);
+  host.innerHTML = `<div class="macro-panel" data-noi18n>${html}${caveat}</div>`;
+  host.querySelectorAll('[data-open-ticker]').forEach(el => el.addEventListener('click', () => openDrawer(el.dataset.openTicker)));
+}
+
+function pfOverviewHtml(P) {
+  const a = P.assets, T = P.total;
+  const stack = pfStack([
+    { v: a.directStock / T, cls: 'c-direct', label: pfT('Aktier direkt', 'Stocks direct') }, { v: a.fundStock / T, cls: 'c-fund', label: pfT('Aktier via fonder', 'Stocks via funds') },
+    { v: a.bond / T, cls: 'c-bond', label: pfT('Räntor', 'Bonds') }, { v: (a.cash + a.other) / T, cls: 'c-other', label: pfT('Kassa/övrigt', 'Cash/other') }]);
+  const top5 = P.companies.slice(0, 5).reduce((s, c) => s + c.total, 0);
+  const topS = P.sectors.find(s => s.key !== 'Unknown');
+  const nBoth = P.companies.filter(c => c.both).length;
+  const cell = (l, v, s) => `<div class="pf-cell"><div class="pf-cell-l">${l}</div><div class="pf-cell-v">${v}</div>${s ? `<div class="pf-cell-s">${s}</div>` : ''}</div>`;
+  const cells = `<div class="pf-cells">
+    ${cell(pfT('AKTIER DIREKT', 'STOCKS DIRECT'), P.stockRows.length, pfT('bolag', 'companies'))}
+    ${cell(pfT('FONDER', 'FUNDS'), P.fundRows.length, pfT('st', 'pcs'))}
+    ${cell(pfT('5 STÖRSTA BOLAG', '5 LARGEST COMPANIES'), pfPct(top5, 0), pfT('inkl. fonder, minst', 'incl. funds, at least'))}
+    ${cell(pfT('STÖRSTA BRANSCH', 'LARGEST SECTOR'), topS ? pfSec(topS.key) : '–', topS ? pfPct(topS.total, 0) + pfT(' av aktiedelen', ' of the equity part') : '')}
+    ${cell(pfT('ÄGS DUBBELT', 'OWNED TWICE'), nBoth, pfT('bolag direkt och via fonder', 'companies directly and via funds'))}
+  </div>`;
+  const obs = pfObservations(P);
+  const obsHtml = obs.length ? obs.map(o => `<div class="pf-obs ${o.cls}">${escapeHtml(o.txt)}</div>`).join('') : `<div class="pf-note">${pfT('Inget särskilt att notera i fördelningen.', 'Nothing in particular to note in the allocation.')}</div>`;
+  const g = P.geoShare, c = P.catShare;
+  const gStack = g.base > 0 ? pfStack([{ v: g.tail / g.base, cls: 'c-good', label: pfT('Medvind', 'Tailwind') }, { v: g.neutral / g.base, cls: 'c-neu', label: pfT('Opåverkat', 'Unaffected') }, { v: g.head / g.base, cls: 'c-bad', label: pfT('Motvind', 'Headwind') }]) : `<div class="pf-note">${pfT('Inga aktier i bevakningslistan.', 'No stocks in the watchlist.')}</div>`;
+  const cStack = c.base > 0 ? pfStack([{ v: c.tail / c.base, cls: 'c-good', label: pfT('Medvind', 'Tailwind') }, { v: c.neutral / c.base, cls: 'c-neu', label: pfT('Neutralt', 'Neutral') }, { v: c.head / c.base, cls: 'c-bad', label: pfT('Motvind', 'Headwind') }]) : `<div class="pf-note">${pfT('Ingen kategoridata.', 'No category data.')}</div>`;
+  const headTxt = g.headNames.length ? `<div class="pf-note" style="margin-top:6px">${pfT('Mest utsatta aktier:', 'Most exposed stocks:')} ${g.headNames.slice(0, 3).map(x => `${escapeHtml(x.name)} (${x.geo > 0 ? '+' : ''}${x.geo})`).join(', ')}.</div>` : '';
+  return `
+    <div class="mp-section"><div class="mp-title" data-noi18n>${pfT('Portföljens sammansättning', 'Portfolio composition')}</div>${stack}${cells}</div>
+    <div class="mp-section"><div class="mp-title" data-noi18n>${pfT('Observationer', 'Observations')}</div>${obsHtml}</div>
+    <div class="mp-section"><div class="mp-title" data-noi18n>${pfT('Koppling till världsläget', 'Link to the world situation')}</div>
+      <div class="mp-sub" data-noi18n>${pfT('Dina aktier – geopolitiska vikter (bransch och land, se Makro → Världsläget)', 'Your stocks – geopolitical weights (sector and country, see Macro → World)')}</div>${gStack}${headTxt}
+      <div class="mp-sub" style="margin-top:14px" data-noi18n>${pfT('Dina fonder – kategoriläge (se Fonder → Alla fonder)', 'Your funds – category climate (see Funds → All funds)')}</div>${cStack}
+    </div>`;
+}
+
+function pfSectorsHtml(P) {
+  const max = Math.max(0.01, ...P.sectors.map(s => Math.max(s.total, s.ref || 0)));
+  const rows = P.sectors.map(s => {
+    const w = v => (v / max * 100).toFixed(2);
+    const diff = s.ref != null ? (s.total - s.ref) * 100 : null;
+    const dr = diff == null ? 0 : Math.round(diff);
+    const diffHtml = diff == null ? '' : `<span class="pf-diff ${diff >= 5 ? 'over' : (diff <= -5 ? 'under' : '')}">${dr > 0 ? '+' : ''}${fmtNum(dr, 0)} pp</span>`;
+    const refMark = s.ref != null ? `<div class="pf-ref" style="left:${w(s.ref)}%" title="${pfT('Världsindex', 'World index')} ${pfPct(s.ref)}"></div>` : '';
+    const body = s.contrib.slice(0, 8).map(c => `<div class="pf-contrib"><span>${c.kind === 'fund' ? `<em>${pfT('fond', 'fund')}</em> ` : ''}${escapeHtml(c.name)}</span><span>${pfPct(c.share)}</span></div>`).join('');
+    return `<details class="pf-det"><summary class="pf-row">
+      <div class="pf-lab">${pfSec(s.key)}</div>
+      <div class="pf-track"><div class="pf-seg c-direct" style="width:${w(s.direct)}%"></div><div class="pf-seg c-fund" style="width:${w(s.via)}%"></div>${refMark}</div>
+      <div class="pf-num">${pfPct(s.total)}${diffHtml}</div></summary><div class="pf-body">${body}</div></details>`;
+  }).join('');
+  return `<div class="mp-section"><div class="mp-title" data-noi18n>${pfT('Branschfördelning av aktiedelen', 'Sector breakdown of the equity part')}</div>
+    <div class="pf-note" data-noi18n>${pfT('Dina direkta aktier och aktiedelen i fonderna tillsammans. Tryck på en bransch för att se vad som bidrar.', 'Your direct stocks and the equity part of your funds together. Tap a sector to see what contributes.')}</div>
+    <div class="pf-legend" style="margin:8px 0 6px" data-noi18n><span><i class="c-direct"></i>${pfT('Direkt', 'Direct')}</span><span><i class="c-fund"></i>${pfT('Via fonder', 'Via funds')}</span>${P.ref ? `<span><i class="c-ref"></i>${escapeHtml(P.ref.name)} ${pfT('(världsindex)', '(world index)')}</span>` : ''}</div>
+    ${rows}</div>`;
+}
+
+function pfCompaniesHtml(P) {
+  const list = P.companies.slice(0, 20);
+  const max = Math.max(0.01, ...list.map(c => c.total));
+  const rows = list.map((c, i) => {
+    const w = v => (v / max * 100).toFixed(2);
+    const via = c.viaFunds.slice(0, 3).map(v => `via ${escapeHtml(v.fund)} ${pfPct(v.amt / P.total)}`).join(' · ') + (c.viaFunds.length > 3 ? pfT(` · +${c.viaFunds.length - 3} till`, ` · +${c.viaFunds.length - 3} more`) : '');
+    const sub = [c.directShare > 0 ? `${pfT('Direkt', 'Direct')} ${pfPct(c.directShare)}` : '', via].filter(Boolean).join(' · ');
+    const open = c.inList && c.ticker && (state.data.results || []).some(r => r.ticker === c.ticker);
+    return `<div class="pf-crow ${open ? 'clickable' : ''}" ${open ? `data-open-ticker="${escapeHtml(c.ticker)}"` : ''}>
+      <div class="pf-rank">${i + 1}</div>
+      <div class="pf-cmain"><div class="pf-cname">${escapeHtml(c.name)}${c.both ? ` <span class="mkt-badge">${pfT('ÄGS DUBBELT', 'OWNED TWICE')}</span>` : ''}</div>
+        <div class="pf-track slim"><div class="pf-seg c-direct" style="width:${w(c.directShare)}%"></div><div class="pf-seg c-fund" style="width:${w(c.viaShare)}%"></div></div>
+        <div class="pf-csub">${sub}</div></div>
+      <div class="pf-num">${c.viaShare > 0 ? pfT('minst ', 'at least ') : ''}${pfPct(c.total)}</div></div>`;
+  }).join('');
+  const cov = P.fundTotalWithData > 0 ? P.coveredFund / P.fundTotalWithData : null;
+  const covTxt = cov != null ? pfT(` Topp tio täcker i snitt ${pfPct(cov, 0)} av dina fonders värde.`, ` The top ten cover on average ${pfPct(cov, 0)} of the value of your funds.`) : '';
+  return `<div class="mp-section"><div class="mp-title" data-noi18n>${pfT('Största bolagen i hela portföljen', 'Largest companies in the whole portfolio')}</div>
+    <div class="pf-note" data-noi18n>${pfT('Direkt ägda aktier plus fondernas tio största innehav. Bolag utanför en fonds topp tio syns inte, så siffrorna är ett golv.', 'Directly owned stocks plus the ten largest holdings of the funds. Companies outside a fund\'s top ten are not visible, so the figures are a floor.')}${covTxt}</div>
+    <div class="pf-legend" style="margin:8px 0 6px" data-noi18n><span><i class="c-direct"></i>${pfT('Direkt', 'Direct')}</span><span><i class="c-fund"></i>${pfT('Via fonder', 'Via funds')}</span></div>
+    <div data-noi18n>${rows}</div></div>`;
+}
+
 // v9.5: kategoriläge – branschens medvind/motvind mätt på ett marknadsindex
 function catClimateCls(sc) { return sc >= 65 ? 'good' : (sc < 45 ? 'bad' : 'mid'); }
 function catClimatePill(cc) {
@@ -2917,7 +3254,7 @@ const MODULES_SV = [
       body: `
         <p>Innan du dyker in i själva analysen är det värt att känna igen de symboler som återkommer i listan, så du slipper gissa vad de betyder när du väl ser dem.</p>
         <h3 class="sub">Flikarna</h3>
-        <p><strong>USA</strong>, <strong>Europa</strong> och <strong>Norden</strong> visar köpkandidater sorterade efter marknad. <strong>Tillväxt</strong> visar manuellt utvalda unga/små bolag med en egen, mer risktålig poängmodell (mer om den senare). <strong>Mina innehav</strong> visar dina egna aktier, laddade upp som en CSV-fil som aldrig lämnar din webbläsare.</p>
+        <p>Appen har fem huvudflikar: <strong>Makro</strong> (stabilitet, räntor, världsläge, marknadsbredd), <strong>Aktier</strong>, <strong>Fonder</strong>, <strong>Analys</strong> (din portfölj i helhet) och <strong>Guide</strong>. Under Aktier visar <strong>USA</strong>, <strong>Europa</strong> och <strong>Norden</strong> köpkandidater sorterade efter marknad. <strong>Tillväxt</strong> visar manuellt utvalda unga/små bolag med en egen, mer risktålig poängmodell (mer om den senare). <strong>Mina innehav</strong> visar dina egna aktier, laddade upp som en fil som aldrig lämnar din webbläsare – samma fil används för <strong>Fonder → Mina fonder</strong> och <strong>Analys</strong>.</p>
         <h3 class="sub">Symboler i namnraden</h3>
         <div class="in-app">
           <div class="lbl">Symbol → betydelse</div>
@@ -3466,7 +3803,8 @@ const MODULES_SV = [
   title: "Modul 7 — Fonder & marknadsstabilitet",
   lessons: [
     { id: "fondpoang", title: "Fondpoängen — hur lovande ser en fond ut just nu?", body: `<div class="analogy"><div class="lbl">Liknelse</div><p>Att välja fond är lite som att välja buss: alla bussar på samma linje (samma kategori) kör ungefär samma väg, men vissa går i tid, har låg biljettpris och en lugn förare. Fondpoängen jämför bussar på samma linje med varandra, inte en stadsbuss med ett tåg.</p></div><p>Varje fond får en poäng 0–100 som sätts ihop av fem delar. Jämförelser görs så långt det går <strong>inom samma kategori</strong> — en svensk indexfond mot andra svenska indexfonder, en räntefond mot andra räntefonder.</p><div class="in-app"><div class="lbl">I appen</div><table><tr><td>Trend (35)</td><td>Hur långt över/under SMA200 kursen ligger, om SMA200 stiger eller faller, kurs över SMA50, golden cross och RSI</td></tr><tr><td>Momentum (25)</td><td>Blandad avkastning 3/6/12 mån – hälften rankad inom kategorin, hälften mot alla jämförbara fonder</td></tr><tr><td>Riskjusterad avkastning (25)</td><td>Sharpekvot mot styrräntan och största fall senaste året</td></tr><tr><td>Avgift (10)</td><td>≤0,3 % ger full pott, över 1,5 % ger noll</td></tr><tr><td>Kategoriläge (5)</td><td>Hur kategorins marknadsindex ser ut (medvind/motvind), stabilitetspoängen för räntefonder</td></tr><tr><td>≥75 / &lt;50</td><td>Lovande / döljs i listorna</td></tr></table></div><h3 class="sub">Kategoriläge — medvind eller motvind för branschen</h3><p>Under <strong>Alla fonder</strong> visar varje kategoribanner ett eget läge 0–100: <strong>Medvind</strong> (65+), <strong>Neutralt</strong> (45–64) eller <strong>Motvind</strong> (under 45), plus pil för förändringen senaste månaden. Det mäts inte på fonderna själva utan på ett marknadsindex för kategorin – t.ex. OMXS30 för svenska indexfonder, S&amp;P 500 för USA och guld/silver för ädelmetallfonder – med trend (40), momentum (40) och risk (20). För räntefonder används stabilitetspoängen. Läget står för 5 av fondpoängens 100 poäng och visar om hela branschen har vind i ryggen just nu.</p><div class="callout-warn"><strong>Kom ihåg:</strong> fondpoängen mäter hur fonden ser ut <em>just nu</em> – trend och momentum vänder. Den säger ingenting om förvaltarens skicklighet på lång sikt och är inte finansiell rådgivning.</div>` },
-    { id: "stabilitet", title: "Stabilitetsmätaren — ränte- och kreditläget i en siffra", body: `<p>Under <strong>MAKRO → STABILITET</strong> visar en mätare med nål hur stabilt ränte- och kreditläget är, från mycket instabilt (vänster) till mycket stabilt (höger). Poängen 0–100 väger ihop sex kategorier: ränterörelse, räntekurva, kredit, realränta och inflation, obligationsvolatilitet (MOVE) samt Europa och Norden.</p><p>Grafen under mätaren visar hur poängen rört sig vecka för vecka eller månad för månad. Historiken räknas fram med exakt samma formel och bara med data som fanns vid respektive datum.</p><div class="in-app"><div class="lbl">I appen</div><table><tr><td>70–100 Stabilt</td><td>+2 poäng på alla aktier vid ≥80</td></tr><tr><td>50–70 Blandat</td><td>0 till −2 poäng</td></tr><tr><td>30–50 Ostabilt</td><td>−4 till −6 poäng</td></tr><tr><td>0–30 Stressat</td><td>−8 poäng</td></tr><tr><td>Trend ±5 på en månad</td><td>±2 poäng extra</td></tr></table></div>` }
+    { id: "stabilitet", title: "Stabilitetsmätaren — ränte- och kreditläget i en siffra", body: `<p>Under <strong>MAKRO → STABILITET</strong> visar en mätare med nål hur stabilt ränte- och kreditläget är, från mycket instabilt (vänster) till mycket stabilt (höger). Poängen 0–100 väger ihop sex kategorier: ränterörelse, räntekurva, kredit, realränta och inflation, obligationsvolatilitet (MOVE) samt Europa och Norden.</p><p>Grafen under mätaren visar hur poängen rört sig vecka för vecka eller månad för månad. Historiken räknas fram med exakt samma formel och bara med data som fanns vid respektive datum.</p><div class="in-app"><div class="lbl">I appen</div><table><tr><td>70–100 Stabilt</td><td>+2 poäng på alla aktier vid ≥80</td></tr><tr><td>50–70 Blandat</td><td>0 till −2 poäng</td></tr><tr><td>30–50 Ostabilt</td><td>−4 till −6 poäng</td></tr><tr><td>0–30 Stressat</td><td>−8 poäng</td></tr><tr><td>Trend ±5 på en månad</td><td>±2 poäng extra</td></tr></table></div>` },
+    { id: "portfolj", title: "Analys-fliken — branscher och bolag i hela portföljen", body: `<div class="analogy"><div class="lbl">Liknelse</div><p>Att äga tio fonder kan kännas som god spridning. Men om alla tio har samma äpplen i korgen har du i praktiken en korg med äpplen. Analys-fliken tittar in i korgarna och visar vad du egentligen äger, när aktier och fonder läggs ihop.</p></div><p>Fliken använder samma innehavsfil som resten av appen, med kolumnen Marknadsvärde för att räkna vikter. Allt räknas i din webbläsare och inga belopp visas, bara andelar.</p><h3 class="sub">Branscher</h3><p>Dina direkta aktier och den aktiedel som ligger i fonderna läggs ihop och delas på bransch. Ett streck visar hur marknaden som helhet ser ut (en global indexfond), så att du ser var du är över- eller undervikt. Tryck på en bransch för att se vilka aktier och fonder som bidrar.</p><h3 class="sub">Toppbolag</h3><p>Dina största bolag i hela portföljen: det du äger direkt plus det som ligger i fondernas tio största innehav. Äger du Nvidia direkt och dessutom via tre fonder ser du den samlade exponeringen och en markering <strong>ÄGS DUBBELT</strong>.</p><h3 class="sub">Översikt</h3><p>Fördelning mellan aktier, räntor och kassa, nyckeltal om koncentration, observationer i klartext och en koppling till världsläget: hur stor del av dina aktier som ligger i branscher och länder med geopolitisk motvind, och hur stor del av fonderna som ligger i kategorier med medvind eller motvind.</p><div class="callout-warn"><strong>Begränsningar:</strong> Yahoo ger bara en fonds tio största innehav, ofta 30–60 % av fonden, så bolagssiffrorna är ett golv. Fondernas innehav uppdateras sällan. Branscherna är en grov indelning där halvledare ingår i teknik. Observationerna beskriver fördelningen och är inte finansiell rådgivning.</div><div class="in-app"><div class="lbl">I appen</div><table><tr><td>30 % i en bransch</td><td>Observation om hög koncentration</td></tr><tr><td>8 procentenheter över världsindex</td><td>Observation om övervikt</td></tr><tr><td>8 % i ett bolag (minst)</td><td>Observation om enskilt stort innehav</td></tr></table></div>` }
   ]
 }
 ];

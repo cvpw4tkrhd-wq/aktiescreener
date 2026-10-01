@@ -26,6 +26,8 @@ category_proxies:
   "Fastigheter": {name: "Europeiska fastighetsbolag (IPRP)", tickers: ["IPRP.L"]}
   "Råvaror/ädelmetaller": {name: "Guld och silver (snitt)", tickers: ["GC=F", "SI=F"]}
   "Räntefond": {name: "Stabilitetspoängen (räntor & kredit)", source: stability}
+# Fond vars branschfördelning används som "världsindex" i ANALYS-fliken (v9.8).
+reference_fund: "0P0001ECQR.ST"   # Avanza Global
 funds:
   - {name: "Alfred Berg Gambak Global R", ticker: "0P0001VSIP.ST", isin: "NO0013583344", category: "Global", asset_class: equity, fee_pct: 1.59}
   - {name: "Avanza Zero", ticker: "0P00005U1J.ST", isin: "SE0001718388", category: "Sverige index", asset_class: equity, fee_pct: 0.0}

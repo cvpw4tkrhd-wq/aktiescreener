@@ -5,7 +5,9 @@ makroläge (stabilitetspoäng) och marknadsbredd ur docs/results.json.
 Påverkar inte aktiedatan."""
 import json
 import math
+import re
 import sys
+import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -47,7 +49,104 @@ def _rsi(close, n=14):
     return float((100 - 100 / (1 + rs)).iloc[-1])
 
 
-def fetch_fund(cfg, rf_rates):
+# ===== Innehåll i fonderna (v9.8) – underlag för ANALYS-fliken =====
+YF_SECTOR_MAP = {
+    "technology": "Technology", "communication_services": "Communication", "consumer_cyclical": "Consumer",
+    "consumer_defensive": "Consumer", "financial_services": "Financials", "healthcare": "Healthcare",
+    "industrials": "Industrials", "energy": "Energy", "basic_materials": "Materials",
+    "realestate": "RealEstate", "utilities": "Utilities",
+}
+_STOP = {"inc", "corp", "corporation", "ltd", "limited", "plc", "ab", "publ", "abp", "asa", "oyj", "class", "a", "b", "c",
+         "ord", "ordinary", "shares", "share", "sa", "nv", "se", "ag", "co", "company", "the", "adr", "series", "holding",
+         "holdings", "group", "spa", "bv", "as", "de", "cv", "reg", "registered", "namen", "akt"}
+
+
+def norm_name(name):
+    """Normaliserat bolagsnamn för matchning mellan fonder och bevakningslistan.
+    Samma regler finns i frontend (normCompanyName) – ändra båda tillsammans."""
+    s = unicodedata.normalize("NFKD", str(name or "")).encode("ascii", "ignore").decode().lower()
+    return "".join(t for t in re.findall(r"[a-z0-9]+", s) if t not in _STOP)
+
+
+def norm_symbol(sym):
+    return re.sub(r"[^A-Z0-9]", "", str(sym or "").upper().split(".")[0])
+
+
+def load_watch_lookup():
+    """Slår upp bevakade bolag via normaliserat namn och via ticker utan börssuffix."""
+    by_name, by_sym = {}, {}
+    try:
+        d = json.loads(RESULTS_FILE.read_text(encoding="utf-8"))
+    except Exception:
+        return by_name, by_sym
+    for r in d.get("results", []):
+        tk = r.get("ticker")
+        for nm in (r.get("name"), r.get("watchlist_name")):
+            k = norm_name(nm)
+            if k and k not in by_name:
+                by_name[k] = tk
+        by_sym.setdefault(norm_symbol(tk), tk)
+    return by_name, by_sym
+
+
+def fetch_holdings(tk, cfg, lookup):
+    """Tio största innehav, branschfördelning och tillgångsslag från Yahoo (funds_data)."""
+    by_name, by_sym = lookup
+    out = {"top_holdings": [], "top_coverage": None, "sectors": None, "assets": None}
+    try:
+        fd = tk.funds_data
+    except Exception:
+        fd = None
+    if fd is None:
+        return out
+    try:
+        th = fd.top_holdings
+        if th is not None and len(th):
+            rows = []
+            for sym, row in th.iterrows():
+                pct = row.get("Holding Percent")
+                if pct is None or pct != pct:
+                    continue
+                name = row.get("Name") or str(sym)
+                w = by_name.get(norm_name(name))
+                if w is None and not str(sym).count("."):   # USA/Norden-symboler utan suffix, t.ex. "INVE B"
+                    w = by_sym.get(norm_symbol(sym))
+                rows.append({"s": str(sym), "n": str(name), "p": round(float(pct), 4), "w": w, "k": norm_name(name)})
+            out["top_holdings"] = rows
+            out["top_coverage"] = round(sum(r["p"] for r in rows), 3)
+    except Exception:
+        pass
+    try:
+        sw = fd.sector_weightings
+        if sw:
+            agg = {}
+            for k, v in sw.items():
+                key = YF_SECTOR_MAP.get(k)
+                if key and v is not None and v == v:
+                    agg[key] = agg.get(key, 0) + float(v)
+            tot = sum(agg.values())
+            if tot > 0:
+                out["sectors"] = {k: round(v / tot, 4) for k, v in sorted(agg.items(), key=lambda x: -x[1])}
+    except Exception:
+        pass
+    try:
+        ac = fd.asset_classes
+        if ac:
+            g = lambda k: float(ac.get(k) or 0)
+            a = {"stock": g("stockPosition"), "bond": g("bondPosition"), "cash": g("cashPosition"),
+                 "other": g("otherPosition") + g("preferredPosition") + g("convertiblePosition")}
+            tot = sum(a.values())
+            if tot > 0.5:
+                out["assets"] = {k: round(v / tot, 4) for k, v in a.items()}
+    except Exception:
+        pass
+    if out["assets"] is None:   # reserv utifrån fondtyp
+        out["assets"] = {"stock": 0.0, "bond": 1.0, "cash": 0.0, "other": 0.0} if cfg.get("asset_class") == "bond" \
+            else {"stock": 1.0, "bond": 0.0, "cash": 0.0, "other": 0.0}
+    return out
+
+
+def fetch_fund(cfg, rf_rates, lookup=None):
     """rf_rates: kort riskfri ränta per valuta (v8.8, tidigare 10-årsränta per land)."""
     tk = yf.Ticker(cfg["ticker"])
     h = tk.history(period="2y", auto_adjust=True)
@@ -90,7 +189,9 @@ def fetch_fund(cfg, rf_rates):
         elif isinstance(arer, (int, float)) and 0 < arer < 0.05:
             fee, fee_src = float(arer) * 100, "Yahoo Finance"
     step = max(1, len(last_year) // 180)
+    extra = fetch_holdings(tk, cfg, lookup or ({}, {}))
     return {
+        **extra,
         "name": cfg["name"], "ticker": cfg["ticker"], "isin": cfg.get("isin"),
         "category": cfg.get("category"), "asset_class": cfg.get("asset_class", "equity"),
         "proxy": bool(cfg.get("proxy")), "proxy_note": cfg.get("proxy_note"),
@@ -354,9 +455,10 @@ def main():
         pass
     rf_rates.setdefault("USD", 4.0)
     funds = []
+    lookup = load_watch_lookup()
     for c in cfg.get("funds", []):
         try:
-            f = fetch_fund(c, rf_rates)
+            f = fetch_fund(c, rf_rates, lookup)
             if f:
                 funds.append(f)
         except Exception as e:
@@ -368,9 +470,14 @@ def main():
         stab_hist = []
     categories = compute_category_climate(cfg, stab, stab_hist)
     score_funds(funds, stab, breadth, categories)
+    reference = None
+    ref_tk = cfg.get("reference_fund")
+    ref = next((f for f in funds if f["ticker"] == ref_tk), None)
+    if ref and ref.get("sectors"):
+        reference = {"name": ref["name"], "ticker": ref["ticker"], "sectors": ref["sectors"]}
     version = VERSION_FILE.read_text().strip() if VERSION_FILE.exists() else None
     out = {"generated_at": datetime.now(timezone.utc).isoformat(), "version": version,
-           "count": len(funds), "stability_score": stab, "categories": categories, "funds": funds}
+           "count": len(funds), "stability_score": stab, "categories": categories, "reference": reference, "funds": funds}
     OUT_FILE.write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"Fonder: {len(funds)} av {len(cfg.get('funds', []))} skrivna till {OUT_FILE.name}")
 

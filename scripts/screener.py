@@ -650,7 +650,7 @@ def _fx_factor(fin_ccy, trade_ccy):
     return f * (100 if pence else 1)
 
 
-def compute_valuation(tk, info, pe, forward_pe, revenue_growth_yoy_pct, dividend_yield_pct, market_cap):
+def compute_valuation(tk, info, pe, forward_pe, revenue_growth_yoy_pct, dividend_yield_pct, market_cap, ttm_override=None):
     """Klassar bolaget i fas och jämför dagens P/E (P/S för förlustbolag) med
     bolagets egen median de senaste ~4 åren. Vinst/försäljning per aktie
     interpoleras mellan bokslut så att historiken motsvarar rullande 12 mån,
@@ -698,6 +698,9 @@ def compute_valuation(tk, info, pe, forward_pe, revenue_growth_yoy_pct, dividend
         last4 = qb.iloc[-4:]
         if (last4.index[-1] - last4.index[0]).days < 330:
             pts[pd.Timestamp(last4.index[-1])] = float(last4.sum()) / float(qs.iloc[-1]) * fx
+    # Rapportkomplettering: rapporterad rullande 12 mån som senaste punkt (v9.7)
+    if ttm_override and ttm_override[0] == metric:
+        pts[ttm_override[1]] = ttm_override[2] * fx
     if len(pts) < 2:
         return None
     ser = pd.Series(pts).sort_index()
@@ -818,6 +821,40 @@ def fetch_fmp_fundamentals(ticker: str):
         }
     except Exception:
         return None
+
+
+REPORT_OVERRIDES_FILE = DATA_DIR / "report_overrides.yml"
+_REPORT_OVERRIDES = None
+
+
+def report_override_for(ticker, tk):
+    """Rapporterade siffror som kompletterar Yahoo tills Yahoo lagt in det nya
+    kvartalet (v9.7). Returnerar None om ingen post finns eller om Yahoo redan
+    har ett kvartal som slutar senast 10 dagar före period_end."""
+    global _REPORT_OVERRIDES
+    if _REPORT_OVERRIDES is None:
+        try:
+            with open(REPORT_OVERRIDES_FILE, "r", encoding="utf-8") as f:
+                _REPORT_OVERRIDES = (yaml.safe_load(f) or {}).get("overrides") or {}
+        except FileNotFoundError:
+            _REPORT_OVERRIDES = {}
+        except Exception as e:
+            print(f"  report_overrides.yml kunde inte läsas: {e}", file=sys.stderr)
+            _REPORT_OVERRIDES = {}
+    ov = _REPORT_OVERRIDES.get(ticker)
+    if not ov or not ov.get("period_end"):
+        return None
+    pend = pd.Timestamp(str(ov["period_end"]))
+    try:
+        q = tk.quarterly_income_stmt
+        if q is not None and not q.empty:
+            latest = max(pd.Timestamp(c) for c in q.columns)
+            if latest >= pend - pd.Timedelta(days=10):
+                print(f"  {ticker}: Yahoo har kvartalet {latest.date()} – rapportkomplettering används inte längre")
+                return None
+    except Exception:
+        pass
+    return ov
 
 
 def analyze_ticker(ticker: str):
@@ -988,6 +1025,7 @@ def analyze_ticker(ticker: str):
     capex_to_da = None
     fcf_margin_pct = None
     sbc_to_revenue_pct = None
+    _roic_years_list = []
     roic_pct = None
     roic_avg_pct = None
     roic_min_pct = None
@@ -1087,6 +1125,7 @@ def analyze_ticker(ticker: str):
                     continue
                 roic_by_year.append(year_roic)  # income.columns är nyast->äldst
 
+        _roic_years_list = list(roic_by_year)
         roic_years_count = len(roic_by_year)
         if roic_years_count >= 3:
             roic_pct = roic_by_year[0]
@@ -1131,9 +1170,39 @@ def analyze_ticker(ticker: str):
     except Exception as e:
         print(f"  Kvartalstrend saknas/fel för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)
 
+    # Rapportkomplettering (v9.7): ersätt Yahoos inaktuella siffror med
+    # rapporterade tills Yahoo har lagt in det nya kvartalet.
+    report_ov = report_override_for(ticker, tk)
+    ttm_override = None
+    if report_ov:
+        try:
+            if report_ov.get("ttm_eps"):
+                old_pe = pe
+                pe = last_close / float(report_ov["ttm_eps"]) if report_ov["ttm_eps"] > 0 else None
+                if isinstance(pe, (int, float)) and isinstance(forward_pe, (int, float)) and pe > 0:
+                    forward_pe_trend_pct = (forward_pe - pe) / pe * 100
+                if isinstance(peg, (int, float)) and isinstance(old_pe, (int, float)) and old_pe > 0 and pe:
+                    peg = peg * pe / old_pe
+                ttm_override = ("pe", pd.Timestamp(str(report_ov["period_end"])), float(report_ov["ttm_eps"]))
+            if report_ov.get("q_revenue") and report_ov.get("q_revenue_year_ago"):
+                revenue_growth_yoy_pct = (report_ov["q_revenue"] / report_ov["q_revenue_year_ago"] - 1) * 100
+            if report_ov.get("q_op_margin") is not None and report_ov.get("q_op_margin_year_ago") is not None:
+                operating_margin_trend_pp = float(report_ov["q_op_margin"]) - float(report_ov["q_op_margin_year_ago"])
+            if report_ov.get("ttm_fcf") is not None and report_ov.get("ttm_revenue"):
+                fcf_margin_pct = report_ov["ttm_fcf"] / report_ov["ttm_revenue"] * 100
+            if report_ov.get("fy_roic_pct") is not None:
+                prev = _roic_years_list
+                yrs = ([float(report_ov["fy_roic_pct"])] + list(prev))[:4]   # nytt år först, max 4 år
+                if len(yrs) >= 3:
+                    roic_pct, roic_avg_pct, roic_min_pct, roic_years_count = yrs[0], sum(yrs) / len(yrs), min(yrs), len(yrs)
+            print(f"  {ticker}: kompletterad med rapport {report_ov.get('report_date')} ({report_ov.get('source')})")
+        except Exception as e:
+            print(f"  {ticker}: rapportkomplettering misslyckades: {type(e).__name__}: {e}", file=sys.stderr)
+            report_ov = None
+
     valuation = None
     try:
-        valuation = compute_valuation(tk, info, pe, forward_pe, revenue_growth_yoy_pct, dividend_yield_pct, market_cap)
+        valuation = compute_valuation(tk, info, pe, forward_pe, revenue_growth_yoy_pct, dividend_yield_pct, market_cap, ttm_override=ttm_override)
     except Exception as e:
         print(f"  Värdering saknas/fel för {ticker}: {type(e).__name__}: {e}", file=sys.stderr)
 
@@ -1143,6 +1212,8 @@ def analyze_ticker(ticker: str):
         "currency": currency,
         "price": round(last_close, 2),
         "pe": round(pe, 2) if isinstance(pe, (int, float)) else None,
+        "report_override": ({"source": report_ov.get("source"), "report_date": str(report_ov.get("report_date")),
+                             "period_end": str(report_ov.get("period_end"))} if report_ov else None),
         "forward_pe": round(forward_pe, 2) if isinstance(forward_pe, (int, float)) else None,
         "forward_pe_trend_pct": round(forward_pe_trend_pct, 1) if forward_pe_trend_pct is not None else None,
         "peg_ratio": round(peg, 2) if isinstance(peg, (int, float)) else None,

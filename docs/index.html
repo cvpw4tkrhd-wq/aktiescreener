@@ -362,6 +362,7 @@
   .fund-cat-banner .fcb-name { font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--text); }
   .fund-cat-banner .fcb-meta { font-size: 12px; color: var(--text-dim); white-space: nowrap; }
   .fund-cat-banner + .table-scroll { margin-top: 4px; }
+  .report-ov { font-size: 12px; line-height: 1.45; color: var(--text-dim); background: var(--panel-alt); border: 1px solid var(--border); border-radius: 8px; padding: 8px 11px; margin: -6px 0 14px; }
   .hidden-note { font-size: 12px; color: var(--text-faint); padding: 12px 18px 16px; text-align: center; }
   .fund-cat-banner .fcb-left { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
   .fund-cat-banner .fcb-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
@@ -2613,6 +2614,7 @@ function openDrawer(ticker) {
     <button class="drawer-close" id="drawerClose">STÄNG ✕</button>
     <h2>${r.name || r.watchlist_name}</h2>
     <div class="tkr-line">${r.ticker} · ${marketFlag(r.market)} ${r.market}${r.is_holding ? ' · INNEHAV' : ''}</div>
+    ${r.report_override ? `<div class="report-ov">📄 Kompletterad med rapporten ${escapeHtml(r.report_override.report_date || '')} – Yahoo har ännu inte lagt in kvartalet, så P/E, tillväxt, marginaler, FCF, ROIC och värdering bygger på bolagets egna siffror tills dess.</div>` : ''}
     ${sparklineHtml(r, 'price_history_3m', 'KURS 3 MÅN')}
     ${sparklineHtml(r, 'price_history_1y', 'KURS 1 ÅR')}
     ${drawerSummaryHtml(r)}

@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-05T21:30:25.554267+00:00",
+ "generated_at": "2026-10-05T22:46:12.594782+00:00",
  "version": "10.1",
  "stocks": 201,
  "live": {
@@ -14,18 +14,18 @@
     "buckets": {
      "buy": {
       "n": 235,
-      "avg_excess": -0.34,
+      "avg_excess": -0.35,
       "hit_rate": 48.1
      },
      "low": {
       "n": 338,
-      "avg_excess": 0.26,
-      "hit_rate": 48.5
+      "avg_excess": 0.28,
+      "hit_rate": 47.9
      },
      "mid": {
       "n": 203,
-      "avg_excess": -0.05,
-      "hit_rate": 51.2
+      "avg_excess": -0.06,
+      "hit_rate": 52.2
      }
     }
    },

@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-28T13:16:44Z",
-  "price_date": "2026-09-25",
+  "generated_at": "2026-10-05T13:59:48Z",
+  "price_date": "2026-10-05",
   "ranking_year": 2025,
   "buy_year": 2026,
   "universe_size": 503,
@@ -12,8 +12,8 @@
       "sector": "Information Technology",
       "ret_prev_year_pct": 283.7,
       "base_price": 172.09,
-      "price": 456.81,
-      "ytd_pct": 165.4,
+      "price": 441.64,
+      "ytd_pct": 156.6,
       "rank": 1
     },
     {
@@ -22,8 +22,8 @@
       "sector": "Information Technology",
       "ret_prev_year_pct": 240.2,
       "base_price": 285.25,
-      "price": 1082.28,
-      "ytd_pct": 279.4,
+      "price": 1059.58,
+      "ytd_pct": 271.5,
       "rank": 2
     },
     {
@@ -32,8 +32,8 @@
       "sector": "Information Technology",
       "ret_prev_year_pct": 225.3,
       "base_price": 274.71,
-      "price": 916.83,
-      "ytd_pct": 233.7,
+      "price": 900.76,
+      "ytd_pct": 227.9,
       "rank": 3
     },
     {
@@ -42,8 +42,8 @@
       "sector": "Financials",
       "ret_prev_year_pct": 203.5,
       "base_price": 113.1,
-      "price": 119.4,
-      "ytd_pct": 5.6,
+      "price": 113.9,
+      "ytd_pct": 0.7,
       "rank": 4
     },
     {
@@ -52,8 +52,8 @@
       "sector": "Materials",
       "ret_prev_year_pct": 172.8,
       "base_price": 99.21,
-      "price": 121.43,
-      "ytd_pct": 22.4,
+      "price": 114.07,
+      "ytd_pct": 15.0,
       "rank": 5
     }
   ]

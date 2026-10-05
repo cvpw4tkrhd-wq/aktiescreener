@@ -1397,6 +1397,8 @@ def is_valuation_reason(txt):
 INVESTMENT_IGNORED = ("revenue_growth_yoy_pct", "operating_margin_trend_pp", "fcf_margin_pct", "peg_ratio",
                       "forward_pe_trend_pct", "pe", "earnings_yield_pct", "risk_premium_pct")
 MARGIN_TREND_SANITY = 60   # procentenheter
+INVESTMENT_TICKERS = {"INVE-A.ST", "INVE-B.ST", "INDU-A.ST", "INDU-C.ST", "LATO-B.ST", "LUND-B.ST", "KINV-A.ST", "KINV-B.ST",
+                      "SVOL-A.ST", "SVOL-B.ST", "BURE.ST", "CRED-A.ST", "ORES.ST", "VNV.ST", "SPLTN.ST"}
 
 
 def rate_sensitivity_weight(d, ten_y_chg):
@@ -2119,8 +2121,10 @@ def main():
             # värdeförändringar i innehaven och är inte meningsfulla som för rörelsebolag.
             pre_notes = []
             ind = d.get("industry") or ""
-            d["investment_company"] = bool(entry.get("investment_company")) or (
-                entry["market"] in ("SE", "NO", "DK", "FI") and ind in ("Asset Management", "Conglomerates"))
+            # Yahoo kallar även industrikoncerner (t.ex. Lagercrantz) "Conglomerates" – därför en
+            # uttrycklig lista för konglomerat, och branschregeln bara för "Asset Management" (v10.1)
+            d["investment_company"] = bool(entry.get("investment_company")) or ticker in INVESTMENT_TICKERS or (
+                entry["market"] in ("SE", "NO", "DK", "FI") and ind == "Asset Management")
             if d["investment_company"]:
                 d["ignored_metrics"] = {k: d.get(k) for k in INVESTMENT_IGNORED if d.get(k) is not None}
                 for k in INVESTMENT_IGNORED:

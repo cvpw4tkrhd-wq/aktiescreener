@@ -404,6 +404,44 @@
   .pf-rank { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-faint); padding-top: 1px; }
   .pf-cname { font-size: 13.5px; } .pf-csub { font-size: 11px; color: var(--text-dim); line-height: 1.4; }
   .pf-crow .pf-num { padding-top: 1px; }
+  /* Poänguppdelning och dubbel poängcell (v9.9) */
+  .sb-sec > summary { font-weight: 600; }
+  .sb-sellsec { border-left: 3px solid var(--down); padding-left: 10px; }
+  .sb-buysec { border-left: 3px solid var(--accent, var(--amber)); padding-left: 10px; }
+  .sb-lead { font-size: 13.5px; line-height: 1.5; margin: 4px 0 8px; }
+  .sb-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11.5px; color: var(--text-dim); margin-bottom: 6px; align-items: center; }
+  .sb-legend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+  .sb-legend i.pos { background: var(--up); } .sb-legend i.neg { background: var(--down); }
+  .sb-tip { margin-left: auto; font-style: italic; }
+  .sb-area { border-top: 1px solid var(--border); }
+  .sb-row { display: grid; grid-template-columns: minmax(110px, 170px) 1fr 48px; gap: 10px; align-items: center; padding: 8px 0; cursor: pointer; list-style: none; }
+  .sb-row::-webkit-details-marker { display: none; }
+  .sb-lab { font-size: 13px; line-height: 1.25; }
+  .sb-hint { display: block; font-size: 10.5px; color: var(--text-faint); margin-top: 2px; }
+  .sb-track { position: relative; height: 12px; background: var(--panel-alt); border-radius: 6px; }
+  .sb-mid { position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: var(--text-faint); }
+  .sb-fill { position: absolute; top: 0; bottom: 0; border-radius: 6px; }
+  .sb-fill.pos { background: var(--up); } .sb-fill.neg { background: var(--down); }
+  .sb-sum { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 700; text-align: right; }
+  .sb-sum.pos, .sb-pts.pos { color: var(--up); } .sb-sum.neg, .sb-pts.neg { color: var(--down); }
+  .sb-items { padding: 2px 0 10px; }
+  .sb-item { display: grid; grid-template-columns: 44px 1fr; gap: 8px; font-size: 12.5px; line-height: 1.4; padding: 3px 0; color: var(--text-dim); }
+  .sb-pts { font-family: 'IBM Plex Mono', monospace; font-weight: 700; text-align: right; color: var(--text-faint); }
+  .sb-math { font-family: 'IBM Plex Mono', monospace; font-size: 12px; margin-top: 10px; padding: 8px 10px; background: var(--panel-alt); border-radius: 8px; }
+  .sb-foot-note { font-size: 11px; color: var(--text-faint); margin-top: 6px; }
+  .sb-neutral { margin-top: 8px; } .sb-neutral > summary { font-size: 12px; color: var(--text-dim); cursor: pointer; }
+  .dual-score { display: flex; flex-direction: column; gap: 5px; min-width: 128px; }
+  .ds-row { display: grid; grid-template-columns: 34px 1fr 24px; gap: 6px; align-items: center; }
+  .ds-lbl { font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .04em; color: var(--text-faint); text-align: left; }
+  .ds-bar { position: relative; height: 7px; background: var(--panel-alt); border-radius: 4px; }
+  .ds-fill { height: 100%; border-radius: 4px; opacity: .45; }
+  .ds-buy .ds-fill { background: var(--accent, var(--amber)); } .ds-sell .ds-fill { background: var(--down); }
+  .ds-row.hit .ds-fill { opacity: 1; }
+  .ds-thr { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--text-faint); }
+  .ds-num { font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; font-weight: 700; text-align: right; }
+  .ds-buy.hit .ds-num, .ds-buy.hit .ds-lbl { color: var(--accent, var(--amber)); } .ds-sell.hit .ds-num, .ds-sell.hit .ds-lbl { color: var(--down); }
+  .dr-sum-item.sum-buy { border-color: var(--accent, var(--amber)); } .dr-sum-item.sum-sell { border-color: var(--down); }
+  .dr-sum-item.sum-buy .dr-sum-val { color: var(--accent, var(--amber)); } .dr-sum-item.sum-sell.hit .dr-sum-val { color: var(--down); }
   .hidden-note { font-size: 12px; color: var(--text-faint); padding: 12px 18px 16px; text-align: center; }
   .fund-cat-banner .fcb-left { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
   .fund-cat-banner .fcb-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
@@ -1241,23 +1279,24 @@ function scoreSellSignal(d) {
   // v9.1: varje skäl får ett tecken (+1 höjer säljpoängen, −1 sänker) genom att
   // push läser av hur score ändrats sedan föregående skäl.
   reasons.signs = [];
+  reasons.points = [];   // v9.9: poäng per skäl för uppdelningen i informationsrutan
   let _lastScore = 0;
   const _push = Array.prototype.push;
-  reasons.push = (txt) => { _push.call(reasons, txt); reasons.signs.push(Math.sign(score - _lastScore)); _lastScore = score; return reasons.length; };
+  reasons.push = (txt) => { _push.call(reasons, txt); reasons.signs.push(Math.sign(score - _lastScore)); reasons.points.push(score - _lastScore); _lastScore = score; return reasons.length; };
 
   // Beräknas först: om bolaget redan visar tecken på finansiell stress
   // (utebliven vinst + hög skuldsättning + nedåttrend) ska en "förbättrad"
   // marginal eller "stark" FCF inte få dra ner säljpoängen - i ett sånt
   // läge är de siffrorna ofta en artefakt av nedskärningar/tillgångsförsäljningar,
   // inte ett tecken på att verksamheten faktiskt mår bättre.
-  const distress = d.pe === null && d.debt_to_equity !== null && d.debt_to_equity !== undefined
+  const distress = !d.investment_company && d.pe === null && d.debt_to_equity !== null && d.debt_to_equity !== undefined
     && d.debt_to_equity > 120 && d.above_sma50 === false;
 
   if (d.rsi14 !== null && d.rsi14 !== undefined && d.rsi14 > 70) {
     score += 15; reasons.push(`RSI överköpt (${d.rsi14})`);
   }
   if (d.cross_signal === 'death_cross') {
-    score += 35; reasons.push('Death cross (SMA50 under SMA200)');
+    score += 20; reasons.push('Death cross (SMA50 under SMA200)');   // v9.9: 35 → 20, hänger ihop med 'pris under SMA200'
   }
   if (d.above_sma50 === false) {
     // v8.8: kortsiktig svaghet väger lätt, men mer när även långa trenden brutits
@@ -1281,13 +1320,28 @@ function scoreSellSignal(d) {
       score -= 10; reasons.push(`Forward P/E ${d.forward_pe_trend_pct}% under historiskt P/E – vinsttillväxt väntas, talar emot att sälja`);
     }
   }
+  // v9.9: graderad riskpremie (samma steg som köpmodellen)
   if (d.risk_premium_pct !== null && d.risk_premium_pct !== undefined) {
-    if (d.risk_premium_pct < 0) {
+    const rp = d.risk_premium_pct;
+    if (rp < -3) {
       score += 10; reasons.push(`Negativ riskpremie (vinstavkastning ${d.earnings_yield_pct}% under riskfri ränta ${d.risk_free_rate_pct}%) – du får mer avkastning helt riskfritt just nu`);
-    } else if (d.risk_premium_pct > 8) {
+    } else if (rp < 0) {
+      score += 4; reasons.push(`Något sämre än riskfri ränta (vinstavkastning ${d.earnings_yield_pct}% mot riskfri ränta ${d.risk_free_rate_pct}%) – liten negativ riskpremie`);
+    } else if (rp > 8) {
       score -= 10; reasons.push(`Hög riskpremie (vinstavkastning ${d.earnings_yield_pct}% mot riskfri ränta ${d.risk_free_rate_pct}%) – talar emot att sälja`);
     }
   }
+  // v9.9: värdering mot egen historik (befintligt verktyg som tidigare bara påverkade köppoängen)
+  if (d.valuation && !d.investment_company) {
+    const v = d.valuation, cyc = ['Energy', 'Materials', 'Semiconductors'].includes(d.sector);
+    const falling = (v.flags || []).includes('earnings_falling');
+    if (v.verdict === 'expensive') {
+      score += cyc ? 4 : 8; reasons.push(`Dyr mot egen historik (${v.metric} ${fmtNum(v.current, 1)} mot median ${fmtNum(v.hist_median, 1)}, ${v.diff_pct > 0 ? '+' : ''}${fmtNum(v.diff_pct, 0)}%)`);
+    } else if (v.verdict === 'cheap' && !falling) {
+      score -= cyc ? 3 : 6; reasons.push(`Billig mot egen historik (${v.metric} ${fmtNum(v.current, 1)} mot median ${fmtNum(v.hist_median, 1)}, ${fmtNum(v.diff_pct, 0)}%) – talar emot att sälja`);
+    }
+  }
+
   if (d.revenue_growth_yoy_pct !== null && d.revenue_growth_yoy_pct !== undefined) {
     if (d.revenue_growth_yoy_pct < -5) {
       score += 8; reasons.push(`Krympande intäkter (${fmtNum(d.revenue_growth_yoy_pct,0)}% mot samma kvartal förra året)`);
@@ -1332,7 +1386,7 @@ function scoreSellSignal(d) {
     score += 10; reasons.push(`Hög skuldsättning (D/E ${d.debt_to_equity})`);
   }
   if (d.pb !== null && d.pb !== undefined) {
-    if (d.pb > 8) { score += 10; reasons.push(`Mycket högt P/B (${d.pb})`); }
+    if (d.pb > 8 && !(!d.roic_na && (d.roic_avg || 0) >= 15)) { score += 10; reasons.push(`Mycket högt P/B (${d.pb})`); }   // v9.9: inte när hög ROIC förklarar P/B
     if (d.pb < 0) { score += 25; reasons.push(`Negativt P/B (${d.pb}) – bolaget har negativt eget kapital, allvarlig varningssignal`); }
   }
   if (d.market_cap !== null && d.market_cap !== undefined && d.market_cap < 50000000) {
@@ -1370,22 +1424,23 @@ function scoreSellSignal(d) {
     score += 20; reasons.push('Kombination av utebliven vinst, hög skuldsättning och nedåttrend – tecken på finansiell stress');
   }
 
-  score = Math.max(0, Math.min(100, score));
-
+  // v9.9: geopolitiken läggs på råsumman – klipps till 0–100 en gång på slutet
   if (d.sector_weight) {
-    score = Math.max(0, Math.min(100, score - d.sector_weight));
+    score = score - d.sector_weight;
     if (d.geopolitics_note) {
       reasons.push(`Geopolitik/makro (${d.sector}): ${d.geopolitics_note}`);
     }
   }
 
   if (d.country_weight) {
-    score = Math.max(0, Math.min(100, score - d.country_weight));
+    score = score - d.country_weight;
     if (d.geopolitics_country_note) {
       reasons.push(`Geopolitik/makro (${d.country}): ${d.geopolitics_country_note}`);
     }
   }
 
+  reasons.rawScore = score;
+  score = Math.max(0, Math.min(100, score));
   return { score, reasons };
 }
 
@@ -1462,6 +1517,8 @@ function applyHoldingsToResults() {
     r.sell_score = score;
     r.sell_reasons = reasons;
     r.sell_reason_signs = reasons.signs;
+    r.sell_reason_points = reasons.points;
+    r.sell_raw_score = reasons.rawScore;
     const { days, delta } = updateSellHistory(sellHistory, r.ticker, score, todayStr);
     r.sell_days_on_list = days;
     r.sell_score_delta = delta;
@@ -2320,11 +2377,11 @@ function render() {
       <td class="num dim">${fmtVol(r.volume_ratio)}</td>
       <td class="num">${targetCompactHtml(r)}</td>
       <td class="num">
-        <div class="score-bar-wrap ${cls}">
+        ${state.tab === 'sell' ? dualScoreHtml(r) : `<div class="score-bar-wrap ${cls}">
           ${deltaHtml(delta)}
           <div class="score-bar"><div style="width:${score ?? 0}%"></div></div>
-          <span class="score-num">${score ?? '–'}</span>${state.tab === 'sell' ? `<span class="score-num-secondary" title="Köppoäng för samma aktie">K${r.buy_score ?? '–'}</span>` : ''}
-        </div>
+          <span class="score-num">${score ?? '–'}</span>
+        </div>`}
       </td>
       <td class="num"><button class="info-btn" data-ticker="${r.ticker}" title="Visa alla nyckeltal" aria-label="Visa alla nyckeltal">ⓘ</button></td>
     </tr>`;
@@ -2337,7 +2394,7 @@ function render() {
       <th class="num">RSI14</th>
       <th class="num">Volym</th>
       <th class="num">Kursmål</th>
-      <th class="num">${state.tab === 'sell' ? 'Sälj · Köp' : 'Köppoäng'}</th>
+      <th class="num">${state.tab === 'sell' ? 'Köp · Sälj' : 'Köppoäng'}</th>
       <th class="num"></th>
     </tr></thead>`;
 
@@ -2468,6 +2525,104 @@ function drawerSecOpen(key, dflt) {
   const st = drawerSecState();
   return (key in st ? st[key] : dflt) ? ' open' : '';
 }
+// ===== Poänguppdelning i informationsrutan (v9.9) =====
+const SCORE_AREAS = [
+  { key: 'valuation', sv: 'Värdering', en: 'Valuation', hsv: 'Pris i förhållande till vinst, tillgångar, utdelning och ränta', hen: 'Price relative to earnings, assets, dividends and rates' },
+  { key: 'earnings', sv: 'Vinst & tillväxt', en: 'Earnings & growth', hsv: 'Intäkter, marginaler, kassaflöde, kapitalavkastning och vinstutsikter', hen: 'Revenue, margins, cash flow, return on capital and earnings outlook' },
+  { key: 'trend', sv: 'Trend & teknik', en: 'Trend & technicals', hsv: 'Glidande medelvärden, RSI, volym och Investtech', hen: 'Moving averages, RSI, volume and Investtech' },
+  { key: 'analysts', sv: 'Analytiker', en: 'Analysts', hsv: 'Rekommendationer och kursmål', hen: 'Recommendations and price targets' },
+  { key: 'risk', sv: 'Risk & finansiell styrka', en: 'Risk & financial strength', hsv: 'Skuldsättning, volatilitet, storlek och likviditet', hen: 'Debt, volatility, size and liquidity' },
+  { key: 'macro', sv: 'Omvärld & makro', en: 'World & macro', hsv: 'Geopolitik, räntor och kreditläge', hen: 'Geopolitics, rates and credit' },
+];
+// Klassning utifrån skälets svenska text (skälen översätts först vid uppritning)
+function reasonArea(txt) {
+  const s = String(txt);
+  if (/^Analytiker|analytikerbevakning/.test(s)) return 'analysts';
+  if (/^Geopolitik|Ränte- och kreditstabilitet|^Stabiliteten|^Inverterad|kreditspread|^Räntekänslig|^Räntemedvind/.test(s)) return 'macro';
+  if (/^Forward P\/E|intäkt|rörelsemarginal|Rörelsemarginalens|FCF|ROIC|aktiebaserad|investeringstakt|Kassaförbrukning|^Investmentbolag/i.test(s)) return 'earnings';
+  if (/^Negativt P\/B|skuldsättning|volatilitet|börsvärde|Mikro-cap|likviditet|Kombination av utebliven/i.test(s)) return 'risk';
+  if (/SMA|RSI|[Cc]ross|volym|Volym|Investtech|momentumsignal|varningssignal/.test(s)) return 'trend';
+  if (/P\/E|P\/B|PEG|riskpremie|riskfri ränta|^Utdelning|^Värdering|^Substans|egen historik/.test(s)) return 'valuation';
+  return 'other';
+}
+const fmtPts = p => `${p > 0 ? '+' : (p < 0 ? '−' : '')}${fmtNum(Math.abs(p), Math.abs(p) % 1 ? 1 : 0)}`;
+
+function scoreBreakdownHtml(kind, r) {
+  const isSell = kind === 'sell';
+  const reasons = isSell ? r.sell_reasons : (kind === 'growth' ? r.growth_reasons : r.buy_reasons);
+  const points = isSell ? r.sell_reason_points : (kind === 'growth' ? r.growth_reason_points : r.buy_reason_points);
+  const signs = isSell ? r.sell_reason_signs : (kind === 'growth' ? r.growth_reason_signs : r.buy_reason_signs);
+  const finalScore = isSell ? r.sell_score : (kind === 'growth' ? r.growth_score : r.buy_score);
+  if (!reasons || !reasons.length) return `<div class="pf-note">${pfT('Inga särskilda signaler.', 'No particular signals.')}</div>`;
+  if (!points || points.length !== reasons.length) return reasonGroupsHtml(reasons, signs, isSell);   // äldre data utan poäng per skäl
+  const parts = isSell ? null : (kind === 'growth' ? r.growth_score_parts : r.buy_score_parts);
+  const groups = Object.fromEntries([...SCORE_AREAS.map(a => a.key), 'other'].map(k => [k, []]));
+  const neutral = [];
+  reasons.forEach((txt, i) => { const p = points[i] || 0; if (!p) { neutral.push(txt); return; } groups[reasonArea(txt)].push({ txt, p }); });
+  const areas = [...SCORE_AREAS, { key: 'other', sv: 'Övriga signaler', en: 'Other signals', hsv: '', hen: '' }]
+    .map(a => ({ ...a, items: groups[a.key].sort((x, y) => Math.abs(y.p) - Math.abs(x.p)), sum: groups[a.key].reduce((s, x) => s + x.p, 0) }))
+    .filter(a => a.items.length);
+  const base = isSell ? 0 : 50;
+  const up = areas.reduce((s, a) => s + a.items.filter(x => x.p > 0).reduce((t, x) => t + x.p, 0), 0);
+  const down = areas.reduce((s, a) => s + a.items.filter(x => x.p < 0).reduce((t, x) => t + x.p, 0), 0);
+  const damp = parts ? (parts.bonus_effective - parts.bonus) : 0;
+  const raw = isSell ? (r.sell_raw_score != null ? r.sell_raw_score : base + up + down) : base + up + down + damp;
+  const max = Math.max(10, ...areas.map(a => Math.abs(a.sum)));
+  // färg: för köp är plus bra, för sälj är plus dåligt (talar för att sälja)
+  const posCls = isSell ? 'neg' : 'pos', negCls = isSell ? 'pos' : 'neg';
+  const name = a => pfT(a.sv, a.en);
+  const topUp = areas.filter(a => a.sum > 0).sort((a, b) => b.sum - a.sum).slice(0, 2);
+  const topDown = areas.filter(a => a.sum < 0).sort((a, b) => a.sum - b.sum).slice(0, 2);
+  const list = arr => arr.map(a => `${name(a).toLowerCase()} (${fmtPts(a.sum)})`).join(pfT(' och ', ' and '));
+  const lead = isSell
+    ? pfT(`Säljpoängen startar på 0 och samlar det som talar för att sälja.${topUp.length ? ` Mest för att sälja: ${list(topUp)}.` : ''}${topDown.length ? ` Mest emot: ${list(topDown)}.` : ''}`,
+          `The sell score starts at 0 and adds up what argues for selling.${topUp.length ? ` Most for selling: ${list(topUp)}.` : ''}${topDown.length ? ` Most against: ${list(topDown)}.` : ''}`)
+    : pfT(`Poängen startar på 50.${topUp.length ? ` Det som höjer mest är ${list(topUp)}.` : ''}${topDown.length ? ` Det som sänker mest är ${list(topDown)}.` : ''}`,
+          `The score starts at 50.${topUp.length ? ` What raises it most: ${list(topUp)}.` : ''}${topDown.length ? ` What lowers it most: ${list(topDown)}.` : ''}`);
+  const rows = areas.map(a => {
+    const w = Math.min(50, Math.abs(a.sum) / max * 50).toFixed(1);
+    const bar = a.sum >= 0 ? `<div class="sb-fill ${posCls}" style="left:50%;width:${w}%"></div>` : `<div class="sb-fill ${negCls}" style="right:50%;width:${w}%"></div>`;
+    const items = a.items.map(x => `<div class="sb-item"><span class="sb-pts ${x.p > 0 ? posCls : negCls}">${fmtPts(x.p)}</span><span>${escapeHtml(x.txt)}</span></div>`).join('');
+    return `<details class="sb-area"><summary class="sb-row">
+        <div class="sb-lab" data-noi18n>${name(a)}<span class="sb-hint">${pfT(a.hsv, a.hen)}</span></div>
+        <div class="sb-track"><div class="sb-mid"></div>${bar}</div>
+        <div class="sb-sum ${a.sum > 0 ? posCls : (a.sum < 0 ? negCls : '')}">${fmtPts(a.sum)}</div></summary>
+      <div class="sb-items">${items}</div></details>`;
+  }).join('');
+  const shown = Math.max(0, Math.min(100, Math.round(raw)));
+  const math = isSell
+    ? pfT(`0 + ${fmtNum(up, 0)} för att sälja − ${fmtNum(Math.abs(down), 0)} emot = ${fmtNum(Math.round(raw), 0)}${shown !== Math.round(raw) ? ` → visas som ${finalScore}` : ''}. SÄLJ-flagga från 40.`,
+          `0 + ${fmtNum(up, 0)} for selling − ${fmtNum(Math.abs(down), 0)} against = ${fmtNum(Math.round(raw), 0)}${shown !== Math.round(raw) ? ` → shown as ${finalScore}` : ''}. SELL flag from 40.`)
+    : pfT(`50 + ${fmtNum(up, 0)} som höjer − ${fmtNum(Math.abs(down), 0)} som sänker${damp ? ` − ${fmtNum(Math.abs(damp), 0)} dämpning av stora bonusar` : ''} = ${finalScore}. KÖP från 65.`,
+          `50 + ${fmtNum(up, 0)} raising − ${fmtNum(Math.abs(down), 0)} lowering${damp ? ` − ${fmtNum(Math.abs(damp), 0)} dampening of large bonuses` : ''} = ${finalScore}. BUY from 65.`);
+  const dampNote = damp ? `<div class="sb-foot-note">${pfT('Dämpning: bonusar över 25 poäng räknas bara till 40 %, så att toppoäng blir ovanliga. Avdrag räknas alltid fullt ut.', 'Dampening: bonuses above 25 points count only 40%, so top scores are rare. Deductions always count in full.')}</div>` : '';
+  const neutralHtml = neutral.length ? `<details class="sb-neutral"><summary>${pfT(`Övrigt – påverkar inte poängen (${neutral.length})`, `Other – does not affect the score (${neutral.length})`)}</summary><div class="sb-items">${neutral.map(x => `<div class="sb-item"><span class="sb-pts">±0</span><span>${escapeHtml(x)}</span></div>`).join('')}</div></details>` : '';
+  return `<div class="sb-lead" data-noi18n>${lead}</div>
+    <div class="sb-legend" data-noi18n><span><i class="${posCls}"></i>${isSell ? pfT('Talar för att sälja', 'Argues for selling') : pfT('Höjer poängen', 'Raises the score')}</span><span><i class="${negCls}"></i>${isSell ? pfT('Talar emot att sälja', 'Argues against selling') : pfT('Sänker poängen', 'Lowers the score')}</span><span class="sb-tip">${pfT('Tryck på ett område för detaljer', 'Tap an area for details')}</span></div>
+    <div class="sb-rows">${rows}</div>
+    <div class="sb-math" data-noi18n>${math}</div>${dampNote}${neutralHtml}`;
+}
+
+function scoreBreakdownSections(r) {
+  const tab = state.tab;
+  const sec = (key, kind, title, open, cls) => `<details class="dr-sec sb-sec ${cls}" data-sec="${key}"${drawerSecOpen(key, open)}>
+      <summary data-noi18n>${title}</summary>${scoreBreakdownHtml(kind, r)}</details>`;
+  if (r.is_holding) {
+    return sec('sb-sell', 'sell', pfT('SÅ RÄKNADES SÄLJPOÄNGEN', 'HOW THE SELL SCORE WAS CALCULATED') + ` · ${r.sell_score ?? '–'}`, tab === 'sell', 'sb-sellsec')
+      + sec(tab === 'growth' ? 'sb-growth' : 'sb-buy', tab === 'growth' ? 'growth' : 'buy', (tab === 'growth' ? pfT('SÅ RÄKNADES TILLVÄXTPOÄNGEN', 'HOW THE GROWTH SCORE WAS CALCULATED') : pfT('SÅ RÄKNADES KÖPPOÄNGEN', 'HOW THE BUY SCORE WAS CALCULATED')) + ` · ${(tab === 'growth' ? r.growth_score : r.buy_score) ?? '–'}`, tab !== 'sell', 'sb-buysec');
+  }
+  const kind = tab === 'growth' ? 'growth' : 'buy';
+  return sec('sb-' + kind, kind, (kind === 'growth' ? pfT('SÅ RÄKNADES TILLVÄXTPOÄNGEN', 'HOW THE GROWTH SCORE WAS CALCULATED') : pfT('SÅ RÄKNADES KÖPPOÄNGEN', 'HOW THE BUY SCORE WAS CALCULATED')) + ` · ${(kind === 'growth' ? r.growth_score : r.buy_score) ?? '–'}`, true, 'sb-buysec');
+}
+
+// Dubbel poängcell för innehav: köp och sälj lika tydligt, med egna färger
+function dualScoreHtml(r) {
+  const b = r.buy_score, s = r.sell_score;
+  const row = (lbl, v, thr, cls, tip) => `<div class="ds-row ${cls} ${v != null && v >= thr ? 'hit' : ''}" title="${tip}">
+      <span class="ds-lbl">${lbl}</span><div class="ds-bar"><div class="ds-fill" style="width:${v ?? 0}%"></div><div class="ds-thr" style="left:${thr}%"></div></div><span class="ds-num">${v ?? '–'}</span></div>`;
+  return `<div class="dual-score">${row(pfT('KÖP', 'BUY'), b, 65, 'ds-buy', pfT('Köppoäng – KÖP från 65 (strecket)', 'Buy score – BUY from 65 (the line)'))}${row(pfT('SÄLJ', 'SELL'), s, 40, 'ds-sell', pfT('Säljpoäng – SÄLJ från 40 (strecket)', 'Sell score – SELL from 40 (the line)'))}</div>`;
+}
+
 function drawerSummaryHtml(r) {
   const tab = state.tab;
   const score = tab === 'sell' ? r.sell_score : (tab === 'growth' ? r.growth_score : r.buy_score);
@@ -2486,7 +2641,9 @@ function drawerSummaryHtml(r) {
   const box = (label, val, cls, sub) => `<div class="dr-sum-item ${cls}"><div class="dr-sum-label">${label}</div><div class="dr-sum-val">${val}</div>${sub ? `<div class="dr-sum-sub">${sub}</div>` : ''}</div>`;
   return `<div class="dr-summary">
     ${box('PRIS', `${fmtNum(r.price)} <small>${r.currency || ''}</small>`, '', '')}
-    ${box(scoreLabel, score ?? '–', scoreCls, '')}
+    ${r.is_holding
+      ? box(tab === 'growth' ? 'TILLVÄXTPOÄNG' : 'KÖPPOÄNG', (tab === 'growth' ? r.growth_score : r.buy_score) ?? '–', 'sum-buy', 'KÖP från 65') + box('SÄLJPOÄNG', r.sell_score ?? '–', 'sum-sell' + ((r.sell_score || 0) >= 40 ? ' hit' : ''), 'SÄLJ från 40')
+      : box(scoreLabel, score ?? '–', scoreCls, tab === 'growth' ? '' : 'KÖP från 65')}
     ${box('VÄRDERING', vTxt, vCls, v ? `${v.metric} ${v.diff_pct > 0 ? '+' : ''}${fmtNum(v.diff_pct, 0)}% mot historik` : '')}
     ${box('TREND', trTxt, trCls, r.rsi14 != null ? `RSI ${fmtNum(r.rsi14, 0)}` : '')}
     ${box('ANALYTIKER', rec ? (recSv[rec] || rec.toUpperCase()) : '–', recCls, r.analyst_upside_pct != null ? `mål ${r.analyst_upside_pct > 0 ? '+' : ''}${fmtNum(r.analyst_upside_pct, 0)}%` : '')}
@@ -2955,6 +3112,7 @@ function openDrawer(ticker) {
     ${sparklineHtml(r, 'price_history_3m', 'KURS 3 MÅN')}
     ${sparklineHtml(r, 'price_history_1y', 'KURS 1 ÅR')}
     ${drawerSummaryHtml(r)}
+    ${scoreBreakdownSections(r)}
     <details class="dr-sec" data-sec="val"${drawerSecOpen('val', true)}>
       <summary>VÄRDERING</summary>
       <div class="stat-grid">
@@ -3019,8 +3177,7 @@ function openDrawer(ticker) {
       </div>
     </details>
     ${r.data_source === 'yfinance+fmp' ? '<div class="pe-compare-footnote">Kassaflödesnyckeltal (Capex/DA, FCF-marginal, SBC) hämtade från Financial Modeling Prep.</div>' : ''}
-    <div class="dr-sec-title">${state.tab === 'sell' ? 'SKÄL TILL SÄLJPOÄNGEN' : 'SKÄL TILL POÄNGEN'}</div>
-    ${reasonGroupsHtml(reasons, state.tab === 'sell' ? r.sell_reason_signs : (state.tab === 'growth' ? r.growth_reason_signs : r.buy_reason_signs), state.tab === 'sell')}
+
     ${r.ai_writeup ? `
     <div class="ai-writeup">
       <div class="stat-label">AI-KVALITETSANALYS <span class="ai-writeup-date">(${fmtDate(r.ai_writeup.generated_at)})</span></div>
@@ -3242,7 +3399,7 @@ const MODULES_SV = [
           <div class="lbl">I appen</div>
           <table>
             <tr><td>≥65 poäng</td><td>Flaggas KÖP (om analytikerkonsensus inte säger emot — mer om det senare)</td></tr>
-            <tr><td>≥40 säljpoäng</td><td>Flaggas SÄLJ för innehav du äger</td></tr>
+            <tr><td>≥40 säljpoäng</td><td>Flaggas SÄLJ för innehav du äger. Under Mina innehav visas köp- och säljpoäng sida vid sida, med ett streck vid respektive gräns</td></tr>
             <tr><td>&lt;50 poäng</td><td>Döljs i USA/Europa/Norden/Tillväxt (bevakas fortfarande, dina innehav visas alltid)</td></tr>
           </table>
         </div>
@@ -3360,7 +3517,7 @@ const MODULES_SV = [
           <table>
             <tr><td>P/B &lt; 0</td><td>−25 poäng — negativt eget kapital, allvarlig varningssignal</td></tr>
             <tr><td>0 &lt; P/B &lt; 1.5 (utan hög skuld)</td><td>+8 poäng</td></tr>
-            <tr><td>P/B &gt; 6</td><td>−5 poäng — svagt mått för bolag med få fysiska tillgångar</td></tr>
+            <tr><td>P/B &gt; 6</td><td>−5 poäng — men inget avdrag om ROIC-snittet är över 15 %, eftersom hög avkastning på kapitalet motiverar ett högt P/B</td></tr>
           </table>
         </div>
       `
@@ -3390,7 +3547,9 @@ const MODULES_SV = [
           <div class="lbl">I appen</div>
           <table>
             <tr><td>Riskpremie &gt; 8pp</td><td>+10 poäng — mycket kompensation för risken</td></tr>
-            <tr><td>Riskpremie &lt; 0</td><td>−10 poäng — du får mer riskfritt just nu</td></tr>
+            <tr><td>Riskpremie 4–8pp</td><td>+4 poäng</td></tr>
+            <tr><td>Riskpremie −3–0pp</td><td>−4 poäng — liten negativ riskpremie</td></tr>
+            <tr><td>Riskpremie &lt; −3pp</td><td>−10 poäng — du får klart mer riskfritt just nu</td></tr>
           </table>
         </div>
       `
@@ -3782,7 +3941,7 @@ const MODULES_SV = [
         <p><strong>Avdrag räknas alltid fullt ut</strong> — en dålig aktie ska kunna hamna nära noll. <strong>Bonusar dämpas</strong> efter 25 poäng (de första 25 räknas fullt, resten bara till 40%) — det gör poäng nära 100 strukturellt sällsynta, och håller sig så även när nya faktorer läggs till i modellen över tid.</p>
         <h3 class="sub">Geopolitik och makro</h3>
         <p>Utöver bolagsspecifika faktorer väger appen även in manuellt uppdaterade sektor- och landsvikter kopplade till verkliga världshändelser (t.ex. Iran-konfliktens effekt på oljepris och halvledarsektorn) — dessa faller in i samma dämpade bonuspool, inte som ett separat, obegränsat tillägg.</p>
-      `
+      <h3 class="sub">Så läser du uppdelningen i informationsrutan</h3><p>Överst i varje informationsruta visas <strong>Så räknades poängen</strong>: alla skäl grupperade i sex områden – värdering, vinst och tillväxt, trend och teknik, analytiker, risk och finansiell styrka samt omvärld och makro – med hur många poäng varje område gav. Tryck på ett område för att se de enskilda skälen. Sista raden visar hela uträkningen, till exempel 50 + 41 som höjer − 27 som sänker − 9 dämpning = 55. För dina innehav visas både säljpoängen (röd kant) och köppoängen (blå kant).</p><h3 class="sub">Tak och specialfall</h3><p><strong>Värderingstak:</strong> P/E, PEG, P/B, riskpremie och utdelning mäter delvis samma sak. Tillsammans får de ge högst +16 eller −20 poäng, så att en och samma dyr- eller billighet inte räknas fem gånger. <strong>Investmentbolag</strong> (t.ex. Investor, Bure och Svolder) bedöms inte på intäkter, marginaler, kassaflöde eller P/E, eftersom de speglar värdeförändringar i innehaven. P/B används i stället som ett grovt mått på substansrabatt. <strong>Orimliga värden</strong>, som en marginalförändring på tusentals procentenheter, räknas inte. <strong>Räntekänslighet</strong> ger ±2–3 poäng när 10-årsräntan har rört sig tydligt under månaden, baserat på hur aktien historiskt reagerat på räntan.</p>`
     },
     {
       id: "kop-salj-tillvaxt",

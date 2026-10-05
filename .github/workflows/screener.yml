@@ -34,6 +34,10 @@ jobs:
         if: always()
         run: python scripts/funds.py || echo "Fondsteget misslyckades, fortsätter ändå"
 
+      - name: Signaluppföljning
+        if: always()
+        run: python scripts/followup.py || echo "Signaluppföljningen misslyckades, fortsätter ändå"
+
       - name: Generera AI-kvalitetsanalyser för toppkandidater
         if: always()
         env:
@@ -52,6 +56,7 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add docs/results.json data/score_history.json
           [ -f docs/funds.json ] && git add docs/funds.json
+          [ -f docs/followup.json ] && git add docs/followup.json
           [ -f debug_crash.txt ] && git add debug_crash.txt
           [ -f data/writeups.json ] && git add data/writeups.json
           git diff --cached --quiet && echo "Inga förändringar" || git commit -m "Uppdatera screenerresultat $(date -u +'%Y-%m-%d %H:%M UTC')"

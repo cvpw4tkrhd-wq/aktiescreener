@@ -827,6 +827,102 @@ REPORT_OVERRIDES_FILE = DATA_DIR / "report_overrides.yml"
 _REPORT_OVERRIDES = None
 
 
+# ===== Nya verktyg (v10.0) =====
+MARKET_INDEX = {"US": ("^GSPC", "S&P 500"), "SE": ("^OMXSPI", "OMX Stockholm All-Share"), "DK": ("^OMXC25", "OMX Köpenhamn 25"),
+                "FI": ("^OMXH25", "OMX Helsingfors 25"), "DE": ("^GDAXI", "DAX"), "NL": ("^AEX", "AEX"),
+                "GB": ("^FTSE", "FTSE 100"), "NO": ("^STOXX", "STOXX Europe 600")}
+_INDEX_RET = {}
+
+
+def _ret_pct(close, days):
+    try:
+        if close is None or len(close) <= days:
+            return None
+        return round((float(close.iloc[-1]) / float(close.iloc[-1 - days]) - 1) * 100, 2)
+    except Exception:
+        return None
+
+
+def index_returns(market):
+    """Indexets avkastning 3 och 6 månader (hämtas en gång per marknad och körning)."""
+    if market not in _INDEX_RET:
+        tk_name = MARKET_INDEX.get(market)
+        out = None
+        if tk_name:
+            try:
+                c = yf.Ticker(tk_name[0]).history(period="1y", auto_adjust=True)["Close"].dropna()
+                out = {"index": tk_name[1], "r3": _ret_pct(c, 63), "r6": _ret_pct(c, 126)}
+            except Exception as e:
+                print(f"  Index {tk_name[0]} kunde inte hämtas: {e}", file=sys.stderr)
+        _INDEX_RET[market] = out
+    return _INDEX_RET[market]
+
+
+def fetch_eps_revisions(tk):
+    """Analytikernas vinstrevideringar för innevarande räkenskapsår (Yahoo eps_trend/eps_revisions)."""
+    try:
+        et, er = tk.eps_trend, tk.eps_revisions
+        if et is None or er is None or et.empty or er.empty:
+            return None
+        row = "0y" if "0y" in et.index else et.index[0]
+        g = lambda df, col: (float(df.loc[row, col]) if col in df.columns and df.loc[row, col] == df.loc[row, col] else None)
+        cur, d30, d90 = g(et, "current"), g(et, "30daysAgo"), g(et, "90daysAgo")
+        pct = lambda a, b: round((a / b - 1) * 100, 1) if a is not None and b not in (None, 0) and b > 0 else None
+        return {"period": row, "chg_30d_pct": pct(cur, d30), "chg_90d_pct": pct(cur, d90),
+                "up_30d": int(g(er, "upLast30days") or 0), "down_30d": int(g(er, "downLast30days") or 0)}
+    except Exception:
+        return None
+
+
+def report_info(tk, info):
+    """Nästa och senaste rapportdatum, och om Yahoo saknar det senast rapporterade kvartalet."""
+    try:
+        today = datetime.now(timezone.utc).date()
+        ts = lambda k: datetime.fromtimestamp(info[k], timezone.utc).date() if isinstance(info.get(k), (int, float)) else None
+        cands = [d for d in (ts("earningsTimestampStart"), ts("earningsTimestamp"), ts("earningsCallTimestampStart")) if d]
+        nxt = min((d for d in cands if d >= today), default=None)
+        last = max((d for d in cands if d < today), default=None)
+        stale = False
+        if last and (today - last).days <= 21:
+            q = tk.quarterly_income_stmt
+            if q is not None and not q.empty:
+                latest_q = max(pd.Timestamp(c) for c in q.columns).date()
+                stale = (last - latest_q).days > 100
+        return {"next": nxt.isoformat() if nxt else None, "last": last.isoformat() if last else None,
+                "days_to_next": (nxt - today).days if nxt else None, "yahoo_stale": stale}
+    except Exception:
+        return None
+
+
+def eps_revision_weight(rev):
+    """±3/±6 poäng utifrån hur årets vinstprognos ändrats senaste 30 dagarna."""
+    if not rev:
+        return 0, None
+    c, up, dn = rev.get("chg_30d_pct"), rev.get("up_30d") or 0, rev.get("down_30d") or 0
+    cnt = f"{up} höjningar, {dn} sänkningar"
+    if (c is not None and c >= 3) or (up - dn >= 3 and up >= 2 * max(dn, 1)):
+        return 6, f"Vinstprognoserna höjs kraftigt: årets förväntade vinst per aktie {c:+.1f} % senaste 30 dagarna ({cnt})" if c is not None else f"Vinstprognoserna höjs kraftigt senaste 30 dagarna ({cnt})"
+    if (c is not None and c <= -3) or (dn - up >= 3 and dn >= 2 * max(up, 1)):
+        return -6, f"Vinstprognoserna sänks kraftigt: årets förväntade vinst per aktie {c:+.1f} % senaste 30 dagarna ({cnt})" if c is not None else f"Vinstprognoserna sänks kraftigt senaste 30 dagarna ({cnt})"
+    if c is not None and c >= 1:
+        return 3, f"Vinstprognoserna höjs: årets förväntade vinst per aktie {c:+.1f} % senaste 30 dagarna ({cnt})"
+    if c is not None and c <= -1:
+        return -3, f"Vinstprognoserna sänks: årets förväntade vinst per aktie {c:+.1f} % senaste 30 dagarna ({cnt})"
+    return 0, None
+
+
+def rel_strength_weight(rs):
+    """±5 poäng när aktien tydligt slagit eller släpat efter sitt index senaste halvåret."""
+    if not rs or rs.get("rs_6m") is None or rs.get("rs_3m") is None:
+        return 0, None
+    r6, r3 = rs["rs_6m"], rs["rs_3m"]
+    if r6 >= 15 and r3 > 0:
+        return 5, f"Starkare än index: {r6:+.0f} procentenheter mot {rs['index']} senaste 6 månaderna ({r3:+.0f} senaste 3)"
+    if r6 <= -15 and r3 < 0:
+        return -5, f"Svagare än index: {r6:+.0f} procentenheter mot {rs['index']} senaste 6 månaderna ({r3:+.0f} senaste 3)"
+    return 0, None
+
+
 def report_override_for(ticker, tk):
     """Rapporterade siffror som kompletterar Yahoo tills Yahoo lagt in det nya
     kvartalet (v9.7). Returnerar None om ingen post finns eller om Yahoo redan
@@ -1213,6 +1309,10 @@ def analyze_ticker(ticker: str):
         "price": round(last_close, 2),
         "pe": round(pe, 2) if isinstance(pe, (int, float)) else None,
         "industry": info.get("industry"),
+        "ret_3m_pct": _ret_pct(close, 63),
+        "ret_6m_pct": _ret_pct(close, 126),
+        "eps_revisions": fetch_eps_revisions(tk),
+        "report": report_info(tk, info),
         "report_override": ({"source": report_ov.get("source"), "report_date": str(report_ov.get("report_date")),
                              "period_end": str(report_ov.get("period_end"))} if report_ov else None),
         "forward_pe": round(forward_pe, 2) if isinstance(forward_pe, (int, float)) else None,
@@ -2053,17 +2153,25 @@ def main():
                 valuation_w, valuation_note = 0, None
             # v9.9: räntekänslighet (befintligt verktyg) – används när räntan rört sig tydligt
             rate_w, rate_note = rate_sensitivity_weight(d, ten_y_chg)
+            # v10.0: relativ styrka mot index och analytikernas vinstrevideringar
+            idx = index_returns(entry["market"])
+            d["rel_strength"] = None
+            if idx and d.get("ret_6m_pct") is not None and idx.get("r6") is not None:
+                d["rel_strength"] = {"index": idx["index"], "rs_3m": round(d["ret_3m_pct"] - idx["r3"], 1) if d.get("ret_3m_pct") is not None and idx.get("r3") is not None else None,
+                                     "rs_6m": round(d["ret_6m_pct"] - idx["r6"], 1), "idx_6m": idx["r6"], "idx_3m": idx["r3"]}
+            rs_w, rs_note = rel_strength_weight(d["rel_strength"])
+            rev_w, rev_note = (0, None) if d["investment_company"] else eps_revision_weight(d.get("eps_revisions"))
             d["valuation_weight"] = valuation_w
-            total_extra = sector_weight + country_weight + investtech_weight + macro_weight + valuation_w + rate_w
+            total_extra = sector_weight + country_weight + investtech_weight + macro_weight + valuation_w + rate_w + rs_w + rev_w
             buy_score, buy_reasons = score_buy_candidate(d, extra_weight=total_extra)
             growth_score, growth_reasons = score_growth_candidate(d, extra_weight=total_extra)
             for txt, sg, pt in pre_notes:
                 buy_reasons.append(txt, sign=sg, pts=pt)
                 growth_reasons.append(txt, sign=sg, pts=pt)
-            if rate_note:
-                rs_ = 1 if rate_w > 0 else -1
-                buy_reasons.append(rate_note, sign=rs_, pts=rate_w)
-                growth_reasons.append(rate_note, sign=rs_, pts=rate_w)
+            for w_, n_ in ((rate_w, rate_note), (rs_w, rs_note), (rev_w, rev_note)):
+                if n_:
+                    buy_reasons.append(n_, sign=1 if w_ > 0 else -1, pts=w_)
+                    growth_reasons.append(n_, sign=1 if w_ > 0 else -1, pts=w_)
 
             geopolitics_note = None
             if sector_weight:

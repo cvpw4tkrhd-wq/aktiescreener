@@ -1,11 +1,11 @@
 {
- "generated_at": "2026-10-05T21:01:02.933087+00:00",
- "version": "9.8",
+ "generated_at": "2026-10-05T21:13:41.125137+00:00",
+ "version": "10.0",
  "stocks": 201,
  "live": {
   "first_date": "2026-09-03",
   "last_date": "2026-10-05",
-  "observations": 783,
+  "observations": 979,
   "horizons": [
    {
     "days": 5,
@@ -19,12 +19,12 @@
      },
      "low": {
       "n": 338,
-      "avg_excess": 0.27,
+      "avg_excess": 0.26,
       "hit_rate": 48.5
      },
      "mid": {
       "n": 203,
-      "avg_excess": -0.06,
+      "avg_excess": -0.05,
       "hit_rate": 51.2
      }
     }

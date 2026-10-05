@@ -1212,6 +1212,7 @@ def analyze_ticker(ticker: str):
         "currency": currency,
         "price": round(last_close, 2),
         "pe": round(pe, 2) if isinstance(pe, (int, float)) else None,
+        "industry": info.get("industry"),
         "report_override": ({"source": report_ov.get("source"), "report_date": str(report_ov.get("report_date")),
                              "period_end": str(report_ov.get("period_end"))} if report_ov else None),
         "forward_pe": round(forward_pe, 2) if isinstance(forward_pe, (int, float)) else None,
@@ -1264,9 +1265,10 @@ class SignedReasons(list):
     def __init__(self):
         super().__init__()
         self.signs = []
+        self.points = []   # v9.9: råpoäng per skäl (före dämpning av bonusar)
         self._last = (0, 0)
 
-    def append(self, item, sign=None):
+    def append(self, item, sign=None, pts=None):
         if sign is None:
             loc = sys._getframe(1).f_locals
             # roic_adj samlas separat och läggs på bonus/penalty först efteråt
@@ -1275,8 +1277,44 @@ class SignedReasons(list):
             db, dp = b - self._last[0], p - self._last[1]
             self._last = (b, p)
             sign = 1 if db > dp else (-1 if dp > db else 0)
+            if pts is None:
+                pts = db - dp
         super().append(item)
         self.signs.append(sign)
+        self.points.append(round(pts, 1) if isinstance(pts, (int, float)) else 0)
+
+
+VAL_CAP_POS = 16   # låga multiplar speglar ofta värdefällor – begränsas mer
+VAL_CAP_NEG = 20   # tydligt dyra bolag ska fortfarande straffas ordentligt
+_VAL_PREFIX = ("Lågt P/E", "Högt P/E", "Lågt PEG", "Högt PEG", "Lågt P/B", "Substansrabatt", "Substanspremie", "Högt P/B", "Mycket högt P/B",
+               "Hög riskpremie", "Negativ riskpremie", "Klart bättre än riskfri", "Något sämre än riskfri", "Utdelning")
+
+
+def is_valuation_reason(txt):
+    return str(txt).startswith(_VAL_PREFIX)
+
+
+INVESTMENT_IGNORED = ("revenue_growth_yoy_pct", "operating_margin_trend_pp", "fcf_margin_pct", "peg_ratio",
+                      "forward_pe_trend_pct", "pe", "earnings_yield_pct", "risk_premium_pct")
+MARGIN_TREND_SANITY = 60   # procentenheter
+
+
+def rate_sensitivity_weight(d, ten_y_chg):
+    """v9.9: räntekänslighet (rate_beta) används när 10-årsräntan rört sig minst
+    0,25 pp på en månad. β = veckoavkastning i % per +1 pp ränta (1 år, R² ≥ 0,15).
+    Effekt = β × förändring: ≤ −5 ger −3 poäng, ≥ +5 ger +2."""
+    b, r2 = d.get("rate_beta"), d.get("rate_beta_r2")
+    if b is None or r2 is None or r2 < 0.15 or abs(b) > 200 or ten_y_chg is None or abs(ten_y_chg) < 0.25:
+        return 0, None
+    eff = b * ten_y_chg
+    up = ten_y_chg > 0
+    if eff <= -5:
+        return -3, (f"Räntekänslig: aktien har historiskt sjunkit när räntan {'stiger' if up else 'faller'} (β {b:+.1f}), "
+                    f"och 10-årsräntan har {'stigit' if up else 'fallit'} {abs(ten_y_chg):.2f} pp senaste månaden")
+    if eff >= 5:
+        return 2, (f"Räntemedvind: aktien har historiskt stigit när räntan {'stiger' if up else 'faller'} (β {b:+.1f}), "
+                   f"och 10-årsräntan har {'stigit' if up else 'fallit'} {abs(ten_y_chg):.2f} pp senaste månaden")
+    return 0, None
 
 
 def score_buy_candidate(d, extra_weight=0):
@@ -1306,7 +1344,7 @@ def score_buy_candidate(d, extra_weight=0):
         elif d["pe"] > 40:
             penalty += 10
             reasons.append(f"Högt P/E ({d['pe']})")
-    else:
+    elif not d.get("investment_company"):
         reasons.append("P/E saknas (t.ex. förlust eller ej rapporterat)")
 
     if d.get("peg_ratio") is not None:
@@ -1383,7 +1421,17 @@ def score_buy_candidate(d, extra_weight=0):
             penalty += 5
             reasons.append(f"Analytikernas kursmål {upside:+.0f}% under dagens pris (måttligt)")
 
-    if d.get("pb") is not None:
+    if d.get("pb") is not None and d.get("investment_company"):
+        # v9.9: för investmentbolag är P/B ett grovt mått på substansrabatt/premie
+        if d["pb"] < 0.85:
+            bonus += 8
+            reasons.append(f"Substansrabatt: P/B {d['pb']} – handlas mer än 15 % under bokfört värde")
+        elif d["pb"] > 1.15:
+            penalty += 5
+            reasons.append(f"Substanspremie: P/B {d['pb']} – handlas över bokfört värde")
+        else:
+            reasons.append(f"P/B {d['pb']} – handlas nära bokfört värde (ingen tydlig substansrabatt)")
+    elif d.get("pb") is not None:
         if d["pb"] < 0:
             penalty += 25
             reasons.append(f"Negativt P/B ({d['pb']}) – bolaget har negativt eget kapital, allvarlig varningssignal")
@@ -1395,8 +1443,11 @@ def score_buy_candidate(d, extra_weight=0):
                 bonus += 8
                 reasons.append(f"Lågt P/B ({d['pb']}) – handlas nära/under bokfört värde")
         elif d["pb"] > 6:
-            penalty += 5
-            reasons.append(f"Högt P/B ({d['pb']})")
+            if not d.get("roic_na") and (d.get("roic_avg") or 0) >= 15:
+                reasons.append(f"Högt P/B ({d['pb']}) – motiveras av hög ROIC ({d['roic_avg']:.0f}%), inget avdrag")
+            else:
+                penalty += 5
+                reasons.append(f"Högt P/B ({d['pb']})")
 
     if d.get("dividend_yield_pct") is not None:
         rf = d.get("risk_free_rate_pct")
@@ -1410,13 +1461,21 @@ def score_buy_candidate(d, extra_weight=0):
             bonus += 5
             reasons.append(f"Utdelning {d['dividend_yield_pct']}%")
 
+    # v9.9: graderad – räntenivån slår redan mot alla aktier via stabilitetsjusteringen
     if d.get("risk_premium_pct") is not None:
-        if d["risk_premium_pct"] > 8:
+        rp = d["risk_premium_pct"]
+        if rp > 8:
             bonus += 10
             reasons.append(f"Hög riskpremie (vinstavkastning {d['earnings_yield_pct']}% mot riskfri ränta {d['risk_free_rate_pct']}%) – betydligt mer betalt för risken än en säker placering ger")
-        elif d["risk_premium_pct"] < 0:
+        elif rp > 4:
+            bonus += 4
+            reasons.append(f"Klart bättre än riskfri ränta (vinstavkastning {d['earnings_yield_pct']}% mot riskfri ränta {d['risk_free_rate_pct']}%)")
+        elif rp < -3:
             penalty += 10
             reasons.append(f"Negativ riskpremie (vinstavkastning {d['earnings_yield_pct']}% under riskfri ränta {d['risk_free_rate_pct']}%) – du får MER avkastning helt riskfritt just nu")
+        elif rp < 0:
+            penalty += 4
+            reasons.append(f"Något sämre än riskfri ränta (vinstavkastning {d['earnings_yield_pct']}% mot riskfri ränta {d['risk_free_rate_pct']}%) – liten negativ riskpremie")
 
     if d.get("revenue_growth_yoy_pct") is not None:
         if d["revenue_growth_yoy_pct"] > 15:
@@ -1446,7 +1505,7 @@ def score_buy_candidate(d, extra_weight=0):
     # skuldsättning + nedåttrend samtidigt är ett starkare varningstecken
     # än vad de tre faktorerna signalerar var för sig.
     if (
-        d["pe"] is None
+        d["pe"] is None and not d.get("investment_company")
         and d.get("debt_to_equity") is not None and d["debt_to_equity"] > 120
         and d["above_sma50"] is False
     ):
@@ -1515,11 +1574,21 @@ def score_buy_candidate(d, extra_weight=0):
                 roic_adj -= 2
                 reasons.append(f"Ostabil ROIC – stora svängningar mellan åren (sämsta året {rmin:.1f}%)")
 
+        pre_cap = roic_adj
         roic_adj = max(-6, min(6, roic_adj))
+        if pre_cap != roic_adj and reasons.points:
+            reasons.points[-1] -= (pre_cap - roic_adj)   # taket ±6 syns i sista ROIC-skälet
+            lb, lp = reasons._last
+            if pre_cap > roic_adj:
+                lb -= (pre_cap - roic_adj)
+            else:
+                lp -= (roic_adj - pre_cap)
+            reasons._last = (lb, lp)
         if roic_adj > 0:
             bonus += roic_adj
         elif roic_adj < 0:
             penalty += -roic_adj
+        roic_adj = 0   # redan inräknad – håller poäng per skäl korrekt (v9.9)
 
     if d.get("sbc_to_revenue_pct") is not None and d["sbc_to_revenue_pct"] > 15:
         penalty += 10
@@ -1528,6 +1597,16 @@ def score_buy_candidate(d, extra_weight=0):
     if d.get("capex_to_da") is not None and d["capex_to_da"] > 5:
         penalty += 5
         reasons.append(f"Mycket hög investeringstakt (capex {d['capex_to_da']}x avskrivningar) – aggressiv tillväxtfas, ökad osäkerhet kring avkastning")
+
+    # v9.9: värderingstak – P/E, PEG, forward P/E, P/B, riskpremie och utdelning
+    # mäter delvis samma sak. Sammanlagt högst +VAL_CAP_POS / -VAL_CAP_NEG poäng.
+    val_net = sum(pt for txt, pt in zip(reasons, reasons.points) if is_valuation_reason(txt))
+    if val_net > VAL_CAP_POS:
+        bonus -= (val_net - VAL_CAP_POS)
+        reasons.append(f"Värderingstak: värderingssignalerna summerar till +{val_net:.0f}, begränsas till +{VAL_CAP_POS}")
+    elif val_net < -VAL_CAP_NEG:
+        penalty -= (-VAL_CAP_NEG - val_net)
+        reasons.append(f"Värderingstak: värderingssignalerna summerar till {val_net:.0f}, begränsas till -{VAL_CAP_NEG}")
 
     if extra_weight > 0:
         bonus += extra_weight
@@ -1542,6 +1621,7 @@ def score_buy_candidate(d, extra_weight=0):
         effective_bonus = bonus
 
     score = 50 + effective_bonus - penalty
+    reasons.parts = {"bonus": round(bonus, 1), "bonus_effective": round(effective_bonus, 1), "penalty": round(penalty, 1)}
     return max(0, min(100, round(score))), reasons
 
 
@@ -1572,7 +1652,7 @@ def score_growth_candidate(d, extra_weight=0):
         elif d["pe"] > 40:
             penalty += 10
             reasons.append(f"Högt P/E ({d['pe']})")
-    else:
+    elif not d.get("investment_company"):
         reasons.append("P/E saknas (vanligt för unga bolag utan stabil vinst)")
 
     if d.get("peg_ratio") is not None:
@@ -1655,7 +1735,17 @@ def score_growth_candidate(d, extra_weight=0):
             penalty += 10
             reasons.append(f"Analytikernas kursmål {upside:+.0f}% under dagens pris")
 
-    if d.get("pb") is not None:
+    if d.get("pb") is not None and d.get("investment_company"):
+        # v9.9: för investmentbolag är P/B ett grovt mått på substansrabatt/premie
+        if d["pb"] < 0.85:
+            bonus += 8
+            reasons.append(f"Substansrabatt: P/B {d['pb']} – handlas mer än 15 % under bokfört värde")
+        elif d["pb"] > 1.15:
+            penalty += 5
+            reasons.append(f"Substanspremie: P/B {d['pb']} – handlas över bokfört värde")
+        else:
+            reasons.append(f"P/B {d['pb']} – handlas nära bokfört värde (ingen tydlig substansrabatt)")
+    elif d.get("pb") is not None:
         if d["pb"] < 0:
             penalty += 25
             reasons.append(f"Negativt P/B ({d['pb']}) – bolaget har negativt eget kapital, allvarlig varningssignal")
@@ -1667,15 +1757,18 @@ def score_growth_candidate(d, extra_weight=0):
                 bonus += 8
                 reasons.append(f"Lågt P/B ({d['pb']}) – handlas nära/under bokfört värde")
         elif d["pb"] > 6:
-            penalty += 5
-            reasons.append(f"Högt P/B ({d['pb']}) – kan vara rimligt för ett snabbväxande bolag, men innebär hög värderingsrisk")
+            if not d.get("roic_na") and (d.get("roic_avg") or 0) >= 15:
+                reasons.append(f"Högt P/B ({d['pb']}) – motiveras av hög ROIC ({d['roic_avg']:.0f}%), inget avdrag")
+            else:
+                penalty += 5
+                reasons.append(f"Högt P/B ({d['pb']}) – kan vara rimligt för ett snabbväxande bolag, men innebär hög värderingsrisk")
 
     if d.get("risk_premium_pct") is not None:
         if d["risk_premium_pct"] > 8:
             bonus += 8
             reasons.append(f"Hög riskpremie (vinstavkastning {d['earnings_yield_pct']}% mot riskfri ränta {d['risk_free_rate_pct']}%)")
-        elif d["risk_premium_pct"] < 0:
-            penalty += 8
+        elif d["risk_premium_pct"] < -3:
+            penalty += 4
             reasons.append(f"Negativ riskpremie (vinstavkastning {d['earnings_yield_pct']}% under riskfri ränta {d['risk_free_rate_pct']}%)")
 
     if d.get("revenue_growth_yoy_pct") is not None:
@@ -1705,7 +1798,7 @@ def score_growth_candidate(d, extra_weight=0):
     # Finansiell stress-kombo och likviditetsspärrar - OFÖRÄNDRADE mot
     # standardmodellen. Litenhet ursäktar inte genuina varningstecken.
     if (
-        d["pe"] is None
+        d["pe"] is None and not d.get("investment_company")
         and d.get("debt_to_equity") is not None and d["debt_to_equity"] > 120
         and d["above_sma50"] is False
     ):
@@ -1754,6 +1847,16 @@ def score_growth_candidate(d, extra_weight=0):
         penalty += 8
         reasons.append(f"Hög aktiebaserad ersättning ({d['sbc_to_revenue_pct']}% av intäkter) – utspädningsrisk")
 
+    # v9.9: värderingstak – P/E, PEG, forward P/E, P/B, riskpremie och utdelning
+    # mäter delvis samma sak. Sammanlagt högst +VAL_CAP_POS / -VAL_CAP_NEG poäng.
+    val_net = sum(pt for txt, pt in zip(reasons, reasons.points) if is_valuation_reason(txt))
+    if val_net > VAL_CAP_POS:
+        bonus -= (val_net - VAL_CAP_POS)
+        reasons.append(f"Värderingstak: värderingssignalerna summerar till +{val_net:.0f}, begränsas till +{VAL_CAP_POS}")
+    elif val_net < -VAL_CAP_NEG:
+        penalty -= (-VAL_CAP_NEG - val_net)
+        reasons.append(f"Värderingstak: värderingssignalerna summerar till {val_net:.0f}, begränsas till -{VAL_CAP_NEG}")
+
     if extra_weight > 0:
         bonus += extra_weight
     elif extra_weight < 0:
@@ -1767,6 +1870,7 @@ def score_growth_candidate(d, extra_weight=0):
         effective_bonus = bonus
 
     score = 50 + effective_bonus - penalty
+    reasons.parts = {"bonus": round(bonus, 1), "bonus_effective": round(effective_bonus, 1), "penalty": round(penalty, 1)}
     return max(0, min(100, round(score))), reasons
 
 
@@ -1866,6 +1970,10 @@ def main():
     macro["stability_adjustment"] = stab_adj
     macro["score_adjustment"] = macro_weight   # visas i MAKRO-panelen: poängpåverkan på alla aktier
     macro["score_notes"] = macro_notes
+    try:
+        ten_y_chg = next((y.get("chg_1m") for y in (macro.get("bonds") or {}).get("yields", []) if y.get("label") == "10Y"), None)
+    except Exception:
+        ten_y_chg = None
     score_history = load_score_history()
     today_str = datetime.now(timezone.utc).date().isoformat()
 
@@ -1907,6 +2015,24 @@ def main():
                     d.update(fmp_data)
                     d["data_source"] = "yfinance+fmp"
 
+            # v9.9: investmentbolag – intäkter, marginaler, kassaflöde och P/E speglar
+            # värdeförändringar i innehaven och är inte meningsfulla som för rörelsebolag.
+            pre_notes = []
+            ind = d.get("industry") or ""
+            d["investment_company"] = bool(entry.get("investment_company")) or (
+                entry["market"] in ("SE", "NO", "DK", "FI") and ind in ("Asset Management", "Conglomerates"))
+            if d["investment_company"]:
+                d["ignored_metrics"] = {k: d.get(k) for k in INVESTMENT_IGNORED if d.get(k) is not None}
+                for k in INVESTMENT_IGNORED:
+                    d[k] = None
+                pre_notes.append(("Investmentbolag – intäkter, marginaler, kassaflöde, P/E och riskpremie speglar värdeförändringar i innehaven och räknas inte. P/B fungerar som ett grovt mått på substansrabatt.", 0, 0))
+            # v9.9: rimlighetskontroll – enorma marginalförändringar är nästan alltid basffekter
+            omt = d.get("operating_margin_trend_pp")
+            if isinstance(omt, (int, float)) and abs(omt) > MARGIN_TREND_SANITY:
+                d.setdefault("ignored_metrics", {})["operating_margin_trend_pp"] = omt
+                d["operating_margin_trend_pp"] = None
+                pre_notes.append((f"Rörelsemarginalens förändring ({omt:+.0f} procentenheter) är orimligt stor – troligen en baseffekt av små intäkter, räknas inte", 0, 0))
+
             sector = entry.get("sector")
             sector_weight, sector_names = sector_weight_for(sector, entry["market"]) if sector else (0, [])
             country_weight = country_weights.get(entry["market"], 0)
@@ -1923,46 +2049,62 @@ def main():
                 investtech_weight = 10 if rank <= 5 else (7 if rank <= 10 else 5)
 
             valuation_w, valuation_note = valuation_weight(d.get("valuation"), sector)
+            if d["investment_company"]:
+                valuation_w, valuation_note = 0, None
+            # v9.9: räntekänslighet (befintligt verktyg) – används när räntan rört sig tydligt
+            rate_w, rate_note = rate_sensitivity_weight(d, ten_y_chg)
             d["valuation_weight"] = valuation_w
-            total_extra = sector_weight + country_weight + investtech_weight + macro_weight + valuation_w
+            total_extra = sector_weight + country_weight + investtech_weight + macro_weight + valuation_w + rate_w
             buy_score, buy_reasons = score_buy_candidate(d, extra_weight=total_extra)
             growth_score, growth_reasons = score_growth_candidate(d, extra_weight=total_extra)
+            for txt, sg, pt in pre_notes:
+                buy_reasons.append(txt, sign=sg, pts=pt)
+                growth_reasons.append(txt, sign=sg, pts=pt)
+            if rate_note:
+                rs_ = 1 if rate_w > 0 else -1
+                buy_reasons.append(rate_note, sign=rs_, pts=rate_w)
+                growth_reasons.append(rate_note, sign=rs_, pts=rate_w)
 
             geopolitics_note = None
             if sector_weight:
                 geopolitics_note = ", ".join(sector_names) + (f" – begränsat till {sector_weight:+d} (tak ±{GEO_CAP})" if geo_capped != geo_raw else "")
                 sg = 1 if sector_weight > 0 else -1
-                buy_reasons.append(f"Geopolitik/makro ({sector}): {geopolitics_note}", sign=sg)
-                growth_reasons.append(f"Geopolitik/makro ({sector}): {geopolitics_note}", sign=sg)
+                buy_reasons.append(f"Geopolitik/makro ({sector}): {geopolitics_note}", sign=sg, pts=sector_weight)
+                growth_reasons.append(f"Geopolitik/makro ({sector}): {geopolitics_note}", sign=sg, pts=sector_weight)
 
             geopolitics_country_note = None
             if country_weight:
                 geopolitics_country_note = ", ".join(country_factor_names.get(entry["market"], []))
                 sg = 1 if country_weight > 0 else -1
-                buy_reasons.append(f"Geopolitik/makro ({entry.get('country')}): {geopolitics_country_note}", sign=sg)
-                growth_reasons.append(f"Geopolitik/makro ({entry.get('country')}): {geopolitics_country_note}", sign=sg)
+                buy_reasons.append(f"Geopolitik/makro ({entry.get('country')}): {geopolitics_country_note}", sign=sg, pts=country_weight)
+                growth_reasons.append(f"Geopolitik/makro ({entry.get('country')}): {geopolitics_country_note}", sign=sg, pts=country_weight)
 
             if investtech_entry:
                 note = f"Investtech Topp 20 (plats #{investtech_entry['rank']}, teknisk poäng {investtech_entry['investtech_score']}) – teknisk medelfristig signal (1-6 mån)"
-                buy_reasons.append(note, sign=1)
-                growth_reasons.append(note, sign=1)
+                buy_reasons.append(note, sign=1, pts=investtech_weight)
+                growth_reasons.append(note, sign=1, pts=investtech_weight)
 
             if valuation_note:
                 vs = 1 if valuation_w > 0 else (-1 if valuation_w < 0 else 0)
-                buy_reasons.append(valuation_note, sign=vs)
-                growth_reasons.append(valuation_note, sign=vs)
+                buy_reasons.append(valuation_note, sign=vs, pts=valuation_w)
+                growth_reasons.append(valuation_note, sign=vs, pts=valuation_w)
 
-            for macro_note in macro_notes:
+            for i_m, macro_note in enumerate(macro_notes):
                 ms = 1 if macro_weight > 0 else (-1 if macro_weight < 0 else 0)
-                buy_reasons.append(macro_note, sign=ms)
-                growth_reasons.append(macro_note, sign=ms)
+                mp_ = macro_weight if i_m == 0 else 0   # hela makrojusteringen på första raden
+                buy_reasons.append(macro_note, sign=ms, pts=mp_)
+                growth_reasons.append(macro_note, sign=ms, pts=mp_)
 
             d["buy_score"] = buy_score
             d["buy_reasons"] = list(buy_reasons)
             d["buy_reason_signs"] = list(buy_reasons.signs)
+            d["buy_reason_points"] = list(buy_reasons.points)
+            d["buy_score_parts"] = getattr(buy_reasons, "parts", None)
             d["growth_score"] = growth_score
             d["growth_reasons"] = list(growth_reasons)
             d["growth_reason_signs"] = list(growth_reasons.signs)
+            d["growth_reason_points"] = list(growth_reasons.points)
+            d["growth_score_parts"] = getattr(growth_reasons, "parts", None)
             d["investtech_rank"] = investtech_entry["rank"] if investtech_entry else None
             # Exponerar den använda sektor- och landsvikten (+ förklaringstexter)
             # så att webbläsaren kan räkna ut en identisk geopolitik-justering

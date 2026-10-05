@@ -442,6 +442,13 @@
   .ds-buy.hit .ds-num, .ds-buy.hit .ds-lbl { color: var(--accent, var(--amber)); } .ds-sell.hit .ds-num, .ds-sell.hit .ds-lbl { color: var(--down); }
   .dr-sum-item.sum-buy { border-color: var(--accent, var(--amber)); } .dr-sum-item.sum-sell { border-color: var(--down); }
   .dr-sum-item.sum-buy .dr-sum-val { color: var(--accent, var(--amber)); } .dr-sum-item.sum-sell.hit .dr-sum-val { color: var(--down); }
+  /* Nya verktyg (v10.0) */
+  .rep-badge { border-color: var(--amber); color: var(--amber); }
+  .report-line { font-size: 12px; color: var(--text-dim); margin: -6px 0 10px; }
+  .report-ov.warn { border-color: var(--down); }
+  .fu-table td, .fu-table th { padding: 8px 10px; }
+  .fu-table td, .fu-table td * { text-transform: none; letter-spacing: normal; }
+  .fu-sub { font-size: 10.5px; color: var(--text-faint); white-space: nowrap; }
   .hidden-note { font-size: 12px; color: var(--text-faint); padding: 12px 18px 16px; text-align: center; }
   .fund-cat-banner .fcb-left { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
   .fund-cat-banner .fcb-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
@@ -1045,6 +1052,7 @@
     <div class="tab active" data-atab="overview">ÖVERSIKT</div>
     <div class="tab" data-atab="sectors">BRANSCHER</div>
     <div class="tab" data-atab="companies">TOPPBOLAG</div>
+    <div class="tab" data-atab="signals">SIGNALER</div>
   </div>
   <div class="panel" id="analysisPanel" style="display:none;">
     <div id="analysisUploadHost"></div>
@@ -1424,6 +1432,19 @@ function scoreSellSignal(d) {
     score += 20; reasons.push('Kombination av utebliven vinst, hög skuldsättning och nedåttrend – tecken på finansiell stress');
   }
 
+  // v10.0: analytikernas vinstrevideringar och relativ styrka mot index
+  if (d.eps_revisions && !d.investment_company) {
+    const e = d.eps_revisions, c = e.chg_30d_pct, up = e.up_30d || 0, dn = e.down_30d || 0;
+    if ((c != null && c <= -3) || (dn - up >= 3 && dn >= 2 * Math.max(up, 1))) { score += 8; reasons.push(`Vinstprognoserna sänks kraftigt (${c != null ? (c > 0 ? '+' : '') + fmtNum(c, 1) + ' % ' : ''}senaste 30 dagarna, ${up} höjningar, ${dn} sänkningar)`); }
+    else if (c != null && c <= -1) { score += 4; reasons.push(`Vinstprognoserna sänks (${fmtNum(c, 1)} % senaste 30 dagarna)`); }
+    else if ((c != null && c >= 3) || (up - dn >= 3 && up >= 2 * Math.max(dn, 1))) { score -= 6; reasons.push(`Vinstprognoserna höjs kraftigt (${c != null ? '+' + fmtNum(c, 1) + ' % ' : ''}senaste 30 dagarna) – talar emot att sälja`); }
+    else if (c != null && c >= 1) { score -= 3; reasons.push(`Vinstprognoserna höjs (+${fmtNum(c, 1)} % senaste 30 dagarna) – talar emot att sälja`); }
+  }
+  if (d.rel_strength && d.rel_strength.rs_6m != null && d.rel_strength.rs_3m != null) {
+    const s = d.rel_strength;
+    if (s.rs_6m <= -15 && s.rs_3m < 0) { score += 6; reasons.push(`Svagare än index: ${fmtNum(s.rs_6m, 0)} procentenheter mot ${s.index} senaste 6 månaderna`); }
+    else if (s.rs_6m >= 15 && s.rs_3m > 0) { score -= 4; reasons.push(`Starkare än index: +${fmtNum(s.rs_6m, 0)} procentenheter mot ${s.index} senaste 6 månaderna – talar emot att sälja`); }
+  }
   // v9.9: geopolitiken läggs på råsumman – klipps till 0–100 en gång på slutet
   if (d.sector_weight) {
     score = score - d.sector_weight;
@@ -2361,7 +2382,7 @@ function render() {
     const cls = barClsMap[flag.cls];
     const trend = r.above_sma50 && r.above_sma200 ? 'up-txt' : (r.above_sma50 === false && r.above_sma200 === false ? 'down-txt' : 'dim');
     return `<tr data-ticker="${r.ticker}">
-      <td class="name"><div class="name-line">${r.is_new ? `<span class="new-star" title="Ny på listan - tillagd de senaste dagarna">★</span> ` : ''}${r.name || r.watchlist_name}${flag ? `<span class="signal-flag ${flag.cls}"${flag.title ? ` title="${flag.title}"` : ''}>${flag.label}</span>` : ''}${days >= 3 ? `<span class="mkt-badge days-badge" title="${days} körningar i rad med aktiv signal">${days}D</span>` : ''}${r.investtech_rank ? `<span class="mkt-badge it-badge" title="Investtech Topp 20, plats #${r.investtech_rank} - teknisk medelfristig signal (1-6 mån)">IT#${r.investtech_rank}</span>` : ''}${(() => {
+      <td class="name"><div class="name-line">${r.is_new ? `<span class="new-star" title="Ny på listan - tillagd de senaste dagarna">★</span> ` : ''}${r.name || r.watchlist_name}${flag ? `<span class="signal-flag ${flag.cls}"${flag.title ? ` title="${flag.title}"` : ''}>${flag.label}</span>` : ''}${days >= 3 ? `<span class="mkt-badge days-badge" title="${days} körningar i rad med aktiv signal">${days}D</span>` : ''}${reportBadgeHtml(r)}${r.investtech_rank ? `<span class="mkt-badge it-badge" title="Investtech Topp 20, plats #${r.investtech_rank} - teknisk medelfristig signal (1-6 mån)">IT#${r.investtech_rank}</span>` : ''}${(() => {
         const cp = crossProximity(r);
         const cp20 = crossProximity20_50(r);
         let html = '';
@@ -2468,6 +2489,8 @@ const METRIC_GLOSSARY = {
   'RANK I KATEGORI': { title: 'Momentum-rank', text: 'Fondens placering bland jämförbara fonder (aktiefonder mot aktiefonder, räntefonder mot räntefonder) utifrån en blandning av 3, 6 och 12 månaders avkastning.' },
   'SMA50 / SMA200': { title: 'SMA50 mot SMA200', text: 'Golden cross = 50-dagarssnittet ligger över 200-dagarssnittet, en klassisk signal för uppåtgående trend. Death cross = tvärtom.' },
   'AVSTÅND TILL SMA200': { title: 'Avstånd till SMA200', text: 'Hur långt kursen ligger över eller under sitt 200-dagarssnitt, och om snittet stiger eller faller. Fondpoängens trenddel graderas efter båda – längre över ett stigande SMA200 ger fler poäng.' },
+  'VINSTREVIDERINGAR 30 D': { title: 'Vinstrevideringar', text: 'Hur analytikernas prognos för årets vinst per aktie har ändrats de senaste 30 dagarna, och hur många analytiker som höjt respektive sänkt. Höjda prognoser är historiskt en av de mer pålitliga positiva signalerna. Ger +3/+6 vid höjning och −3/−6 vid sänkning (1 respektive 3 % eller tydlig övervikt av höjningar/sänkningar).' },
+  'MOT INDEX 6 MÅN': { title: 'Relativ styrka mot index', text: 'Aktiens kursutveckling minus indexets (t.ex. S&P 500 eller OMX Stockholm) de senaste 6 månaderna, i procentenheter. Minst 15 procentenheter bättre – och bättre även senaste 3 månaderna – ger +5; lika mycket sämre ger −5.' },
   'VÄRDERING MOT EGEN HISTORIK': { title: 'Värdering mot egen historik', text: 'Första screening av om aktien är billig eller dyr jämfört med sig själv. Bolaget delas in i fas: växer försäljningen, är det lönsamt, och ger det tillbaka pengar via utdelning eller återköp. Lönsamma bolag jämförs på P/E, förlustbolag på P/S (pris/försäljning). Dagens tal jämförs med bolagets median de senaste ca 4 åren: mer än 15 % under = BILLIG, mer än 15 % över = DYR. Ger ±3 poäng vid 15–30 % avvikelse och ±6 vid över 30 % (halverat för cykliska sektorer, ingen bonus om vinsten väntas falla). Tänk på att historiken inkluderar låg-ränteåren – med dagens högre räntor är ett något lägre P/E än snittet ofta motiverat.' },
   'FORWARD P/E': { title: 'Forward P/E', text: 'Samma princip som vanligt P/E, men baserat på FÖRVÄNTAD framtida vinst istället för senast rapporterade. Symbolen visar om forward P/E är klart lägre (▲, grönt – vinsttillväxt väntas) eller klart högre (▼, rött – vinstnedgång väntas) än det vanliga P/E-talet. Bygger på analytikeres vinstprognoser, inte facit.' },
   'RISKFRI RÄNTA': { title: 'Riskfri ränta', text: 'Vad en 10-årig statsobligation i bolagets hemland ger just nu - avkastningen du kan få praktiskt taget utan risk. Referenspunkten allt annat mäts mot: varför ta aktierisk för mindre än så? Hämtas automatiskt vid varje körning från FRED (USA dagligen, övriga länder OECD:s månadsdata, som släpar någon månad).' },
@@ -2539,6 +2562,8 @@ function reasonArea(txt) {
   const s = String(txt);
   if (/^Analytiker|analytikerbevakning/.test(s)) return 'analysts';
   if (/^Geopolitik|Ränte- och kreditstabilitet|^Stabiliteten|^Inverterad|kreditspread|^Räntekänslig|^Räntemedvind/.test(s)) return 'macro';
+  if (/^Vinstprognos/.test(s)) return 'earnings';
+  if (/än index/.test(s)) return 'trend';
   if (/^Forward P\/E|intäkt|rörelsemarginal|Rörelsemarginalens|FCF|ROIC|aktiebaserad|investeringstakt|Kassaförbrukning|^Investmentbolag/i.test(s)) return 'earnings';
   if (/^Negativt P\/B|skuldsättning|volatilitet|börsvärde|Mikro-cap|likviditet|Kombination av utebliven/i.test(s)) return 'risk';
   if (/SMA|RSI|[Cc]ross|volym|Volym|Investtech|momentumsignal|varningssignal/.test(s)) return 'trend';
@@ -2621,6 +2646,86 @@ function dualScoreHtml(r) {
   const row = (lbl, v, thr, cls, tip) => `<div class="ds-row ${cls} ${v != null && v >= thr ? 'hit' : ''}" title="${tip}">
       <span class="ds-lbl">${lbl}</span><div class="ds-bar"><div class="ds-fill" style="width:${v ?? 0}%"></div><div class="ds-thr" style="left:${thr}%"></div></div><span class="ds-num">${v ?? '–'}</span></div>`;
   return `<div class="dual-score">${row(pfT('KÖP', 'BUY'), b, 65, 'ds-buy', pfT('Köppoäng – KÖP från 65 (strecket)', 'Buy score – BUY from 65 (the line)'))}${row(pfT('SÄLJ', 'SELL'), s, 40, 'ds-sell', pfT('Säljpoäng – SÄLJ från 40 (strecket)', 'Sell score – SELL from 40 (the line)'))}</div>`;
+}
+
+// ===== Nya verktyg (v10.0): rapportkalender, vinstrevideringar, relativ styrka, signaluppföljning =====
+const MON_SV = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
+const MON_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function fmtDayMon(iso) { if (!iso) return '–'; const d = new Date(iso + 'T12:00:00'); return `${d.getDate()} ${(window.APP_LANG === 'en' ? MON_EN : MON_SV)[d.getMonth()]}`; }
+function daysTo(iso) { if (!iso) return null; const d = new Date(iso + 'T12:00:00'), n = new Date(); n.setHours(12, 0, 0, 0); return Math.round((d - n) / 86400000); }
+function reportBadgeHtml(r) {
+  const rp = r.report, dd = rp ? daysTo(rp.next) : null;
+  if (dd == null || dd < 0 || dd > 7) return '';
+  return `<span class="mkt-badge rep-badge" title="${pfT('Rapport', 'Report')} ${fmtDayMon(rp.next)}">${pfT('RAPPORT', 'REPORT')} ${dd === 0 ? pfT('IDAG', 'TODAY') : dd + pfT('D', 'D')}</span>`;
+}
+function reportLineHtml(r) {
+  const rp = r.report; if (!rp || (!rp.next && !rp.last)) return '';
+  const dd = daysTo(rp.next);
+  const nxt = rp.next ? pfT(`Nästa rapport ${fmtDayMon(rp.next)}${dd != null && dd >= 0 ? ` (om ${dd} ${dd === 1 ? 'dag' : 'dagar'})` : ''}`, `Next report ${fmtDayMon(rp.next)}${dd != null && dd >= 0 ? ` (in ${dd} ${dd === 1 ? 'day' : 'days'})` : ''}`) : '';
+  const last = rp.last ? pfT(`senaste ${fmtDayMon(rp.last)}`, `latest ${fmtDayMon(rp.last)}`) : '';
+  const stale = rp.yahoo_stale && !r.report_override
+    ? `<div class="report-ov warn" data-noi18n>⚠ ${pfT(`Bolaget rapporterade ${fmtDayMon(rp.last)} men Yahoo har ännu inte lagt in kvartalet – P/E, tillväxt och marginaler kan vara inaktuella. Be Claude komplettera med rapporten.`, `The company reported on ${fmtDayMon(rp.last)} but Yahoo has not yet added the quarter – P/E, growth and margins may be out of date. Ask Claude to supplement with the report.`)}</div>` : '';
+  return `<div class="report-line" data-noi18n>📅 ${[nxt, last].filter(Boolean).join(' · ')}</div>${stale}`;
+}
+function upcomingReportsHtml(rows) {
+  const list = rows.map(r => ({ r, dd: daysTo(r.report && r.report.next) })).filter(x => x.dd != null && x.dd >= 0 && x.dd <= 14).sort((a, b) => a.dd - b.dd);
+  if (!list.length) return '';
+  return `<div class="summary-block" data-noi18n><h3>${pfT('Rapporter inom 14 dagar', 'Reports within 14 days')}</h3>${list.map(x => `<div class="summary-row"><span class="label">${escapeHtml(x.r.watchlist_name || x.r.name)}</span><span class="val">${fmtDayMon(x.r.report.next)} · ${x.dd === 0 ? pfT('idag', 'today') : pfT(`om ${x.dd} d`, `in ${x.dd} d`)}</span></div>`).join('')}</div>`;
+}
+function epsRevisionCellHtml(r) {
+  const e = r.eps_revisions; if (!e) return '';
+  const c = e.chg_30d_pct;
+  const cls = c == null ? '' : (c >= 1 ? 'up-txt' : (c <= -1 ? 'down-txt' : ''));
+  return `<div><div class="stat-label">VINSTREVIDERINGAR 30 D</div><div class="stat-val ${cls}">${c != null ? `${c > 0 ? '+' : ''}${fmtNum(c, 1)}%` : '–'}</div><div class="stat-sub" data-noi18n>${pfT(`${e.up_30d} höjningar · ${e.down_30d} sänkningar`, `${e.up_30d} up · ${e.down_30d} down`)}${e.chg_90d_pct != null ? ` · 90 d ${e.chg_90d_pct > 0 ? '+' : ''}${fmtNum(e.chg_90d_pct, 1)}%` : ''}</div></div>`;
+}
+function relStrengthCellHtml(r) {
+  const s = r.rel_strength; if (!s || s.rs_6m == null) return '';
+  const cls = s.rs_6m >= 5 ? 'up-txt' : (s.rs_6m <= -5 ? 'down-txt' : '');
+  return `<div><div class="stat-label">MOT INDEX 6 MÅN</div><div class="stat-val ${cls}">${s.rs_6m > 0 ? '+' : ''}${fmtNum(s.rs_6m, 0)} pp</div><div class="stat-sub" data-noi18n>${escapeHtml(s.index)} ${s.idx_6m > 0 ? '+' : ''}${fmtNum(s.idx_6m, 0)}%${s.rs_3m != null ? ` · 3 ${pfT('mån', 'mo')} ${s.rs_3m > 0 ? '+' : ''}${fmtNum(s.rs_3m, 0)} pp` : ''}</div></div>`;
+}
+
+// Signaluppföljning (ANALYS → SIGNALER)
+async function loadFollowup() {
+  if (state.followup !== undefined) return state.followup;
+  try { const res = await fetch('followup.json?_=' + Date.now()); state.followup = res.ok ? await res.json() : null; } catch (e) { state.followup = null; }
+  return state.followup;
+}
+function fuTableHtml(horizons, bucketDefs, key) {
+  const rows = bucketDefs.map(([b, lab]) => `<tr><td>${lab}</td>${horizons.map(h => { const x = (h[key] || {})[b];
+    if (!x) return '<td class="num dim">–</td>';
+    const c = x.avg_excess > 0.5 ? 'up-txt' : (x.avg_excess < -0.5 ? 'down-txt' : '');
+    return `<td class="num"><span class="${c}">${x.avg_excess > 0 ? '+' : ''}${fmtNum(x.avg_excess, 1)} pp</span><div class="fu-sub">${pfT('slog medianen', 'beat median')} ${fmtNum(x.hit_rate, 0)}% · n ${x.n}</div></td>`; }).join('')}</tr>`).join('');
+  return `<div class="table-scroll"><table class="fu-table"><thead><tr><th></th>${horizons.map(h => `<th class="num">${pfT(h.label, h.label.replace('vecka', 'week').replace('månader', 'months').replace('månad', 'month'))}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+async function renderFollowup(host) {
+  host.innerHTML = `<div class="fund-note">${pfT('Laddar…', 'Loading…')}</div>`;
+  const F = await loadFollowup();
+  if (!F) { host.innerHTML = `<div class="fund-note" data-noi18n>${pfT('Uppföljningen skapas vid nästa schemalagda körning.', 'The follow-up is created at the next scheduled run.')}</div>`; return; }
+  const L = F.live, B = F.trend_backtest;
+  const liveH = (L.horizons || []).filter(h => h.dates > 0);
+  const liveTxt = pfT(`Varje vecka sedan ${fmtDayMon(L.first_date)} delas aktierna in efter köppoäng, och avkastningen därefter jämförs med snittet för alla ${F.stocks} bevakade aktier samma datum. Historiken är ännu kort – längre perioder fylls på automatiskt.`,
+    `Every week since ${fmtDayMon(L.first_date)} the stocks are grouped by buy score, and the return afterwards is compared with the average of all ${F.stocks} watched stocks on the same date. The history is still short – longer periods fill in automatically.`);
+  const live = liveH.length ? fuTableHtml(liveH, [['buy', pfT('KÖP (≥65)', 'BUY (≥65)')], ['mid', '50–64'], ['low', pfT('Under 50', 'Below 50')]], 'buckets') : `<div class="pf-note">${pfT('För lite data ännu.', 'Not enough data yet.')}</div>`;
+  const bh = B.horizons || [];
+  const defs = [['pos', pfT('Positiv signal', 'Positive signal')], ['neu', pfT('Neutral', 'Neutral')], ['neg', pfT('Negativ signal', 'Negative signal')]];
+  const verdict = (() => {
+    const h = bh.find(x => x.days === 63) || bh[0]; if (!h) return '';
+    const p = (h.buckets || {}).pos, n = (h.buckets || {}).neg; if (!p || !n) return '';
+    const edge = Math.abs(p.hit_rate - 50) < 3 && Math.abs(n.hit_rate - 50) < 3;
+    return edge ? pfT('Slutsats: trendsignalerna har inte pekat ut vilka aktier som slår medianen – träffsäkerheten ligger nära 50 % i alla grupper. Snitten drivs av ett fåtal stora rörelser.', 'Conclusion: the trend signals have not identified which stocks beat the median – the hit rate is close to 50% in all groups. The averages are driven by a few large moves.')
+      : pfT(`Slutsats: positiv signal slog medianen i ${fmtNum(p.hit_rate, 0)}% av fallen mot ${fmtNum(n.hit_rate, 0)}% för negativ signal.`, `Conclusion: a positive signal beat the median ${fmtNum(p.hit_rate, 0)}% of the time vs ${fmtNum(n.hit_rate, 0)}% for a negative signal.`);
+  })();
+  host.innerHTML = `<div class="macro-panel" data-noi18n>
+    <div class="mp-section"><div class="mp-title">${pfT('Hur har appens köpsignaler gått?', 'How have the app\'s buy signals performed?')}</div>
+      <div class="pf-note">${liveTxt}</div>${live}</div>
+    <div class="mp-section"><div class="mp-title">${pfT('Historiskt test av trenddelen', 'Historical test of the trend part')} (${fmtDayMon(B.first)} ${B.first ? B.first.slice(0, 4) : ''} – ${fmtDayMon(B.last)} ${B.last ? B.last.slice(0, 4) : ''})</div>
+      <div class="pf-note">${pfT(`Yahoo saknar historiska nyckeltal, men trenddelen kan räknas fram ur kurserna. Vid varje månadsskifte (${B.months} st) delades aktierna in efter trendsignal (över/under SMA50 och SMA200) och RSI, och avkastningen därefter jämfördes med snittet.`, `Yahoo has no historical key figures, but the trend part can be calculated from prices. At each month end (${B.months}) the stocks were grouped by trend signal (above/below SMA50 and SMA200) and RSI, and the return afterwards was compared with the average.`)}</div>
+      <div class="mp-sub">${pfT('Trend och RSI tillsammans', 'Trend and RSI combined')}</div>${fuTableHtml(bh, defs, 'buckets')}
+      <div class="mp-sub" style="margin-top:12px">${pfT('Bara trend (SMA50/SMA200)', 'Trend only (SMA50/SMA200)')}</div>${fuTableHtml(bh, defs, 'trend_only')}
+      <div class="mp-sub" style="margin-top:12px">${pfT('Bara RSI (positiv = översåld, negativ = överköpt)', 'RSI only (positive = oversold, negative = overbought)')}</div>${fuTableHtml(bh, defs, 'rsi_only')}
+      ${verdict ? `<div class="pf-obs info" style="margin-top:12px">${verdict}</div>` : ''}</div>
+    <div class="mp-caveat">${pfT('pp = procentenheter mot snittet samma datum. "Slog medianen" = andel som gick bättre än hälften av aktierna – 50 % betyder ingen förmåga. Testet gäller dagens bevakningslista (aktier som tillkommit för att de gått bra kan ge en skev bild), bara de senaste två åren och bara den tekniska delen. Historisk avkastning är ingen garanti.', 'pp = percentage points vs the average on the same date. "Beat median" = share that did better than half of the stocks – 50% means no ability. The test uses today\'s watchlist (stocks added because they did well can skew the picture), only the last two years and only the technical part. Past returns are no guarantee.')}</div>
+  </div>`;
 }
 
 function drawerSummaryHtml(r) {
@@ -2862,6 +2967,7 @@ function pfObservations(P) {
 function renderAnalysis() {
   const host = document.getElementById('analysisHost');
   const up = document.getElementById('analysisUploadHost');
+  if ((state.analysisTab || 'overview') === 'signals') { up.innerHTML = ''; renderFollowup(host); return; }
   mountUploadPanel(up, 'a', true);
   const hasHold = Object.keys(state.holdings || {}).length > 0;
   if (!hasHold) { host.innerHTML = `<div class="fund-note" data-noi18n>${pfT('Ladda upp din innehavsfil ovan – samma fil som för aktier och fonder. Analysen visar hur dina aktier och fonder tillsammans fördelar sig på branscher och bolag.', 'Upload your holdings file above – the same file as for stocks and funds. The analysis shows how your stocks and funds together are spread across sectors and companies.')}</div>`; return; }
@@ -3108,6 +3214,7 @@ function openDrawer(ticker) {
     <button class="drawer-close" id="drawerClose">STÄNG ✕</button>
     <h2>${r.name || r.watchlist_name}</h2>
     <div class="tkr-line">${r.ticker} · ${marketFlag(r.market)} ${r.market}${r.is_holding ? ' · INNEHAV' : ''}</div>
+    ${reportLineHtml(r)}
     ${r.report_override ? `<div class="report-ov">📄 Kompletterad med rapporten ${escapeHtml(r.report_override.report_date || '')} – Yahoo har ännu inte lagt in kvartalet, så P/E, tillväxt, marginaler, FCF, ROIC och värdering bygger på bolagets egna siffror tills dess.</div>` : ''}
     ${sparklineHtml(r, 'price_history_3m', 'KURS 3 MÅN')}
     ${sparklineHtml(r, 'price_history_1y', 'KURS 1 ÅR')}
@@ -3156,6 +3263,7 @@ function openDrawer(ticker) {
       <summary>TEKNISK ANALYS & TREND</summary>
       <div class="stat-grid">
       <div><div class="stat-label">RSI14</div><div class="stat-val">${r.rsi14 !== null ? fmtNum(r.rsi14,0) : '–'}${levelBadge(r.rsi14, 35, 70, ['ÖVERSÅLT','NEUTRALT','ÖVERKÖPT'])}</div></div>
+      ${relStrengthCellHtml(r)}
       <div class="stat-wide"><div class="stat-label">SMA20 / SMA50 / SMA200</div><div class="stat-val">${smaTrendHtml(r)}</div></div>
       <div><div class="stat-label">VOLYM</div><div class="stat-val">${fmtVol(r.volume_ratio)}</div></div>
       </div>
@@ -3166,6 +3274,7 @@ function openDrawer(ticker) {
       <div><div class="stat-label">ANALYTIKER</div><div class="stat-val">${r.recommendation_key ? r.recommendation_key.replace('_',' ').toUpperCase() : '–'}</div></div>
       <div><div class="stat-label">KURSMÅL</div><div class="stat-val">${targetHtml(r)}</div></div>
       <div><div class="stat-label">ANTAL ANALYTIKER</div><div class="stat-val">${r.num_analysts ?? '–'}</div></div>
+      ${epsRevisionCellHtml(r)}
       ${analystBreakdownHtml(r)}
       </div>
     </details>
@@ -3346,6 +3455,7 @@ function renderSummary(sellRows) {
           <h3>Fördelning per land</h3>
           ${barRows(countries)}
         </div>
+        ${upcomingReportsHtml(sellRows)}
       </div>
     </div>`;
 }
@@ -3963,7 +4073,8 @@ const MODULES_SV = [
   lessons: [
     { id: "fondpoang", title: "Fondpoängen — hur lovande ser en fond ut just nu?", body: `<div class="analogy"><div class="lbl">Liknelse</div><p>Att välja fond är lite som att välja buss: alla bussar på samma linje (samma kategori) kör ungefär samma väg, men vissa går i tid, har låg biljettpris och en lugn förare. Fondpoängen jämför bussar på samma linje med varandra, inte en stadsbuss med ett tåg.</p></div><p>Varje fond får en poäng 0–100 som sätts ihop av fem delar. Jämförelser görs så långt det går <strong>inom samma kategori</strong> — en svensk indexfond mot andra svenska indexfonder, en räntefond mot andra räntefonder.</p><div class="in-app"><div class="lbl">I appen</div><table><tr><td>Trend (35)</td><td>Hur långt över/under SMA200 kursen ligger, om SMA200 stiger eller faller, kurs över SMA50, golden cross och RSI</td></tr><tr><td>Momentum (25)</td><td>Blandad avkastning 3/6/12 mån – hälften rankad inom kategorin, hälften mot alla jämförbara fonder</td></tr><tr><td>Riskjusterad avkastning (25)</td><td>Sharpekvot mot styrräntan och största fall senaste året</td></tr><tr><td>Avgift (10)</td><td>≤0,3 % ger full pott, över 1,5 % ger noll</td></tr><tr><td>Kategoriläge (5)</td><td>Hur kategorins marknadsindex ser ut (medvind/motvind), stabilitetspoängen för räntefonder</td></tr><tr><td>≥75 / &lt;50</td><td>Lovande / döljs i listorna</td></tr></table></div><h3 class="sub">Kategoriläge — medvind eller motvind för branschen</h3><p>Under <strong>Alla fonder</strong> visar varje kategoribanner ett eget läge 0–100: <strong>Medvind</strong> (65+), <strong>Neutralt</strong> (45–64) eller <strong>Motvind</strong> (under 45), plus pil för förändringen senaste månaden. Det mäts inte på fonderna själva utan på ett marknadsindex för kategorin – t.ex. OMXS30 för svenska indexfonder, S&amp;P 500 för USA och guld/silver för ädelmetallfonder – med trend (40), momentum (40) och risk (20). För räntefonder används stabilitetspoängen. Läget står för 5 av fondpoängens 100 poäng och visar om hela branschen har vind i ryggen just nu.</p><div class="callout-warn"><strong>Kom ihåg:</strong> fondpoängen mäter hur fonden ser ut <em>just nu</em> – trend och momentum vänder. Den säger ingenting om förvaltarens skicklighet på lång sikt och är inte finansiell rådgivning.</div>` },
     { id: "stabilitet", title: "Stabilitetsmätaren — ränte- och kreditläget i en siffra", body: `<p>Under <strong>MAKRO → STABILITET</strong> visar en mätare med nål hur stabilt ränte- och kreditläget är, från mycket instabilt (vänster) till mycket stabilt (höger). Poängen 0–100 väger ihop sex kategorier: ränterörelse, räntekurva, kredit, realränta och inflation, obligationsvolatilitet (MOVE) samt Europa och Norden.</p><p>Grafen under mätaren visar hur poängen rört sig vecka för vecka eller månad för månad. Historiken räknas fram med exakt samma formel och bara med data som fanns vid respektive datum.</p><div class="in-app"><div class="lbl">I appen</div><table><tr><td>70–100 Stabilt</td><td>+2 poäng på alla aktier vid ≥80</td></tr><tr><td>50–70 Blandat</td><td>0 till −2 poäng</td></tr><tr><td>30–50 Ostabilt</td><td>−4 till −6 poäng</td></tr><tr><td>0–30 Stressat</td><td>−8 poäng</td></tr><tr><td>Trend ±5 på en månad</td><td>±2 poäng extra</td></tr></table></div>` },
-    { id: "portfolj", title: "Analys-fliken — branscher och bolag i hela portföljen", body: `<div class="analogy"><div class="lbl">Liknelse</div><p>Att äga tio fonder kan kännas som god spridning. Men om alla tio har samma äpplen i korgen har du i praktiken en korg med äpplen. Analys-fliken tittar in i korgarna och visar vad du egentligen äger, när aktier och fonder läggs ihop.</p></div><p>Fliken använder samma innehavsfil som resten av appen, med kolumnen Marknadsvärde för att räkna vikter. Allt räknas i din webbläsare och inga belopp visas, bara andelar.</p><h3 class="sub">Branscher</h3><p>Dina direkta aktier och den aktiedel som ligger i fonderna läggs ihop och delas på bransch. Ett streck visar hur marknaden som helhet ser ut (en global indexfond), så att du ser var du är över- eller undervikt. Tryck på en bransch för att se vilka aktier och fonder som bidrar.</p><h3 class="sub">Toppbolag</h3><p>Dina största bolag i hela portföljen: det du äger direkt plus det som ligger i fondernas tio största innehav. Äger du Nvidia direkt och dessutom via tre fonder ser du den samlade exponeringen och en markering <strong>ÄGS DUBBELT</strong>.</p><h3 class="sub">Översikt</h3><p>Fördelning mellan aktier, räntor och kassa, nyckeltal om koncentration, observationer i klartext och en koppling till världsläget: hur stor del av dina aktier som ligger i branscher och länder med geopolitisk motvind, och hur stor del av fonderna som ligger i kategorier med medvind eller motvind.</p><div class="callout-warn"><strong>Begränsningar:</strong> Yahoo ger bara en fonds tio största innehav, ofta 30–60 % av fonden, så bolagssiffrorna är ett golv. Fondernas innehav uppdateras sällan. Branscherna är en grov indelning där halvledare ingår i teknik. Observationerna beskriver fördelningen och är inte finansiell rådgivning.</div><div class="in-app"><div class="lbl">I appen</div><table><tr><td>30 % i en bransch</td><td>Observation om hög koncentration</td></tr><tr><td>8 procentenheter över världsindex</td><td>Observation om övervikt</td></tr><tr><td>8 % i ett bolag (minst)</td><td>Observation om enskilt stort innehav</td></tr></table></div>` }
+    { id: "portfolj", title: "Analys-fliken — branscher och bolag i hela portföljen", body: `<div class="analogy"><div class="lbl">Liknelse</div><p>Att äga tio fonder kan kännas som god spridning. Men om alla tio har samma äpplen i korgen har du i praktiken en korg med äpplen. Analys-fliken tittar in i korgarna och visar vad du egentligen äger, när aktier och fonder läggs ihop.</p></div><p>Fliken använder samma innehavsfil som resten av appen, med kolumnen Marknadsvärde för att räkna vikter. Allt räknas i din webbläsare och inga belopp visas, bara andelar.</p><h3 class="sub">Branscher</h3><p>Dina direkta aktier och den aktiedel som ligger i fonderna läggs ihop och delas på bransch. Ett streck visar hur marknaden som helhet ser ut (en global indexfond), så att du ser var du är över- eller undervikt. Tryck på en bransch för att se vilka aktier och fonder som bidrar.</p><h3 class="sub">Toppbolag</h3><p>Dina största bolag i hela portföljen: det du äger direkt plus det som ligger i fondernas tio största innehav. Äger du Nvidia direkt och dessutom via tre fonder ser du den samlade exponeringen och en markering <strong>ÄGS DUBBELT</strong>.</p><h3 class="sub">Översikt</h3><p>Fördelning mellan aktier, räntor och kassa, nyckeltal om koncentration, observationer i klartext och en koppling till världsläget: hur stor del av dina aktier som ligger i branscher och länder med geopolitisk motvind, och hur stor del av fonderna som ligger i kategorier med medvind eller motvind.</p><div class="callout-warn"><strong>Begränsningar:</strong> Yahoo ger bara en fonds tio största innehav, ofta 30–60 % av fonden, så bolagssiffrorna är ett golv. Fondernas innehav uppdateras sällan. Branscherna är en grov indelning där halvledare ingår i teknik. Observationerna beskriver fördelningen och är inte finansiell rådgivning.</div><div class="in-app"><div class="lbl">I appen</div><table><tr><td>30 % i en bransch</td><td>Observation om hög koncentration</td></tr><tr><td>8 procentenheter över världsindex</td><td>Observation om övervikt</td></tr><tr><td>8 % i ett bolag (minst)</td><td>Observation om enskilt stort innehav</td></tr></table></div>` },
+    { id: "signaler", title: "Signaluppföljning — fungerar poängen?", body: `<div class="analogy"><div class="lbl">Liknelse</div><p>En väderprognos blir trovärdig först när man i efterhand kontrollerat hur ofta den slog in. Signaluppföljningen gör samma sak med appens poäng: den mäter hur aktierna faktiskt utvecklades efter att de fick en viss poäng.</p></div><p>Under <strong>ANALYS → SIGNALER</strong> finns två delar. <strong>Appens köpsignaler:</strong> varje vecka delas aktierna in efter köppoäng – KÖP (65+), 50–64 och under 50 – och avkastningen efter 1 vecka, 1, 3 och 6 månader jämförs med snittet för alla bevakade aktier. Historiken började i september 2026, så de längre perioderna fylls på efter hand. <strong>Historiskt test av trenddelen:</strong> Yahoo saknar historiska nyckeltal, men trend och RSI kan räknas fram ur kurserna. Testet görs vid varje månadsskifte de senaste två åren.</p><h3 class="sub">Så läser du siffrorna</h3><p><strong>pp mot snittet</strong> visar hur mycket bättre eller sämre gruppen gick än genomsnittet. <strong>Slog medianen</strong> visar hur stor andel som gick bättre än hälften av aktierna – 50 % betyder ingen förmåga att peka ut vinnare. Ett högt snitt med en träffsäkerhet nära 50 % betyder att några få stora rörelser drar upp snittet.</p><div class="callout-warn"><strong>Begränsningar:</strong> testet använder dagens bevakningslista, så aktier som lagts till för att de gått bra kan ge en skev bild. Två år är en kort period, och bara den tekniska delen kan testas bakåt.</div><h3 class="sub">Fler verktyg i poängen</h3><p><strong>Vinstrevideringar</strong> (+3/+6 eller −3/−6): hur analytikernas prognos för årets vinst ändrats senaste 30 dagarna. <strong>Relativ styrka</strong> (±5): om aktien gått minst 15 procentenheter bättre eller sämre än sitt index senaste halvåret. <strong>Rapportkalendern</strong> påverkar inte poängen men visar när nästa rapport kommer, och varnar när Yahoo ännu inte lagt in ett nyss rapporterat kvartal.</p>` }
   ]
 }
 ];

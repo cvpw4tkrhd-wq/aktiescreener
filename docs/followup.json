@@ -1,11 +1,11 @@
 {
- "generated_at": "2026-10-06T12:57:03.513212+00:00",
- "version": "10.4",
- "stocks": 219,
+ "generated_at": "2026-10-06T13:46:53.520062+00:00",
+ "version": "10.5",
+ "stocks": 259,
  "live": {
   "first_date": "2026-09-03",
   "last_date": "2026-10-06",
-  "observations": 997,
+  "observations": 1037,
   "horizons": [
    {
     "days": 5,
@@ -41,12 +41,12 @@
      },
      "low": {
       "n": 18,
-      "avg_excess": 1.99,
+      "avg_excess": 2.09,
       "hit_rate": 55.6
      },
      "mid": {
       "n": 17,
-      "avg_excess": -0.04,
+      "avg_excess": -0.15,
       "hit_rate": 47.1
      }
     }
@@ -76,53 +76,53 @@
     "months": 26,
     "buckets": {
      "neg": {
-      "n": 1631,
+      "n": 1909,
       "avg_excess": -0.09,
-      "hit_rate": 50.3
+      "hit_rate": 49.9
      },
      "neu": {
-      "n": 1660,
-      "avg_excess": 0.7,
-      "hit_rate": 48.7
+      "n": 1928,
+      "avg_excess": 0.55,
+      "hit_rate": 48.8
      },
      "pos": {
-      "n": 2358,
-      "avg_excess": -0.43,
-      "hit_rate": 50.4
+      "n": 2756,
+      "avg_excess": -0.32,
+      "hit_rate": 50.7
      }
     },
     "trend_only": {
      "neg": {
-      "n": 1546,
-      "avg_excess": 0.86,
-      "hit_rate": 49.2
+      "n": 1796,
+      "avg_excess": 0.64,
+      "hit_rate": 48.5
      },
      "neu": {
-      "n": 1402,
-      "avg_excess": -0.55,
-      "hit_rate": 48.8
+      "n": 1623,
+      "avg_excess": -0.48,
+      "hit_rate": 49.4
      },
      "pos": {
-      "n": 2701,
-      "avg_excess": -0.21,
-      "hit_rate": 50.8
+      "n": 3174,
+      "avg_excess": -0.12,
+      "hit_rate": 51.0
      }
     },
     "rsi_only": {
      "neg": {
-      "n": 428,
-      "avg_excess": 0.87,
-      "hit_rate": 52.1
+      "n": 512,
+      "avg_excess": 0.78,
+      "hit_rate": 51.8
      },
      "neu": {
-      "n": 4807,
-      "avg_excess": -0.45,
-      "hit_rate": 49.9
+      "n": 5603,
+      "avg_excess": -0.37,
+      "hit_rate": 50.0
      },
      "pos": {
-      "n": 414,
-      "avg_excess": 4.33,
-      "hit_rate": 47.1
+      "n": 478,
+      "avg_excess": 3.54,
+      "hit_rate": 46.2
      }
     }
    },
@@ -132,53 +132,53 @@
     "months": 24,
     "buckets": {
      "neg": {
-      "n": 1510,
-      "avg_excess": 0.82,
-      "hit_rate": 50.8
+      "n": 1768,
+      "avg_excess": 0.67,
+      "hit_rate": 50.5
      },
      "neu": {
-      "n": 1538,
-      "avg_excess": 0.88,
-      "hit_rate": 48.1
+      "n": 1793,
+      "avg_excess": 0.74,
+      "hit_rate": 48.6
      },
      "pos": {
-      "n": 2163,
-      "avg_excess": -1.2,
+      "n": 2518,
+      "avg_excess": -1.0,
       "hit_rate": 50.5
      }
     },
     "trend_only": {
      "neg": {
-      "n": 1440,
-      "avg_excess": 3.59,
-      "hit_rate": 50.8
+      "n": 1680,
+      "avg_excess": 3.02,
+      "hit_rate": 50.7
      },
      "neu": {
-      "n": 1286,
-      "avg_excess": -0.82,
-      "hit_rate": 48.0
+      "n": 1494,
+      "avg_excess": -0.71,
+      "hit_rate": 48.5
      },
      "pos": {
-      "n": 2485,
-      "avg_excess": -1.66,
+      "n": 2905,
+      "avg_excess": -1.38,
       "hit_rate": 50.3
      }
     },
     "rsi_only": {
      "neg": {
-      "n": 402,
-      "avg_excess": -4.26,
-      "hit_rate": 49.5
+      "n": 476,
+      "avg_excess": -3.43,
+      "hit_rate": 49.4
      },
      "neu": {
-      "n": 4410,
-      "avg_excess": -0.1,
+      "n": 5140,
+      "avg_excess": -0.13,
       "hit_rate": 49.9
      },
      "pos": {
-      "n": 399,
-      "avg_excess": 5.35,
-      "hit_rate": 50.1
+      "n": 463,
+      "avg_excess": 4.91,
+      "hit_rate": 50.8
      }
     }
    }

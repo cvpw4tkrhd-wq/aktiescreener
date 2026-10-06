@@ -39,11 +39,11 @@ factors:
     source_url: "https://www.globsec.org/what-we-do/commentaries/xi-coming-mineral-and-chips-export-controls-loom"
   - name: "USA-tullar mot Sverige/EU"
     name_en: "US tariffs on Sweden/EU"
-    updated: 2026-09-07
-    summary_en: "The US has introduced broad tariffs (about 10% generally on most goods, 50% on steel/aluminium, up to 100% on pharmaceuticals outside the EU agreement, which otherwise caps the tariff at 15%). Hits export-dependent Swedish industrial companies (Volvo, Atlas Copco, Sandvik etc.) and pharmaceutical companies. Several analysts (JP Morgan, Handelsbanken) judge the effect as 'manageable' rather than serious, partly because large companies are investing in US production to avoid the tariffs – hence a moderate weight."
-    summary: "USA infört breda tullar (ca 10% generellt på de flesta varor, 50% på stål/aluminium, upp till 100% på läkemedel utanför EU-avtalet som annars tak:ar tullen vid 15%). Träffar exportberoende svenska industribolag (Volvo, Atlas Copco, Sandvik m.fl.) och läkemedelsbolag. Flera analytiker (JP Morgan, Handelsbanken) bedömer effekten som 'hanterbar' snarare än allvarlig, delvis eftersom storbolag investerar i amerikansk produktion för att undvika tullarna - därför måttlig vikt."
-    # Gäller bara bolag noterade i EU/EES (v8.8) – amerikanska bolag drabbas inte av USA:s egna tullar.
-    markets: ["SE", "FI", "NO", "DK", "DE", "NL"]
+    updated: 2026-10-06
+    summary_en: "The US has introduced broad tariffs (about 10% generally on most goods, 50% on steel/aluminium, up to 100% on pharmaceuticals outside the EU agreement, which otherwise caps the tariff at 15%). Hits export-dependent Swedish industrial companies (Volvo, Atlas Copco, Sandvik etc.) and pharmaceutical companies. Several analysts (JP Morgan, Handelsbanken) judge the effect as 'manageable' rather than serious, partly because large companies are investing in US production to avoid the tariffs – hence a moderate weight. Also applies to France (EU) and Switzerland, which since the framework agreement of November 2025 has the same 15% ceiling as the EU, including for pharmaceuticals (SECO, August 2026)."
+    summary: "USA infört breda tullar (ca 10% generellt på de flesta varor, 50% på stål/aluminium, upp till 100% på läkemedel utanför EU-avtalet som annars tak:ar tullen vid 15%). Träffar exportberoende svenska industribolag (Volvo, Atlas Copco, Sandvik m.fl.) och läkemedelsbolag. Flera analytiker (JP Morgan, Handelsbanken) bedömer effekten som 'hanterbar' snarare än allvarlig, delvis eftersom storbolag investerar i amerikansk produktion för att undvika tullarna - därför måttlig vikt. Gäller även Frankrike (EU) och Schweiz, som sedan ramavtalet i november 2025 har samma tak på 15 % som EU, även för läkemedel (SECO, augusti 2026)."
+    # Gäller bara bolag noterade i EU/EES och Schweiz (v8.8, FR/CH tillagda v10.4) – amerikanska bolag drabbas inte av USA:s egna tullar.
+    markets: ["SE", "FI", "NO", "DK", "DE", "NL", "FR", "CH"]
     sectors:
       Industrials: -5
       Healthcare: -5
@@ -51,11 +51,12 @@ factors:
   - name: "ECB-räntehöjning (Irankrigsdriven inflation)"
     name_en: "ECB rate hike (Iran-war-driven inflation)"
     updated: 2026-09-21
-    summary_en: "On 10 September 2026 the ECB raised its policy rates by 0.25 percentage points – the deposit rate is now 2.50% (from 2.25%), the second hike this year, citing inflationary pressure from the Middle East conflict. The ECB now expects about 3.0% inflation in 2026 and 2.5% in 2027, and several forecasters (including Deutsche Bank) expect another hike in December. Raises financing costs for companies in the euro area and the UK (where the Bank of England is pushed in the same direction). Sweden deliberately diverges – the Riksbank held at 1.75% in August and Swedish CPIF inflation was only 0.7% in August, so no weight is set on SE."
-    summary: "ECB höjde den 10 september 2026 sina styrräntor med 0,25 procentenheter - inlåningsräntan är nu 2,50% (från 2,25%), årets andra höjning, med hänvisning till att konflikten i Mellanöstern skapar inflationstryck. ECB räknar nu med ca 3,0% inflation 2026 och 2,5% 2027, och flera bedömare (bl.a. Deutsche Bank) räknar med ytterligare en höjning i december. Ökar finansieringskostnader för bolag i euroområdet och Storbritannien (där Bank of England pressas i samma riktning). Sverige avviker medvetet - Riksbanken låg kvar på 1,75% i augusti, svensk KPIF-inflation var bara 0,7% i augusti och nästa besked kommer 24 september, så ingen vikt sätts på SE."
+    summary_en: "On 10 September 2026 the ECB raised its policy rates by 0.25 percentage points – the deposit rate is now 2.50% (from 2.25%), the second hike this year, citing inflationary pressure from the Middle East conflict. The ECB now expects about 3.0% inflation in 2026 and 2.5% in 2027, and several forecasters (including Deutsche Bank) expect another hike in December. Raises financing costs for companies in the euro area (Germany, the Netherlands, France) and the UK (where the Bank of England is pushed in the same direction). Sweden deliberately diverges – the Riksbank held at 1.75% in August and Swedish CPIF inflation was only 0.7% in August, so no weight is set on SE."
+    summary: "ECB höjde den 10 september 2026 sina styrräntor med 0,25 procentenheter - inlåningsräntan är nu 2,50% (från 2,25%), årets andra höjning, med hänvisning till att konflikten i Mellanöstern skapar inflationstryck. ECB räknar nu med ca 3,0% inflation 2026 och 2,5% 2027, och flera bedömare (bl.a. Deutsche Bank) räknar med ytterligare en höjning i december. Ökar finansieringskostnader för bolag i euroområdet (Tyskland, Nederländerna, Frankrike) och Storbritannien (där Bank of England pressas i samma riktning). Sverige avviker medvetet - Riksbanken låg kvar på 1,75% i augusti, svensk KPIF-inflation var bara 0,7% i augusti och nästa besked kommer 24 september, så ingen vikt sätts på SE."
     countries:
       DE: -3
       NL: -3
+      FR: -3   # v10.4 – euroområdet (Schweiz har egen centralbank och påverkas inte)
       GB: -3
     source_url: "https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260910~314e508016.sv.html"
   - name: "Ryssland/NATO – hybridhot och gränsincidenter"

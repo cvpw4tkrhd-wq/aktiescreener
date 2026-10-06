@@ -925,6 +925,50 @@ def rel_strength_weight(rs):
     return 0, None
 
 
+def earnings_stability(tk):
+    """v10.4: vinststabilitet ur Yahoos årsdata (normalt 4 år). I första hand justerat
+    resultat (utan engångsposter), annars vinst per aktie eller nettoresultat. Mäter
+    förlustår och största fall ett enskilt år – inte variation runt snittet, så att
+    bolag med stadigt växande vinst räknas som stabila."""
+    try:
+        inc = tk.income_stmt
+        if inc is None or inc.empty:
+            return None
+        row = next((r for r in ("Normalized Income", "Diluted EPS", "Net Income")
+                    if r in inc.index and inc.loc[r].dropna().size >= 4), None)
+        if row is None:
+            return None
+        ser = inc.loc[row].dropna()
+        ser = ser[sorted(ser.index)]
+        vals = [float(v) for v in ser.values]
+        loss = sum(1 for v in vals if v <= 0)
+        yoy = [(vals[i] / vals[i - 1] - 1) * 100 for i in range(1, len(vals)) if vals[i - 1] > 0]
+        worst = min(yoy) if yoy else None
+        declines = sum(1 for x in yoy if x < 0)
+        return {"years": len(vals), "basis": {"Normalized Income": "justerat resultat", "Diluted EPS": "vinst per aktie"}.get(row, "nettoresultat"),
+                "worst_yoy_pct": round(worst, 1) if worst is not None else None, "declines": declines, "loss_years": loss}
+    except Exception:
+        return None
+
+
+def stability_points(es, sector):
+    """Poäng för vinststabilitet. Större utslag för cykliska sektorer."""
+    if not es:
+        return 0, None
+    cyc = sector in CYCLICAL_SECTORS
+    w, n, loss, dec = es.get("worst_yoy_pct"), es["years"], es["loss_years"], es["declines"]
+    base = f"{n} år, {es['basis']}"
+    if loss:
+        return (-6 if cyc else -4), f"Vinststabilitet: förlust {loss} av de senaste {n} åren – instabil vinst ({base})"
+    if w is not None and w <= -50:
+        return (-8 if cyc else -4), f"Vinststabilitet: mycket ojämn – vinsten föll som mest {abs(w):.0f} % på ett år ({base})"
+    if w is not None and w <= -30:
+        return (-5 if cyc else -2), f"Vinststabilitet: ojämn – vinsten föll som mest {abs(w):.0f} % på ett år ({base})"
+    if (w is None or w > -10) and dec <= 1:
+        return 4, f"Vinststabilitet: stabil – vinsten har aldrig fallit mer än 10 % på ett år ({base})"
+    return (-2 if cyc else 0), f"Vinststabilitet: måttlig – vinsten föll som mest {abs(w):.0f} % på ett år ({base})"
+
+
 def report_override_for(ticker, tk):
     """Rapporterade siffror som kompletterar Yahoo tills Yahoo lagt in det nya
     kvartalet (v9.7). Returnerar None om ingen post finns eller om Yahoo redan
@@ -1314,6 +1358,7 @@ def analyze_ticker(ticker: str):
         "ret_3m_pct": _ret_pct(close, 63),
         "ret_6m_pct": _ret_pct(close, 126),
         "eps_revisions": fetch_eps_revisions(tk),
+        "earnings_stability": earnings_stability(tk),
         "report": report_info(tk, info),
         "report_override": ({"source": report_ov.get("source"), "report_date": str(report_ov.get("report_date")),
                              "period_end": str(report_ov.get("period_end"))} if report_ov else None),
@@ -1701,6 +1746,16 @@ def score_buy_candidate(d, extra_weight=0):
     if d.get("capex_to_da") is not None and d["capex_to_da"] > 5:
         penalty += 5
         reasons.append(f"Mycket hög investeringstakt (capex {d['capex_to_da']}x avskrivningar) – aggressiv tillväxtfas, ökad osäkerhet kring avkastning")
+
+    # v10.4: vinststabilitet (inte i tillväxtmodellen – unga bolag har väntat ojämn vinst)
+    if not d.get("investment_company"):
+        sp, sn = stability_points(d.get("earnings_stability"), d.get("sector"))
+        if sn:
+            if sp > 0:
+                bonus += sp
+            elif sp < 0:
+                penalty += -sp
+            reasons.append(sn)
 
     # v9.9: värderingstak – P/E, PEG, forward P/E, P/B, riskpremie och utdelning
     # mäter delvis samma sak. Sammanlagt högst +VAL_CAP_POS / -VAL_CAP_NEG poäng.

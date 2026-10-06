@@ -42,6 +42,12 @@ funds:
   - {name: "Spiltan Aktiefond Investmentbolag", ticker: "0P0000ULAP.ST", isin: "SE0004297927", category: "Sverige", asset_class: equity, fee_pct: 0.22}
   - {name: "Swedbank Robur Technology A", ticker: "0P00000LCG.ST", isin: "SE0000538944", category: "Tema: teknik", asset_class: equity, fee_pct: 1.38}
   - {name: "iShares STOXX Europe 600 Banks UCITS ETF", ticker: "EXV1.DE", isin: "DE000A0F5UJ7", category: "Europa", asset_class: equity}
+  - {name: "Aktiespararna Direktavkastning A", ticker: "0P00018JII.ST", isin: "SE0008321780", category: "Sverige", asset_class: equity, fee_pct: 0.33}
+  - {name: "Avanza Småbolag by Skoglund", ticker: "0P0001L5HQ.ST", isin: "SE0015194618", category: "Sverige småbolag", asset_class: equity, fee_pct: 1.26}
+  - {name: "DNB Global Indeks S", ticker: "0P0001Q6FC.ST", isin: "NO0010827280", category: "Global index", asset_class: equity, fee_pct: 0.21}
+  - {name: "Länsförsäkringar USA Index", ticker: "0P0000K9E7.ST", isin: "SE0002793943", category: "USA", asset_class: equity, fee_pct: 0.21}
+  - {name: "Pareto Småbolagsfond A", ticker: "0P00016JY2.ST", isin: "SE0007413398", category: "Sverige småbolag", asset_class: equity, fee_pct: 1.72}
+  - {name: "PriorNilsson Sverige Aktiv A", ticker: "0P0000X68W.ST", isin: "SE0004636447", category: "Sverige", asset_class: equity, fee_pct: 1.35}
   # --- Jämförelsefonder ---
   - {name: "Avanza Global", ticker: "0P0001ECQR.ST", category: "Global index", asset_class: equity, isin: "SE0011527613", fee_pct: 0.1}
   - {name: "Avanza USA", ticker: "0P0001IVD1.ST", category: "USA", asset_class: equity, isin: "SE0012741163", fee_pct: 0.18}

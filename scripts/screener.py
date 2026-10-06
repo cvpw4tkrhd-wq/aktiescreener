@@ -1474,17 +1474,17 @@ def score_buy_candidate(d, extra_weight=0):
             reasons.append(f"RSI högt/överköpt ({d['rsi14']})")
 
     if d["cross_signal"] == "golden_cross":
-        bonus += 15
+        bonus += 8   # v10.2: halverat efter test av trendsignalen
         reasons.append("Golden cross (SMA50 korsade upp genom SMA200)")
     elif d["cross_signal"] == "death_cross":
-        penalty += 20
+        penalty += 10   # v10.2: halverat efter test av trendsignalen
         reasons.append("Death cross (SMA50 korsade ner genom SMA200)")
 
     if d["above_sma50"] and d["above_sma200"]:
-        bonus += 8
+        bonus += 4   # v10.2: halverat efter test av trendsignalen
         reasons.append("Pris över både SMA50 och SMA200 (uppåttrend)")
     elif d["above_sma50"] is False and d["above_sma200"] is False:
-        penalty += 10
+        penalty += 5   # v10.2: halverat efter test av trendsignalen
         reasons.append("Pris under både SMA50 och SMA200 (nedåttrend)")
 
     if d["volume_ratio"] and d["volume_ratio"] > 2:
@@ -1782,24 +1782,24 @@ def score_growth_candidate(d, extra_weight=0):
             reasons.append(f"RSI högt/överköpt ({d['rsi14']})")
 
     if d["cross_signal"] == "golden_cross":
-        bonus += 15
+        bonus += 8   # v10.2: halverat efter test av trendsignalen
         reasons.append("Golden cross (SMA50 korsade upp genom SMA200)")
     elif d["cross_signal"] == "death_cross":
-        penalty += 20
+        penalty += 10   # v10.2: halverat efter test av trendsignalen
         reasons.append("Death cross (SMA50 korsade ner genom SMA200)")
 
     if d.get("cross_signal_20_50") == "golden_cross":
-        bonus += 10
+        bonus += 5   # v10.2: halverat efter test av trendsignalen
         reasons.append("Tidig momentumsignal: SMA20 korsade upp genom SMA50")
     elif d.get("cross_signal_20_50") == "death_cross":
-        penalty += 10
+        penalty += 5   # v10.2: halverat efter test av trendsignalen
         reasons.append("Tidig varningssignal: SMA20 korsade ner genom SMA50")
 
     if d["above_sma50"] and d["above_sma200"]:
-        bonus += 8
+        bonus += 4   # v10.2: halverat efter test av trendsignalen
         reasons.append("Pris över både SMA50 och SMA200 (uppåttrend)")
     elif d["above_sma50"] is False and d["above_sma200"] is False:
-        penalty += 10
+        penalty += 5   # v10.2: halverat efter test av trendsignalen
         reasons.append("Pris under både SMA50 och SMA200 (nedåttrend)")
 
     if d["volume_ratio"] and d["volume_ratio"] > 2:

@@ -65,7 +65,8 @@ RISK_FREE_RATES_FILE = DATA_DIR / "risk_free_rates.json"
 
 
 RISK_FREE_FRED = {"US": "DGS10", "SE": "IRLTLT01SEM156N", "DE": "IRLTLT01DEM156N", "NL": "IRLTLT01NLM156N",
-                  "FI": "IRLTLT01FIM156N", "GB": "IRLTLT01GBM156N", "NO": "IRLTLT01NOM156N", "DK": "IRLTLT01DKM156N"}
+                  "FI": "IRLTLT01FIM156N", "GB": "IRLTLT01GBM156N", "NO": "IRLTLT01NOM156N", "DK": "IRLTLT01DKM156N",
+                  "CH": "IRLTLT01CHM156N", "FR": "IRLTLT01FRM156N"}
 _RF_LIVE = None
 
 
@@ -830,7 +831,8 @@ _REPORT_OVERRIDES = None
 # ===== Nya verktyg (v10.0) =====
 MARKET_INDEX = {"US": ("^GSPC", "S&P 500"), "SE": ("^OMXSPI", "OMX Stockholm All-Share"), "DK": ("^OMXC25", "OMX Köpenhamn 25"),
                 "FI": ("^OMXH25", "OMX Helsingfors 25"), "DE": ("^GDAXI", "DAX"), "NL": ("^AEX", "AEX"),
-                "GB": ("^FTSE", "FTSE 100"), "NO": ("^STOXX", "STOXX Europe 600")}
+                "GB": ("^FTSE", "FTSE 100"), "NO": ("^STOXX", "STOXX Europe 600"),
+                "CH": ("^SSMI", "SMI"), "FR": ("^FCHI", "CAC 40")}
 _INDEX_RET = {}
 
 

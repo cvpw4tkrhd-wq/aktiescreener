@@ -1441,6 +1441,16 @@ def is_valuation_reason(txt):
     return str(txt).startswith(_VAL_PREFIX)
 
 
+FCF_MEANINGLESS_PREFIX = ("Banks", "Insurance", "Capital Markets", "Mortgage", "Real Estate", "REIT", "Savings")
+
+
+def fcf_meaningless(d):
+    """v10.5: fritt kassaflöde säger inget om banker, försäkring, värdepappersbolag och
+    fastighetsbolag – kassaflödet speglar insättningar, utlåning, skadereserver och
+    fastighetsköp. Samma logik som för ROIC (roic_na)."""
+    return d.get("sector") == "RealEstate" or str(d.get("industry") or "").startswith(FCF_MEANINGLESS_PREFIX)
+
+
 INVESTMENT_IGNORED = ("revenue_growth_yoy_pct", "operating_margin_trend_pp", "fcf_margin_pct", "peg_ratio",
                       "forward_pe_trend_pct", "pe", "earnings_yield_pct", "risk_premium_pct")
 MARGIN_TREND_SANITY = 60   # procentenheter
@@ -1686,7 +1696,9 @@ def score_buy_candidate(d, extra_weight=0):
             bonus += 5
             reasons.append(f"Låg volatilitet ({d['volatility_pct']}% årstakt) – stabil kursutveckling")
 
-    if d.get("fcf_margin_pct") is not None:
+    if d.get("fcf_margin_pct") is not None and fcf_meaningless(d):
+        reasons.append("FCF-marginal räknas inte för banker, försäkring, värdepappersbolag och fastighetsbolag – kassaflödet speglar insättningar, utlåning och fastighetsköp")
+    elif d.get("fcf_margin_pct") is not None:
         if d["fcf_margin_pct"] < 0:
             penalty += 15
             reasons.append(f"Negativ FCF-marginal ({d['fcf_margin_pct']}%) – bolaget bränner kassa")
@@ -1974,7 +1986,7 @@ def score_growth_candidate(d, extra_weight=0):
     # Kassaförbrukning räknas EN gång (v8.8): negativ FCF och kraftigt negativ
     # ROIC mäter samma sak hos unga bolag. Sammanlagt högst -10, och bara -5
     # om intäkterna växer mer än 15 %.
-    burn_fcf = d.get("fcf_margin_pct") is not None and d["fcf_margin_pct"] < 0
+    burn_fcf = d.get("fcf_margin_pct") is not None and d["fcf_margin_pct"] < 0 and not fcf_meaningless(d)
     burn_roic = not d.get("roic_na") and d.get("roic_avg") is not None and d["roic_avg"] < -10
     if burn_fcf or burn_roic:
         fast_growth = (d.get("revenue_growth_yoy_pct") or 0) > 15
@@ -1982,7 +1994,9 @@ def score_growth_candidate(d, extra_weight=0):
         penalty += pen
         what = " och ".join(x for x, on in (("negativt fritt kassaflöde", burn_fcf), (f"negativ ROIC ({d['roic_avg']:.0f}%)" if burn_roic else "", burn_roic)) if on)
         reasons.append(f"Kassaförbrukning: {what} – vanligt i tillväxtfas, bevaka kassans räckvidd" + (" (mildrat av stark intäktstillväxt)" if fast_growth else ""))
-    if d.get("fcf_margin_pct") is not None:
+    if d.get("fcf_margin_pct") is not None and fcf_meaningless(d):
+        reasons.append("FCF-marginal räknas inte för banker, försäkring, värdepappersbolag och fastighetsbolag – kassaflödet speglar insättningar, utlåning och fastighetsköp")
+    elif d.get("fcf_margin_pct") is not None:
         if d["fcf_margin_pct"] < 0:
             pass
         elif d["fcf_margin_pct"] > 15:

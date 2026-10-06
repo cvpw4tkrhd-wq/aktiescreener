@@ -1045,3 +1045,94 @@ stocks:
   sector: Industrials
   country: Sverige
   market: SE
+# --- Tillagda 2026-10-06 (v10.3): efterfrågade bolag + sökning i läkemedel, energi och dagligvaror ---
+- ticker: RO.SW
+  name: Roche
+  sector: Healthcare
+  country: Schweiz
+  market: CH
+- ticker: NOVN.SW
+  name: Novartis
+  sector: Healthcare
+  country: Schweiz
+  market: CH
+- ticker: NESN.SW
+  name: Nestlé
+  sector: Consumer
+  country: Schweiz
+  market: CH
+- ticker: TTE.PA
+  name: TotalEnergies
+  sector: Energy
+  country: Frankrike
+  market: FR
+- ticker: ULVR.L
+  name: Unilever
+  sector: Consumer
+  country: Storbritannien
+  market: GB
+- ticker: CAMX.ST
+  name: Camurus
+  sector: Healthcare
+  country: Sverige
+  market: SE
+- ticker: SOBI.ST
+  name: Swedish Orphan Biovitrum
+  sector: Healthcare
+  country: Sverige
+  market: SE
+- ticker: VAR.OL
+  name: Vår Energi
+  sector: Energy
+  country: Norge
+  market: NO
+- ticker: SUBC.OL
+  name: Subsea 7
+  sector: Energy
+  country: Norge
+  market: NO
+- ticker: DNO.OL
+  name: DNO
+  sector: Energy
+  country: Norge
+  market: NO
+- ticker: BAVA.CO
+  name: Bavarian Nordic
+  sector: Healthcare
+  country: Danmark
+  market: DK
+- ticker: SALM.OL
+  name: SalMar
+  sector: Consumer
+  country: Norge
+  market: NO
+- ticker: KESKOB.HE
+  name: Kesko
+  sector: Consumer
+  country: Finland
+  market: FI
+- ticker: MRK.DE
+  name: Merck KGaA
+  sector: Healthcare
+  country: Tyskland
+  market: DE
+- ticker: SAN.PA
+  name: Sanofi
+  sector: Healthcare
+  country: Frankrike
+  market: FR
+- ticker: OR.PA
+  name: L'Oréal
+  sector: Consumer
+  country: Frankrike
+  market: FR
+- ticker: BN.PA
+  name: Danone
+  sector: Consumer
+  country: Frankrike
+  market: FR
+- ticker: DGE.L
+  name: Diageo
+  sector: Consumer
+  country: Storbritannien
+  market: GB

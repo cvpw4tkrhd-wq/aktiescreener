@@ -1304,12 +1304,12 @@ function scoreSellSignal(d) {
     score += 15; reasons.push(`RSI överköpt (${d.rsi14})`);
   }
   if (d.cross_signal === 'death_cross') {
-    score += 20; reasons.push('Death cross (SMA50 under SMA200)');   // v9.9: 35 → 20, hänger ihop med 'pris under SMA200'
+    score += 10; reasons.push('Death cross (SMA50 under SMA200)');   // v10.2: 20 → 10 efter test av trendsignalen
   }
   if (d.above_sma50 === false) {
     // v8.8: kortsiktig svaghet väger lätt, men mer när även långa trenden brutits
-    if (d.above_sma200 === false) { score += 15; reasons.push('Pris under både SMA50 och SMA200 – trenden är bruten'); }
-    else { score += 8; reasons.push('Pris under SMA50 (men över SMA200) – kortsiktig svaghet'); }
+    if (d.above_sma200 === false) { score += 8; reasons.push('Pris under både SMA50 och SMA200 – trenden är bruten'); }   // v10.2: halverat
+    else { score += 4; reasons.push('Pris under SMA50 (men över SMA200) – kortsiktig svaghet'); }
   }
   if (d.pe !== null && d.pe !== undefined && d.pe > 40) {
     score += 15; reasons.push(`Högt P/E (${d.pe}) – dyrt relativt vinst`);
@@ -3706,10 +3706,12 @@ const MODULES_SV = [
           <table>
             <tr><td>+↑ (gult)</td><td>Golden cross på SMA50/SMA200, eller inom 2% marginal av att ske</td></tr>
             <tr><td>+↓ (rött)</td><td>Death cross på SMA50/SMA200, eller inom 2% marginal</td></tr>
+            <tr><td>Kurs över / under både SMA50 och SMA200</td><td>+4 / −5 poäng (köp)</td></tr>
+            <tr><td>Golden cross / death cross</td><td>+8 / −10 poäng (köp), death cross +10 i säljpoängen</td></tr>
             <tr><td>↑20 / ↓20</td><td>Samma idé men på SMA20/SMA50 — snabbare, mer brusig, tidigare varning</td></tr>
           </table>
         </div>
-      `
+      <div class="callout-warn"><strong>Halverade vikter (oktober 2026):</strong> ett test på cirka 620 aktier under fem år visade att trendsignalen inte pekat ut vinnare – aktier i upptrend slog medianen i 49 % av fallen och aktier i nedtrend i 51 %. Vikterna halverades därför, men signalen finns kvar eftersom fem år är en begränsad period. Se Analys → Signaler för den löpande uppföljningen.</div>`
     },
     {
       id: "rsi",

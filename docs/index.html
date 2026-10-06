@@ -1445,6 +1445,12 @@ function scoreSellSignal(d) {
     if (s.rs_6m <= -15 && s.rs_3m < 0) { score += 6; reasons.push(`Svagare än index: ${fmtNum(s.rs_6m, 0)} procentenheter mot ${s.index} senaste 6 månaderna`); }
     else if (s.rs_6m >= 15 && s.rs_3m > 0) { score -= 4; reasons.push(`Starkare än index: +${fmtNum(s.rs_6m, 0)} procentenheter mot ${s.index} senaste 6 månaderna – talar emot att sälja`); }
   }
+  // v10.4: vinststabilitet
+  if (d.earnings_stability && !d.investment_company) {
+    const e = d.earnings_stability, w = e.worst_yoy_pct;
+    if (e.loss_years || (w != null && w <= -50)) { score += 4; reasons.push(`Vinststabilitet: ${e.loss_years ? 'förlustår under perioden' : `vinsten föll som mest ${fmtNum(Math.abs(w), 0)} % på ett år`} – ökar risken`); }
+    else if ((w == null || w > -10) && e.declines <= 1) { score -= 3; reasons.push('Vinststabilitet: stabil vinst – talar emot att sälja'); }
+  }
   // v9.9: geopolitiken läggs på råsumman – klipps till 0–100 en gång på slutet
   if (d.sector_weight) {
     score = score - d.sector_weight;
@@ -2489,6 +2495,7 @@ const METRIC_GLOSSARY = {
   'RANK I KATEGORI': { title: 'Momentum-rank', text: 'Fondens placering bland jämförbara fonder (aktiefonder mot aktiefonder, räntefonder mot räntefonder) utifrån en blandning av 3, 6 och 12 månaders avkastning.' },
   'SMA50 / SMA200': { title: 'SMA50 mot SMA200', text: 'Golden cross = 50-dagarssnittet ligger över 200-dagarssnittet, en klassisk signal för uppåtgående trend. Death cross = tvärtom.' },
   'AVSTÅND TILL SMA200': { title: 'Avstånd till SMA200', text: 'Hur långt kursen ligger över eller under sitt 200-dagarssnitt, och om snittet stiger eller faller. Fondpoängens trenddel graderas efter båda – längre över ett stigande SMA200 ger fler poäng.' },
+  'VINSTSTABILITET': { title: 'Vinststabilitet', text: 'Hur jämn vinsten har varit de senaste cirka fyra åren (justerat resultat om det finns, annars vinst per aktie). Mäter förlustår och det största fallet ett enskilt år. Stabil (aldrig mer än 10 % nedgång): +4. Ojämn (fall över 30 %): −2, eller −5 för cykliska sektorer som energi, råvaror och halvledare. Mycket ojämn (fall över 50 % eller förlust): −4, eller upp till −8 för cykliska. Påverkar inte tillväxtmodellen.' },
   'VINSTREVIDERINGAR 30 D': { title: 'Vinstrevideringar', text: 'Hur analytikernas prognos för årets vinst per aktie har ändrats de senaste 30 dagarna, och hur många analytiker som höjt respektive sänkt. Höjda prognoser är historiskt en av de mer pålitliga positiva signalerna. Ger +3/+6 vid höjning och −3/−6 vid sänkning (1 respektive 3 % eller tydlig övervikt av höjningar/sänkningar).' },
   'MOT INDEX 6 MÅN': { title: 'Relativ styrka mot index', text: 'Aktiens kursutveckling minus indexets (t.ex. S&P 500 eller OMX Stockholm) de senaste 6 månaderna, i procentenheter. Minst 15 procentenheter bättre – och bättre även senaste 3 månaderna – ger +5; lika mycket sämre ger −5.' },
   'VÄRDERING MOT EGEN HISTORIK': { title: 'Värdering mot egen historik', text: 'Första screening av om aktien är billig eller dyr jämfört med sig själv. Bolaget delas in i fas: växer försäljningen, är det lönsamt, och ger det tillbaka pengar via utdelning eller återköp. Lönsamma bolag jämförs på P/E, förlustbolag på P/S (pris/försäljning). Dagens tal jämförs med bolagets median de senaste ca 4 åren: mer än 15 % under = BILLIG, mer än 15 % över = DYR. Ger ±3 poäng vid 15–30 % avvikelse och ±6 vid över 30 % (halverat för cykliska sektorer, ingen bonus om vinsten väntas falla). Tänk på att historiken inkluderar låg-ränteåren – med dagens högre räntor är ett något lägre P/E än snittet ofta motiverat.' },
@@ -2562,7 +2569,7 @@ function reasonArea(txt) {
   const s = String(txt);
   if (/^Analytiker|analytikerbevakning/.test(s)) return 'analysts';
   if (/^Geopolitik|Ränte- och kreditstabilitet|^Stabiliteten|^Inverterad|kreditspread|^Räntekänslig|^Räntemedvind/.test(s)) return 'macro';
-  if (/^Vinstprognos/.test(s)) return 'earnings';
+  if (/^Vinstprognos|^Vinststabilitet/.test(s)) return 'earnings';
   if (/än index/.test(s)) return 'trend';
   if (/^Forward P\/E|intäkt|rörelsemarginal|Rörelsemarginalens|FCF|ROIC|aktiebaserad|investeringstakt|Kassaförbrukning|^Investmentbolag/i.test(s)) return 'earnings';
   if (/^Negativt P\/B|skuldsättning|volatilitet|börsvärde|Mikro-cap|likviditet|Kombination av utebliven/i.test(s)) return 'risk';
@@ -2728,6 +2735,13 @@ async function renderFollowup(host) {
   </div>`;
 }
 
+function earningsStabilityCellHtml(r) {
+  const e = r.earnings_stability; if (!e) return '';
+  const cyc = ['Energy', 'Materials', 'Semiconductors'].includes(r.sector);
+  const w = e.worst_yoy_pct;
+  const lvl = e.loss_years ? ['MYCKET OJÄMN', 'down-txt'] : (w != null && w <= -50 ? ['MYCKET OJÄMN', 'down-txt'] : (w != null && w <= -30 ? ['OJÄMN', 'down-txt'] : ((w == null || w > -10) && e.declines <= 1 ? ['STABIL', 'up-txt'] : ['MÅTTLIG', ''])));
+  return `<div><div class="stat-label">VINSTSTABILITET</div><div class="stat-val ${lvl[1]}">${lvl[0]}</div><div class="stat-sub" data-noi18n>${pfT(`Största fall ${w != null ? fmtNum(Math.abs(w), 0) + ' %' : '–'} · förlustår ${e.loss_years} · ${e.years} år${cyc ? ' · cyklisk sektor' : ''}`, `Largest drop ${w != null ? fmtNum(Math.abs(w), 0) + ' %' : '–'} · loss years ${e.loss_years} · ${e.years} yrs${cyc ? ' · cyclical sector' : ''}`)}</div></div>`;
+}
 function drawerSummaryHtml(r) {
   const tab = state.tab;
   const score = tab === 'sell' ? r.sell_score : (tab === 'growth' ? r.growth_score : r.buy_score);
@@ -3246,6 +3260,7 @@ function openDrawer(ticker) {
         ${r.roic_na ? `<div class="stat-sub">Inte ett meningsfullt mått för banker, försäkringsbolag och fastighetsbolag/REIT - deras kapitalstruktur skiljer sig strukturellt</div>` : ''}
         ${!r.roic_na && (r.roic_avg === null || r.roic_avg === undefined) ? `<div class="stat-sub">Kräver minst 3 års bokslutsdata från Yahoo Finance - saknas för det här bolaget${r.roic_years ? ` (bara ${r.roic_years} år tillgängliga)` : ''}</div>` : ''}
       </div>
+      ${earningsStabilityCellHtml(r)}
       <div><div class="stat-label">SBC/INTÄKTER</div><div class="stat-val">${r.sbc_to_revenue_pct !== null && r.sbc_to_revenue_pct !== undefined ? fmtNum(r.sbc_to_revenue_pct,0) + '%' : '–'}</div></div>
       <div><div class="stat-label">CAPEX/AVSKRIVNINGAR</div><div class="stat-val">${r.capex_to_da !== null && r.capex_to_da !== undefined ? fmtNum(r.capex_to_da,1) + 'x' : '–'}</div></div>
       </div>
@@ -4053,7 +4068,7 @@ const MODULES_SV = [
         <p><strong>Avdrag räknas alltid fullt ut</strong> — en dålig aktie ska kunna hamna nära noll. <strong>Bonusar dämpas</strong> efter 25 poäng (de första 25 räknas fullt, resten bara till 40%) — det gör poäng nära 100 strukturellt sällsynta, och håller sig så även när nya faktorer läggs till i modellen över tid.</p>
         <h3 class="sub">Geopolitik och makro</h3>
         <p>Utöver bolagsspecifika faktorer väger appen även in manuellt uppdaterade sektor- och landsvikter kopplade till verkliga världshändelser (t.ex. Iran-konfliktens effekt på oljepris och halvledarsektorn) — dessa faller in i samma dämpade bonuspool, inte som ett separat, obegränsat tillägg.</p>
-      <h3 class="sub">Så läser du uppdelningen i informationsrutan</h3><p>Överst i varje informationsruta visas <strong>Så räknades poängen</strong>: alla skäl grupperade i sex områden – värdering, vinst och tillväxt, trend och teknik, analytiker, risk och finansiell styrka samt omvärld och makro – med hur många poäng varje område gav. Tryck på ett område för att se de enskilda skälen. Sista raden visar hela uträkningen, till exempel 50 + 41 som höjer − 27 som sänker − 9 dämpning = 55. För dina innehav visas både säljpoängen (röd kant) och köppoängen (blå kant).</p><h3 class="sub">Tak och specialfall</h3><p><strong>Värderingstak:</strong> P/E, PEG, P/B, riskpremie och utdelning mäter delvis samma sak. Tillsammans får de ge högst +16 eller −20 poäng, så att en och samma dyr- eller billighet inte räknas fem gånger. <strong>Investmentbolag</strong> (t.ex. Investor, Bure och Svolder) bedöms inte på intäkter, marginaler, kassaflöde eller P/E, eftersom de speglar värdeförändringar i innehaven. P/B används i stället som ett grovt mått på substansrabatt. <strong>Orimliga värden</strong>, som en marginalförändring på tusentals procentenheter, räknas inte. <strong>Räntekänslighet</strong> ger ±2–3 poäng när 10-årsräntan har rört sig tydligt under månaden, baserat på hur aktien historiskt reagerat på räntan.</p>`
+      <h3 class="sub">Så läser du uppdelningen i informationsrutan</h3><p>Överst i varje informationsruta visas <strong>Så räknades poängen</strong>: alla skäl grupperade i sex områden – värdering, vinst och tillväxt, trend och teknik, analytiker, risk och finansiell styrka samt omvärld och makro – med hur många poäng varje område gav. Tryck på ett område för att se de enskilda skälen. Sista raden visar hela uträkningen, till exempel 50 + 41 som höjer − 27 som sänker − 9 dämpning = 55. För dina innehav visas både säljpoängen (röd kant) och köppoängen (blå kant).</p><h3 class="sub">Tak och specialfall</h3><p><strong>Värderingstak:</strong> P/E, PEG, P/B, riskpremie och utdelning mäter delvis samma sak. Tillsammans får de ge högst +16 eller −20 poäng, så att en och samma dyr- eller billighet inte räknas fem gånger. <strong>Investmentbolag</strong> (t.ex. Investor, Bure och Svolder) bedöms inte på intäkter, marginaler, kassaflöde eller P/E, eftersom de speglar värdeförändringar i innehaven. P/B används i stället som ett grovt mått på substansrabatt. <strong>Orimliga värden</strong>, som en marginalförändring på tusentals procentenheter, räknas inte. <strong>Räntekänslighet</strong> ger ±2–3 poäng när 10-årsräntan har rört sig tydligt under månaden, baserat på hur aktien historiskt reagerat på räntan.</p><h3 class="sub">Vinststabilitet</h3><p>Bolag vars vinst svänger kraftigt – typiskt energi, råvaror och halvledare som följer råvarupriser och konjunktur – kan se billiga ut just när vinsten toppar. Därför mäts hur jämn vinsten varit de senaste cirka fyra åren: stabil vinst ger +4, medan stora vinstfall eller förlustår ger avdrag, upp till −8 för cykliska sektorer. Måttet ingår i köp- och säljpoängen men inte i tillväxtmodellen.</p>`
     },
     {
       id: "kop-salj-tillvaxt",

@@ -1136,3 +1136,205 @@ stocks:
   sector: Consumer
   country: Storbritannien
   market: GB
+
+# --- Tillagda 2026-10-07 (v10.5): bredsökning bland nordiska bolag, urval efter analys och kvalitetsfilter ---
+- ticker: VIT-B.ST
+  name: Vitec Software
+  sector: Technology
+  country: Sverige
+  market: SE
+- ticker: NOBA.ST
+  name: NOBA Bank
+  sector: Financials
+  country: Sverige
+  market: SE
+- ticker: SYSR.ST
+  name: Systemair
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: GRNG.ST
+  name: Gränges
+  sector: Materials
+  country: Sverige
+  market: SE
+- ticker: SKIS-B.ST
+  name: SkiStar
+  sector: Consumer
+  country: Sverige
+  market: SE
+- ticker: MMGR-B.ST
+  name: Momentum
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: BOOZT.ST
+  name: Boozt
+  sector: Consumer
+  country: Sverige
+  market: SE
+- ticker: EPEN.ST
+  name: Ependion
+  sector: Technology
+  country: Sverige
+  market: SE
+- ticker: THULE.ST
+  name: Thule
+  sector: Consumer
+  country: Sverige
+  market: SE
+- ticker: ACAD.ST
+  name: AcadeMedia
+  sector: Consumer
+  country: Sverige
+  market: SE
+- ticker: ALIG.ST
+  name: Alimak
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: CEVI.ST
+  name: CellaVision
+  sector: Healthcare
+  country: Sverige
+  market: SE
+- ticker: COFFEE-B.ST
+  name: Coffee Stain
+  sector: Technology
+  country: Sverige
+  market: SE
+- ticker: NORION.ST
+  name: Norion Bank
+  sector: Financials
+  country: Sverige
+  market: SE
+- ticker: SWEC-B.ST
+  name: Sweco
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: ALLIGO-B.ST
+  name: Alligo
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: INSTAL.ST
+  name: Instalco
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: SECT-B.ST
+  name: Sectra
+  sector: Healthcare
+  country: Sverige
+  market: SE
+- ticker: GETI-B.ST
+  name: Getinge
+  sector: Healthcare
+  country: Sverige
+  market: SE
+- ticker: LIFCO-B.ST
+  name: Lifco
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: MTG-B.ST
+  name: Modern Times Group MTG
+  sector: Technology
+  country: Sverige
+  market: SE
+- ticker: HOFI.ST
+  name: Hoist Finance
+  sector: Financials
+  country: Sverige
+  market: SE
+- ticker: AFRY.ST
+  name: Afry
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: ALMB.CO
+  name: Alm. Brand
+  sector: Financials
+  country: Danmark
+  market: DK
+- ticker: FLS.CO
+  name: FLSmidth & Co.
+  sector: Industrials
+  country: Danmark
+  market: DK
+- ticker: BONHR.OL
+  name: Bonheur
+  sector: Industrials
+  country: Norge
+  market: NO
+- ticker: MING.OL
+  name: SpareBank 1 SMN
+  sector: Financials
+  country: Norge
+  market: NO
+- ticker: EMBLA.CO
+  name: Embla Medical
+  sector: Healthcare
+  country: Danmark
+  market: DK
+- ticker: SNTIA.OL
+  name: Sentia
+  sector: Industrials
+  country: Norge
+  market: NO
+- ticker: TRMD-A.CO
+  name: TORM plc
+  sector: Energy
+  country: Danmark
+  market: DK
+- ticker: RILBA.CO
+  name: Ringkjøbing Landbobank
+  sector: Financials
+  country: Danmark
+  market: DK
+- ticker: DOFG.OL
+  name: DOF Group
+  sector: Industrials
+  country: Norge
+  market: NO
+- ticker: JYSK.CO
+  name: Jyske Bank
+  sector: Financials
+  country: Danmark
+  market: DK
+- ticker: BIOMAR.CO
+  name: BioMar Group
+  sector: Consumer
+  country: Danmark
+  market: DK
+- ticker: ALSYDB.CO
+  name: AL Sydbank
+  sector: Financials
+  country: Danmark
+  market: DK
+- ticker: BWLPG.OL
+  name: BW LPG
+  sector: Energy
+  country: Norge
+  market: NO
+- ticker: KCR.HE
+  name: Konecranes
+  sector: Industrials
+  country: Finland
+  market: FI
+- ticker: SPOL.OL
+  name: SpareBank 1 Østlandet
+  sector: Financials
+  country: Norge
+  market: NO
+- ticker: B2I.OL
+  name: B2 Impact
+  sector: Financials
+  country: Norge
+  market: NO
+- ticker: NONG.OL
+  name: SpareBank 1 Nord-Norge
+  sector: Financials
+  country: Norge
+  market: NO

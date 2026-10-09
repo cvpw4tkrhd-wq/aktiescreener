@@ -1,251 +1,249 @@
 {
- "generated_at": "2026-10-08T21:31:35.447563+00:00",
+ "generated_at": "2026-10-09T21:04:12.694008+00:00",
  "version": "10.6",
  "count": 43,
- "stability_score": 59.6,
+ "stability_score": 61.5,
  "categories": {
   "Sverige": {
-   "score": 56,
+   "score": 61,
    "label": "Neutralt",
    "proxy": "OMX Stockholm All-Share",
    "tickers": [
     "^OMXSPI"
    ],
-   "change_1m": -20,
-   "ret_3m": 0.7,
-   "ret_1y": 9.1,
-   "sma200_dist_pct": 1.2,
-   "drawdown_pct": -4.4,
+   "change_1m": -5,
+   "ret_3m": 2.3,
+   "ret_1y": 11.6,
+   "sma200_dist_pct": 2.8,
+   "drawdown_pct": -2.8,
    "reasons_pos": [
-    "Indexet ligger 1.2 % över SMA200",
-    "SMA200 stiger (+1.1 % senaste månaden)",
-    "+0.7 % senaste 3 månaderna",
-    "+9.1 % senaste året"
+    "Indexet ligger 2.8 % över SMA200",
+    "SMA200 stiger (+1.0 % senaste månaden)",
+    "+2.3 % senaste 3 månaderna",
+    "+11.6 % senaste året"
    ],
    "reasons_neg": []
   },
   "Sverige index": {
-   "score": 62,
-   "label": "Neutralt",
+   "score": 67,
+   "label": "Medvind",
    "proxy": "OMXS30",
    "tickers": [
     "^OMX"
    ],
-   "change_1m": -20,
-   "ret_3m": 1.1,
-   "ret_1y": 16.8,
-   "sma200_dist_pct": 2.3,
-   "drawdown_pct": -4.0,
+   "change_1m": -4,
+   "ret_3m": 3.0,
+   "ret_1y": 19.7,
+   "sma200_dist_pct": 4.0,
+   "drawdown_pct": -2.3,
    "reasons_pos": [
-    "Indexet ligger 2.3 % över SMA200",
+    "Indexet ligger 4.0 % över SMA200",
     "SMA200 stiger (+1.6 % senaste månaden)",
-    "+1.1 % senaste 3 månaderna",
-    "+16.8 % senaste året"
+    "+3.0 % senaste 3 månaderna",
+    "+19.7 % senaste året"
    ],
    "reasons_neg": []
   },
   "Sverige småbolag": {
-   "score": 58,
+   "score": 62,
    "label": "Neutralt",
    "proxy": "XACT Småbolag",
    "tickers": [
     "XACT-SMABOLAG.ST"
    ],
-   "change_1m": -20,
-   "ret_3m": 1.9,
-   "ret_1y": 7.2,
-   "sma200_dist_pct": 2.2,
-   "drawdown_pct": -3.7,
+   "change_1m": -12,
+   "ret_3m": 3.3,
+   "ret_1y": 7.5,
+   "sma200_dist_pct": 3.6,
+   "drawdown_pct": -2.3,
    "reasons_pos": [
-    "Indexet ligger 2.2 % över SMA200",
+    "Indexet ligger 3.6 % över SMA200",
     "SMA200 stiger (+0.8 % senaste månaden)",
-    "+1.9 % senaste 3 månaderna",
-    "+7.2 % senaste året"
+    "+3.3 % senaste 3 månaderna",
+    "+7.5 % senaste året"
    ],
    "reasons_neg": []
   },
   "Global": {
-   "score": 70,
+   "score": 80,
    "label": "Medvind",
    "proxy": "MSCI ACWI (världen)",
    "tickers": [
     "ACWI"
    ],
-   "change_1m": -14,
-   "ret_3m": 1.3,
-   "ret_1y": 16.5,
-   "sma200_dist_pct": 5.6,
-   "drawdown_pct": -1.7,
+   "change_1m": -2,
+   "ret_3m": 3.2,
+   "ret_1y": 16.7,
+   "sma200_dist_pct": 6.3,
+   "drawdown_pct": -1.0,
    "reasons_pos": [
-    "Indexet ligger 5.6 % över SMA200",
+    "Indexet ligger 6.3 % över SMA200",
     "SMA200 stiger (+1.5 % senaste månaden)",
-    "+1.3 % senaste 3 månaderna",
-    "+16.5 % senaste året"
+    "+3.2 % senaste 3 månaderna",
+    "+16.7 % senaste året"
    ],
    "reasons_neg": []
   },
   "Global index": {
-   "score": 70,
+   "score": 80,
    "label": "Medvind",
    "proxy": "MSCI ACWI (världen)",
    "tickers": [
     "ACWI"
    ],
-   "change_1m": -14,
-   "ret_3m": 1.3,
-   "ret_1y": 16.5,
-   "sma200_dist_pct": 5.6,
-   "drawdown_pct": -1.7,
+   "change_1m": -2,
+   "ret_3m": 3.2,
+   "ret_1y": 16.7,
+   "sma200_dist_pct": 6.3,
+   "drawdown_pct": -1.0,
    "reasons_pos": [
-    "Indexet ligger 5.6 % över SMA200",
+    "Indexet ligger 6.3 % över SMA200",
     "SMA200 stiger (+1.5 % senaste månaden)",
-    "+1.3 % senaste 3 månaderna",
-    "+16.5 % senaste året"
+    "+3.2 % senaste 3 månaderna",
+    "+16.7 % senaste året"
    ],
    "reasons_neg": []
   },
   "Europa": {
-   "score": 53,
+   "score": 56,
    "label": "Neutralt",
    "proxy": "STOXX Europe 600",
    "tickers": [
     "^STOXX"
    ],
-   "change_1m": -12,
-   "ret_3m": -2.4,
-   "ret_1y": 9.7,
-   "sma200_dist_pct": 0.2,
-   "drawdown_pct": -5.3,
+   "change_1m": -7,
+   "ret_3m": -1.6,
+   "ret_1y": 10.9,
+   "sma200_dist_pct": 1.1,
+   "drawdown_pct": -4.4,
    "reasons_pos": [
-    "Indexet ligger 0.2 % över SMA200",
+    "Indexet ligger 1.1 % över SMA200",
     "SMA200 stiger (+1.0 % senaste månaden)",
-    "+9.7 % senaste året"
+    "+10.9 % senaste året"
    ],
    "reasons_neg": [
-    "-2.4 % senaste 3 månaderna"
+    "-1.6 % senaste 3 månaderna"
    ]
   },
   "USA": {
-   "score": 82,
+   "score": 84,
    "label": "Medvind",
    "proxy": "S&P 500",
    "tickers": [
     "^GSPC"
    ],
-   "change_1m": 1,
-   "ret_3m": 2.5,
-   "ret_1y": 15.6,
-   "sma200_dist_pct": 7.2,
-   "drawdown_pct": -0.7,
+   "change_1m": 12,
+   "ret_3m": 3.9,
+   "ret_1y": 15.7,
+   "sma200_dist_pct": 7.7,
+   "drawdown_pct": -0.1,
    "reasons_pos": [
-    "Indexet ligger 7.2 % över SMA200",
+    "Indexet ligger 7.7 % över SMA200",
     "SMA200 stiger (+1.3 % senaste månaden)",
-    "+2.5 % senaste 3 månaderna",
-    "+15.6 % senaste året"
+    "+3.9 % senaste 3 månaderna",
+    "+15.7 % senaste året"
    ],
    "reasons_neg": []
   },
   "Tillväxtmarknader": {
-   "score": 64,
-   "label": "Neutralt",
+   "score": 69,
+   "label": "Medvind",
    "proxy": "MSCI Emerging Markets",
    "tickers": [
     "EEM"
    ],
-   "change_1m": -23,
-   "ret_3m": -1.2,
-   "ret_1y": 24.7,
-   "sma200_dist_pct": 4.8,
-   "drawdown_pct": -7.2,
+   "change_1m": -13,
+   "ret_3m": 3.6,
+   "ret_1y": 25.0,
+   "sma200_dist_pct": 5.8,
+   "drawdown_pct": -6.2,
    "reasons_pos": [
-    "Indexet ligger 4.8 % över SMA200",
+    "Indexet ligger 5.8 % över SMA200",
     "SMA200 stiger (+2.4 % senaste månaden)",
-    "+24.7 % senaste året"
+    "+3.6 % senaste 3 månaderna",
+    "+25.0 % senaste året"
    ],
-   "reasons_neg": [
-    "-1.2 % senaste 3 månaderna"
-   ]
+   "reasons_neg": []
   },
   "Tema: teknik": {
-   "score": 91,
+   "score": 94,
    "label": "Medvind",
    "proxy": "Teknikaktier (XLK)",
    "tickers": [
     "XLK"
    ],
-   "change_1m": 4,
-   "ret_3m": 6.6,
-   "ret_1y": 39.2,
-   "sma200_dist_pct": 19.3,
-   "drawdown_pct": -2.1,
+   "change_1m": 7,
+   "ret_3m": 9.8,
+   "ret_1y": 37.5,
+   "sma200_dist_pct": 19.7,
+   "drawdown_pct": -1.6,
    "reasons_pos": [
-    "Indexet ligger 19.3 % över SMA200",
+    "Indexet ligger 19.7 % över SMA200",
     "SMA200 stiger (+3.3 % senaste månaden)",
-    "+6.6 % senaste 3 månaderna",
-    "+39.2 % senaste året"
+    "+9.8 % senaste 3 månaderna",
+    "+37.5 % senaste året"
    ],
    "reasons_neg": []
   },
   "Tema: bioteknik": {
-   "score": 61,
-   "label": "Neutralt",
+   "score": 70,
+   "label": "Medvind",
    "proxy": "Bioteknikaktier (XBI)",
    "tickers": [
     "XBI"
    ],
-   "change_1m": -30,
-   "ret_3m": -6.1,
-   "ret_1y": 44.6,
-   "sma200_dist_pct": 7.1,
-   "drawdown_pct": -11.9,
+   "change_1m": -12,
+   "ret_3m": -1.0,
+   "ret_1y": 46.5,
+   "sma200_dist_pct": 10.2,
+   "drawdown_pct": -9.3,
    "reasons_pos": [
-    "Indexet ligger 7.1 % över SMA200",
-    "SMA200 stiger (+2.7 % senaste månaden)",
-    "+44.6 % senaste året"
+    "Indexet ligger 10.2 % över SMA200",
+    "SMA200 stiger (+2.6 % senaste månaden)",
+    "+46.5 % senaste året"
    ],
    "reasons_neg": [
-    "-6.1 % senaste 3 månaderna",
-    "-12 % från årets högsta"
+    "-1.0 % senaste 3 månaderna"
    ]
   },
   "Tema: hälsovård": {
-   "score": 74,
+   "score": 86,
    "label": "Medvind",
    "proxy": "Hälsovårdsaktier (XLV)",
    "tickers": [
     "XLV"
    ],
-   "change_1m": -10,
-   "ret_3m": 5.0,
-   "ret_1y": 18.5,
-   "sma200_dist_pct": 7.9,
-   "drawdown_pct": -3.9,
+   "change_1m": 11,
+   "ret_3m": 6.2,
+   "ret_1y": 20.2,
+   "sma200_dist_pct": 9.6,
+   "drawdown_pct": -2.4,
    "reasons_pos": [
-    "Indexet ligger 7.9 % över SMA200",
+    "Indexet ligger 9.6 % över SMA200",
     "SMA200 stiger (+1.1 % senaste månaden)",
-    "+5.0 % senaste 3 månaderna",
-    "+18.5 % senaste året"
+    "+6.2 % senaste 3 månaderna",
+    "+20.2 % senaste året"
    ],
    "reasons_neg": []
   },
   "Tema: försvar": {
-   "score": 16,
+   "score": 18,
    "label": "Motvind",
    "proxy": "Försvarsaktier (VanEck Defense)",
    "tickers": [
     "DFEN.DE"
    ],
-   "change_1m": -7,
-   "ret_3m": -2.8,
-   "ret_1y": -12.4,
-   "sma200_dist_pct": -11.0,
-   "drawdown_pct": -22.4,
+   "change_1m": -1,
+   "ret_3m": -0.5,
+   "ret_1y": -10.6,
+   "sma200_dist_pct": -9.4,
+   "drawdown_pct": -21.0,
    "reasons_pos": [],
    "reasons_neg": [
-    "Indexet ligger 11.0 % under SMA200",
-    "-2.8 % senaste 3 månaderna",
-    "-12.4 % senaste året",
-    "-22 % från årets högsta"
+    "Indexet ligger 9.4 % under SMA200",
+    "-0.5 % senaste 3 månaderna",
+    "-10.6 % senaste året",
+    "-21 % från årets högsta"
    ]
   },
   "Fastigheter": {
@@ -255,50 +253,50 @@
    "tickers": [
     "IPRP.L"
    ],
-   "change_1m": -11,
-   "ret_3m": -14.9,
-   "ret_1y": -15.9,
-   "sma200_dist_pct": -16.5,
-   "drawdown_pct": -27.2,
+   "change_1m": -7,
+   "ret_3m": -14.5,
+   "ret_1y": -15.1,
+   "sma200_dist_pct": -16.1,
+   "drawdown_pct": -26.9,
    "reasons_pos": [],
    "reasons_neg": [
-    "Indexet ligger 16.5 % under SMA200",
+    "Indexet ligger 16.1 % under SMA200",
     "SMA200 faller (-1.2 % senaste månaden)",
-    "-14.9 % senaste 3 månaderna",
-    "-15.9 % senaste året",
+    "-14.5 % senaste 3 månaderna",
+    "-15.1 % senaste året",
     "-27 % från årets högsta"
    ]
   },
   "Råvaror/ädelmetaller": {
-   "score": 25,
+   "score": 29,
    "label": "Motvind",
    "proxy": "Guld och silver (snitt)",
    "tickers": [
     "GC=F",
     "SI=F"
    ],
-   "change_1m": -22,
-   "ret_3m": 0.2,
-   "ret_1y": 14.9,
-   "sma200_dist_pct": -13.3,
-   "drawdown_pct": -35.1,
+   "change_1m": -15,
+   "ret_3m": 5.7,
+   "ret_1y": 14.6,
+   "sma200_dist_pct": -11.5,
+   "drawdown_pct": -33.8,
    "reasons_pos": [
-    "+0.2 % senaste 3 månaderna",
-    "+14.9 % senaste året"
+    "+5.7 % senaste 3 månaderna",
+    "+14.6 % senaste året"
    ],
    "reasons_neg": [
-    "Indexet ligger 13.3 % under SMA200",
-    "-35 % från årets högsta"
+    "Indexet ligger 11.5 % under SMA200",
+    "-34 % från årets högsta"
    ]
   },
   "Räntefond": {
-   "score": 60,
+   "score": 62,
    "label": "Neutralt",
    "proxy": "Stabilitetspoängen (räntor & kredit)",
    "tickers": [],
-   "change_1m": -17,
+   "change_1m": -15,
    "reasons_pos": [
-    "Stabilitetspoängen för räntor och kredit är 60/100"
+    "Stabilitetspoängen för räntor och kredit är 62/100"
    ],
    "reasons_neg": []
   }
@@ -307,15 +305,15 @@
   "name": "Avanza Global",
   "ticker": "0P0001ECQR.ST",
   "sectors": {
-   "Technology": 0.3152,
-   "Financials": 0.1649,
-   "Consumer": 0.1595,
-   "Industrials": 0.0983,
-   "Healthcare": 0.0974,
-   "Communication": 0.0939,
-   "Materials": 0.0304,
-   "RealEstate": 0.0252,
-   "Utilities": 0.0145,
+   "Technology": 0.3422,
+   "Financials": 0.1545,
+   "Consumer": 0.1494,
+   "Healthcare": 0.0977,
+   "Communication": 0.0952,
+   "Industrials": 0.0928,
+   "Materials": 0.0314,
+   "RealEstate": 0.0226,
+   "Utilities": 0.0136,
    "Energy": 0.0007
   }
  },
@@ -325,35 +323,42 @@
     {
      "s": "NVDA",
      "n": "NVIDIA Corp",
-     "p": 0.0451,
+     "p": 0.0479,
      "w": "NVDA",
      "k": "nvidia"
     },
     {
      "s": "GOOG",
      "n": "Alphabet Inc Class C",
-     "p": 0.042,
+     "p": 0.0381,
      "w": "GOOGL",
      "k": "alphabet"
     },
     {
      "s": "AAPL",
      "n": "Apple Inc",
-     "p": 0.0392,
+     "p": 0.0342,
      "w": "AAPL",
      "k": "apple"
     },
     {
-     "s": "AVGO",
-     "n": "Broadcom Inc",
-     "p": 0.0216,
-     "w": "AVGO",
-     "k": "broadcom"
+     "s": "MSFT",
+     "n": "Microsoft Corp",
+     "p": 0.0256,
+     "w": "MSFT",
+     "k": "microsoft"
+    },
+    {
+     "s": "MU",
+     "n": "Micron Technology Inc",
+     "p": 0.0206,
+     "w": "MU",
+     "k": "microntechnology"
     },
     {
      "s": "AMZN",
      "n": "Amazon.com Inc",
-     "p": 0.0204,
+     "p": 0.0189,
      "w": "AMZN",
      "k": "amazoncom"
     },
@@ -365,51 +370,44 @@
      "k": "johnsonjohnson"
     },
     {
-     "s": "MSFT",
-     "n": "Microsoft Corp",
-     "p": 0.0161,
-     "w": "MSFT",
-     "k": "microsoft"
-    },
-    {
-     "s": "MU",
-     "n": "Micron Technology Inc",
-     "p": 0.0161,
-     "w": "MU",
-     "k": "microntechnology"
-    },
-    {
      "s": "ASML.AS",
      "n": "ASML Holding NV",
-     "p": 0.0154,
+     "p": 0.0152,
      "w": "ASML.AS",
      "k": "asml"
     },
     {
+     "s": "LLY",
+     "n": "Eli Lilly and Co",
+     "p": 0.0145,
+     "w": "LLY",
+     "k": "elilillyand"
+    },
+    {
      "s": "JPM",
      "n": "JPMorgan Chase & Co",
-     "p": 0.0143,
+     "p": 0.0139,
      "w": "JPM",
      "k": "jpmorganchase"
     }
    ],
-   "top_coverage": 0.248,
+   "top_coverage": 0.246,
    "sectors": {
-    "Technology": 0.2916,
-    "Financials": 0.2191,
-    "Industrials": 0.1344,
-    "Consumer": 0.1138,
-    "Healthcare": 0.09,
-    "Communication": 0.0489,
-    "Energy": 0.0383,
-    "Utilities": 0.0283,
-    "Materials": 0.0244,
-    "RealEstate": 0.0111
+    "Technology": 0.3157,
+    "Financials": 0.2162,
+    "Industrials": 0.1182,
+    "Consumer": 0.1083,
+    "Healthcare": 0.1023,
+    "Communication": 0.0412,
+    "Energy": 0.0399,
+    "Materials": 0.0246,
+    "Utilities": 0.0228,
+    "RealEstate": 0.0107
    },
    "assets": {
-    "stock": 0.989,
+    "stock": 0.996,
     "bond": 0.0,
-    "cash": 0.011,
+    "cash": 0.004,
     "other": 0.0
    },
    "name": "Alfred Berg Gambak Global R",
@@ -420,29 +418,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 150.23,
-   "as_of": "2026-10-06",
-   "sma50": 144.3,
-   "sma200": 132.62,
+   "price": 149.36,
+   "as_of": "2026-10-07",
+   "sma50": 144.44,
+   "sma200": 132.65,
    "above_sma50": true,
    "above_sma200": true,
-   "sma50_vs_200_pct": 8.8,
+   "sma50_vs_200_pct": 8.9,
    "cross": "golden",
-   "rsi14": 71.6,
-   "sma200_dist_pct": 13.3,
-   "sma200_slope_pct": 2.6,
-   "ret_1m": 4.5,
-   "ret_3m": 4.3,
-   "ret_6m": 27.6,
-   "ret_1y": 40.6,
-   "ret_ytd": 31.8,
+   "rsi14": 64.9,
+   "sma200_dist_pct": 12.6,
+   "sma200_slope_pct": 2.62,
+   "ret_1m": 3.7,
+   "ret_3m": 3.7,
+   "ret_6m": 26.9,
+   "ret_1y": 39.8,
+   "ret_ytd": 31.0,
    "volatility_pct": 15.7,
    "max_drawdown_pct": -7.6,
-   "sharpe": 2.48,
+   "sharpe": 2.42,
    "fee_pct": 1.59,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    111.09,
     110.43,
     111.61,
     112.13,
@@ -659,7 +656,6 @@
     142.97,
     142.95,
     141.63,
-    142.54,
     143.81,
     144.06,
     143.17,
@@ -681,25 +677,26 @@
     148.59,
     149.48,
     150.42,
-    150.23
+    150.23,
+    149.36
    ],
-   "momentum_rank": "2 av 4 i kategorin",
-   "score": 77,
+   "momentum_rank": "1 av 4 i kategorin",
+   "score": 85,
    "score_parts": {
-    "trend": 29.2,
-    "momentum": 19.4,
-    "risk": 24.9,
+    "trend": 32.7,
+    "momentum": 24.0,
+    "risk": 24.5,
     "cost": 0,
-    "macro": 3.5
+    "macro": 4.0
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen 13.3 % över SMA200 – långsiktig upptrend",
+    "Kursen 12.6 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+2.6 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "Stark avkastning jämfört med andra fonder (plats 2 av 4 i kategorin)",
-    "Bra riskjusterad avkastning (Sharpe 2.48)",
-    "Medvind för kategorin (MSCI ACWI (världen): 70/100)"
+    "Stark avkastning jämfört med andra fonder (plats 1 av 4 i kategorin)",
+    "Bra riskjusterad avkastning (Sharpe 2.42)",
+    "Medvind för kategorin (MSCI ACWI (världen): 80/100)"
    ],
    "reasons_neg": [
     "Hög avgift (1.59%)"
@@ -710,91 +707,91 @@
     {
      "s": "INVE B",
      "n": "Investor AB Class B",
-     "p": 0.0921,
+     "p": 0.0907,
      "w": "INVE-B.ST",
      "k": "investor"
     },
     {
      "s": "ATCO-A.ST",
      "n": "Atlas Copco AB Class A",
-     "p": 0.083,
+     "p": 0.085,
      "w": "ATCO-A.ST",
      "k": "atlascopco"
     },
     {
      "s": "VOLV-B.ST",
      "n": "Volvo AB Class B",
-     "p": 0.0713,
+     "p": 0.063,
      "w": "VOLV-B.ST",
      "k": "volvo"
     },
     {
      "s": "SAND.ST",
      "n": "Sandvik AB",
-     "p": 0.0549,
+     "p": 0.0578,
      "w": "SAND.ST",
      "k": "sandvik"
     },
     {
-     "s": "SEB-A.ST",
-     "n": "Skandinaviska Enskilda Banken AB Class A",
-     "p": 0.0538,
-     "w": "SEB-A.ST",
-     "k": "skandinaviskaenskildabanken"
-    },
-    {
      "s": "SWED-A.ST",
      "n": "Swedbank AB Class A",
-     "p": 0.053,
+     "p": 0.0566,
      "w": "SWED-A.ST",
      "k": "swedbank"
     },
     {
+     "s": "SEB-A.ST",
+     "n": "Skandinaviska Enskilda Banken AB Class A",
+     "p": 0.0561,
+     "w": "SEB-A.ST",
+     "k": "skandinaviskaenskildabanken"
+    },
+    {
      "s": "ABBN.SW",
      "n": "ABB Ltd",
-     "p": 0.0503,
+     "p": 0.0512,
      "w": null,
      "k": "abb"
     },
     {
-     "s": "EQT.ST",
-     "n": "EQT AB Ordinary Shares",
-     "p": 0.0488,
-     "w": null,
-     "k": "eqt"
-    },
-    {
      "s": "ASSA-B.ST",
      "n": "Assa Abloy AB Class B",
-     "p": 0.0458,
+     "p": 0.046,
      "w": null,
      "k": "assaabloy"
     },
     {
+     "s": "EQT.ST",
+     "n": "EQT AB Ordinary Shares",
+     "p": 0.0433,
+     "w": null,
+     "k": "eqt"
+    },
+    {
      "s": "SAAB-B.ST",
      "n": "Saab AB Class B",
-     "p": 0.0392,
+     "p": 0.0405,
      "w": null,
      "k": "saab"
     }
    ],
-   "top_coverage": 0.592,
+   "top_coverage": 0.59,
    "sectors": {
-    "Industrials": 0.4586,
-    "Financials": 0.2988,
-    "Consumer": 0.0727,
-    "Technology": 0.0665,
-    "Communication": 0.0395,
-    "Healthcare": 0.0383,
-    "Materials": 0.0255,
+    "Industrials": 0.4595,
+    "Financials": 0.2987,
+    "Consumer": 0.0695,
+    "Technology": 0.0669,
+    "Communication": 0.0393,
+    "Healthcare": 0.0385,
+    "Materials": 0.0275,
     "RealEstate": 0.0,
     "Utilities": 0.0,
     "Energy": 0.0
    },
    "assets": {
-    "stock": 0.9888,
+    "stock": 0.9941,
     "bond": 0.0,
-    "cash": 0.0112,
+    "cash": 0.0059,
     "other": 0.0
    },
    "name": "Avanza Zero",
@@ -805,29 +802,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 568.68,
-   "as_of": "2026-10-06",
-   "sma50": 567.48,
-   "sma200": 535.33,
-   "above_sma50": true,
+   "price": 559.22,
+   "as_of": "2026-10-07",
+   "sma50": 567.42,
+   "sma200": 535.32,
+   "above_sma50": false,
    "above_sma200": true,
    "sma50_vs_200_pct": 6.0,
    "cross": "golden",
-   "rsi14": 52.4,
-   "sma200_dist_pct": 6.2,
+   "rsi14": 44.0,
+   "sma200_dist_pct": 4.5,
    "sma200_slope_pct": 1.86,
-   "ret_1m": 0.3,
-   "ret_3m": 3.4,
-   "ret_6m": 12.0,
-   "ret_1y": 26.3,
-   "ret_ytd": 15.6,
-   "volatility_pct": 14.7,
+   "ret_1m": -1.6,
+   "ret_3m": 1.7,
+   "ret_6m": 10.2,
+   "ret_1y": 24.2,
+   "ret_ytd": 13.6,
+   "volatility_pct": 14.8,
    "max_drawdown_pct": -10.6,
-   "sharpe": 1.67,
+   "sharpe": 1.52,
    "fee_pct": 0.0,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    469.61,
     465.39,
     466.67,
     465.38,
@@ -1050,7 +1046,6 @@
     577.48,
     573.54,
     565.37,
-    561.96,
     567.23,
     568.42,
     569.9,
@@ -1072,27 +1067,30 @@
     558.18,
     563.95,
     564.34,
-    568.68
+    568.68,
+    559.22
    ],
    "momentum_rank": "1 av 3 i kategorin",
-   "score": 78,
+   "score": 70,
    "score_parts": {
-    "trend": 27.0,
-    "momentum": 19.1,
-    "risk": 19.1,
+    "trend": 19.8,
+    "momentum": 18.8,
+    "risk": 18.1,
     "cost": 10,
-    "macro": 3.1
+    "macro": 3.4
    },
-   "label": "Lovande",
+   "label": "Neutral",
    "reasons_pos": [
-    "Kursen 6.2 % över SMA200 – långsiktig upptrend",
+    "Kursen 4.5 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+1.9 % senaste månaden)",
-    "Kursen ligger över SMA50 – kortsiktig styrka",
     "Stark avkastning jämfört med andra fonder (plats 1 av 3 i kategorin)",
-    "Bra riskjusterad avkastning (Sharpe 1.67)",
-    "Låg avgift (0.00%)"
+    "Bra riskjusterad avkastning (Sharpe 1.52)",
+    "Låg avgift (0.00%)",
+    "Medvind för kategorin (OMXS30: 67/100)"
    ],
-   "reasons_neg": []
+   "reasons_neg": [
+    "Kursen ligger under SMA50 – kortsiktig svaghet"
+   ]
   },
   {
    "top_holdings": [
@@ -1194,30 +1192,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "EUR",
-   "price": 1206.08,
-   "as_of": "2026-10-02",
-   "sma50": 1202.55,
-   "sma200": 1183.42,
+   "price": 1204.58,
+   "as_of": "2026-10-05",
+   "sma50": 1200.72,
+   "sma200": 1182.96,
    "above_sma50": true,
    "above_sma200": true,
-   "sma50_vs_200_pct": 1.6,
+   "sma50_vs_200_pct": 1.5,
    "cross": "golden",
-   "rsi14": 42.4,
-   "sma200_dist_pct": 1.9,
-   "sma200_slope_pct": 3.62,
-   "ret_1m": -10.6,
-   "ret_3m": 18.8,
-   "ret_6m": 4.3,
-   "ret_1y": 60.6,
-   "ret_ytd": 8.0,
-   "volatility_pct": 49.8,
+   "rsi14": 42.7,
+   "sma200_dist_pct": 1.8,
+   "sma200_slope_pct": 3.58,
+   "ret_1m": -10.7,
+   "ret_3m": 18.7,
+   "ret_6m": 4.2,
+   "ret_1y": 60.4,
+   "ret_ytd": 7.9,
+   "volatility_pct": 50.0,
    "max_drawdown_pct": -35.8,
-   "sharpe": 1.17,
+   "sharpe": 1.16,
    "fee_pct": 2.01,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    901.15,
-    910.62,
     932.63,
     924.91,
     968.02,
@@ -1431,7 +1427,6 @@
     1324.78,
     1300.56,
     1254.78,
-    1296.1,
     1336.9,
     1316.93,
     1328.6,
@@ -1447,29 +1442,30 @@
     1260.41,
     1267.9,
     1213.41,
-    1206.08
+    1206.08,
+    1204.58
    ],
    "momentum_rank": "2 av 37",
    "score": 59,
    "score_parts": {
     "trend": 25.8,
     "momentum": 24.3,
-    "risk": 8.0,
+    "risk": 7.9,
     "cost": 0,
-    "macro": 1.2
+    "macro": 1.4
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen 1.9 % över SMA200 – långsiktig upptrend",
+    "Kursen 1.8 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+3.6 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
     "Stark avkastning jämfört med andra fonder (plats 2 av 37)",
-    "Bra riskjusterad avkastning (Sharpe 1.17)"
+    "Bra riskjusterad avkastning (Sharpe 1.16)"
    ],
    "reasons_neg": [
     "Stort fall från toppen senaste året (-36%)",
     "Hög avgift (2.01%)",
-    "Motvind för kategorin (Guld och silver (snitt): 25/100)"
+    "Motvind för kategorin (Guld och silver (snitt): 29/100)"
    ]
   },
   {
@@ -1477,83 +1473,83 @@
     {
      "s": "RR.L",
      "n": "Rolls-Royce Holdings PLC",
-     "p": 0.0439,
+     "p": 0.0437,
      "w": null,
      "k": "rollsroyce"
     },
     {
      "s": "S63.SI",
      "n": "Singapore Technologies Engineering Ltd",
-     "p": 0.0392,
+     "p": 0.0405,
      "w": null,
      "k": "singaporetechnologiesengineering"
     },
     {
-     "s": "HWM",
-     "n": "Howmet Aerospace Inc",
-     "p": 0.0379,
-     "w": null,
-     "k": "howmetaerospace"
-    },
-    {
      "s": "GE",
      "n": "GE Aerospace",
-     "p": 0.0328,
+     "p": 0.04,
      "w": "GE",
      "k": "geaerospace"
     },
     {
      "s": "012450.KQ",
      "n": "Hanwha Aerospace Co Ltd",
-     "p": 0.0326,
+     "p": 0.0378,
      "w": null,
      "k": "hanwhaaerospace"
     },
     {
-     "s": "KOG.OL",
-     "n": "Kongsberg Gruppen ASA",
-     "p": 0.029,
-     "w": null,
-     "k": "kongsberggruppen"
-    },
-    {
-     "s": "IDR.MC",
-     "n": "Indra Sistemas SA SHS Class -A-",
-     "p": 0.0287,
-     "w": null,
-     "k": "indrasistemasshs"
-    },
-    {
-     "s": "BITTI.HE",
-     "n": "Bittium Corp",
-     "p": 0.0285,
-     "w": null,
-     "k": "bittium"
-    },
-    {
      "s": "RTX",
      "n": "RTX Corp",
-     "p": 0.0271,
+     "p": 0.0315,
      "w": "RTX",
      "k": "rtx"
     },
     {
-     "s": "RHM.DE",
-     "n": "Rheinmetall AG",
-     "p": 0.027,
+     "s": "SAAB-B.ST",
+     "n": "Saab AB Class B",
+     "p": 0.0311,
      "w": null,
-     "k": "rheinmetall"
+     "k": "saab"
+    },
+    {
+     "s": "BITTI.HE",
+     "n": "Bittium Corp",
+     "p": 0.03,
+     "w": null,
+     "k": "bittium"
+    },
+    {
+     "s": "IDR.MC",
+     "n": "Indra Sistemas SA SHS Class -A-",
+     "p": 0.0299,
+     "w": null,
+     "k": "indrasistemasshs"
+    },
+    {
+     "s": "LDO.MI",
+     "n": "Leonardo SpA Az nom Post raggruppamento",
+     "p": 0.0287,
+     "w": null,
+     "k": "leonardoaznompostraggruppamento"
+    },
+    {
+     "s": "MOG-A",
+     "n": "Moog Inc Class A",
+     "p": 0.0286,
+     "w": null,
+     "k": "moog"
     }
    ],
-   "top_coverage": 0.327,
+   "top_coverage": 0.342,
    "sectors": {
-    "Industrials": 0.7507,
-    "Technology": 0.2202,
-    "Energy": 0.0243,
-    "Communication": 0.0048,
+    "Industrials": 0.7318,
+    "Technology": 0.2403,
+    "Energy": 0.0279,
     "RealEstate": 0.0,
     "Consumer": 0.0,
     "Materials": 0.0,
+    "Communication": 0.0,
     "Financials": 0.0,
     "Utilities": 0.0,
     "Healthcare": 0.0
@@ -1572,30 +1568,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 303.55,
-   "as_of": "2026-10-06",
-   "sma50": 307.12,
-   "sma200": 317.62,
+   "price": 291.12,
+   "as_of": "2026-10-08",
+   "sma50": 306.9,
+   "sma200": 317.66,
    "above_sma50": false,
    "above_sma200": false,
-   "sma50_vs_200_pct": -3.3,
+   "sma50_vs_200_pct": -3.4,
    "cross": "death",
-   "rsi14": 49.7,
-   "sma200_dist_pct": -4.4,
-   "sma200_slope_pct": 0.56,
-   "ret_1m": 1.8,
-   "ret_3m": -2.3,
-   "ret_6m": -8.0,
-   "ret_1y": -2.6,
-   "ret_ytd": 5.5,
-   "volatility_pct": 21.6,
+   "rsi14": 33.5,
+   "sma200_dist_pct": -8.4,
+   "sma200_slope_pct": 0.57,
+   "ret_1m": -2.9,
+   "ret_3m": -5.4,
+   "ret_6m": -11.9,
+   "ret_1y": -5.8,
+   "ret_ytd": 1.2,
+   "volatility_pct": 21.9,
    "max_drawdown_pct": -18.0,
-   "sharpe": -0.2,
+   "sharpe": -0.34,
    "fee_pct": 1.91,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    330.95,
-    328.54,
     332.41,
     333.01,
     326.41,
@@ -1838,29 +1832,30 @@
     302.14,
     304.61,
     305.6,
-    303.55
+    303.55,
+    291.12
    ],
    "momentum_rank": "35 av 37",
-   "score": 16,
+   "score": 11,
    "score_parts": {
-    "trend": 8.5,
+    "trend": 4.1,
     "momentum": 1.4,
     "risk": 4.8,
     "cost": 0,
-    "macro": 0.8
+    "macro": 0.9
    },
    "label": "Svag",
    "reasons_pos": [
     "SMA200 stiger (+0.6 % senaste månaden)"
    ],
    "reasons_neg": [
-    "Kursen 4.4 % under SMA200 – långsiktig nedtrend",
+    "Kursen 8.4 % under SMA200 – långsiktig nedtrend",
     "Kursen ligger under SMA50 – kortsiktig svaghet",
     "SMA50 under SMA200 (death cross-läge)",
     "Svag avkastning jämfört med andra fonder (plats 35 av 37)",
-    "Sämre än riskfri ränta senaste året (Sharpe -0.20)",
+    "Sämre än riskfri ränta senaste året (Sharpe -0.34)",
     "Hög avgift (1.91%)",
-    "Motvind för kategorin (Försvarsaktier (VanEck Defense): 16/100)"
+    "Motvind för kategorin (Försvarsaktier (VanEck Defense): 18/100)"
    ]
   },
   {
@@ -1963,29 +1958,28 @@
    "proxy": true,
    "proxy_note": "Andelsklassen LU0109394709 finns inte hos Yahoo. Kursdata från amerikanska systerfonden FBDIX (samma förvaltare och strategi) – trend och momentum blir i praktiken samma, men kursnivån skiljer sig. Avgiften avser din andelsklass (Avanza).",
    "currency": "USD",
-   "price": 178.64,
-   "as_of": "2026-10-07",
-   "sma50": 197.86,
-   "sma200": 180.59,
+   "price": 175.6,
+   "as_of": "2026-10-08",
+   "sma50": 197.51,
+   "sma200": 180.64,
    "above_sma50": false,
    "above_sma200": false,
-   "sma50_vs_200_pct": 9.6,
+   "sma50_vs_200_pct": 9.3,
    "cross": "golden",
-   "rsi14": 26.2,
-   "sma200_dist_pct": -1.1,
-   "sma200_slope_pct": 1.5,
-   "ret_1m": -11.9,
-   "ret_3m": -12.9,
-   "ret_6m": 2.7,
-   "ret_1y": 30.2,
-   "ret_ytd": 7.8,
-   "volatility_pct": 24.2,
-   "max_drawdown_pct": -16.4,
-   "sharpe": 1.07,
+   "rsi14": 23.3,
+   "sma200_dist_pct": -2.8,
+   "sma200_slope_pct": 1.42,
+   "ret_1m": -12.0,
+   "ret_3m": -12.4,
+   "ret_6m": 0.1,
+   "ret_1y": 27.3,
+   "ret_ytd": 5.9,
+   "volatility_pct": 24.3,
+   "max_drawdown_pct": -17.9,
+   "sharpe": 0.95,
    "fee_pct": 1.9,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    137.91,
     139.78,
     141.69,
     140.4,
@@ -2236,25 +2230,26 @@
     181.94,
     182.15,
     178.68,
-    178.64
+    178.64,
+    175.6
    ],
    "momentum_rank": "29 av 37",
-   "score": 35,
+   "score": 32,
    "score_parts": {
-    "trend": 13.3,
+    "trend": 12.0,
     "momentum": 5.6,
-    "risk": 12.7,
+    "risk": 11.3,
     "cost": 0,
-    "macro": 3.0
+    "macro": 3.5
    },
    "label": "Svag",
    "reasons_pos": [
-    "SMA200 stiger (+1.5 % senaste månaden)",
-    "RSI 26 – kortsiktigt översåld, kan vara läge att öka",
-    "Bra riskjusterad avkastning (Sharpe 1.07)"
+    "SMA200 stiger (+1.4 % senaste månaden)",
+    "RSI 23 – kortsiktigt översåld, kan vara läge att öka",
+    "Medvind för kategorin (Bioteknikaktier (XBI): 70/100)"
    ],
    "reasons_neg": [
-    "Kursen 1.1 % under SMA200 – långsiktig nedtrend",
+    "Kursen 2.8 % under SMA200 – långsiktig nedtrend",
     "Kursen ligger under SMA50 – kortsiktig svaghet",
     "Svag avkastning jämfört med andra fonder (plats 29 av 37)",
     "Hög avgift (1.90%)"
@@ -2265,91 +2260,91 @@
     {
      "s": "NVDA",
      "n": "NVIDIA Corp",
-     "p": 0.0446,
+     "p": 0.0442,
      "w": "NVDA",
      "k": "nvidia"
     },
     {
      "s": "AAPL",
      "n": "Apple Inc",
-     "p": 0.0363,
+     "p": 0.0373,
      "w": "AAPL",
      "k": "apple"
     },
     {
-     "s": "GOOGL",
-     "n": "Alphabet Inc Class A",
-     "p": 0.0341,
-     "w": "GOOGL",
-     "k": "alphabet"
-    },
-    {
      "s": "MU",
      "n": "Micron Technology Inc",
-     "p": 0.0301,
+     "p": 0.0373,
      "w": "MU",
      "k": "microntechnology"
     },
     {
-     "s": "JNJ",
-     "n": "Johnson & Johnson",
-     "p": 0.0277,
-     "w": "JNJ",
-     "k": "johnsonjohnson"
-    },
-    {
-     "s": "MSFT",
-     "n": "Microsoft Corp",
-     "p": 0.0276,
-     "w": "MSFT",
-     "k": "microsoft"
-    },
-    {
-     "s": "GOOG",
-     "n": "Alphabet Inc Class C",
-     "p": 0.0276,
+     "s": "GOOGL",
+     "n": "Alphabet Inc Class A",
+     "p": 0.0362,
      "w": "GOOGL",
      "k": "alphabet"
     },
     {
+     "s": "INTC",
+     "n": "Intel Corp",
+     "p": 0.0307,
+     "w": "INTC",
+     "k": "intel"
+    },
+    {
+     "s": "MSFT",
+     "n": "Microsoft Corp",
+     "p": 0.026,
+     "w": "MSFT",
+     "k": "microsoft"
+    },
+    {
+     "s": "STX",
+     "n": "Seagate Technology Holdings PLC",
+     "p": 0.0255,
+     "w": null,
+     "k": "seagatetechnology"
+    },
+    {
      "s": "SNDK",
      "n": "SanDisk Corp Ordinary Shares",
-     "p": 0.0234,
+     "p": 0.0244,
      "w": null,
      "k": "sandisk"
     },
     {
-     "s": "WDC",
-     "n": "Western Digital Corp",
-     "p": 0.0211,
-     "w": null,
-     "k": "westerndigital"
+     "s": "JNJ",
+     "n": "Johnson & Johnson",
+     "p": 0.0234,
+     "w": "JNJ",
+     "k": "johnsonjohnson"
     },
     {
-     "s": "TD",
-     "n": "The Toronto-Dominion Bank",
-     "p": 0.0211,
-     "w": null,
-     "k": "torontodominionbank"
+     "s": "CAT",
+     "n": "Caterpillar Inc",
+     "p": 0.0226,
+     "w": "CAT",
+     "k": "caterpillar"
     }
    ],
-   "top_coverage": 0.294,
+   "top_coverage": 0.308,
    "sectors": {
-    "Technology": 0.3646,
-    "Financials": 0.1686,
-    "Industrials": 0.1263,
-    "Communication": 0.1016,
-    "Healthcare": 0.0838,
-    "Consumer": 0.0806,
-    "RealEstate": 0.0302,
-    "Materials": 0.0266,
-    "Utilities": 0.0176,
+    "Technology": 0.3971,
+    "Industrials": 0.1605,
+    "Financials": 0.1426,
+    "Communication": 0.1002,
+    "Healthcare": 0.0701,
+    "Consumer": 0.0635,
+    "Materials": 0.0282,
+    "RealEstate": 0.0238,
+    "Utilities": 0.0141,
     "Energy": 0.0
    },
    "assets": {
-    "stock": 0.9984,
+    "stock": 0.9874,
     "bond": 0.0,
-    "cash": 0.0016,
+    "cash": 0.0126,
     "other": 0.0
    },
    "name": "Handelsbanken Global Momentum A1 SEK",
@@ -2360,30 +2355,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 233.7,
-   "as_of": "2026-10-06",
-   "sma50": 220.19,
-   "sma200": 200.68,
+   "price": 227.59,
+   "as_of": "2026-10-08",
+   "sma50": 220.44,
+   "sma200": 200.96,
    "above_sma50": true,
    "above_sma200": true,
    "sma50_vs_200_pct": 9.7,
    "cross": "golden",
-   "rsi14": 70.1,
-   "sma200_dist_pct": 16.5,
+   "rsi14": 54.5,
+   "sma200_dist_pct": 13.3,
    "sma200_slope_pct": 3.05,
-   "ret_1m": 8.2,
-   "ret_3m": 6.3,
-   "ret_6m": 34.9,
-   "ret_1y": 40.5,
-   "ret_ytd": 37.4,
-   "volatility_pct": 18.2,
+   "ret_1m": 3.6,
+   "ret_3m": 3.1,
+   "ret_6m": 27.5,
+   "ret_1y": 37.0,
+   "ret_ytd": 33.8,
+   "volatility_pct": 18.4,
    "max_drawdown_pct": -12.1,
-   "sharpe": 2.13,
+   "sharpe": 1.91,
    "fee_pct": 0.73,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    169.11,
-    168.19,
     168.79,
     170.05,
     170.95,
@@ -2624,25 +2617,26 @@
     228.72,
     231.52,
     233.71,
-    233.7
+    233.7,
+    227.59
    ],
-   "momentum_rank": "1 av 4 i kategorin",
-   "score": 87,
+   "momentum_rank": "2 av 4 i kategorin",
+   "score": 84,
    "score_parts": {
-    "trend": 31,
-    "momentum": 24.0,
-    "risk": 21.6,
+    "trend": 33.8,
+    "momentum": 19.4,
+    "risk": 20.1,
     "cost": 7,
-    "macro": 3.5
+    "macro": 4.0
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen 16.5 % över SMA200 – långsiktig upptrend",
+    "Kursen 13.3 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+3.0 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "Stark avkastning jämfört med andra fonder (plats 1 av 4 i kategorin)",
-    "Bra riskjusterad avkastning (Sharpe 2.13)",
-    "Medvind för kategorin (MSCI ACWI (världen): 70/100)"
+    "Stark avkastning jämfört med andra fonder (plats 2 av 4 i kategorin)",
+    "Bra riskjusterad avkastning (Sharpe 1.91)",
+    "Medvind för kategorin (MSCI ACWI (världen): 80/100)"
    ],
    "reasons_neg": []
   },
@@ -2746,29 +2740,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 5146.94,
-   "as_of": "2026-10-06",
-   "sma50": 5614.61,
-   "sma200": 5804.19,
+   "price": 5086.25,
+   "as_of": "2026-10-07",
+   "sma50": 5594.92,
+   "sma200": 5797.09,
    "above_sma50": false,
    "above_sma200": false,
-   "sma50_vs_200_pct": -3.3,
+   "sma50_vs_200_pct": -3.5,
    "cross": "death",
-   "rsi14": 26.4,
-   "sma200_dist_pct": -11.3,
-   "sma200_slope_pct": -1.17,
-   "ret_1m": -8.8,
-   "ret_3m": -12.6,
-   "ret_6m": -7.8,
-   "ret_1y": -14.2,
-   "ret_ytd": -15.4,
+   "rsi14": 23.6,
+   "sma200_dist_pct": -12.3,
+   "sma200_slope_pct": -1.24,
+   "ret_1m": -11.4,
+   "ret_3m": -13.7,
+   "ret_6m": -10.8,
+   "ret_1y": -15.7,
+   "ret_ytd": -16.4,
    "volatility_pct": 17.5,
    "max_drawdown_pct": -21.4,
-   "sharpe": -0.91,
+   "sharpe": -1.0,
    "fee_pct": 1.45,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    6044.79,
     6024.74,
     5969.49,
     5985.07,
@@ -2957,6 +2950,7 @@
     5769.4,
     5801.41,
     5785.77,
+    5743.69,
     5689.33,
     5641.8,
     5679.64,
@@ -2989,7 +2983,6 @@
     5726.17,
     5637.11,
     5664.25,
-    5642.37,
     5736.15,
     5740.46,
     5723.09,
@@ -3004,18 +2997,20 @@
     5510.55,
     5443.28,
     5310.31,
+    5251.42,
     5231.74,
     5250.83,
     5192.65,
     5132.67,
     5092.94,
     5090.04,
-    5146.94
+    5146.94,
+    5086.25
    ],
    "momentum_rank": "36 av 37",
    "score": 12,
    "score_parts": {
-    "trend": 3.3,
+    "trend": 3.2,
     "momentum": 0.7,
     "risk": 3.4,
     "cost": 4,
@@ -3023,15 +3018,15 @@
    },
    "label": "Svag",
    "reasons_pos": [
-    "RSI 26 – kortsiktigt översåld, kan vara läge att öka"
+    "RSI 24 – kortsiktigt översåld, kan vara läge att öka"
    ],
    "reasons_neg": [
-    "Kursen 11.3 % under SMA200 – långsiktig nedtrend",
+    "Kursen 12.3 % under SMA200 – långsiktig nedtrend",
     "SMA200 faller (-1.2 % senaste månaden)",
     "Kursen ligger under SMA50 – kortsiktig svaghet",
     "SMA50 under SMA200 (death cross-läge)",
     "Svag avkastning jämfört med andra fonder (plats 36 av 37)",
-    "Sämre än riskfri ränta senaste året (Sharpe -0.91)",
+    "Sämre än riskfri ränta senaste året (Sharpe -1.00)",
     "Motvind för kategorin (Europeiska fastighetsbolag (IPRP): 10/100)"
    ]
   },
@@ -3135,29 +3130,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 629.91,
-   "as_of": "2026-10-06",
-   "sma50": 603.09,
-   "sma200": 554.69,
+   "price": 628.51,
+   "as_of": "2026-10-07",
+   "sma50": 603.65,
+   "sma200": 554.83,
    "above_sma50": true,
    "above_sma200": true,
-   "sma50_vs_200_pct": 8.7,
+   "sma50_vs_200_pct": 8.8,
    "cross": "golden",
-   "rsi14": 72.7,
-   "sma200_dist_pct": 13.6,
-   "sma200_slope_pct": 1.69,
-   "ret_1m": 4.9,
-   "ret_3m": 6.1,
-   "ret_6m": 27.2,
-   "ret_1y": 24.8,
-   "ret_ytd": 20.3,
+   "rsi14": 69.8,
+   "sma200_dist_pct": 13.3,
+   "sma200_slope_pct": 1.71,
+   "ret_1m": 4.1,
+   "ret_3m": 5.8,
+   "ret_6m": 26.9,
+   "ret_1y": 24.5,
+   "ret_ytd": 20.0,
    "volatility_pct": 11.9,
    "max_drawdown_pct": -7.8,
-   "sharpe": 1.95,
+   "sharpe": 1.92,
    "fee_pct": 0.21,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    520.32,
     519.08,
     523.02,
     526.8,
@@ -3374,7 +3368,6 @@
     602.22,
     601.3,
     596.43,
-    600.6,
     603.99,
     602.64,
     596.04,
@@ -3395,25 +3388,26 @@
     621.79,
     624.36,
     628.95,
-    629.91
+    629.91,
+    628.51
    ],
    "momentum_rank": "4 av 4 i kategorin",
-   "score": 71,
+   "score": 75,
    "score_parts": {
-    "trend": 27.9,
-    "momentum": 8.0,
-    "risk": 21.3,
+    "trend": 31.7,
+    "momentum": 8.7,
+    "risk": 21.1,
     "cost": 10,
-    "macro": 3.5
+    "macro": 4.0
    },
-   "label": "Neutral",
+   "label": "Lovande",
    "reasons_pos": [
-    "Kursen 13.6 % över SMA200 – långsiktig upptrend",
+    "Kursen 13.3 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+1.7 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "Bra riskjusterad avkastning (Sharpe 1.95)",
+    "Bra riskjusterad avkastning (Sharpe 1.92)",
     "Låg avgift (0.21%)",
-    "Medvind för kategorin (MSCI ACWI (världen): 70/100)"
+    "Medvind för kategorin (MSCI ACWI (världen): 80/100)"
    ],
    "reasons_neg": []
   },
@@ -3517,29 +3511,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 3873.6,
-   "as_of": "2026-10-06",
-   "sma50": 3872.07,
-   "sma200": 3682.8,
-   "above_sma50": true,
+   "price": 3827.3,
+   "as_of": "2026-10-07",
+   "sma50": 3872.15,
+   "sma200": 3684.8,
+   "above_sma50": false,
    "above_sma200": true,
    "sma50_vs_200_pct": 5.1,
    "cross": "golden",
-   "rsi14": 52.2,
-   "sma200_dist_pct": 5.2,
-   "sma200_slope_pct": 1.32,
-   "ret_1m": -0.6,
-   "ret_3m": 2.1,
-   "ret_6m": 11.0,
-   "ret_1y": 20.5,
-   "ret_ytd": 10.6,
+   "rsi14": 44.0,
+   "sma200_dist_pct": 3.9,
+   "sma200_slope_pct": 1.31,
+   "ret_1m": -1.8,
+   "ret_3m": 2.8,
+   "ret_6m": 9.7,
+   "ret_1y": 20.0,
+   "ret_ytd": 9.3,
    "volatility_pct": 12.7,
    "max_drawdown_pct": -10.4,
-   "sharpe": 1.48,
+   "sharpe": 1.44,
    "fee_pct": 1.37,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    3347.64,
     3327.13,
     3342.67,
     3341.43,
@@ -3761,7 +3754,6 @@
     3924.43,
     3908.14,
     3876.66,
-    3862.97,
     3895.49,
     3899.35,
     3898.14,
@@ -3777,31 +3769,34 @@
     3916.84,
     3895.3,
     3853.49,
+    3872.2,
     3871.8,
     3869.56,
     3859.3,
     3818.98,
     3839.86,
     3840.7,
-    3873.6
+    3873.6,
+    3827.3
    ],
    "momentum_rank": "4 av 7 i kategorin",
-   "score": 62,
+   "score": 55,
    "score_parts": {
-    "trend": 25.5,
+    "trend": 18.5,
     "momentum": 11.8,
-    "risk": 17.9,
+    "risk": 17.6,
     "cost": 4,
-    "macro": 2.8
+    "macro": 3.0
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen 5.2 % över SMA200 – långsiktig upptrend",
+    "Kursen 3.9 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+1.3 % senaste månaden)",
-    "Kursen ligger över SMA50 – kortsiktig styrka",
-    "Bra riskjusterad avkastning (Sharpe 1.48)"
+    "Bra riskjusterad avkastning (Sharpe 1.44)"
    ],
-   "reasons_neg": []
+   "reasons_neg": [
+    "Kursen ligger under SMA50 – kortsiktig svaghet"
+   ]
   },
   {
    "top_holdings": [
@@ -3896,29 +3891,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 728.48,
-   "as_of": "2026-10-07",
-   "sma50": 740.82,
-   "sma200": 687.92,
+   "price": 724.0,
+   "as_of": "2026-10-08",
+   "sma50": 740.49,
+   "sma200": 688.47,
    "above_sma50": false,
    "above_sma200": true,
-   "sma50_vs_200_pct": 7.7,
+   "sma50_vs_200_pct": 7.6,
    "cross": "golden",
-   "rsi14": 42.3,
-   "sma200_dist_pct": 5.9,
-   "sma200_slope_pct": 2.13,
-   "ret_1m": -2.6,
-   "ret_3m": 1.4,
-   "ret_6m": 10.3,
-   "ret_1y": 25.8,
-   "ret_ytd": 15.9,
+   "rsi14": 39.8,
+   "sma200_dist_pct": 5.2,
+   "sma200_slope_pct": 2.09,
+   "ret_1m": -1.9,
+   "ret_3m": 1.1,
+   "ret_6m": 8.2,
+   "ret_1y": 24.7,
+   "ret_ytd": 15.2,
    "volatility_pct": 14.9,
    "max_drawdown_pct": -11.1,
-   "sharpe": 1.62,
+   "sharpe": 1.54,
    "fee_pct": 1.69,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    581.74,
     579.53,
     580.79,
     586.16,
@@ -4167,22 +4161,23 @@
     734.07,
     730.49,
     738.31,
-    728.48
+    728.48,
+    724.0
    ],
    "momentum_rank": "3 av 7 i kategorin",
-   "score": 57,
+   "score": 52,
    "score_parts": {
-    "trend": 21.2,
+    "trend": 16.7,
     "momentum": 14.2,
-    "risk": 18.6,
+    "risk": 18.0,
     "cost": 0,
-    "macro": 2.8
+    "macro": 3.0
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen 5.9 % över SMA200 – långsiktig upptrend",
+    "Kursen 5.2 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+2.1 % senaste månaden)",
-    "Bra riskjusterad avkastning (Sharpe 1.62)"
+    "Bra riskjusterad avkastning (Sharpe 1.54)"
    ],
    "reasons_neg": [
     "Kursen ligger under SMA50 – kortsiktig svaghet",
@@ -4194,91 +4189,91 @@
     {
      "s": "INVE B",
      "n": "Investor AB Class B",
-     "p": 0.2624,
+     "p": 0.2605,
      "w": "INVE-B.ST",
      "k": "investor"
     },
     {
      "s": "INDU C",
      "n": "Industrivarden AB Class C",
-     "p": 0.1832,
+     "p": 0.1807,
      "w": null,
      "k": "industrivarden"
     },
     {
      "s": "LUND-B.ST",
      "n": "L E Lundbergforetagen AB Class B",
-     "p": 0.0834,
+     "p": 0.083,
      "w": "LUND-B.ST",
      "k": "lelundbergforetagen"
     },
     {
      "s": "INDT.ST",
      "n": "Indutrade AB",
-     "p": 0.0434,
+     "p": 0.0447,
      "w": null,
      "k": "indutrade"
     },
     {
      "s": "AZN.L",
      "n": "AstraZeneca PLC",
-     "p": 0.0428,
+     "p": 0.0443,
      "w": "AZN.L",
      "k": "astrazeneca"
     },
     {
      "s": "LIFCO-B.ST",
      "n": "Lifco AB Class B",
-     "p": 0.0417,
+     "p": 0.0433,
      "w": "LIFCO-B.ST",
      "k": "lifco"
     },
     {
      "s": "HEXA-B.ST",
      "n": "Hexagon AB Class B",
-     "p": 0.0413,
+     "p": 0.0416,
      "w": null,
      "k": "hexagon"
     },
     {
      "s": "XACTOS.ST",
      "n": "XACT OMXS30 ESG ETF",
-     "p": 0.0286,
+     "p": 0.0287,
      "w": null,
      "k": "xactomxs30esgetf"
     },
     {
-     "s": "EQT.ST",
-     "n": "EQT AB Ordinary Shares",
-     "p": 0.028,
-     "w": null,
-     "k": "eqt"
-    },
-    {
      "s": "LATO-B.ST",
      "n": "Investment AB Latour Class B",
-     "p": 0.0263,
+     "p": 0.0271,
      "w": "LATO-B.ST",
      "k": "investmentlatour"
+    },
+    {
+     "s": "ADDT-B.ST",
+     "n": "Addtech AB Class B",
+     "p": 0.0259,
+     "w": "ADDT-B.ST",
+     "k": "addtech"
     }
    ],
-   "top_coverage": 0.781,
+   "top_coverage": 0.78,
    "sectors": {
-    "Financials": 0.5518,
-    "Industrials": 0.3341,
-    "Healthcare": 0.0444,
-    "Technology": 0.0439,
-    "Materials": 0.0137,
-    "Consumer": 0.0112,
+    "Financials": 0.545,
+    "Industrials": 0.3396,
+    "Healthcare": 0.0458,
+    "Technology": 0.0443,
+    "Materials": 0.0133,
+    "Consumer": 0.0111,
     "Communication": 0.0009,
     "RealEstate": 0.0,
     "Utilities": 0.0,
     "Energy": 0.0
    },
    "assets": {
-    "stock": 0.9885,
+    "stock": 0.9895,
     "bond": 0.0,
-    "cash": 0.0115,
+    "cash": 0.0105,
     "other": 0.0
    },
    "name": "Spiltan Aktiefond Investmentbolag",
@@ -4289,29 +4284,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 989.06,
-   "as_of": "2026-10-07",
-   "sma50": 1005.49,
-   "sma200": 941.26,
+   "price": 982.14,
+   "as_of": "2026-10-08",
+   "sma50": 1005.15,
+   "sma200": 941.91,
    "above_sma50": false,
    "above_sma200": true,
-   "sma50_vs_200_pct": 6.8,
+   "sma50_vs_200_pct": 6.7,
    "cross": "golden",
-   "rsi14": 43.9,
-   "sma200_dist_pct": 5.1,
-   "sma200_slope_pct": 1.69,
-   "ret_1m": -2.0,
-   "ret_3m": 3.2,
-   "ret_6m": 8.3,
-   "ret_1y": 20.4,
-   "ret_ytd": 12.8,
+   "rsi14": 41.2,
+   "sma200_dist_pct": 4.3,
+   "sma200_slope_pct": 1.67,
+   "ret_1m": -1.4,
+   "ret_3m": 2.8,
+   "ret_6m": 6.0,
+   "ret_1y": 18.3,
+   "ret_ytd": 12.0,
    "volatility_pct": 16.5,
    "max_drawdown_pct": -12.1,
-   "sharpe": 1.13,
+   "sharpe": 1.01,
    "fee_pct": 0.22,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    830.03,
     834.2,
     834.21,
     825.36,
@@ -4560,22 +4554,23 @@
     997.75,
     994.7,
     1007.6,
-    989.06
+    989.06,
+    982.14
    ],
    "momentum_rank": "5 av 7 i kategorin",
-   "score": 57,
+   "score": 55,
    "score_parts": {
-    "trend": 20.0,
-    "momentum": 9.0,
-    "risk": 14.8,
+    "trend": 19.4,
+    "momentum": 8.7,
+    "risk": 14.0,
     "cost": 10,
-    "macro": 2.8
+    "macro": 3.0
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen 5.1 % över SMA200 – långsiktig upptrend",
+    "Kursen 4.3 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+1.7 % senaste månaden)",
-    "Bra riskjusterad avkastning (Sharpe 1.13)",
+    "Bra riskjusterad avkastning (Sharpe 1.01)",
     "Låg avgift (0.22%)"
    ],
    "reasons_neg": [
@@ -4682,29 +4677,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 2088.7,
-   "as_of": "2026-10-06",
-   "sma50": 1866.62,
-   "sma200": 1608.17,
+   "price": 2086.06,
+   "as_of": "2026-10-07",
+   "sma50": 1876.19,
+   "sma200": 1614.68,
    "above_sma50": true,
    "above_sma200": true,
-   "sma50_vs_200_pct": 16.1,
+   "sma50_vs_200_pct": 16.2,
    "cross": "golden",
-   "rsi14": 78.1,
-   "sma200_dist_pct": 29.9,
-   "sma200_slope_pct": 3.65,
-   "ret_1m": 13.0,
-   "ret_3m": 10.3,
-   "ret_6m": 59.7,
-   "ret_1y": 53.6,
-   "ret_ytd": 52.4,
+   "rsi14": 76.2,
+   "sma200_dist_pct": 29.2,
+   "sma200_slope_pct": 3.84,
+   "ret_1m": 14.6,
+   "ret_3m": 12.7,
+   "ret_6m": 63.8,
+   "ret_1y": 54.6,
+   "ret_ytd": 52.2,
    "volatility_pct": 26.0,
    "max_drawdown_pct": -15.5,
-   "sharpe": 1.99,
+   "sharpe": 2.03,
    "fee_pct": 1.38,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    1411.76,
     1400.63,
     1427.67,
     1443.15,
@@ -4922,12 +4916,12 @@
     1840.25,
     1848.04,
     1817.22,
-    1810.28,
     1819.67,
     1840.95,
     1861.66,
     1859.48,
     1836.63,
+    1827.34,
     1836.07,
     1876.95,
     1918.8,
@@ -4935,34 +4929,36 @@
     1993.66,
     1995.54,
     2000.97,
+    2010.35,
     1994.4,
     2010.72,
     2016.42,
     2055.72,
     2069.05,
     2092.46,
-    2088.7
+    2088.7,
+    2086.06
    ],
    "momentum_rank": "1 av 37",
    "score": 84,
    "score_parts": {
     "trend": 31,
     "momentum": 25.0,
-    "risk": 19.3,
+    "risk": 19.6,
     "cost": 4,
-    "macro": 4.5
+    "macro": 4.7
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen 29.9 % över SMA200 – långsiktig upptrend",
-    "SMA200 stiger (+3.6 % senaste månaden)",
+    "Kursen 29.2 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+3.8 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
     "Stark avkastning jämfört med andra fonder (plats 1 av 37)",
-    "Bra riskjusterad avkastning (Sharpe 1.99)",
-    "Medvind för kategorin (Teknikaktier (XLK): 91/100)"
+    "Bra riskjusterad avkastning (Sharpe 2.03)",
+    "Medvind för kategorin (Teknikaktier (XLK): 94/100)"
    ],
    "reasons_neg": [
-    "RSI 78 – kortsiktigt överköpt"
+    "RSI 76 – kortsiktigt överköpt"
    ]
   },
   {
@@ -4970,75 +4966,75 @@
     {
      "s": "HSBA.L",
      "n": "HSBC Holdings PLC",
-     "p": 0.1438,
+     "p": 0.1401,
      "w": "HSBA.L",
      "k": "hsbc"
     },
     {
      "s": "SAN.MC",
      "n": "Banco Santander SA",
-     "p": 0.0873,
+     "p": 0.0862,
      "w": null,
      "k": "bancosantander"
     },
     {
      "s": "BBVA.MC",
      "n": "Banco Bilbao Vizcaya Argentaria SA",
-     "p": 0.0662,
+     "p": 0.0645,
      "w": null,
      "k": "bancobilbaovizcayaargentaria"
     },
     {
      "s": "UCG.MI",
      "n": "UniCredit SpA",
-     "p": 0.0595,
+     "p": 0.0582,
      "w": null,
      "k": "unicredit"
     },
     {
-     "s": "BNP.PA",
-     "n": "BNP Paribas Act. Cat.A",
-     "p": 0.0501,
-     "w": null,
-     "k": "bnpparibasactcat"
-    },
-    {
      "s": "ISP.MI",
      "n": "Intesa Sanpaolo",
-     "p": 0.0489,
+     "p": 0.0482,
      "w": null,
      "k": "intesasanpaolo"
     },
     {
+     "s": "BNP.PA",
+     "n": "BNP Paribas Act. Cat.A",
+     "p": 0.0459,
+     "w": null,
+     "k": "bnpparibasactcat"
+    },
+    {
      "s": "INGA.AS",
      "n": "ING Groep NV",
-     "p": 0.0418,
+     "p": 0.0421,
      "w": null,
      "k": "inggroep"
     },
     {
-     "s": "BARC.L",
-     "n": "Barclays PLC",
-     "p": 0.0369,
-     "w": null,
-     "k": "barclays"
-    },
-    {
      "s": "LLOY.L",
      "n": "Lloyds Banking Group PLC",
-     "p": 0.035,
+     "p": 0.0338,
      "w": null,
      "k": "lloydsbanking"
     },
     {
-     "s": "DBK.DE",
-     "n": "Deutsche Bank AG",
-     "p": 0.0311,
+     "s": "BARC.L",
+     "n": "Barclays PLC",
+     "p": 0.0335,
      "w": null,
-     "k": "deutschebank"
+     "k": "barclays"
+    },
+    {
+     "s": "NWG.L",
+     "n": "NatWest Group PLC",
+     "p": 0.0305,
+     "w": "NWG.L",
+     "k": "natwest"
     }
    ],
-   "top_coverage": 0.601,
+   "top_coverage": 0.583,
    "sectors": {
     "Financials": 1.0,
     "RealEstate": 0.0,
@@ -5052,9 +5048,9 @@
     "Healthcare": 0.0
    },
    "assets": {
-    "stock": 0.9927,
+    "stock": 0.9936,
     "bond": 0.0,
-    "cash": 0.0073,
+    "cash": 0.0064,
     "other": 0.0
    },
    "name": "iShares STOXX Europe 600 Banks UCITS ETF",
@@ -5065,29 +5061,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "EUR",
-   "price": 39.11,
-   "as_of": "2026-10-08",
-   "sma50": 42.28,
-   "sma200": 37.55,
+   "price": 39.37,
+   "as_of": "2026-10-09",
+   "sma50": 42.24,
+   "sma200": 37.58,
    "above_sma50": false,
    "above_sma200": true,
-   "sma50_vs_200_pct": 12.6,
+   "sma50_vs_200_pct": 12.4,
    "cross": "golden",
-   "rsi14": 31.6,
-   "sma200_dist_pct": 4.2,
-   "sma200_slope_pct": 2.84,
-   "ret_1m": -9.4,
-   "ret_3m": -3.3,
-   "ret_6m": 11.3,
-   "ret_1y": 32.9,
-   "ret_ytd": 14.7,
-   "volatility_pct": 23.0,
+   "rsi14": 32.5,
+   "sma200_dist_pct": 4.8,
+   "sma200_slope_pct": 2.75,
+   "ret_1m": -7.6,
+   "ret_3m": -2.4,
+   "ret_6m": 9.8,
+   "ret_1y": 31.9,
+   "ret_ytd": 15.5,
+   "volatility_pct": 22.6,
    "max_drawdown_pct": -16.0,
-   "sharpe": 1.32,
+   "sharpe": 1.3,
    "fee_pct": 0.46,
    "fee_source": "Yahoo Finance",
    "price_history_1y": [
-    29.85,
     29.38,
     29.07,
     29.25,
@@ -5338,22 +5333,23 @@
     40.31,
     40.84,
     41.33,
-    39.11
+    39.96,
+    39.37
    ],
    "momentum_rank": "17 av 37",
-   "score": 55,
+   "score": 56,
    "score_parts": {
-    "trend": 17.2,
+    "trend": 17.5,
     "momentum": 13.9,
-    "risk": 14.6,
+    "risk": 14.4,
     "cost": 7,
-    "macro": 2.6
+    "macro": 2.8
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen 4.2 % över SMA200 – långsiktig upptrend",
+    "Kursen 4.8 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+2.8 % senaste månaden)",
-    "Bra riskjusterad avkastning (Sharpe 1.32)"
+    "Bra riskjusterad avkastning (Sharpe 1.30)"
    ],
    "reasons_neg": [
     "Kursen ligger under SMA50 – kortsiktig svaghet"
@@ -5364,91 +5360,91 @@
     {
      "s": "SSAB B",
      "n": "SSAB AB (publ) Class B",
-     "p": 0.0635,
+     "p": 0.0637,
      "w": null,
      "k": "ssab"
     },
     {
      "s": "SEB-A.ST",
      "n": "Skandinaviska Enskilda Banken AB Class A",
-     "p": 0.0547,
+     "p": 0.0577,
      "w": "SEB-A.ST",
      "k": "skandinaviskaenskildabanken"
     },
     {
-     "s": "AZA.ST",
-     "n": "Avanza Bank Holding AB",
-     "p": 0.0543,
-     "w": null,
-     "k": "avanzabank"
-    },
-    {
-     "s": "NDA-SE.ST",
-     "n": "Nordea Bank Abp",
-     "p": 0.0524,
-     "w": "NDA-SE.ST",
-     "k": "nordeabank"
-    },
-    {
-     "s": "ALIV SDB",
-     "n": "Autoliv Inc SEDR",
-     "p": 0.0516,
-     "w": null,
-     "k": "autolivsedr"
-    },
-    {
-     "s": "SKF-B.ST",
-     "n": "SKF AB Class B",
-     "p": 0.0513,
-     "w": null,
-     "k": "skf"
-    },
-    {
      "s": "SWED-A.ST",
      "n": "Swedbank AB Class A",
-     "p": 0.0505,
+     "p": 0.0556,
      "w": "SWED-A.ST",
      "k": "swedbank"
     },
     {
+     "s": "NDA-SE.ST",
+     "n": "Nordea Bank Abp",
+     "p": 0.0538,
+     "w": "NDA-SE.ST",
+     "k": "nordeabank"
+    },
+    {
+     "s": "AZA.ST",
+     "n": "Avanza Bank Holding AB",
+     "p": 0.0527,
+     "w": null,
+     "k": "avanzabank"
+    },
+    {
+     "s": "SKF-B.ST",
+     "n": "SKF AB Class B",
+     "p": 0.051,
+     "w": null,
+     "k": "skf"
+    },
+    {
+     "s": "ALIV SDB",
+     "n": "Autoliv Inc SEDR",
+     "p": 0.0507,
+     "w": null,
+     "k": "autolivsedr"
+    },
+    {
      "s": "SHB-A.ST",
      "n": "Svenska Handelsbanken AB Class A",
-     "p": 0.0472,
+     "p": 0.0501,
      "w": "SHB-A.ST",
      "k": "svenskahandelsbanken"
     },
     {
-     "s": "VOLV-B.ST",
-     "n": "Volvo AB Class B",
-     "p": 0.0467,
-     "w": "VOLV-B.ST",
-     "k": "volvo"
+     "s": "SKA-B.ST",
+     "n": "Skanska AB Class B",
+     "p": 0.0474,
+     "w": "SKA-B.ST",
+     "k": "skanska"
     },
     {
-     "s": "ESSITY-B.ST",
-     "n": "Essity AB Class B",
-     "p": 0.0467,
-     "w": "ESSITY-B.ST",
-     "k": "essity"
+     "s": "SECU-B.ST",
+     "n": "Securitas AB Class B",
+     "p": 0.0454,
+     "w": "SECU-B.ST",
+     "k": "securitas"
     }
    ],
-   "top_coverage": 0.519,
+   "top_coverage": 0.528,
    "sectors": {
-    "Financials": 0.2643,
-    "Industrials": 0.2358,
-    "Consumer": 0.2184,
-    "Materials": 0.1079,
-    "Communication": 0.0858,
-    "Healthcare": 0.0448,
-    "Technology": 0.043,
+    "Financials": 0.2755,
+    "Industrials": 0.2329,
+    "Consumer": 0.2119,
+    "Materials": 0.1082,
+    "Communication": 0.0856,
+    "Healthcare": 0.0443,
+    "Technology": 0.0416,
     "RealEstate": 0.0,
     "Utilities": 0.0,
     "Energy": 0.0
    },
    "assets": {
-    "stock": 0.9798,
+    "stock": 0.9799,
     "bond": 0.0,
-    "cash": 0.0202,
+    "cash": 0.0201,
     "other": 0.0
    },
    "name": "Aktiespararna Direktavkastning A",
@@ -5459,29 +5455,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 277.67,
-   "as_of": "2026-10-06",
-   "sma50": 280.51,
-   "sma200": 271.34,
+   "price": 275.53,
+   "as_of": "2026-10-07",
+   "sma50": 280.26,
+   "sma200": 271.15,
    "above_sma50": false,
    "above_sma200": true,
    "sma50_vs_200_pct": 3.4,
    "cross": "golden",
-   "rsi14": 45.3,
-   "sma200_dist_pct": 2.3,
-   "sma200_slope_pct": 1.31,
-   "ret_1m": -2.5,
-   "ret_3m": 1.5,
-   "ret_6m": 5.4,
-   "ret_1y": 17.4,
-   "ret_ytd": 8.0,
+   "rsi14": 41.4,
+   "sma200_dist_pct": 1.6,
+   "sma200_slope_pct": 1.3,
+   "ret_1m": -2.9,
+   "ret_3m": -1.0,
+   "ret_6m": 4.3,
+   "ret_1y": 16.4,
+   "ret_ytd": 7.2,
    "volatility_pct": 12.6,
    "max_drawdown_pct": -8.6,
-   "sharpe": 1.24,
+   "sharpe": 1.16,
    "fee_pct": 0.33,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    244.89,
     243.49,
     243.76,
     243.29,
@@ -5703,9 +5698,7 @@
     283.61,
     283.13,
     281.47,
-    280.02,
     282.93,
-    284.72,
     283.9,
     279.62,
     279.21,
@@ -5726,22 +5719,23 @@
     274.71,
     277.55,
     276.85,
-    277.67
+    277.67,
+    275.53
    ],
    "momentum_rank": "6 av 7 i kategorin",
-   "score": 49,
+   "score": 48,
    "score_parts": {
-    "trend": 17.4,
+    "trend": 16.9,
     "momentum": 5.2,
-    "risk": 16.4,
+    "risk": 15.9,
     "cost": 7,
-    "macro": 2.8
+    "macro": 3.0
    },
    "label": "Svag",
    "reasons_pos": [
-    "Kursen 2.3 % över SMA200 – långsiktig upptrend",
+    "Kursen 1.6 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+1.3 % senaste månaden)",
-    "Bra riskjusterad avkastning (Sharpe 1.24)"
+    "Bra riskjusterad avkastning (Sharpe 1.16)"
    ],
    "reasons_neg": [
     "Kursen ligger under SMA50 – kortsiktig svaghet",
@@ -5752,21 +5746,21 @@
    "top_holdings": [],
    "top_coverage": null,
    "sectors": {
-    "Industrials": 0.4031,
-    "Consumer": 0.1291,
-    "Healthcare": 0.1236,
-    "RealEstate": 0.1206,
-    "Communication": 0.0831,
-    "Technology": 0.07,
-    "Financials": 0.0464,
-    "Materials": 0.024,
+    "Industrials": 0.4004,
+    "Healthcare": 0.1286,
+    "Consumer": 0.1216,
+    "RealEstate": 0.1101,
+    "Communication": 0.0873,
+    "Technology": 0.0739,
+    "Financials": 0.0492,
+    "Materials": 0.0289,
     "Utilities": 0.0,
     "Energy": 0.0
    },
    "assets": {
-    "stock": 0.9688,
+    "stock": 0.9806,
     "bond": 0.0,
-    "cash": 0.0312,
+    "cash": 0.0194,
     "other": 0.0
    },
    "name": "Avanza Småbolag by Skoglund",
@@ -5777,29 +5771,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 127.91,
-   "as_of": "2026-10-06",
+   "price": 125.7,
+   "as_of": "2026-10-07",
    "sma50": 125.87,
    "sma200": 119.62,
-   "above_sma50": true,
+   "above_sma50": false,
    "above_sma200": true,
    "sma50_vs_200_pct": 5.2,
    "cross": "golden",
-   "rsi14": 58.2,
-   "sma200_dist_pct": 6.9,
+   "rsi14": 47.2,
+   "sma200_dist_pct": 5.1,
    "sma200_slope_pct": 0.79,
-   "ret_1m": 0.4,
-   "ret_3m": 5.2,
-   "ret_6m": 14.5,
-   "ret_1y": 9.9,
-   "ret_ytd": 5.9,
+   "ret_1m": -1.2,
+   "ret_3m": 3.4,
+   "ret_6m": 12.5,
+   "ret_1y": 8.0,
+   "ret_ytd": 4.1,
    "volatility_pct": 14.8,
    "max_drawdown_pct": -13.6,
-   "sharpe": 0.55,
+   "sharpe": 0.42,
    "fee_pct": 1.26,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    117.9,
     117.94,
     118.15,
     118.03,
@@ -6022,7 +6015,6 @@
     127.79,
     126.84,
     126.39,
-    125.66,
     127.46,
     127.25,
     127.96,
@@ -6044,24 +6036,26 @@
     126.81,
     127.56,
     127.03,
-    127.91
+    127.91,
+    125.7
    ],
-   "momentum_rank": "2 av 5 i kategorin",
-   "score": 56,
+   "momentum_rank": "1 av 5 i kategorin",
+   "score": 51,
    "score_parts": {
-    "trend": 25.8,
-    "momentum": 12.8,
-    "risk": 10.3,
+    "trend": 18.5,
+    "momentum": 16.3,
+    "risk": 9.4,
     "cost": 4,
-    "macro": 2.9
+    "macro": 3.1
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen 6.9 % över SMA200 – långsiktig upptrend",
-    "SMA200 stiger (+0.8 % senaste månaden)",
-    "Kursen ligger över SMA50 – kortsiktig styrka"
+    "Kursen 5.1 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+0.8 % senaste månaden)"
    ],
-   "reasons_neg": []
+   "reasons_neg": [
+    "Kursen ligger under SMA50 – kortsiktig svaghet"
+   ]
   },
   {
    "top_holdings": [
@@ -6163,29 +6157,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 189.84,
-   "as_of": "2026-10-06",
-   "sma50": 181.99,
-   "sma200": 166.88,
+   "price": 189.4,
+   "as_of": "2026-10-07",
+   "sma50": 182.16,
+   "sma200": 166.92,
    "above_sma50": true,
    "above_sma200": true,
    "sma50_vs_200_pct": 9.1,
    "cross": "golden",
-   "rsi14": 74.1,
-   "sma200_dist_pct": 13.8,
-   "sma200_slope_pct": 1.9,
+   "rsi14": 70.9,
+   "sma200_dist_pct": 13.5,
+   "sma200_slope_pct": 1.92,
    "ret_1m": 4.2,
-   "ret_3m": 6.7,
-   "ret_6m": 26.3,
-   "ret_1y": 27.7,
-   "ret_ytd": 22.7,
+   "ret_3m": 6.4,
+   "ret_6m": 26.0,
+   "ret_1y": 27.4,
+   "ret_ytd": 22.4,
    "volatility_pct": 11.1,
    "max_drawdown_pct": -5.2,
-   "sharpe": 2.34,
+   "sharpe": 2.31,
    "fee_pct": 0.21,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    153.92,
     153.59,
     154.68,
     155.74,
@@ -6402,7 +6395,6 @@
     181.48,
     181.3,
     180.02,
-    181.23,
     182.15,
     181.83,
     180.13,
@@ -6424,26 +6416,27 @@
     187.48,
     188.19,
     189.54,
-    189.84
+    189.84,
+    189.4
    ],
    "momentum_rank": "1 av 4 i kategorin",
    "score": 88,
    "score_parts": {
-    "trend": 28.4,
+    "trend": 28.2,
     "momentum": 22.2,
-    "risk": 23.9,
+    "risk": 23.7,
     "cost": 10,
-    "macro": 3.5
+    "macro": 4.0
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen 13.8 % över SMA200 – långsiktig upptrend",
+    "Kursen 13.5 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+1.9 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
     "Stark avkastning jämfört med andra fonder (plats 1 av 4 i kategorin)",
-    "Bra riskjusterad avkastning (Sharpe 2.34)",
+    "Bra riskjusterad avkastning (Sharpe 2.31)",
     "Låg avgift (0.21%)",
-    "Medvind för kategorin (MSCI ACWI (världen): 70/100)"
+    "Medvind för kategorin (MSCI ACWI (världen): 80/100)"
    ],
    "reasons_neg": []
   },
@@ -6547,29 +6540,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 1267.6,
-   "as_of": "2026-10-06",
-   "sma50": 1201.03,
-   "sma200": 1099.93,
+   "price": 1268.32,
+   "as_of": "2026-10-07",
+   "sma50": 1202.51,
+   "sma200": 1100.82,
    "above_sma50": true,
    "above_sma200": true,
    "sma50_vs_200_pct": 9.2,
    "cross": "golden",
    "rsi14": 73.5,
    "sma200_dist_pct": 15.2,
-   "sma200_slope_pct": 1.67,
-   "ret_1m": 6.1,
-   "ret_3m": 8.3,
-   "ret_6m": 31.4,
+   "sma200_slope_pct": 1.7,
+   "ret_1m": 5.6,
+   "ret_3m": 7.4,
+   "ret_6m": 30.6,
    "ret_1y": 25.7,
-   "ret_ytd": 21.6,
+   "ret_ytd": 21.7,
    "volatility_pct": 14.3,
    "max_drawdown_pct": -10.2,
-   "sharpe": 1.68,
+   "sharpe": 1.67,
    "fee_pct": 0.21,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    1038.18,
     1036.25,
     1045.46,
     1054.36,
@@ -6753,6 +6745,7 @@
     1177.16,
     1183.44,
     1177.64,
+    1165.36,
     1166.69,
     1178.92,
     1174.78,
@@ -6785,7 +6778,6 @@
     1195.44,
     1193.86,
     1183.88,
-    1194.35,
     1200.8,
     1196.84,
     1183.29,
@@ -6806,16 +6798,17 @@
     1249.14,
     1255.41,
     1266.49,
-    1267.6
+    1267.6,
+    1268.32
    ],
    "momentum_rank": "8 av 37",
-   "score": 82,
+   "score": 83,
    "score_parts": {
     "trend": 28.9,
     "momentum": 20.1,
     "risk": 19.3,
     "cost": 10,
-    "macro": 4.1
+    "macro": 4.2
    },
    "label": "Lovande",
    "reasons_pos": [
@@ -6823,9 +6816,9 @@
     "SMA200 stiger (+1.7 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
     "Stark avkastning jämfört med andra fonder (plats 8 av 37)",
-    "Bra riskjusterad avkastning (Sharpe 1.68)",
+    "Bra riskjusterad avkastning (Sharpe 1.67)",
     "Låg avgift (0.21%)",
-    "Medvind för kategorin (S&P 500: 82/100)"
+    "Medvind för kategorin (S&P 500: 84/100)"
    ],
    "reasons_neg": []
   },
@@ -6834,91 +6827,91 @@
     {
      "s": "AZA.ST",
      "n": "Avanza Bank Holding AB",
-     "p": 0.0439,
+     "p": 0.0426,
      "w": null,
      "k": "avanzabank"
     },
     {
      "s": "SDIP-B.ST",
      "n": "Sdiptech AB Class B",
-     "p": 0.0425,
+     "p": 0.041,
      "w": null,
      "k": "sdiptech"
     },
     {
+     "s": "VIT-B.ST",
+     "n": "Vitec Software Group AB Class B",
+     "p": 0.0402,
+     "w": "VIT-B.ST",
+     "k": "vitecsoftware"
+    },
+    {
      "s": "MYCR.ST",
      "n": "Mycronic AB",
-     "p": 0.0417,
+     "p": 0.0395,
      "w": null,
      "k": "mycronic"
     },
     {
      "s": "SAVE.ST",
      "n": "Nordnet AB (publ) Ordinary Shares",
-     "p": 0.0399,
+     "p": 0.0383,
      "w": null,
      "k": "nordnet"
     },
     {
-     "s": "VIT-B.ST",
-     "n": "Vitec Software Group AB Class B",
-     "p": 0.0383,
-     "w": "VIT-B.ST",
-     "k": "vitecsoftware"
-    },
-    {
-     "s": "KAR.ST",
-     "n": "Karnov Group AB",
-     "p": 0.036,
-     "w": null,
-     "k": "karnov"
-    },
-    {
-     "s": "NP3.ST",
-     "n": "NP3 Fastigheter AB",
-     "p": 0.0339,
-     "w": null,
-     "k": "np3fastigheter"
-    },
-    {
-     "s": "MCAP.ST",
-     "n": "MedCap AB",
-     "p": 0.0327,
-     "w": null,
-     "k": "medcap"
+     "s": "INSTAL.ST",
+     "n": "Instalco AB",
+     "p": 0.0338,
+     "w": "INSTAL.ST",
+     "k": "instalco"
     },
     {
      "s": "NOBA.ST",
      "n": "NOBA Bank Group AB (publ)",
-     "p": 0.0319,
+     "p": 0.0338,
      "w": "NOBA.ST",
      "k": "nobabank"
     },
     {
-     "s": "BUFAB.ST",
-     "n": "Bufab AB",
-     "p": 0.0313,
+     "s": "ANOD-B.ST",
+     "n": "Addnode Group AB Class B",
+     "p": 0.033,
      "w": null,
-     "k": "bufab"
+     "k": "addnode"
+    },
+    {
+     "s": "AQ.ST",
+     "n": "AQ Group AB",
+     "p": 0.0321,
+     "w": null,
+     "k": "aq"
+    },
+    {
+     "s": "BTS-B.ST",
+     "n": "BTS Group AB Class B",
+     "p": 0.0318,
+     "w": "BTS-B.ST",
+     "k": "bts"
     }
    ],
-   "top_coverage": 0.372,
+   "top_coverage": 0.366,
    "sectors": {
-    "Industrials": 0.4413,
-    "Technology": 0.1798,
-    "Financials": 0.119,
-    "RealEstate": 0.092,
-    "Healthcare": 0.0837,
-    "Consumer": 0.0636,
-    "Communication": 0.0206,
+    "Industrials": 0.4603,
+    "Technology": 0.19,
+    "Financials": 0.1186,
+    "RealEstate": 0.0761,
+    "Healthcare": 0.0749,
+    "Consumer": 0.0591,
+    "Communication": 0.021,
     "Materials": 0.0,
     "Utilities": 0.0,
     "Energy": 0.0
    },
    "assets": {
-    "stock": 0.973,
+    "stock": 0.9669,
     "bond": 0.0,
-    "cash": 0.027,
+    "cash": 0.0331,
     "other": 0.0
    },
    "name": "Pareto Småbolagsfond A",
@@ -6929,29 +6922,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 3637.91,
-   "as_of": "2026-10-07",
-   "sma50": 3606.21,
-   "sma200": 3511.28,
+   "price": 3621.12,
+   "as_of": "2026-10-08",
+   "sma50": 3607.66,
+   "sma200": 3511.18,
    "above_sma50": true,
    "above_sma200": true,
    "sma50_vs_200_pct": 2.7,
    "cross": "golden",
-   "rsi14": 50.9,
-   "sma200_dist_pct": 3.6,
-   "sma200_slope_pct": -0.01,
-   "ret_1m": -0.9,
-   "ret_3m": 5.7,
-   "ret_6m": 10.0,
-   "ret_1y": 0.8,
-   "ret_ytd": -1.1,
+   "rsi14": 48.5,
+   "sma200_dist_pct": 3.1,
+   "sma200_slope_pct": -0.02,
+   "ret_1m": -1.5,
+   "ret_3m": 3.4,
+   "ret_6m": 6.1,
+   "ret_1y": 0.1,
+   "ret_ytd": -1.6,
    "volatility_pct": 16.7,
    "max_drawdown_pct": -18.9,
-   "sharpe": -0.06,
+   "sharpe": -0.1,
    "fee_pct": 1.72,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    3667.09,
     3696.11,
     3692.72,
     3634.12,
@@ -7197,25 +7189,26 @@
     3659.44,
     3695.08,
     3685.34,
-    3637.91
+    3637.91,
+    3621.12
    ],
    "momentum_rank": "5 av 5 i kategorin",
-   "score": 31,
+   "score": 30,
    "score_parts": {
-    "trend": 22.2,
-    "momentum": 1.4,
+    "trend": 21.8,
+    "momentum": 1.0,
     "risk": 4.4,
     "cost": 0,
-    "macro": 2.9
+    "macro": 3.1
    },
    "label": "Svag",
    "reasons_pos": [
-    "Kursen 3.6 % över SMA200 – långsiktig upptrend",
+    "Kursen 3.1 % över SMA200 – långsiktig upptrend",
     "Kursen ligger över SMA50 – kortsiktig styrka"
    ],
    "reasons_neg": [
     "Svag avkastning jämfört med andra fonder (plats 5 av 5 i kategorin)",
-    "Sämre än riskfri ränta senaste året (Sharpe -0.06)",
+    "Sämre än riskfri ränta senaste året (Sharpe -0.10)",
     "Hög avgift (1.72%)"
    ]
   },
@@ -7224,91 +7217,91 @@
     {
      "s": "ALFA.ST",
      "n": "Alfa Laval AB",
-     "p": 0.0927,
+     "p": 0.0911,
      "w": "ALFA.ST",
      "k": "alfalaval"
     },
     {
      "s": "ATCO B",
      "n": "Atlas Copco AB Class B",
-     "p": 0.0888,
+     "p": 0.0896,
      "w": "ATCO-A.ST",
      "k": "atlascopco"
     },
     {
-     "s": "ERIC-B.ST",
-     "n": "Telefonaktiebolaget L M Ericsson Class B",
-     "p": 0.0721,
-     "w": "ERIC-B.ST",
-     "k": "telefonaktiebolagetlmericsson"
-    },
-    {
      "s": "INDT.ST",
      "n": "Indutrade AB",
-     "p": 0.0496,
+     "p": 0.0711,
      "w": null,
      "k": "indutrade"
     },
     {
      "s": "SKF-B.ST",
      "n": "SKF AB Class B",
-     "p": 0.047,
+     "p": 0.064,
      "w": null,
      "k": "skf"
     },
     {
-     "s": "VOLV-B.ST",
-     "n": "Volvo AB Class B",
-     "p": 0.0453,
-     "w": "VOLV-B.ST",
-     "k": "volvo"
-    },
-    {
-     "s": "NOVO-B.CO",
-     "n": "Novo Nordisk AS Class B",
-     "p": 0.0443,
-     "w": "NOVO-B.CO",
-     "k": "novonordisk"
+     "s": "ERIC-B.ST",
+     "n": "Telefonaktiebolaget L M Ericsson Class B",
+     "p": 0.0593,
+     "w": "ERIC-B.ST",
+     "k": "telefonaktiebolagetlmericsson"
     },
     {
      "s": "NDA-SE.ST",
      "n": "Nordea Bank Abp",
-     "p": 0.0441,
+     "p": 0.045,
      "w": "NDA-SE.ST",
      "k": "nordeabank"
     },
     {
-     "s": "INVE B",
-     "n": "Investor AB Class B",
-     "p": 0.0425,
-     "w": "INVE-B.ST",
-     "k": "investor"
-    },
-    {
      "s": "SEB-A.ST",
      "n": "Skandinaviska Enskilda Banken AB Class A",
-     "p": 0.0425,
+     "p": 0.0445,
      "w": "SEB-A.ST",
      "k": "skandinaviskaenskildabanken"
+    },
+    {
+     "s": "TREL-B.ST",
+     "n": "Trelleborg AB Class B",
+     "p": 0.044,
+     "w": null,
+     "k": "trelleborg"
+    },
+    {
+     "s": "VOLV-B.ST",
+     "n": "Volvo AB Class B",
+     "p": 0.0427,
+     "w": "VOLV-B.ST",
+     "k": "volvo"
+    },
+    {
+     "s": "SWED-A.ST",
+     "n": "Swedbank AB Class A",
+     "p": 0.0426,
+     "w": "SWED-A.ST",
+     "k": "swedbank"
     }
    ],
-   "top_coverage": 0.569,
+   "top_coverage": 0.594,
    "sectors": {
-    "Industrials": 0.5351,
-    "Financials": 0.2014,
-    "Technology": 0.1079,
-    "Healthcare": 0.0877,
-    "RealEstate": 0.0383,
-    "Consumer": 0.0296,
+    "Industrials": 0.5775,
+    "Financials": 0.2219,
+    "Technology": 0.096,
+    "Consumer": 0.0438,
+    "Healthcare": 0.0414,
+    "RealEstate": 0.0194,
     "Materials": 0.0,
     "Communication": 0.0,
     "Utilities": 0.0,
     "Energy": 0.0
    },
    "assets": {
-    "stock": 0.9768,
+    "stock": 0.9634,
     "bond": 0.0,
-    "cash": 0.0232,
+    "cash": 0.0366,
     "other": 0.0
    },
    "name": "PriorNilsson Sverige Aktiv A",
@@ -7319,29 +7312,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 6040.05,
-   "as_of": "2026-10-06",
-   "sma50": 5974.33,
-   "sma200": 5632.43,
-   "above_sma50": true,
+   "price": 5939.55,
+   "as_of": "2026-10-07",
+   "sma50": 5974.82,
+   "sma200": 5636.19,
+   "above_sma50": false,
    "above_sma200": true,
-   "sma50_vs_200_pct": 6.1,
+   "sma50_vs_200_pct": 6.0,
    "cross": "golden",
-   "rsi14": 55.6,
-   "sma200_dist_pct": 7.2,
-   "sma200_slope_pct": 1.72,
-   "ret_1m": 1.0,
-   "ret_3m": 1.5,
-   "ret_6m": 12.8,
-   "ret_1y": 25.2,
-   "ret_ytd": 16.0,
+   "rsi14": 47.0,
+   "sma200_dist_pct": 5.4,
+   "sma200_slope_pct": 1.71,
+   "ret_1m": -1.1,
+   "ret_3m": 0.8,
+   "ret_6m": 12.3,
+   "ret_1y": 24.0,
+   "ret_ytd": 14.0,
    "volatility_pct": 14.3,
    "max_drawdown_pct": -9.1,
-   "sharpe": 1.64,
+   "sharpe": 1.56,
    "fee_pct": 1.35,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    4992.98,
     4970.28,
     5005.13,
     4997.7,
@@ -7531,6 +7523,7 @@
     5855.92,
     5829.77,
     5914.25,
+    5837.95,
     5802.78,
     5836.15,
     5891.54,
@@ -7563,7 +7556,6 @@
     6066.72,
     6023.19,
     5955.29,
-    5914.98,
     5982.29,
     6006.81,
     6020.79,
@@ -7585,116 +7577,118 @@
     5909.23,
     5978.02,
     5977.83,
-    6040.05
+    6040.05,
+    5939.55
    ],
    "momentum_rank": "2 av 7 i kategorin",
-   "score": 70,
+   "score": 63,
    "score_parts": {
-    "trend": 27.5,
-    "momentum": 16.7,
-    "risk": 19.2,
+    "trend": 20.2,
+    "momentum": 17.0,
+    "risk": 18.6,
     "cost": 4,
-    "macro": 2.8
+    "macro": 3.0
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen 7.2 % över SMA200 – långsiktig upptrend",
+    "Kursen 5.4 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+1.7 % senaste månaden)",
-    "Kursen ligger över SMA50 – kortsiktig styrka",
-    "Bra riskjusterad avkastning (Sharpe 1.64)"
+    "Bra riskjusterad avkastning (Sharpe 1.56)"
    ],
-   "reasons_neg": []
+   "reasons_neg": [
+    "Kursen ligger under SMA50 – kortsiktig svaghet"
+   ]
   },
   {
    "top_holdings": [
     {
      "s": "AAPL",
      "n": "Apple Inc",
-     "p": 0.0558,
+     "p": 0.0591,
      "w": "AAPL",
      "k": "apple"
     },
     {
      "s": "NVDA",
      "n": "NVIDIA Corp",
-     "p": 0.0519,
+     "p": 0.058,
      "w": "NVDA",
      "k": "nvidia"
     },
     {
      "s": "MSFT",
      "n": "Microsoft Corp",
-     "p": 0.0433,
+     "p": 0.0473,
      "w": "MSFT",
      "k": "microsoft"
     },
     {
      "s": "AMZN",
      "n": "Amazon.com Inc",
-     "p": 0.0372,
+     "p": 0.034,
      "w": "AMZN",
      "k": "amazoncom"
     },
     {
      "s": "GOOGL",
      "n": "Alphabet Inc Class A",
-     "p": 0.0263,
+     "p": 0.0252,
      "w": "GOOGL",
      "k": "alphabet"
     },
     {
      "s": "GOOG",
      "n": "Alphabet Inc Class C",
-     "p": 0.0211,
+     "p": 0.0202,
      "w": "GOOGL",
      "k": "alphabet"
     },
     {
-     "s": "AVGO",
-     "n": "Broadcom Inc",
-     "p": 0.0174,
-     "w": "AVGO",
-     "k": "broadcom"
-    },
-    {
      "s": "META",
      "n": "Meta Platforms Inc Class A",
-     "p": 0.0153,
+     "p": 0.0199,
      "w": "META",
      "k": "metaplatforms"
     },
     {
      "s": "AMD",
      "n": "Advanced Micro Devices Inc",
-     "p": 0.0135,
+     "p": 0.0173,
      "w": "AMD",
      "k": "advancedmicrodevices"
     },
     {
      "s": "MU",
      "n": "Micron Technology Inc",
-     "p": 0.0133,
+     "p": 0.017,
      "w": "MU",
      "k": "microntechnology"
+    },
+    {
+     "s": "AVGO",
+     "n": "Broadcom Inc",
+     "p": 0.0156,
+     "w": "AVGO",
+     "k": "broadcom"
     }
    ],
-   "top_coverage": 0.295,
+   "top_coverage": 0.314,
    "sectors": {
-    "Technology": 0.3152,
-    "Financials": 0.1649,
-    "Consumer": 0.1595,
-    "Industrials": 0.0983,
-    "Healthcare": 0.0974,
-    "Communication": 0.0939,
-    "Materials": 0.0304,
-    "RealEstate": 0.0252,
-    "Utilities": 0.0145,
+    "Technology": 0.3422,
+    "Financials": 0.1545,
+    "Consumer": 0.1494,
+    "Healthcare": 0.0977,
+    "Communication": 0.0952,
+    "Industrials": 0.0928,
+    "Materials": 0.0314,
+    "RealEstate": 0.0226,
+    "Utilities": 0.0136,
     "Energy": 0.0007
    },
    "assets": {
-    "stock": 0.9866,
+    "stock": 0.9881,
     "bond": 0.0,
-    "cash": 0.0128,
+    "cash": 0.0113,
     "other": 0.0006
    },
    "name": "Avanza Global",
@@ -7705,29 +7699,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 275.11,
-   "as_of": "2026-10-06",
-   "sma50": 263.81,
-   "sma200": 242.16,
+   "price": 274.75,
+   "as_of": "2026-10-07",
+   "sma50": 264.05,
+   "sma200": 242.36,
    "above_sma50": true,
    "above_sma200": true,
    "sma50_vs_200_pct": 8.9,
    "cross": "golden",
-   "rsi14": 71.7,
-   "sma200_dist_pct": 13.6,
-   "sma200_slope_pct": 1.76,
-   "ret_1m": 4.6,
-   "ret_3m": 6.7,
-   "ret_6m": 27.5,
-   "ret_1y": 25.9,
-   "ret_ytd": 21.0,
+   "rsi14": 70.0,
+   "sma200_dist_pct": 13.4,
+   "sma200_slope_pct": 1.78,
+   "ret_1m": 3.9,
+   "ret_3m": 5.8,
+   "ret_6m": 26.5,
+   "ret_1y": 26.4,
+   "ret_ytd": 20.8,
    "volatility_pct": 11.6,
    "max_drawdown_pct": -7.1,
-   "sharpe": 2.09,
+   "sharpe": 2.13,
    "fee_pct": 0.1,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    225.81,
     225.16,
     226.92,
     228.67,
@@ -7912,6 +7905,7 @@
     258.45,
     259.84,
     259.28,
+    256.42,
     256.53,
     258.97,
     258.46,
@@ -7944,7 +7938,6 @@
     263.92,
     263.53,
     261.3,
-    263.06,
     264.48,
     263.88,
     260.64,
@@ -7965,25 +7958,26 @@
     271.85,
     273.01,
     274.67,
-    275.11
+    275.11,
+    274.75
    ],
    "momentum_rank": "3 av 4 i kategorin",
-   "score": 77,
+   "score": 82,
    "score_parts": {
-    "trend": 28.0,
-    "momentum": 12.8,
-    "risk": 22.2,
+    "trend": 31.9,
+    "momentum": 13.2,
+    "risk": 22.5,
     "cost": 10,
-    "macro": 3.5
+    "macro": 4.0
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen 13.6 % över SMA200 – långsiktig upptrend",
+    "Kursen 13.4 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+1.8 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "Bra riskjusterad avkastning (Sharpe 2.09)",
+    "Bra riskjusterad avkastning (Sharpe 2.13)",
     "Låg avgift (0.10%)",
-    "Medvind för kategorin (MSCI ACWI (världen): 70/100)"
+    "Medvind för kategorin (MSCI ACWI (världen): 80/100)"
    ],
    "reasons_neg": []
   },
@@ -7992,91 +7986,91 @@
     {
      "s": "AAPL",
      "n": "Apple Inc",
-     "p": 0.0756,
+     "p": 0.079,
      "w": "AAPL",
      "k": "apple"
     },
     {
      "s": "NVDA",
      "n": "NVIDIA Corp",
-     "p": 0.0714,
+     "p": 0.0787,
      "w": "NVDA",
      "k": "nvidia"
     },
     {
      "s": "MSFT",
      "n": "Microsoft Corp",
-     "p": 0.0594,
+     "p": 0.0639,
      "w": "MSFT",
      "k": "microsoft"
     },
     {
      "s": "AMZN",
      "n": "Amazon.com Inc",
-     "p": 0.0495,
+     "p": 0.0444,
      "w": "AMZN",
      "k": "amazoncom"
     },
     {
      "s": "GOOGL",
      "n": "Alphabet Inc Class A",
-     "p": 0.0355,
+     "p": 0.0335,
      "w": "GOOGL",
      "k": "alphabet"
-    },
-    {
-     "s": "GOOG",
-     "n": "Alphabet Inc Class C",
-     "p": 0.0284,
-     "w": "GOOGL",
-     "k": "alphabet"
-    },
-    {
-     "s": "AVGO",
-     "n": "Broadcom Inc",
-     "p": 0.026,
-     "w": "AVGO",
-     "k": "broadcom"
     },
     {
      "s": "META",
      "n": "Meta Platforms Inc Class A",
-     "p": 0.0223,
+     "p": 0.0285,
      "w": "META",
      "k": "metaplatforms"
     },
     {
+     "s": "GOOG",
+     "n": "Alphabet Inc Class C",
+     "p": 0.0268,
+     "w": "GOOGL",
+     "k": "alphabet"
+    },
+    {
      "s": "MU",
      "n": "Micron Technology Inc",
-     "p": 0.0184,
+     "p": 0.0233,
      "w": "MU",
      "k": "microntechnology"
     },
     {
+     "s": "AVGO",
+     "n": "Broadcom Inc",
+     "p": 0.0229,
+     "w": "AVGO",
+     "k": "broadcom"
+    },
+    {
      "s": "AMD",
      "n": "Advanced Micro Devices Inc",
-     "p": 0.017,
+     "p": 0.0214,
      "w": "AMD",
      "k": "advancedmicrodevices"
     }
    ],
-   "top_coverage": 0.403,
+   "top_coverage": 0.422,
    "sectors": {
-    "Technology": 0.3892,
-    "Consumer": 0.1621,
-    "Financials": 0.1183,
-    "Communication": 0.1125,
-    "Healthcare": 0.097,
-    "Industrials": 0.0701,
-    "RealEstate": 0.0212,
-    "Materials": 0.0184,
-    "Utilities": 0.0113,
+    "Technology": 0.4196,
+    "Consumer": 0.1499,
+    "Communication": 0.1132,
+    "Financials": 0.107,
+    "Healthcare": 0.0982,
+    "Industrials": 0.0654,
+    "Materials": 0.0186,
+    "RealEstate": 0.0185,
+    "Utilities": 0.0097,
     "Energy": 0.0
    },
    "assets": {
-    "stock": 0.9876,
+    "stock": 0.9882,
     "bond": 0.0,
-    "cash": 0.0124,
+    "cash": 0.0118,
     "other": 0.0
    },
    "name": "Avanza USA",
@@ -8087,29 +8081,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 271.3,
-   "as_of": "2026-10-06",
-   "sma50": 257.22,
-   "sma200": 234.56,
+   "price": 271.76,
+   "as_of": "2026-10-07",
+   "sma50": 257.53,
+   "sma200": 234.77,
    "above_sma50": true,
    "above_sma200": true,
    "sma50_vs_200_pct": 9.7,
    "cross": "golden",
-   "rsi14": 72.8,
-   "sma200_dist_pct": 15.7,
-   "sma200_slope_pct": 1.85,
-   "ret_1m": 5.9,
-   "ret_3m": 8.5,
-   "ret_6m": 31.7,
-   "ret_1y": 27.5,
-   "ret_ytd": 22.8,
+   "rsi14": 73.3,
+   "sma200_dist_pct": 15.8,
+   "sma200_slope_pct": 1.89,
+   "ret_1m": 5.5,
+   "ret_3m": 7.8,
+   "ret_6m": 31.1,
+   "ret_1y": 28.5,
+   "ret_ytd": 23.0,
    "volatility_pct": 13.9,
    "max_drawdown_pct": -9.2,
-   "sharpe": 1.85,
+   "sharpe": 1.92,
    "fee_pct": 0.18,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    219.32,
     218.74,
     220.77,
     222.52,
@@ -8294,6 +8287,7 @@
     251.64,
     252.86,
     252.11,
+    249.15,
     249.5,
     252.0,
     251.11,
@@ -8326,7 +8320,6 @@
     256.4,
     256.09,
     253.94,
-    256.22,
     257.63,
     256.74,
     253.72,
@@ -8347,26 +8340,27 @@
     267.72,
     269.02,
     271.15,
-    271.3
+    271.3,
+    271.76
    ],
-   "momentum_rank": "7 av 37",
-   "score": 85,
+   "momentum_rank": "6 av 37",
+   "score": 86,
    "score_parts": {
     "trend": 29.2,
-    "momentum": 20.8,
-    "risk": 20.6,
+    "momentum": 21.5,
+    "risk": 21.1,
     "cost": 10,
-    "macro": 4.1
+    "macro": 4.2
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen 15.7 % över SMA200 – långsiktig upptrend",
+    "Kursen 15.8 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+1.9 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "Stark avkastning jämfört med andra fonder (plats 7 av 37)",
-    "Bra riskjusterad avkastning (Sharpe 1.85)",
+    "Stark avkastning jämfört med andra fonder (plats 6 av 37)",
+    "Bra riskjusterad avkastning (Sharpe 1.92)",
     "Låg avgift (0.18%)",
-    "Medvind för kategorin (S&P 500: 82/100)"
+    "Medvind för kategorin (S&P 500: 84/100)"
    ],
    "reasons_neg": []
   },
@@ -8470,29 +8464,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 426.74,
-   "as_of": "2026-10-06",
-   "sma50": 409.95,
-   "sma200": 375.96,
+   "price": 425.69,
+   "as_of": "2026-10-07",
+   "sma50": 410.29,
+   "sma200": 376.04,
    "above_sma50": true,
    "above_sma200": true,
-   "sma50_vs_200_pct": 9.0,
+   "sma50_vs_200_pct": 9.1,
    "cross": "golden",
-   "rsi14": 72.3,
-   "sma200_dist_pct": 13.5,
-   "sma200_slope_pct": 1.89,
-   "ret_1m": 4.4,
-   "ret_3m": 5.8,
-   "ret_6m": 26.5,
-   "ret_1y": 27.4,
-   "ret_ytd": 21.8,
+   "rsi14": 69.0,
+   "sma200_dist_pct": 13.2,
+   "sma200_slope_pct": 1.91,
+   "ret_1m": 3.6,
+   "ret_3m": 5.5,
+   "ret_6m": 26.2,
+   "ret_1y": 27.1,
+   "ret_ytd": 21.5,
    "volatility_pct": 11.1,
    "max_drawdown_pct": -5.9,
-   "sharpe": 2.31,
+   "sharpe": 2.28,
    "fee_pct": 0.24,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    347.11,
     346.38,
     348.81,
     351.32,
@@ -8710,7 +8703,6 @@
     409.65,
     408.87,
     405.9,
-    408.7,
     410.91,
     410.13,
     406.04,
@@ -8731,25 +8723,27 @@
     421.99,
     423.49,
     426.4,
-    426.74
+    426.74,
+    425.69
    ],
    "momentum_rank": "2 av 4 i kategorin",
-   "score": 83,
+   "score": 87,
    "score_parts": {
-    "trend": 28.2,
-    "momentum": 17.4,
-    "risk": 23.7,
+    "trend": 32.0,
+    "momentum": 17.7,
+    "risk": 23.5,
     "cost": 10,
-    "macro": 3.5
+    "macro": 4.0
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen 13.5 % över SMA200 – långsiktig upptrend",
+    "Kursen 13.2 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+1.9 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "Bra riskjusterad avkastning (Sharpe 2.31)",
+    "Stark avkastning jämfört med andra fonder (plats 2 av 4 i kategorin)",
+    "Bra riskjusterad avkastning (Sharpe 2.28)",
     "Låg avgift (0.24%)",
-    "Medvind för kategorin (MSCI ACWI (världen): 70/100)"
+    "Medvind för kategorin (MSCI ACWI (världen): 80/100)"
    ],
    "reasons_neg": []
   },
@@ -8758,91 +8752,91 @@
     {
      "s": "NVDA",
      "n": "NVIDIA Corp",
-     "p": 0.0658,
+     "p": 0.0748,
      "w": "NVDA",
      "k": "nvidia"
     },
     {
      "s": "MSFT",
      "n": "Microsoft Corp",
-     "p": 0.0541,
+     "p": 0.0596,
      "w": "MSFT",
      "k": "microsoft"
     },
     {
      "s": "GOOG",
      "n": "Alphabet Inc Class C",
-     "p": 0.0479,
+     "p": 0.0457,
      "w": "GOOGL",
      "k": "alphabet"
     },
     {
      "s": "AAPL",
      "n": "Apple Inc",
-     "p": 0.0407,
+     "p": 0.0428,
      "w": "AAPL",
      "k": "apple"
     },
     {
      "s": "TSM",
      "n": "Taiwan Semiconductor Manufacturing Co Ltd ADR",
-     "p": 0.0294,
+     "p": 0.0332,
      "w": null,
      "k": "taiwansemiconductormanufacturing"
     },
     {
      "s": "8316.T",
      "n": "Sumitomo Mitsui Financial Group Inc",
-     "p": 0.0283,
+     "p": 0.0292,
      "w": null,
      "k": "sumitomomitsuifinancial"
     },
     {
+     "s": "LLY",
+     "n": "Eli Lilly and Co",
+     "p": 0.0251,
+     "w": "LLY",
+     "k": "elilillyand"
+    },
+    {
      "s": "AMZN",
      "n": "Amazon.com Inc",
-     "p": 0.0268,
+     "p": 0.0246,
      "w": "AMZN",
      "k": "amazoncom"
     },
     {
      "s": "INGA.AS",
      "n": "ING Groep NV",
-     "p": 0.0263,
+     "p": 0.0243,
      "w": null,
      "k": "inggroep"
     },
     {
      "s": "BAC",
      "n": "Bank of America Corp",
-     "p": 0.0254,
+     "p": 0.0223,
      "w": "BAC",
      "k": "bankofamerica"
-    },
-    {
-     "s": "LLY",
-     "n": "Eli Lilly and Co",
-     "p": 0.0223,
-     "w": "LLY",
-     "k": "elilillyand"
     }
    ],
-   "top_coverage": 0.367,
+   "top_coverage": 0.382,
    "sectors": {
-    "Technology": 0.312,
-    "Financials": 0.1915,
-    "Consumer": 0.1215,
-    "Industrials": 0.1001,
-    "Communication": 0.0916,
-    "Healthcare": 0.0836,
-    "Energy": 0.0327,
-    "Materials": 0.0312,
-    "RealEstate": 0.0193,
-    "Utilities": 0.0165
+    "Technology": 0.3367,
+    "Financials": 0.1811,
+    "Consumer": 0.1041,
+    "Industrials": 0.1005,
+    "Communication": 0.094,
+    "Healthcare": 0.0882,
+    "Materials": 0.0324,
+    "Energy": 0.0309,
+    "RealEstate": 0.0173,
+    "Utilities": 0.0149
    },
    "assets": {
-    "stock": 0.9887,
+    "stock": 0.9897,
     "bond": 0.0,
-    "cash": 0.0113,
+    "cash": 0.0103,
     "other": 0.0
    },
    "name": "AMF Aktiefond Global",
@@ -8853,29 +8847,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 502.78,
-   "as_of": "2026-10-07",
-   "sma50": 485.23,
-   "sma200": 447.92,
+   "price": 499.4,
+   "as_of": "2026-10-08",
+   "sma50": 484.74,
+   "sma200": 447.54,
    "above_sma50": true,
    "above_sma200": true,
    "sma50_vs_200_pct": 8.3,
    "cross": "golden",
-   "rsi14": 65.2,
-   "sma200_dist_pct": 12.2,
+   "rsi14": 60.8,
+   "sma200_dist_pct": 11.6,
    "sma200_slope_pct": 1.81,
-   "ret_1m": 3.6,
-   "ret_3m": 6.1,
-   "ret_6m": 22.1,
-   "ret_1y": 24.1,
-   "ret_ytd": 20.7,
+   "ret_1m": 2.9,
+   "ret_3m": 5.4,
+   "ret_6m": 21.2,
+   "ret_1y": 23.8,
+   "ret_ytd": 19.9,
    "volatility_pct": 11.0,
    "max_drawdown_pct": -5.8,
-   "sharpe": 2.03,
+   "sharpe": 2.0,
    "fee_pct": 0.63,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    411.94,
     410.84,
     413.99,
     414.31,
@@ -9104,7 +9097,6 @@
     487.59,
     484.81,
     486.35,
-    486.9,
     489.75,
     493.43,
     497.94,
@@ -9117,25 +9109,25 @@
     497.33,
     498.54,
     503.7,
-    505.83,
-    502.78
+    502.78,
+    499.4
    ],
    "momentum_rank": "4 av 4 i kategorin",
    "score": 71,
    "score_parts": {
-    "trend": 31.1,
+    "trend": 30.7,
     "momentum": 7.6,
-    "risk": 21.8,
+    "risk": 21.6,
     "cost": 7,
-    "macro": 3.5
+    "macro": 4.0
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen 12.2 % över SMA200 – långsiktig upptrend",
+    "Kursen 11.6 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+1.8 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "Bra riskjusterad avkastning (Sharpe 2.03)",
-    "Medvind för kategorin (MSCI ACWI (världen): 70/100)"
+    "Bra riskjusterad avkastning (Sharpe 2.00)",
+    "Medvind för kategorin (MSCI ACWI (världen): 80/100)"
    ],
    "reasons_neg": []
   },
@@ -9239,29 +9231,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 258.72,
-   "as_of": "2026-10-06",
-   "sma50": 248.11,
-   "sma200": 229.22,
+   "price": 257.84,
+   "as_of": "2026-10-07",
+   "sma50": 248.62,
+   "sma200": 229.48,
    "above_sma50": true,
    "above_sma200": true,
-   "sma50_vs_200_pct": 8.2,
+   "sma50_vs_200_pct": 8.3,
    "cross": "golden",
-   "rsi14": 74.4,
-   "sma200_dist_pct": 12.9,
-   "sma200_slope_pct": 1.55,
-   "ret_1m": 5.4,
-   "ret_3m": 4.9,
-   "ret_6m": 27.6,
-   "ret_1y": 25.5,
-   "ret_ytd": 20.7,
+   "rsi14": 69.9,
+   "sma200_dist_pct": 12.4,
+   "sma200_slope_pct": 1.61,
+   "ret_1m": 4.5,
+   "ret_3m": 3.6,
+   "ret_6m": 26.4,
+   "ret_1y": 25.9,
+   "ret_ytd": 20.3,
    "volatility_pct": 11.7,
    "max_drawdown_pct": -8.0,
-   "sharpe": 2.02,
+   "sharpe": 2.06,
    "fee_pct": 1.4,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    211.56,
     211.2,
     212.51,
     214.82,
@@ -9479,7 +9470,6 @@
     248.72,
     247.21,
     245.55,
-    245.42,
     246.72,
     246.84,
     245.08,
@@ -9498,25 +9488,27 @@
     254.79,
     254.17,
     255.4,
+    256.47,
     258.32,
-    258.72
+    258.72,
+    257.84
    ],
    "momentum_rank": "3 av 4 i kategorin",
-   "score": 69,
+   "score": 73,
    "score_parts": {
-    "trend": 27.2,
+    "trend": 31.0,
     "momentum": 12.5,
-    "risk": 21.7,
+    "risk": 22.0,
     "cost": 4,
-    "macro": 3.5
+    "macro": 4.0
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen 12.9 % över SMA200 – långsiktig upptrend",
+    "Kursen 12.4 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+1.6 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "Bra riskjusterad avkastning (Sharpe 2.02)",
-    "Medvind för kategorin (MSCI ACWI (världen): 70/100)"
+    "Bra riskjusterad avkastning (Sharpe 2.06)",
+    "Medvind för kategorin (MSCI ACWI (världen): 80/100)"
    ],
    "reasons_neg": []
   },
@@ -9525,91 +9517,91 @@
     {
      "s": "INVE B",
      "n": "Investor AB Class B",
-     "p": 0.1001,
+     "p": 0.0993,
      "w": "INVE-B.ST",
      "k": "investor"
     },
     {
      "s": "ATCO-A.ST",
      "n": "Atlas Copco AB Class A",
-     "p": 0.0848,
+     "p": 0.0859,
      "w": "ATCO-A.ST",
      "k": "atlascopco"
     },
     {
      "s": "VOLV-B.ST",
      "n": "Volvo AB Class B",
-     "p": 0.0627,
+     "p": 0.059,
      "w": "VOLV-B.ST",
      "k": "volvo"
     },
     {
-     "s": "SAND.ST",
-     "n": "Sandvik AB",
-     "p": 0.0403,
-     "w": "SAND.ST",
-     "k": "sandvik"
-    },
-    {
      "s": "SWED-A.ST",
      "n": "Swedbank AB Class A",
-     "p": 0.0372,
+     "p": 0.0408,
      "w": "SWED-A.ST",
      "k": "swedbank"
     },
     {
+     "s": "SAND.ST",
+     "n": "Sandvik AB",
+     "p": 0.0399,
+     "w": "SAND.ST",
+     "k": "sandvik"
+    },
+    {
      "s": "ABBN.SW",
      "n": "ABB Ltd",
-     "p": 0.0357,
+     "p": 0.0369,
      "w": null,
      "k": "abb"
     },
     {
-     "s": "ASSA-B.ST",
-     "n": "Assa Abloy AB Class B",
-     "p": 0.0351,
-     "w": null,
-     "k": "assaabloy"
-    },
-    {
      "s": "SEB-A.ST",
      "n": "Skandinaviska Enskilda Banken AB Class A",
-     "p": 0.0342,
+     "p": 0.0359,
      "w": "SEB-A.ST",
      "k": "skandinaviskaenskildabanken"
     },
     {
+     "s": "ASSA-B.ST",
+     "n": "Assa Abloy AB Class B",
+     "p": 0.0353,
+     "w": null,
+     "k": "assaabloy"
+    },
+    {
      "s": "ERIC-B.ST",
      "n": "Telefonaktiebolaget L M Ericsson Class B",
-     "p": 0.0284,
+     "p": 0.0273,
      "w": "ERIC-B.ST",
      "k": "telefonaktiebolagetlmericsson"
     },
     {
      "s": "EPI-A.ST",
      "n": "Epiroc AB Ordinary Shares - Class A",
-     "p": 0.0268,
+     "p": 0.0269,
      "w": null,
      "k": "epiroc"
     }
    ],
-   "top_coverage": 0.485,
+   "top_coverage": 0.487,
    "sectors": {
-    "Industrials": 0.4372,
-    "Financials": 0.2645,
-    "Healthcare": 0.0686,
-    "Technology": 0.0632,
-    "Consumer": 0.0594,
-    "Materials": 0.0459,
-    "RealEstate": 0.0338,
-    "Communication": 0.0273,
+    "Industrials": 0.4376,
+    "Financials": 0.2677,
+    "Healthcare": 0.0715,
+    "Technology": 0.0624,
+    "Consumer": 0.057,
+    "Materials": 0.0449,
+    "RealEstate": 0.0316,
+    "Communication": 0.0271,
     "Utilities": 0.0002,
     "Energy": 0.0
    },
    "assets": {
-    "stock": 0.9999,
+    "stock": 0.9998,
     "bond": 0.0,
-    "cash": 0.0001,
+    "cash": 0.0002,
     "other": 0.0
    },
    "name": "Handelsbanken Sverige Index A1",
@@ -9620,30 +9612,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 607.59,
-   "as_of": "2026-10-06",
-   "sma50": 605.99,
-   "sma200": 575.79,
-   "above_sma50": true,
+   "price": 594.34,
+   "as_of": "2026-10-08",
+   "sma50": 605.93,
+   "sma200": 576.13,
+   "above_sma50": false,
    "above_sma200": true,
    "sma50_vs_200_pct": 5.2,
    "cross": "golden",
-   "rsi14": 52.3,
-   "sma200_dist_pct": 5.5,
-   "sma200_slope_pct": 1.52,
-   "ret_1m": -0.5,
-   "ret_3m": 3.5,
-   "ret_6m": 7.6,
-   "ret_1y": 20.7,
-   "ret_ytd": 13.0,
-   "volatility_pct": 15.7,
+   "rsi14": 42.7,
+   "sma200_dist_pct": 3.2,
+   "sma200_slope_pct": 1.5,
+   "ret_1m": -2.9,
+   "ret_3m": 0.9,
+   "ret_6m": 5.5,
+   "ret_1y": 16.7,
+   "ret_ytd": 10.6,
+   "volatility_pct": 15.8,
    "max_drawdown_pct": -10.9,
-   "sharpe": 1.21,
+   "sharpe": 0.95,
    "fee_pct": 0.8,
    "fee_source": "Yahoo Finance",
    "price_history_1y": [
-    516.2,
-    515.55,
     514.87,
     513.82,
     516.93,
@@ -9891,25 +9881,26 @@
     597.76,
     603.7,
     599.95,
-    607.59
+    607.59,
+    594.34
    ],
    "momentum_rank": "3 av 3 i kategorin",
-   "score": 56,
+   "score": 47,
    "score_parts": {
-    "trend": 26.0,
-    "momentum": 4.5,
-    "risk": 15.9,
+    "trend": 18.3,
+    "momentum": 4.2,
+    "risk": 14.1,
     "cost": 7,
-    "macro": 3.1
+    "macro": 3.4
    },
-   "label": "Neutral",
+   "label": "Svag",
    "reasons_pos": [
-    "Kursen 5.5 % över SMA200 – långsiktig upptrend",
+    "Kursen 3.2 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+1.5 % senaste månaden)",
-    "Kursen ligger över SMA50 – kortsiktig styrka",
-    "Bra riskjusterad avkastning (Sharpe 1.21)"
+    "Medvind för kategorin (OMXS30: 67/100)"
    ],
    "reasons_neg": [
+    "Kursen ligger under SMA50 – kortsiktig svaghet",
     "Svag avkastning jämfört med andra fonder (plats 3 av 3 i kategorin)"
    ]
   },
@@ -10013,29 +10004,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 714.14,
-   "as_of": "2026-10-06",
-   "sma50": 712.69,
-   "sma200": 676.77,
-   "above_sma50": true,
+   "price": 702.04,
+   "as_of": "2026-10-07",
+   "sma50": 712.62,
+   "sma200": 677.13,
+   "above_sma50": false,
    "above_sma200": true,
-   "sma50_vs_200_pct": 5.3,
+   "sma50_vs_200_pct": 5.2,
    "cross": "golden",
-   "rsi14": 52.5,
-   "sma200_dist_pct": 5.5,
-   "sma200_slope_pct": 1.66,
-   "ret_1m": 0.1,
-   "ret_3m": 1.2,
-   "ret_6m": 10.0,
-   "ret_1y": 21.9,
-   "ret_ytd": 13.8,
+   "rsi14": 43.8,
+   "sma200_dist_pct": 3.7,
+   "sma200_slope_pct": 1.64,
+   "ret_1m": -1.8,
+   "ret_3m": 0.4,
+   "ret_6m": 9.6,
+   "ret_1y": 21.2,
+   "ret_ytd": 11.8,
    "volatility_pct": 15.2,
    "max_drawdown_pct": -11.4,
-   "sharpe": 1.33,
+   "sharpe": 1.28,
    "fee_pct": 0.21,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    600.99,
     597.21,
     599.71,
     598.59,
@@ -10224,6 +10214,7 @@
     690.68,
     688.97,
     690.59,
+    689.0,
     685.48,
     688.03,
     696.32,
@@ -10256,7 +10247,6 @@
     724.61,
     719.26,
     710.45,
-    705.75,
     713.59,
     714.88,
     716.13,
@@ -10278,26 +10268,29 @@
     701.51,
     708.03,
     708.12,
-    714.14
+    714.14,
+    702.04
    ],
    "momentum_rank": "2 av 3 i kategorin",
-   "score": 67,
+   "score": 60,
    "score_parts": {
-    "trend": 26.2,
+    "trend": 18.9,
     "momentum": 11.5,
-    "risk": 16.5,
+    "risk": 16.1,
     "cost": 10,
-    "macro": 3.1
+    "macro": 3.4
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen 5.5 % över SMA200 – långsiktig upptrend",
-    "SMA200 stiger (+1.7 % senaste månaden)",
-    "Kursen ligger över SMA50 – kortsiktig styrka",
-    "Bra riskjusterad avkastning (Sharpe 1.33)",
-    "Låg avgift (0.21%)"
+    "Kursen 3.7 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+1.6 % senaste månaden)",
+    "Bra riskjusterad avkastning (Sharpe 1.28)",
+    "Låg avgift (0.21%)",
+    "Medvind för kategorin (OMXS30: 67/100)"
    ],
-   "reasons_neg": []
+   "reasons_neg": [
+    "Kursen ligger under SMA50 – kortsiktig svaghet"
+   ]
   },
   {
    "top_holdings": [
@@ -10399,29 +10392,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 94.23,
-   "as_of": "2026-10-06",
-   "sma50": 94.14,
-   "sma200": 88.06,
-   "above_sma50": true,
+   "price": 93.07,
+   "as_of": "2026-10-07",
+   "sma50": 94.28,
+   "sma200": 88.19,
+   "above_sma50": false,
    "above_sma200": true,
    "sma50_vs_200_pct": 6.9,
    "cross": "golden",
-   "rsi14": 48.5,
-   "sma200_dist_pct": 7.0,
-   "sma200_slope_pct": 1.92,
-   "ret_1m": -0.4,
-   "ret_3m": 3.1,
-   "ret_6m": 14.3,
-   "ret_1y": 26.8,
-   "ret_ytd": 14.7,
+   "rsi14": 42.7,
+   "sma200_dist_pct": 5.5,
+   "sma200_slope_pct": 1.88,
+   "ret_1m": -2.6,
+   "ret_3m": 2.8,
+   "ret_6m": 11.4,
+   "ret_1y": 27.7,
+   "ret_ytd": 13.3,
    "volatility_pct": 15.1,
    "max_drawdown_pct": -10.1,
-   "sharpe": 1.66,
+   "sharpe": 1.72,
    "fee_pct": 1.99,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    75.42,
     74.81,
     75.06,
     74.84,
@@ -10644,10 +10636,10 @@
     95.71,
     95.36,
     94.64,
-    94.13,
     95.21,
     95.6,
     95.71,
+    94.64,
     94.81,
     93.93,
     94.03,
@@ -10663,27 +10655,29 @@
     94.86,
     94.49,
     93.21,
+    93.76,
     93.37,
-    94.23
+    94.23,
+    93.07
    ],
    "momentum_rank": "1 av 7 i kategorin",
-   "score": 70,
+   "score": 63,
    "score_parts": {
-    "trend": 27.7,
+    "trend": 20.6,
     "momentum": 19.8,
-    "risk": 19.2,
+    "risk": 19.7,
     "cost": 0,
-    "macro": 2.8
+    "macro": 3.0
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen 7.0 % över SMA200 – långsiktig upptrend",
+    "Kursen 5.5 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+1.9 % senaste månaden)",
-    "Kursen ligger över SMA50 – kortsiktig styrka",
     "Stark avkastning jämfört med andra fonder (plats 1 av 7 i kategorin)",
-    "Bra riskjusterad avkastning (Sharpe 1.66)"
+    "Bra riskjusterad avkastning (Sharpe 1.72)"
    ],
    "reasons_neg": [
+    "Kursen ligger under SMA50 – kortsiktig svaghet",
     "Hög avgift (1.99%)"
    ]
   },
@@ -10692,91 +10686,91 @@
     {
      "s": "INVE-A.ST",
      "n": "Investor AB Class A",
-     "p": 0.0662,
+     "p": 0.0667,
      "w": "INVE-B.ST",
      "k": "investor"
     },
     {
      "s": "LUND-B.ST",
      "n": "L E Lundbergforetagen AB Class B",
-     "p": 0.0634,
+     "p": 0.0631,
      "w": "LUND-B.ST",
      "k": "lelundbergforetagen"
     },
     {
      "s": "LATO-B.ST",
      "n": "Investment AB Latour Class B",
-     "p": 0.0475,
+     "p": 0.0482,
      "w": "LATO-B.ST",
      "k": "investmentlatour"
     },
     {
-     "s": "INDT.ST",
-     "n": "Indutrade AB",
-     "p": 0.0464,
-     "w": null,
-     "k": "indutrade"
-    },
-    {
-     "s": "ASSA-B.ST",
-     "n": "Assa Abloy AB Class B",
-     "p": 0.045,
-     "w": null,
-     "k": "assaabloy"
-    },
-    {
      "s": "BEIJ-B.ST",
      "n": "Beijer Ref AB Class B",
-     "p": 0.0448,
+     "p": 0.0479,
      "w": null,
      "k": "beijerref"
     },
     {
+     "s": "INDT.ST",
+     "n": "Indutrade AB",
+     "p": 0.0458,
+     "w": null,
+     "k": "indutrade"
+    },
+    {
      "s": "LIFCO-B.ST",
      "n": "Lifco AB Class B",
-     "p": 0.0448,
+     "p": 0.0456,
      "w": "LIFCO-B.ST",
      "k": "lifco"
     },
     {
-     "s": "VOLV-B.ST",
-     "n": "Volvo AB Class B",
-     "p": 0.0446,
-     "w": "VOLV-B.ST",
-     "k": "volvo"
-    },
-    {
-     "s": "ATCO-A.ST",
-     "n": "Atlas Copco AB Class A",
-     "p": 0.0424,
-     "w": "ATCO-A.ST",
-     "k": "atlascopco"
+     "s": "ASSA-B.ST",
+     "n": "Assa Abloy AB Class B",
+     "p": 0.0454,
+     "w": null,
+     "k": "assaabloy"
     },
     {
      "s": "ABBN.SW",
      "n": "ABB Ltd",
-     "p": 0.0416,
+     "p": 0.0439,
      "w": null,
      "k": "abb"
+    },
+    {
+     "s": "VOLV-B.ST",
+     "n": "Volvo AB Class B",
+     "p": 0.0425,
+     "w": "VOLV-B.ST",
+     "k": "volvo"
+    },
+    {
+     "s": "AZN.L",
+     "n": "AstraZeneca PLC",
+     "p": 0.0425,
+     "w": "AZN.L",
+     "k": "astrazeneca"
     }
    ],
-   "top_coverage": 0.487,
+   "top_coverage": 0.492,
    "sectors": {
-    "Industrials": 0.5668,
-    "Financials": 0.1541,
-    "Consumer": 0.1061,
-    "Healthcare": 0.0633,
-    "Technology": 0.0576,
-    "RealEstate": 0.0297,
-    "Materials": 0.0224,
+    "Industrials": 0.5667,
+    "Financials": 0.1509,
+    "Consumer": 0.1065,
+    "Healthcare": 0.0676,
+    "Technology": 0.0605,
+    "RealEstate": 0.0262,
+    "Materials": 0.0216,
     "Communication": 0.0,
     "Utilities": 0.0,
     "Energy": 0.0
    },
    "assets": {
-    "stock": 0.919,
-    "bond": 0.0672,
-    "cash": 0.0138,
+    "stock": 0.9185,
+    "bond": 0.0669,
+    "cash": 0.0146,
     "other": 0.0
    },
    "name": "Spiltan Aktiefond Stabil",
@@ -10787,29 +10781,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 1343.63,
-   "as_of": "2026-10-07",
-   "sma50": 1356.01,
-   "sma200": 1322.31,
+   "price": 1332.48,
+   "as_of": "2026-10-08",
+   "sma50": 1354.88,
+   "sma200": 1321.61,
    "above_sma50": false,
    "above_sma200": true,
    "sma50_vs_200_pct": 2.5,
    "cross": "golden",
-   "rsi14": 44.4,
-   "sma200_dist_pct": 1.6,
-   "sma200_slope_pct": 0.48,
-   "ret_1m": -1.6,
-   "ret_3m": 2.4,
-   "ret_6m": 6.0,
-   "ret_1y": 7.3,
-   "ret_ytd": 2.1,
-   "volatility_pct": 14.3,
+   "rsi14": 38.9,
+   "sma200_dist_pct": 0.8,
+   "sma200_slope_pct": 0.45,
+   "ret_1m": -1.3,
+   "ret_3m": -0.5,
+   "ret_6m": 4.0,
+   "ret_1y": 7.1,
+   "ret_ytd": 1.3,
+   "volatility_pct": 14.1,
    "max_drawdown_pct": -10.7,
-   "sharpe": 0.39,
+   "sharpe": 0.38,
    "fee_pct": 1.54,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    1283.72,
     1291.31,
     1291.79,
     1281.3,
@@ -11039,11 +11032,9 @@
     1362.48,
     1366.24,
     1351.12,
-    1347.06,
     1345.04,
     1340.87,
     1340.71,
-    1362.0,
     1354.7,
     1368.56,
     1371.81,
@@ -11055,21 +11046,21 @@
     1346.89,
     1354.67,
     1353.65,
-    1367.7,
-    1343.63
+    1343.63,
+    1332.48
    ],
    "momentum_rank": "7 av 7 i kategorin",
-   "score": 30,
+   "score": 26,
    "score_parts": {
-    "trend": 15.6,
-    "momentum": 1.7,
-    "risk": 10.4,
+    "trend": 11.0,
+    "momentum": 1.4,
+    "risk": 10.3,
     "cost": 0,
-    "macro": 2.8
+    "macro": 3.0
    },
    "label": "Svag",
    "reasons_pos": [
-    "Kursen 1.6 % över SMA200 – långsiktig upptrend"
+    "Kursen 0.8 % över SMA200 – långsiktig upptrend"
    ],
    "reasons_neg": [
     "Kursen ligger under SMA50 – kortsiktig svaghet",
@@ -11080,93 +11071,93 @@
   {
    "top_holdings": [
     {
-     "s": "SAVE.ST",
-     "n": "Nordnet AB (publ) Ordinary Shares",
-     "p": 0.0522,
-     "w": null,
-     "k": "nordnet"
-    },
-    {
      "s": "BEIJ-B.ST",
      "n": "Beijer Ref AB Class B",
-     "p": 0.0445,
+     "p": 0.0494,
      "w": null,
      "k": "beijerref"
     },
     {
-     "s": "GETI-B.ST",
-     "n": "Getinge AB Class B",
-     "p": 0.0441,
-     "w": "GETI-B.ST",
-     "k": "getinge"
+     "s": "SAVE.ST",
+     "n": "Nordnet AB (publ) Ordinary Shares",
+     "p": 0.0474,
+     "w": null,
+     "k": "nordnet"
     },
     {
      "s": "TREL-B.ST",
      "n": "Trelleborg AB Class B",
-     "p": 0.042,
+     "p": 0.043,
      "w": null,
      "k": "trelleborg"
     },
     {
-     "s": "SAGA B",
-     "n": "AB Sagax Class B",
-     "p": 0.0386,
-     "w": null,
-     "k": "sagax"
+     "s": "GETI-B.ST",
+     "n": "Getinge AB Class B",
+     "p": 0.0424,
+     "w": "GETI-B.ST",
+     "k": "getinge"
     },
     {
      "s": "SECT-B.ST",
      "n": "Sectra AB Class B",
-     "p": 0.0381,
+     "p": 0.0411,
      "w": "SECT-B.ST",
      "k": "sectra"
     },
     {
      "s": "ADDT-B.ST",
      "n": "Addtech AB Class B",
-     "p": 0.0376,
+     "p": 0.0369,
      "w": "ADDT-B.ST",
      "k": "addtech"
     },
     {
+     "s": "SAGA B",
+     "n": "AB Sagax Class B",
+     "p": 0.0361,
+     "w": null,
+     "k": "sagax"
+    },
+    {
      "s": "SWEC B",
      "n": "Sweco AB Class B",
-     "p": 0.0372,
+     "p": 0.0358,
      "w": "SWEC-B.ST",
      "k": "sweco"
     },
     {
-     "s": "AZA.ST",
-     "n": "Avanza Bank Holding AB",
-     "p": 0.0351,
+     "s": "MCOV-B.ST",
+     "n": "Medicover AB Class B",
+     "p": 0.0355,
      "w": null,
-     "k": "avanzabank"
+     "k": "medicover"
     },
     {
      "s": "MYCR.ST",
      "n": "Mycronic AB",
-     "p": 0.033,
+     "p": 0.0354,
      "w": null,
      "k": "mycronic"
     }
    ],
-   "top_coverage": 0.402,
+   "top_coverage": 0.403,
    "sectors": {
-    "Industrials": 0.3861,
-    "Healthcare": 0.2268,
-    "RealEstate": 0.1226,
-    "Consumer": 0.1035,
-    "Financials": 0.0937,
-    "Technology": 0.061,
-    "Materials": 0.0063,
+    "Industrials": 0.398,
+    "Healthcare": 0.2431,
+    "RealEstate": 0.1071,
+    "Consumer": 0.0925,
+    "Financials": 0.0865,
+    "Technology": 0.066,
+    "Materials": 0.0068,
     "Communication": 0.0,
     "Utilities": 0.0,
     "Energy": 0.0
    },
    "assets": {
-    "stock": 0.9833,
+    "stock": 0.9854,
     "bond": 0.0,
-    "cash": 0.0167,
+    "cash": 0.0146,
     "other": 0.0
    },
    "name": "AMF Aktiefond Småbolag",
@@ -11177,29 +11168,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 1244.96,
-   "as_of": "2026-10-07",
-   "sma50": 1240.14,
-   "sma200": 1185.11,
-   "above_sma50": true,
+   "price": 1238.31,
+   "as_of": "2026-10-08",
+   "sma50": 1240.5,
+   "sma200": 1185.5,
+   "above_sma50": false,
    "above_sma200": true,
    "sma50_vs_200_pct": 4.6,
    "cross": "golden",
-   "rsi14": 49.5,
-   "sma200_dist_pct": 5.1,
+   "rsi14": 46.7,
+   "sma200_dist_pct": 4.5,
    "sma200_slope_pct": 0.37,
-   "ret_1m": -0.4,
-   "ret_3m": 5.2,
-   "ret_6m": 8.2,
-   "ret_1y": 3.8,
-   "ret_ytd": 3.3,
+   "ret_1m": -0.3,
+   "ret_3m": 3.9,
+   "ret_6m": 5.9,
+   "ret_1y": 2.9,
+   "ret_ytd": 2.8,
    "volatility_pct": 16.0,
    "max_drawdown_pct": -17.8,
-   "sharpe": 0.12,
+   "sharpe": 0.07,
    "fee_pct": 0.48,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    1223.98,
     1223.76,
     1222.47,
     1226.86,
@@ -11429,6 +11419,7 @@
     1249.97,
     1246.96,
     1242.61,
+    1232.96,
     1232.95,
     1225.89,
     1217.3,
@@ -11447,23 +11438,24 @@
     1253.05,
     1252.49,
     1270.17,
-    1244.96
+    1244.96,
+    1238.31
    ],
    "momentum_rank": "4 av 5 i kategorin",
-   "score": 45,
+   "score": 38,
    "score_parts": {
-    "trend": 23.9,
-    "momentum": 5.2,
-    "risk": 5.7,
+    "trend": 17.4,
+    "momentum": 4.9,
+    "risk": 5.4,
     "cost": 7,
-    "macro": 2.9
+    "macro": 3.1
    },
    "label": "Svag",
    "reasons_pos": [
-    "Kursen 5.1 % över SMA200 – långsiktig upptrend",
-    "Kursen ligger över SMA50 – kortsiktig styrka"
+    "Kursen 4.5 % över SMA200 – långsiktig upptrend"
    ],
    "reasons_neg": [
+    "Kursen ligger under SMA50 – kortsiktig svaghet",
     "Svag avkastning jämfört med andra fonder (plats 4 av 5 i kategorin)"
    ]
   },
@@ -11472,91 +11464,91 @@
     {
      "s": "MYCR.ST",
      "n": "Mycronic AB",
-     "p": 0.0493,
+     "p": 0.0501,
      "w": null,
      "k": "mycronic"
     },
     {
-     "s": "SAVE.ST",
-     "n": "Nordnet AB (publ) Ordinary Shares",
-     "p": 0.0479,
-     "w": null,
-     "k": "nordnet"
-    },
-    {
      "s": "AZA.ST",
      "n": "Avanza Bank Holding AB",
-     "p": 0.0474,
+     "p": 0.0478,
      "w": null,
      "k": "avanzabank"
     },
     {
+     "s": "SAVE.ST",
+     "n": "Nordnet AB (publ) Ordinary Shares",
+     "p": 0.0464,
+     "w": null,
+     "k": "nordnet"
+    },
+    {
      "s": "LOOMIS.ST",
      "n": "Loomis AB Class B",
-     "p": 0.0446,
+     "p": 0.0451,
      "w": null,
      "k": "loomis"
     },
     {
      "s": "LAGR-B.ST",
      "n": "Lagercrantz Group AB Class B",
-     "p": 0.037,
+     "p": 0.0364,
      "w": "LAGR-B.ST",
      "k": "lagercrantz"
     },
     {
      "s": "ALV",
      "n": "Autoliv Inc",
-     "p": 0.0346,
+     "p": 0.0335,
      "w": "ALV.DE",
      "k": "autoliv"
     },
     {
      "s": "GRNG.ST",
      "n": "Granges AB Shs 144A/Reg S",
-     "p": 0.0312,
+     "p": 0.0308,
      "w": null,
      "k": "grangesshs144as"
     },
     {
-     "s": "OEM-B.ST",
-     "n": "OEM International AB Class B",
-     "p": 0.0292,
+     "s": "BRAV.ST",
+     "n": "Bravida Holding AB",
+     "p": 0.0296,
      "w": null,
-     "k": "oeminternational"
+     "k": "bravida"
     },
     {
-     "s": "WIHL.ST",
-     "n": "Wihlborgs Fastigheter AB",
-     "p": 0.0288,
-     "w": null,
-     "k": "wihlborgsfastigheter"
+     "s": "ASMDEE-B.ST",
+     "n": "Asmodee Group AB Ordinary Shares - Class B",
+     "p": 0.0296,
+     "w": "ASMDEE-B.ST",
+     "k": "asmodee"
     },
     {
-     "s": "CATE.ST",
-     "n": "Catena AB",
-     "p": 0.0282,
+     "s": "CLAS-B.ST",
+     "n": "Clas Ohlson AB",
+     "p": 0.0293,
      "w": null,
-     "k": "catena"
+     "k": "clasohlson"
     }
    ],
-   "top_coverage": 0.378,
+   "top_coverage": 0.379,
    "sectors": {
-    "Industrials": 0.3914,
-    "Healthcare": 0.1408,
-    "Consumer": 0.1396,
-    "Financials": 0.1284,
-    "RealEstate": 0.0941,
-    "Materials": 0.0531,
-    "Technology": 0.0349,
-    "Communication": 0.0176,
+    "Industrials": 0.3918,
+    "Healthcare": 0.1422,
+    "Financials": 0.1376,
+    "Consumer": 0.134,
+    "RealEstate": 0.0897,
+    "Materials": 0.048,
+    "Technology": 0.0365,
+    "Communication": 0.0201,
     "Utilities": 0.0,
     "Energy": 0.0
    },
    "assets": {
-    "stock": 0.9814,
+    "stock": 0.9802,
     "bond": 0.0,
-    "cash": 0.0186,
+    "cash": 0.0198,
     "other": 0.0
    },
    "name": "Swedbank Robur Småbolagsfond Sverige A",
@@ -11567,29 +11559,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 255.41,
-   "as_of": "2026-10-06",
-   "sma50": 251.15,
-   "sma200": 239.94,
-   "above_sma50": true,
+   "price": 250.66,
+   "as_of": "2026-10-07",
+   "sma50": 251.32,
+   "sma200": 240.12,
+   "above_sma50": false,
    "above_sma200": true,
    "sma50_vs_200_pct": 4.7,
    "cross": "golden",
-   "rsi14": 57.6,
-   "sma200_dist_pct": 6.4,
-   "sma200_slope_pct": 0.77,
-   "ret_1m": 1.4,
-   "ret_3m": 1.6,
-   "ret_6m": 15.1,
-   "ret_1y": 4.2,
-   "ret_ytd": 8.1,
-   "volatility_pct": 15.5,
+   "rsi14": 46.3,
+   "sma200_dist_pct": 4.4,
+   "sma200_slope_pct": 0.78,
+   "ret_1m": -1.1,
+   "ret_3m": 0.9,
+   "ret_6m": 11.8,
+   "ret_1y": 5.4,
+   "ret_ytd": 6.1,
+   "volatility_pct": 15.3,
    "max_drawdown_pct": -13.9,
-   "sharpe": 0.16,
+   "sharpe": 0.24,
    "fee_pct": 1.44,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    240.61,
     239.57,
     241.11,
     241.42,
@@ -11812,13 +11803,13 @@
     257.03,
     254.17,
     251.9,
-    249.3,
     253.77,
     253.44,
     253.97,
     249.68,
     249.29,
     247.15,
+    246.9,
     249.85,
     251.65,
     250.39,
@@ -11826,58 +11817,61 @@
     255.63,
     255.28,
     251.5,
+    252.14,
     251.87,
     253.1,
     253.26,
     251.85,
     253.51,
     254.43,
-    255.41
+    255.41,
+    250.66
    ],
    "momentum_rank": "3 av 5 i kategorin",
-   "score": 49,
+   "score": 42,
    "score_parts": {
-    "trend": 25.4,
+    "trend": 18.0,
     "momentum": 8.7,
-    "risk": 7.5,
+    "risk": 8.1,
     "cost": 4,
-    "macro": 2.9
+    "macro": 3.1
    },
    "label": "Svag",
    "reasons_pos": [
-    "Kursen 6.4 % över SMA200 – långsiktig upptrend",
-    "SMA200 stiger (+0.8 % senaste månaden)",
-    "Kursen ligger över SMA50 – kortsiktig styrka"
+    "Kursen 4.4 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+0.8 % senaste månaden)"
    ],
-   "reasons_neg": []
+   "reasons_neg": [
+    "Kursen ligger under SMA50 – kortsiktig svaghet"
+   ]
   },
   {
    "top_holdings": [
     {
      "s": "SKF-B.ST",
      "n": "SKF AB Class B",
-     "p": 0.0399,
+     "p": 0.0404,
      "w": null,
      "k": "skf"
     },
     {
-     "s": "SSAB B",
-     "n": "SSAB AB (publ) Class B",
-     "p": 0.0354,
-     "w": null,
-     "k": "ssab"
-    },
-    {
      "s": "ADDT-B.ST",
      "n": "Addtech AB Class B",
-     "p": 0.0327,
+     "p": 0.0343,
      "w": "ADDT-B.ST",
      "k": "addtech"
     },
     {
+     "s": "SSAB B",
+     "n": "SSAB AB (publ) Class B",
+     "p": 0.0341,
+     "w": null,
+     "k": "ssab"
+    },
+    {
      "s": "BEIJ-B.ST",
      "n": "Beijer Ref AB Class B",
-     "p": 0.0305,
+     "p": 0.0331,
      "w": null,
      "k": "beijerref"
     },
@@ -11891,49 +11885,49 @@
     {
      "s": "TREL-B.ST",
      "n": "Trelleborg AB Class B",
-     "p": 0.0293,
+     "p": 0.0292,
      "w": null,
      "k": "trelleborg"
     },
     {
-     "s": "BALD-B.ST",
-     "n": "Fastighets AB Balder Class B",
-     "p": 0.026,
-     "w": "BALD-B.ST",
-     "k": "fastighetsbalder"
-    },
-    {
-     "s": "MTG B",
-     "n": "Modern Times Group MTG AB Class B",
-     "p": 0.0248,
-     "w": "MTG-B.ST",
-     "k": "moderntimesmtg"
+     "s": "NIBE-B.ST",
+     "n": "NIBE Industrier AB Class B",
+     "p": 0.0263,
+     "w": null,
+     "k": "nibeindustrier"
     },
     {
      "s": "SKA-B.ST",
      "n": "Skanska AB Class B",
-     "p": 0.0245,
+     "p": 0.0259,
      "w": "SKA-B.ST",
      "k": "skanska"
     },
     {
      "s": "INDT.ST",
      "n": "Indutrade AB",
-     "p": 0.0244,
+     "p": 0.0258,
      "w": null,
      "k": "indutrade"
+    },
+    {
+     "s": "STOR-B.ST",
+     "n": "Storskogen Group AB Class B",
+     "p": 0.0234,
+     "w": null,
+     "k": "storskogen"
     }
    ],
-   "top_coverage": 0.297,
+   "top_coverage": 0.302,
    "sectors": {
-    "Industrials": 0.3948,
-    "Healthcare": 0.1265,
-    "Consumer": 0.1092,
-    "Financials": 0.1067,
-    "RealEstate": 0.0868,
-    "Technology": 0.0667,
-    "Communication": 0.0553,
-    "Materials": 0.054,
+    "Industrials": 0.4123,
+    "Healthcare": 0.1224,
+    "Financials": 0.1087,
+    "Consumer": 0.0947,
+    "RealEstate": 0.0744,
+    "Technology": 0.0705,
+    "Materials": 0.0654,
+    "Communication": 0.0516,
     "Utilities": 0.0,
     "Energy": 0.0
    },
@@ -11951,30 +11945,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 2542.94,
-   "as_of": "2026-10-06",
-   "sma50": 2518.5,
-   "sma200": 2375.03,
-   "above_sma50": true,
+   "price": 2478.49,
+   "as_of": "2026-10-08",
+   "sma50": 2517.58,
+   "sma200": 2374.8,
+   "above_sma50": false,
    "above_sma200": true,
    "sma50_vs_200_pct": 6.0,
    "cross": "golden",
-   "rsi14": 56.1,
-   "sma200_dist_pct": 7.1,
-   "sma200_slope_pct": 0.87,
-   "ret_1m": -0.5,
-   "ret_3m": 4.8,
-   "ret_6m": 15.9,
-   "ret_1y": 11.2,
-   "ret_ytd": 7.4,
+   "rsi14": 41.1,
+   "sma200_dist_pct": 4.4,
+   "sma200_slope_pct": 0.86,
+   "ret_1m": -3.0,
+   "ret_3m": 2.2,
+   "ret_6m": 13.0,
+   "ret_1y": 8.4,
+   "ret_ytd": 4.6,
    "volatility_pct": 16.3,
    "max_drawdown_pct": -14.8,
-   "sharpe": 0.58,
+   "sharpe": 0.41,
    "fee_pct": 1.71,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    2344.97,
-    2342.46,
     2346.91,
     2343.19,
     2350.41,
@@ -12204,40 +12196,40 @@
     2559.3,
     2550.27,
     2529.21,
-    2505.31,
     2505.18,
     2485.44,
     2474.84,
     2493.04,
-    2522.4,
     2487.98,
     2513.32,
     2544.5,
     2530.88,
     2513.41,
+    2515.87,
     2518.67,
     2518.89,
     2525.08,
     2511.68,
+    2529.99,
     2516.49,
-    2542.94
+    2478.49
    ],
-   "momentum_rank": "1 av 5 i kategorin",
-   "score": 55,
+   "momentum_rank": "2 av 5 i kategorin",
+   "score": 43,
    "score_parts": {
-    "trend": 26.1,
-    "momentum": 16.3,
-    "risk": 10.0,
+    "trend": 18.2,
+    "momentum": 12.8,
+    "risk": 8.9,
     "cost": 0,
-    "macro": 2.9
+    "macro": 3.1
    },
-   "label": "Neutral",
+   "label": "Svag",
    "reasons_pos": [
-    "Kursen 7.1 % över SMA200 – långsiktig upptrend",
-    "SMA200 stiger (+0.9 % senaste månaden)",
-    "Kursen ligger över SMA50 – kortsiktig styrka"
+    "Kursen 4.4 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+0.9 % senaste månaden)"
    ],
    "reasons_neg": [
+    "Kursen ligger under SMA50 – kortsiktig svaghet",
     "Hög avgift (1.71%)"
    ]
   },
@@ -12341,29 +12333,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 113.75,
-   "as_of": "2026-10-07",
-   "sma50": 116.09,
-   "sma200": 109.65,
+   "price": 113.08,
+   "as_of": "2026-10-08",
+   "sma50": 115.99,
+   "sma200": 109.62,
    "above_sma50": false,
    "above_sma200": true,
-   "sma50_vs_200_pct": 5.9,
+   "sma50_vs_200_pct": 5.8,
    "cross": "golden",
-   "rsi14": 39.7,
-   "sma200_dist_pct": 3.7,
-   "sma200_slope_pct": 0.19,
-   "ret_1m": -3.0,
-   "ret_3m": 3.4,
-   "ret_6m": 9.9,
-   "ret_1y": 0.1,
-   "ret_ytd": 0.4,
-   "volatility_pct": 13.0,
+   "rsi14": 33.7,
+   "sma200_dist_pct": 3.2,
+   "sma200_slope_pct": 0.2,
+   "ret_1m": -3.4,
+   "ret_3m": 3.3,
+   "ret_6m": 12.8,
+   "ret_1y": 0.0,
+   "ret_ytd": -0.2,
+   "volatility_pct": 12.9,
    "max_drawdown_pct": -16.8,
-   "sharpe": -0.12,
+   "sharpe": -0.13,
    "fee_pct": 1.67,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    114.96,
     114.78,
     114.68,
     114.91,
@@ -12592,11 +12583,9 @@
     117.27,
     117.27,
     115.81,
-    115.2,
     115.76,
     115.52,
     115.22,
-    115.95,
     116.63,
     115.41,
     116.54,
@@ -12610,26 +12599,26 @@
     114.74,
     114.42,
     114.2,
-    115.63,
-    113.75
+    113.75,
+    113.08
    ],
-   "momentum_rank": "34 av 37",
-   "score": 23,
+   "momentum_rank": "31 av 37",
+   "score": 25,
    "score_parts": {
-    "trend": 12.6,
-    "momentum": 2.1,
+    "trend": 12.3,
+    "momentum": 4.2,
     "risk": 5.3,
     "cost": 0,
-    "macro": 2.6
+    "macro": 2.8
    },
    "label": "Svag",
    "reasons_pos": [
-    "Kursen 3.7 % över SMA200 – långsiktig upptrend"
+    "Kursen 3.2 % över SMA200 – långsiktig upptrend"
    ],
    "reasons_neg": [
     "Kursen ligger under SMA50 – kortsiktig svaghet",
-    "Svag avkastning jämfört med andra fonder (plats 34 av 37)",
-    "Sämre än riskfri ränta senaste året (Sharpe -0.12)",
+    "Svag avkastning jämfört med andra fonder (plats 31 av 37)",
+    "Sämre än riskfri ränta senaste året (Sharpe -0.13)",
     "Hög avgift (1.67%)"
    ]
   },
@@ -12637,22 +12626,22 @@
    "top_holdings": [],
    "top_coverage": null,
    "sectors": {
-    "Technology": 0.3865,
-    "Financials": 0.2063,
-    "Consumer": 0.119,
-    "Communication": 0.0697,
-    "Industrials": 0.0623,
-    "Materials": 0.0598,
-    "Energy": 0.0374,
-    "Healthcare": 0.0289,
-    "Utilities": 0.0198,
-    "RealEstate": 0.0104
+    "Technology": 0.442,
+    "Financials": 0.1918,
+    "Consumer": 0.0994,
+    "Industrials": 0.0603,
+    "Communication": 0.0589,
+    "Materials": 0.0568,
+    "Energy": 0.0352,
+    "Healthcare": 0.0283,
+    "Utilities": 0.0178,
+    "RealEstate": 0.0094
    },
    "assets": {
-    "stock": 0.9994,
+    "stock": 0.9978,
     "bond": 0.0,
-    "cash": 0.0003,
-    "other": 0.0003
+    "cash": 0.002,
+    "other": 0.0002
    },
    "name": "Avanza Emerging Markets",
    "ticker": "0P0001H4TL.ST",
@@ -12662,25 +12651,25 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 206.89,
-   "as_of": "2026-10-06",
-   "sma50": 192.77,
-   "sma200": 174.55,
+   "price": 205.25,
+   "as_of": "2026-10-07",
+   "sma50": 193.0,
+   "sma200": 174.61,
    "above_sma50": true,
    "above_sma200": true,
-   "sma50_vs_200_pct": 10.4,
+   "sma50_vs_200_pct": 10.5,
    "cross": "golden",
-   "rsi14": 65.3,
-   "sma200_dist_pct": 18.5,
-   "sma200_slope_pct": 3.1,
-   "ret_1m": 6.5,
-   "ret_3m": 1.1,
-   "ret_6m": 32.9,
-   "ret_1y": 47.6,
-   "ret_ytd": 36.7,
-   "volatility_pct": 24.4,
+   "rsi14": 61.7,
+   "sma200_dist_pct": 17.6,
+   "sma200_slope_pct": 3.13,
+   "ret_1m": 5.7,
+   "ret_3m": 0.3,
+   "ret_6m": 31.8,
+   "ret_1y": 46.5,
+   "ret_ytd": 35.6,
+   "volatility_pct": 24.5,
    "max_drawdown_pct": -13.4,
-   "sharpe": 1.88,
+   "sharpe": 1.83,
    "fee_pct": 0.3,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
@@ -12877,7 +12866,6 @@
     195.33,
     195.56,
     194.79,
-    194.24,
     193.27,
     196.03,
     199.86,
@@ -12893,25 +12881,27 @@
     205.58,
     202.39,
     200.71,
-    206.89
+    206.89,
+    205.25
    ],
    "momentum_rank": "3 av 37",
    "score": 91,
    "score_parts": {
     "trend": 35,
     "momentum": 23.6,
-    "risk": 19.4,
+    "risk": 19.1,
     "cost": 10,
-    "macro": 3.2
+    "macro": 3.5
    },
    "label": "Lovande",
    "reasons_pos": [
-    "Kursen 18.5 % över SMA200 – långsiktig upptrend",
+    "Kursen 17.6 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+3.1 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
     "Stark avkastning jämfört med andra fonder (plats 3 av 37)",
-    "Bra riskjusterad avkastning (Sharpe 1.88)",
-    "Låg avgift (0.30%)"
+    "Bra riskjusterad avkastning (Sharpe 1.83)",
+    "Låg avgift (0.30%)",
+    "Medvind för kategorin (MSCI Emerging Markets: 69/100)"
    ],
    "reasons_neg": []
   },
@@ -13015,25 +13005,25 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 269.5,
-   "as_of": "2026-10-06",
-   "sma50": 252.66,
-   "sma200": 239.91,
+   "price": 267.67,
+   "as_of": "2026-10-07",
+   "sma50": 252.97,
+   "sma200": 240.09,
    "above_sma50": true,
    "above_sma200": true,
-   "sma50_vs_200_pct": 5.3,
+   "sma50_vs_200_pct": 5.4,
    "cross": "golden",
-   "rsi14": 65.8,
-   "sma200_dist_pct": 12.3,
-   "sma200_slope_pct": 1.65,
-   "ret_1m": 5.4,
-   "ret_3m": 7.1,
-   "ret_6m": 22.6,
-   "ret_1y": 29.6,
-   "ret_ytd": 23.6,
+   "rsi14": 61.8,
+   "sma200_dist_pct": 11.5,
+   "sma200_slope_pct": 1.7,
+   "ret_1m": 4.7,
+   "ret_3m": 4.1,
+   "ret_6m": 22.5,
+   "ret_1y": 27.3,
+   "ret_ytd": 22.8,
    "volatility_pct": 21.2,
    "max_drawdown_pct": -14.4,
-   "sharpe": 1.31,
+   "sharpe": 1.2,
    "fee_pct": 0.51,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
@@ -13219,6 +13209,7 @@
     245.83,
     251.55,
     247.89,
+    241.17,
     241.29,
     247.56,
     247.26,
@@ -13251,7 +13242,6 @@
     254.07,
     254.3,
     255.6,
-    252.4,
     251.25,
     255.09,
     260.45,
@@ -13271,24 +13261,25 @@
     263.39,
     266.1,
     270.47,
-    269.5
+    269.5,
+    267.67
    ],
-   "momentum_rank": "10 av 37",
-   "score": 75,
+   "momentum_rank": "14 av 37",
+   "score": 71,
    "score_parts": {
-    "trend": 31.0,
-    "momentum": 18.8,
-    "risk": 15.1,
+    "trend": 30.5,
+    "momentum": 16.0,
+    "risk": 14.4,
     "cost": 7,
-    "macro": 3.2
+    "macro": 3.5
    },
-   "label": "Lovande",
+   "label": "Neutral",
    "reasons_pos": [
-    "Kursen 12.3 % över SMA200 – långsiktig upptrend",
-    "SMA200 stiger (+1.6 % senaste månaden)",
+    "Kursen 11.5 % över SMA200 – långsiktig upptrend",
+    "SMA200 stiger (+1.7 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "Stark avkastning jämfört med andra fonder (plats 10 av 37)",
-    "Bra riskjusterad avkastning (Sharpe 1.31)"
+    "Bra riskjusterad avkastning (Sharpe 1.20)",
+    "Medvind för kategorin (MSCI Emerging Markets: 69/100)"
    ],
    "reasons_neg": []
   },
@@ -13297,81 +13288,74 @@
     {
      "s": "MYCR.ST",
      "n": "Mycronic AB",
-     "p": 0.0619,
+     "p": 0.0585,
      "w": null,
      "k": "mycronic"
     },
     {
      "s": "HMS.ST",
      "n": "HMS Networks AB",
-     "p": 0.0506,
+     "p": 0.0512,
      "w": null,
      "k": "hmsnetworks"
     },
     {
      "s": "NCAB.ST",
      "n": "NCAB Group AB",
-     "p": 0.0454,
+     "p": 0.0495,
      "w": null,
      "k": "ncab"
     },
     {
      "s": "HEXA-B.ST",
      "n": "Hexagon AB Class B",
-     "p": 0.0445,
+     "p": 0.045,
      "w": null,
      "k": "hexagon"
     },
     {
      "s": "ASMDEE-B.ST",
      "n": "Asmodee Group AB Ordinary Shares - Class B",
-     "p": 0.0414,
+     "p": 0.0393,
      "w": "ASMDEE-B.ST",
      "k": "asmodee"
     },
     {
      "s": "SILEX.ST",
      "n": "Silex Microsystem AB (publ)",
-     "p": 0.0368,
+     "p": 0.0359,
      "w": null,
      "k": "silexmicrosystem"
     },
     {
-     "s": "SNDK",
-     "n": "SanDisk Corp Ordinary Shares",
-     "p": 0.0361,
-     "w": null,
-     "k": "sandisk"
-    },
-    {
-     "s": "LAGR-B.ST",
-     "n": "Lagercrantz Group AB Class B",
-     "p": 0.0337,
-     "w": "LAGR-B.ST",
-     "k": "lagercrantz"
-    },
-    {
      "s": "MTG B",
      "n": "Modern Times Group MTG AB Class B",
-     "p": 0.0332,
+     "p": 0.0315,
      "w": "MTG-B.ST",
      "k": "moderntimesmtg"
     },
     {
-     "s": "TSM",
-     "n": "Taiwan Semiconductor Manufacturing Co Ltd ADR",
-     "p": 0.0282,
+     "s": "LAGR-B.ST",
+     "n": "Lagercrantz Group AB Class B",
+     "p": 0.0307,
+     "w": "LAGR-B.ST",
+     "k": "lagercrantz"
+    },
+    {
+     "s": "PDX.ST",
+     "n": "Paradox Interactive AB",
+     "p": 0.0252,
      "w": null,
-     "k": "taiwansemiconductormanufacturing"
+     "k": "paradoxinteractive"
     }
    ],
-   "top_coverage": 0.412,
+   "top_coverage": 0.367,
    "sectors": {
-    "Technology": 0.6785,
-    "Communication": 0.1368,
-    "Industrials": 0.1137,
-    "Consumer": 0.0428,
-    "Healthcare": 0.0282,
+    "Technology": 0.6773,
+    "Communication": 0.1344,
+    "Industrials": 0.1199,
+    "Consumer": 0.0416,
+    "Healthcare": 0.0268,
     "RealEstate": 0.0,
     "Materials": 0.0,
     "Financials": 0.0,
@@ -13379,10 +13363,10 @@
     "Energy": 0.0
    },
    "assets": {
-    "stock": 0.9915,
+    "stock": 0.9703,
     "bond": 0.0,
-    "cash": -0.002,
-    "other": 0.0105
+    "cash": 0.0197,
+    "other": 0.01
    },
    "name": "Swedbank Robur Ny Teknik A",
    "ticker": "0P00000K48.ST",
@@ -13392,29 +13376,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 1421.47,
-   "as_of": "2026-10-06",
-   "sma50": 1309.75,
-   "sma200": 1190.24,
+   "price": 1391.56,
+   "as_of": "2026-10-07",
+   "sma50": 1311.96,
+   "sma200": 1191.87,
    "above_sma50": true,
    "above_sma200": true,
-   "sma50_vs_200_pct": 10.0,
+   "sma50_vs_200_pct": 10.1,
    "cross": "golden",
-   "rsi14": 70.1,
-   "sma200_dist_pct": 19.4,
-   "sma200_slope_pct": 2.38,
-   "ret_1m": 7.8,
-   "ret_3m": 3.6,
-   "ret_6m": 42.9,
-   "ret_1y": 26.4,
-   "ret_ytd": 34.5,
-   "volatility_pct": 23.3,
+   "rsi14": 60.7,
+   "sma200_dist_pct": 16.8,
+   "sma200_slope_pct": 2.44,
+   "ret_1m": 8.1,
+   "ret_3m": 4.9,
+   "ret_6m": 41.8,
+   "ret_1y": 20.2,
+   "ret_ytd": 31.7,
+   "volatility_pct": 23.2,
    "max_drawdown_pct": -15.8,
-   "sharpe": 1.06,
+   "sharpe": 0.79,
    "fee_pct": 1.44,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    1143.29,
     1132.59,
     1148.16,
     1151.08,
@@ -13635,9 +13618,9 @@
     1325.6,
     1318.54,
     1287.47,
-    1281.18,
     1289.86,
     1297.03,
+    1296.17,
     1305.49,
     1279.98,
     1292.76,
@@ -13654,25 +13637,25 @@
     1385.58,
     1407.13,
     1414.3,
-    1421.47
+    1421.47,
+    1391.56
    ],
-   "momentum_rank": "6 av 37",
-   "score": 73,
+   "momentum_rank": "7 av 37",
+   "score": 75,
    "score_parts": {
-    "trend": 30.0,
-    "momentum": 21.5,
-    "risk": 12.9,
+    "trend": 34.1,
+    "momentum": 20.8,
+    "risk": 11.1,
     "cost": 4,
-    "macro": 4.5
+    "macro": 4.7
    },
-   "label": "Neutral",
+   "label": "Lovande",
    "reasons_pos": [
-    "Kursen 19.4 % över SMA200 – långsiktig upptrend",
+    "Kursen 16.8 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+2.4 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "Stark avkastning jämfört med andra fonder (plats 6 av 37)",
-    "Bra riskjusterad avkastning (Sharpe 1.06)",
-    "Medvind för kategorin (Teknikaktier (XLK): 91/100)"
+    "Stark avkastning jämfört med andra fonder (plats 7 av 37)",
+    "Medvind för kategorin (Teknikaktier (XLK): 94/100)"
    ],
    "reasons_neg": []
   },
@@ -13681,75 +13664,75 @@
     {
      "s": "LLY",
      "n": "Eli Lilly and Co",
-     "p": 0.0958,
+     "p": 0.0937,
      "w": "LLY",
      "k": "elilillyand"
     },
     {
      "s": "JNJ",
      "n": "Johnson & Johnson",
-     "p": 0.0892,
+     "p": 0.0924,
      "w": "JNJ",
      "k": "johnsonjohnson"
     },
     {
      "s": "ABBV",
      "n": "AbbVie Inc",
-     "p": 0.0673,
+     "p": 0.0713,
      "w": "ABBV",
      "k": "abbvie"
     },
     {
-     "s": "UNH",
-     "n": "UnitedHealth Group Inc",
-     "p": 0.0564,
-     "w": "UNH",
-     "k": "unitedhealth"
-    },
-    {
-     "s": "AZN.L",
-     "n": "AstraZeneca PLC",
-     "p": 0.0512,
-     "w": "AZN.L",
-     "k": "astrazeneca"
-    },
-    {
      "s": "MRK",
      "n": "Merck & Co Inc",
-     "p": 0.046,
+     "p": 0.0529,
      "w": "MRK",
      "k": "merck"
     },
     {
+     "s": "UNH",
+     "n": "UnitedHealth Group Inc",
+     "p": 0.0478,
+     "w": "UNH",
+     "k": "unitedhealth"
+    },
+    {
      "s": "TMO",
      "n": "Thermo Fisher Scientific Inc",
-     "p": 0.0401,
+     "p": 0.0466,
      "w": "TMO",
      "k": "thermofisherscientific"
     },
     {
-     "s": "ROP.SW",
-     "n": "Roche Holding AG Ordinary Shares new",
-     "p": 0.031,
-     "w": null,
-     "k": "rochenew"
+     "s": "AZN.L",
+     "n": "AstraZeneca PLC",
+     "p": 0.0441,
+     "w": "AZN.L",
+     "k": "astrazeneca"
     },
     {
      "s": "GILD",
      "n": "Gilead Sciences Inc",
-     "p": 0.0241,
+     "p": 0.0285,
      "w": "GILD",
      "k": "gileadsciences"
     },
     {
-     "s": "HCA",
-     "n": "HCA Healthcare Inc",
-     "p": 0.0227,
+     "s": "AMGN",
+     "n": "Amgen Inc",
+     "p": 0.0273,
      "w": null,
-     "k": "hcahealthcare"
+     "k": "amgen"
+    },
+    {
+     "s": "ROP.SW",
+     "n": "Roche Holding AG Ordinary Shares new",
+     "p": 0.0264,
+     "w": null,
+     "k": "rochenew"
     }
    ],
-   "top_coverage": 0.524,
+   "top_coverage": 0.531,
    "sectors": {
     "Healthcare": 1.0,
     "RealEstate": 0.0,
@@ -13763,9 +13746,9 @@
     "Energy": 0.0
    },
    "assets": {
-    "stock": 0.9778,
+    "stock": 0.9804,
     "bond": 0.0,
-    "cash": 0.0222,
+    "cash": 0.0196,
     "other": 0.0
    },
    "name": "Handelsbanken Hälsovård Tema A1",
@@ -13776,30 +13759,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 465.8,
-   "as_of": "2026-10-06",
-   "sma50": 457.37,
-   "sma200": 431.21,
+   "price": 459.44,
+   "as_of": "2026-10-08",
+   "sma50": 457.02,
+   "sma200": 431.02,
    "above_sma50": true,
    "above_sma200": true,
-   "sma50_vs_200_pct": 6.1,
+   "sma50_vs_200_pct": 6.0,
    "cross": "golden",
-   "rsi14": 53.3,
-   "sma200_dist_pct": 8.0,
-   "sma200_slope_pct": 0.55,
-   "ret_1m": 1.0,
+   "rsi14": 46.9,
+   "sma200_dist_pct": 6.6,
+   "sma200_slope_pct": 0.6,
+   "ret_1m": 0.4,
    "ret_3m": 0.5,
-   "ret_6m": 11.8,
-   "ret_1y": 19.0,
-   "ret_ytd": 7.8,
-   "volatility_pct": 15.5,
+   "ret_6m": 12.1,
+   "ret_1y": 17.7,
+   "ret_ytd": 6.3,
+   "volatility_pct": 15.6,
    "max_drawdown_pct": -14.3,
-   "sharpe": 1.12,
+   "sharpe": 1.02,
    "fee_pct": 1.6,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    417.88,
-    415.37,
     418.71,
     421.59,
     420.81,
@@ -14023,11 +14004,9 @@
     458.25,
     453.2,
     448.03,
-    449.95,
     450.64,
     458.45,
     454.24,
-    461.91,
     463.97,
     466.53,
     465.39,
@@ -14040,24 +14019,24 @@
     468.86,
     462.66,
     465.57,
-    465.8
+    459.44
    ],
-   "momentum_rank": "25 av 37",
-   "score": 52,
+   "momentum_rank": "23 av 37",
+   "score": 53,
    "score_parts": {
-    "trend": 26.2,
-    "momentum": 8.3,
-    "risk": 13.9,
+    "trend": 25.3,
+    "momentum": 9.7,
+    "risk": 13.2,
     "cost": 0,
-    "macro": 3.7
+    "macro": 4.3
    },
    "label": "Neutral",
    "reasons_pos": [
-    "Kursen 8.0 % över SMA200 – långsiktig upptrend",
+    "Kursen 6.6 % över SMA200 – långsiktig upptrend",
     "SMA200 stiger (+0.6 % senaste månaden)",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "Bra riskjusterad avkastning (Sharpe 1.12)",
-    "Medvind för kategorin (Hälsovårdsaktier (XLV): 74/100)"
+    "Bra riskjusterad avkastning (Sharpe 1.02)",
+    "Medvind för kategorin (Hälsovårdsaktier (XLV): 86/100)"
    ],
    "reasons_neg": [
     "Hög avgift (1.60%)"
@@ -14068,91 +14047,91 @@
     {
      "s": "BALD-B.ST",
      "n": "Fastighets AB Balder Class B",
-     "p": 0.0858,
+     "p": 0.0868,
      "w": "BALD-B.ST",
      "k": "fastighetsbalder"
     },
     {
      "s": "SAGA B",
      "n": "AB Sagax Class B",
-     "p": 0.0741,
+     "p": 0.078,
      "w": null,
      "k": "sagax"
     },
     {
-     "s": "ALTRA.ST",
-     "n": "Altra Fastigheter AB",
-     "p": 0.07,
-     "w": null,
-     "k": "altrafastigheter"
-    },
-    {
      "s": "PNDX-B.ST",
      "n": "Pandox AB Class B",
-     "p": 0.0579,
+     "p": 0.0594,
      "w": null,
      "k": "pandox"
     },
     {
-     "s": "CAST.ST",
-     "n": "Castellum AB",
-     "p": 0.0529,
+     "s": "ALTRA.ST",
+     "n": "Altra Fastigheter AB",
+     "p": 0.0589,
      "w": null,
-     "k": "castellum"
-    },
-    {
-     "s": "NP3.ST",
-     "n": "NP3 Fastigheter AB",
-     "p": 0.0444,
-     "w": null,
-     "k": "np3fastigheter"
-    },
-    {
-     "s": "PLAZ-B.ST",
-     "n": "Platzer Fastigheter Holding AB Class B",
-     "p": 0.0441,
-     "w": null,
-     "k": "platzerfastigheter"
+     "k": "altrafastigheter"
     },
     {
      "s": "SLP-B.ST",
      "n": "Swedish Logistic Property AB Class B",
-     "p": 0.0439,
+     "p": 0.0465,
      "w": null,
      "k": "swedishlogisticproperty"
     },
     {
+     "s": "PLAZ-B.ST",
+     "n": "Platzer Fastigheter Holding AB Class B",
+     "p": 0.0453,
+     "w": null,
+     "k": "platzerfastigheter"
+    },
+    {
      "s": "LOGI-B.ST",
      "n": "Logistea AB Class B",
-     "p": 0.0435,
+     "p": 0.0452,
      "w": null,
      "k": "logistea"
     },
     {
      "s": "CATE.ST",
      "n": "Catena AB",
-     "p": 0.0431,
+     "p": 0.0442,
      "w": null,
      "k": "catena"
+    },
+    {
+     "s": "DIOS.ST",
+     "n": "Dios Fastigheter AB",
+     "p": 0.0428,
+     "w": null,
+     "k": "diosfastigheter"
+    },
+    {
+     "s": "CAST.ST",
+     "n": "Castellum AB",
+     "p": 0.0427,
+     "w": null,
+     "k": "castellum"
     }
    ],
-   "top_coverage": 0.56,
+   "top_coverage": 0.55,
    "sectors": {
-    "RealEstate": 0.9859,
-    "Consumer": 0.0115,
-    "Industrials": 0.0026,
+    "RealEstate": 0.9883,
+    "Consumer": 0.0117,
     "Materials": 0.0,
     "Technology": 0.0,
     "Communication": 0.0,
     "Financials": 0.0,
     "Utilities": 0.0,
+    "Industrials": 0.0,
     "Energy": 0.0,
     "Healthcare": 0.0
    },
    "assets": {
-    "stock": 0.9629,
+    "stock": 0.9582,
     "bond": 0.0,
-    "cash": 0.0371,
+    "cash": 0.0418,
     "other": 0.0
    },
    "name": "Carnegie Fastighetsfond Norden B",
@@ -14163,29 +14142,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 239.59,
-   "as_of": "2026-10-07",
-   "sma50": 263.3,
-   "sma200": 273.14,
+   "price": 238.2,
+   "as_of": "2026-10-08",
+   "sma50": 262.61,
+   "sma200": 272.93,
    "above_sma50": false,
    "above_sma200": false,
-   "sma50_vs_200_pct": -3.6,
+   "sma50_vs_200_pct": -3.8,
    "cross": "death",
-   "rsi14": 23.7,
-   "sma200_dist_pct": -12.3,
-   "sma200_slope_pct": -1.24,
-   "ret_1m": -11.3,
+   "rsi14": 22.5,
+   "sma200_dist_pct": -12.7,
+   "sma200_slope_pct": -1.29,
+   "ret_1m": -11.0,
    "ret_3m": -12.3,
-   "ret_6m": -12.9,
-   "ret_1y": -14.1,
-   "ret_ytd": -16.8,
+   "ret_6m": -13.9,
+   "ret_1y": -14.9,
+   "ret_ytd": -17.2,
    "volatility_pct": 18.0,
-   "max_drawdown_pct": -21.9,
-   "sharpe": -0.88,
+   "max_drawdown_pct": -22.2,
+   "sharpe": -0.92,
    "fee_pct": null,
    "fee_source": null,
    "price_history_1y": [
-    282.18,
     280.77,
     278.42,
     287.61,
@@ -14434,28 +14412,29 @@
     240.92,
     239.22,
     240.99,
-    239.59
+    239.59,
+    238.2
    ],
    "momentum_rank": "37 av 37",
    "score": 12,
    "score_parts": {
-    "trend": 3.2,
+    "trend": 3.1,
     "momentum": 0.0,
-    "risk": 3.2,
+    "risk": 3.1,
     "cost": 5,
     "macro": 0.5
    },
    "label": "Svag",
    "reasons_pos": [
-    "RSI 24 – kortsiktigt översåld, kan vara läge att öka"
+    "RSI 22 – kortsiktigt översåld, kan vara läge att öka"
    ],
    "reasons_neg": [
-    "Kursen 12.3 % under SMA200 – långsiktig nedtrend",
-    "SMA200 faller (-1.2 % senaste månaden)",
+    "Kursen 12.7 % under SMA200 – långsiktig nedtrend",
+    "SMA200 faller (-1.3 % senaste månaden)",
     "Kursen ligger under SMA50 – kortsiktig svaghet",
     "SMA50 under SMA200 (death cross-läge)",
     "Svag avkastning jämfört med andra fonder (plats 37 av 37)",
-    "Sämre än riskfri ränta senaste året (Sharpe -0.88)",
+    "Sämre än riskfri ränta senaste året (Sharpe -0.92)",
     "Motvind för kategorin (Europeiska fastighetsbolag (IPRP): 10/100)"
    ]
   },
@@ -14489,12 +14468,12 @@
    "proxy_note": null,
    "currency": "SEK",
    "price": 152.64,
-   "as_of": "2026-10-07",
-   "sma50": 152.43,
-   "sma200": 151.14,
+   "as_of": "2026-10-08",
+   "sma50": 152.44,
+   "sma200": 151.15,
    "above_sma50": true,
    "above_sma200": true,
-   "sma50_vs_200_pct": 0.9,
+   "sma50_vs_200_pct": 0.8,
    "cross": "golden",
    "rsi14": 78.9,
    "sma200_dist_pct": 1.0,
@@ -14506,11 +14485,10 @@
    "ret_ytd": 2.2,
    "volatility_pct": 0.3,
    "max_drawdown_pct": -0.2,
-   "sharpe": 2.97,
+   "sharpe": 2.95,
    "fee_pct": 0.1,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    148.67,
     148.68,
     148.68,
     148.7,
@@ -14759,6 +14737,7 @@
     152.61,
     152.62,
     152.63,
+    152.64,
     152.64
    ],
    "momentum_rank": "1 av 6 i kategorin",
@@ -14768,14 +14747,14 @@
     "momentum": 25.0,
     "risk": 25,
     "cost": 10,
-    "macro": 3.0
+    "macro": 3.1
    },
    "label": "Lovande",
    "reasons_pos": [
     "Kursen 1.0 % över SMA200 – långsiktig upptrend",
     "Kursen ligger över SMA50 – kortsiktig styrka",
     "Stark avkastning jämfört med andra fonder (plats 1 av 6 i kategorin)",
-    "Bra riskjusterad avkastning (Sharpe 2.97)",
+    "Bra riskjusterad avkastning (Sharpe 2.95)",
     "Låg avgift (0.10%)"
    ],
    "reasons_neg": [
@@ -14800,29 +14779,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 118.32,
-   "as_of": "2026-10-06",
+   "price": 118.33,
+   "as_of": "2026-10-07",
    "sma50": 118.19,
-   "sma200": 117.37,
+   "sma200": 117.36,
    "above_sma50": true,
    "above_sma200": true,
    "sma50_vs_200_pct": 0.7,
    "cross": "golden",
-   "rsi14": 78.9,
+   "rsi14": 81.4,
    "sma200_dist_pct": 0.8,
    "sma200_slope_pct": 0.2,
    "ret_1m": 0.1,
    "ret_3m": 0.4,
    "ret_6m": 1.2,
-   "ret_1y": 2.3,
+   "ret_1y": 2.4,
    "ret_ytd": 1.7,
    "volatility_pct": 0.2,
    "max_drawdown_pct": -0.1,
-   "sharpe": 3.54,
+   "sharpe": 3.67,
    "fee_pct": 0.2,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    115.72,
     115.74,
     115.74,
     115.75,
@@ -15044,9 +15022,7 @@
     118.21,
     118.22,
     118.22,
-    118.22,
     118.23,
-    118.24,
     118.27,
     118.27,
     118.26,
@@ -15066,7 +15042,8 @@
     118.32,
     118.31,
     118.31,
-    118.32
+    118.32,
+    118.33
    ],
    "momentum_rank": "2 av 6 i kategorin",
    "score": 75,
@@ -15075,18 +15052,18 @@
     "momentum": 20.0,
     "risk": 25,
     "cost": 10,
-    "macro": 3.0
+    "macro": 3.1
    },
    "label": "Lovande",
    "reasons_pos": [
     "Kursen 0.8 % över SMA200 – långsiktig upptrend",
     "Kursen ligger över SMA50 – kortsiktig styrka",
     "Stark avkastning jämfört med andra fonder (plats 2 av 6 i kategorin)",
-    "Bra riskjusterad avkastning (Sharpe 3.54)",
+    "Bra riskjusterad avkastning (Sharpe 3.67)",
     "Låg avgift (0.20%)"
    ],
    "reasons_neg": [
-    "RSI 79 – kortsiktigt överköpt"
+    "RSI 81 – kortsiktigt överköpt"
    ]
   },
   {
@@ -15108,16 +15085,16 @@
    "proxy_note": null,
    "currency": "SEK",
    "price": 112.87,
-   "as_of": "2026-10-06",
-   "sma50": 112.68,
-   "sma200": 112.02,
+   "as_of": "2026-10-07",
+   "sma50": 112.67,
+   "sma200": 112.0,
    "above_sma50": true,
    "above_sma200": true,
    "sma50_vs_200_pct": 0.6,
    "cross": "golden",
-   "rsi14": 77.2,
+   "rsi14": 77.4,
    "sma200_dist_pct": 0.8,
-   "sma200_slope_pct": 0.17,
+   "sma200_slope_pct": 0.18,
    "ret_1m": 0.1,
    "ret_3m": 0.4,
    "ret_6m": 1.1,
@@ -15125,11 +15102,10 @@
    "ret_ytd": 1.5,
    "volatility_pct": 0.3,
    "max_drawdown_pct": -0.1,
-   "sharpe": 1.32,
+   "sharpe": 1.42,
    "fee_pct": 0.13,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    110.73,
     110.74,
     110.75,
     110.77,
@@ -15352,22 +15328,20 @@
     112.71,
     112.69,
     112.72,
-    112.74,
     112.77,
     112.75,
-    112.76,
     112.73,
     112.71,
     112.76,
     112.76,
-    112.78,
     112.79,
     112.8,
-    112.82,
+    112.8,
     112.82,
     112.85,
     112.86,
     112.86,
+    112.87,
     112.87
    ],
    "momentum_rank": "3 av 6 i kategorin",
@@ -15375,15 +15349,15 @@
    "score_parts": {
     "trend": 16.5,
     "momentum": 15.0,
-    "risk": 17.0,
+    "risk": 17.7,
     "cost": 10,
-    "macro": 3.0
+    "macro": 3.1
    },
    "label": "Neutral",
    "reasons_pos": [
     "Kursen 0.8 % över SMA200 – långsiktig upptrend",
     "Kursen ligger över SMA50 – kortsiktig styrka",
-    "Bra riskjusterad avkastning (Sharpe 1.32)",
+    "Bra riskjusterad avkastning (Sharpe 1.42)",
     "Låg avgift (0.13%)"
    ],
    "reasons_neg": [
@@ -15393,54 +15367,47 @@
   {
    "top_holdings": [
     {
-     "s": "SGB2YU26",
-     "n": "Swedish 2 year Goverment Bond Future Sept 26",
-     "p": 0.1494,
+     "s": "NDH5YZ26",
+     "n": "Swedish 5 year Nordea Bond Future Dec 26",
+     "p": 0.075,
      "w": null,
-     "k": "swedish2yeargovermentbondfuturesept26"
+     "k": "swedish5yearnordeabondfuturedec26"
     },
     {
-     "s": "NDH5YU26",
-     "n": "Swedish 5 year Nordea Bond Future Sept 26",
-     "p": 0.0751,
+     "s": "STH2YZ26",
+     "n": "Swedish 2 Year Stadshypotek Future Dec 26",
+     "p": 0.073,
      "w": null,
-     "k": "swedish5yearnordeabondfuturesept26"
+     "k": "swedish2yearstadshypotekfuturedec26"
     },
     {
-     "s": "STH2YU26",
-     "n": "Swedish 2 Year Stadshypotek Future Sept 26",
-     "p": 0.0724,
+     "s": "SGB2YZ26",
+     "n": "Swedish 2 year Goverment Bond Future Dec 26",
+     "p": 0.0692,
      "w": null,
-     "k": "swedish2yearstadshypotekfuturesept26"
+     "k": "swedish2yeargovermentbondfuturedec26"
     },
     {
-     "s": "STH5YU26",
-     "n": "Swedish 5 Year Stadshypotek Future Sept 26",
-     "p": 0.0663,
+     "s": "STH5YZ26",
+     "n": "Swedish 5 Year Stadshypotek Future Dec 26",
+     "p": 0.0662,
      "w": null,
-     "k": "swedish5yearstadshypotekfuturesept26"
+     "k": "swedish5yearstadshypotekfuturedec26"
     },
     {
-     "s": "SGB5YU26",
-     "n": "Swedish 5 year Goverment Bond Future Sept 26",
-     "p": 0.0444,
+     "s": "NDH2YZ26",
+     "n": "Swedish 2 year Nordea Bond Future Dec 26",
+     "p": 0.0406,
      "w": null,
-     "k": "swedish5yeargovermentbondfuturesept26"
-    },
-    {
-     "s": "NDH2YU26",
-     "n": "Swedish 2 year Nordea Bond Future Sept 26",
-     "p": 0.0402,
-     "w": null,
-     "k": "swedish2yearnordeabondfuturesept26"
+     "k": "swedish2yearnordeabondfuturedec26"
     }
    ],
-   "top_coverage": 0.448,
+   "top_coverage": 0.324,
    "sectors": null,
    "assets": {
     "stock": 0.0,
-    "bond": 1.3223,
-    "cash": -0.3223,
+    "bond": 1.2383,
+    "cash": -0.2383,
     "other": 0.0
    },
    "name": "AMF Räntefond Lång",
@@ -15451,29 +15418,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 159.05,
-   "as_of": "2026-10-07",
-   "sma50": 159.83,
-   "sma200": 159.58,
+   "price": 158.92,
+   "as_of": "2026-10-08",
+   "sma50": 159.86,
+   "sma200": 159.57,
    "above_sma50": false,
    "above_sma200": false,
    "sma50_vs_200_pct": 0.2,
    "cross": "golden",
-   "rsi14": 43.9,
-   "sma200_dist_pct": -0.3,
+   "rsi14": 40.9,
+   "sma200_dist_pct": -0.4,
    "sma200_slope_pct": 0.09,
-   "ret_1m": -0.7,
+   "ret_1m": -0.8,
    "ret_3m": -1.1,
-   "ret_6m": 0.1,
+   "ret_6m": 0.9,
    "ret_1y": 0.7,
-   "ret_ytd": 0.5,
+   "ret_ytd": 0.4,
    "volatility_pct": 2.4,
    "max_drawdown_pct": -2.3,
    "sharpe": -0.44,
    "fee_pct": 0.13,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    157.9,
     158.12,
     158.07,
     158.16,
@@ -15707,7 +15673,6 @@
     159.16,
     158.83,
     158.82,
-    159.12,
     158.92,
     159.4,
     159.63,
@@ -15720,8 +15685,8 @@
     158.83,
     159.16,
     159.15,
-    159.1,
-    159.05
+    159.05,
+    158.92
    ],
    "momentum_rank": "5 av 6 i kategorin",
    "score": 39,
@@ -15730,14 +15695,14 @@
     "momentum": 5.0,
     "risk": 7.6,
     "cost": 10,
-    "macro": 3.0
+    "macro": 3.1
    },
    "label": "Svag",
    "reasons_pos": [
     "Låg avgift (0.13%)"
    ],
    "reasons_neg": [
-    "Kursen 0.3 % under SMA200 – långsiktig nedtrend",
+    "Kursen 0.4 % under SMA200 – långsiktig nedtrend",
     "Kursen ligger under SMA50 – kortsiktig svaghet",
     "Svag avkastning jämfört med andra fonder (plats 5 av 6 i kategorin)",
     "Sämre än riskfri ränta senaste året (Sharpe -0.44)"
@@ -15772,29 +15737,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 136.17,
-   "as_of": "2026-10-06",
-   "sma50": 136.81,
-   "sma200": 135.6,
+   "price": 136.14,
+   "as_of": "2026-10-07",
+   "sma50": 136.8,
+   "sma200": 135.61,
    "above_sma50": false,
    "above_sma200": true,
    "sma50_vs_200_pct": 0.9,
    "cross": "golden",
-   "rsi14": 36.2,
+   "rsi14": 35.3,
    "sma200_dist_pct": 0.4,
    "sma200_slope_pct": 0.21,
-   "ret_1m": -0.8,
-   "ret_3m": -0.7,
-   "ret_6m": 1.8,
+   "ret_1m": -0.9,
+   "ret_3m": -0.8,
+   "ret_6m": 1.7,
    "ret_1y": 1.9,
-   "ret_ytd": 1.5,
+   "ret_ytd": 1.4,
    "volatility_pct": 1.7,
    "max_drawdown_pct": -2.0,
-   "sharpe": 0.08,
+   "sharpe": 0.1,
    "fee_pct": 1.19,
    "fee_source": "Avanza (2026-09)",
    "price_history_1y": [
-    133.82,
     133.79,
     133.9,
     133.87,
@@ -16017,8 +15981,8 @@
     137.07,
     136.96,
     136.96,
-    137.05,
     137.09,
+    136.91,
     136.39,
     136.16,
     136.33,
@@ -16027,19 +15991,20 @@
     136.06,
     136.09,
     136.16,
-    136.21,
     136.12,
+    136.25,
     136.21,
-    136.17
+    136.17,
+    136.14
    ],
    "momentum_rank": "4 av 6 i kategorin",
    "score": 36,
    "score_parts": {
     "trend": 10.3,
     "momentum": 10.0,
-    "risk": 8.5,
+    "risk": 8.7,
     "cost": 4,
-    "macro": 3.0
+    "macro": 3.1
    },
    "label": "Svag",
    "reasons_pos": [
@@ -16093,29 +16058,28 @@
    "proxy": false,
    "proxy_note": null,
    "currency": "SEK",
-   "price": 161.93,
-   "as_of": "2026-10-06",
-   "sma50": 162.79,
+   "price": 161.99,
+   "as_of": "2026-10-07",
+   "sma50": 162.77,
    "sma200": 163.01,
    "above_sma50": false,
    "above_sma200": false,
    "sma50_vs_200_pct": -0.1,
    "cross": "death",
-   "rsi14": 41.1,
-   "sma200_dist_pct": -0.7,
+   "rsi14": 42.8,
+   "sma200_dist_pct": -0.6,
    "sma200_slope_pct": -0.02,
    "ret_1m": -0.7,
    "ret_3m": -1.1,
    "ret_6m": 0.5,
-   "ret_1y": -0.2,
-   "ret_ytd": -0.5,
+   "ret_1y": -0.1,
+   "ret_ytd": -0.4,
    "volatility_pct": 2.1,
    "max_drawdown_pct": -2.4,
-   "sharpe": -0.91,
+   "sharpe": -0.89,
    "fee_pct": null,
    "fee_source": null,
    "price_history_1y": [
-    162.56,
     162.56,
     162.72,
     162.68,
@@ -16338,7 +16302,6 @@
     163.27,
     163.04,
     162.84,
-    162.75,
     162.96,
     163.11,
     163.1,
@@ -16361,7 +16324,8 @@
     161.85,
     161.95,
     161.97,
-    161.93
+    161.93,
+    161.99
    ],
    "momentum_rank": "6 av 6 i kategorin",
    "score": 26,
@@ -16370,16 +16334,16 @@
     "momentum": 0.0,
     "risk": 7.5,
     "cost": 5,
-    "macro": 3.0
+    "macro": 3.1
    },
    "label": "Svag",
    "reasons_pos": [],
    "reasons_neg": [
-    "Kursen 0.7 % under SMA200 – långsiktig nedtrend",
+    "Kursen 0.6 % under SMA200 – långsiktig nedtrend",
     "Kursen ligger under SMA50 – kortsiktig svaghet",
     "SMA50 under SMA200 (death cross-läge)",
     "Svag avkastning jämfört med andra fonder (plats 6 av 6 i kategorin)",
-    "Sämre än riskfri ränta senaste året (Sharpe -0.91)"
+    "Sämre än riskfri ränta senaste året (Sharpe -0.89)"
    ]
   }
  ]

@@ -1,53 +1,53 @@
 {
- "generated_at": "2026-10-09T21:04:24.763435+00:00",
+ "generated_at": "2026-10-12T23:10:54.926231+00:00",
  "version": "10.6",
  "stocks": 259,
  "live": {
   "first_date": "2026-09-03",
-  "last_date": "2026-10-06",
-  "observations": 1037,
+  "last_date": "2026-10-12",
+  "observations": 1296,
   "horizons": [
    {
     "days": 5,
     "label": "1 vecka",
-    "dates": 10,
+    "dates": 11,
     "buckets": {
      "buy": {
-      "n": 235,
-      "avg_excess": -0.32,
-      "hit_rate": 48.1
+      "n": 294,
+      "avg_excess": 0.13,
+      "hit_rate": 50.0
      },
      "low": {
-      "n": 338,
-      "avg_excess": 0.26,
-      "hit_rate": 48.5
+      "n": 421,
+      "avg_excess": -0.18,
+      "hit_rate": 47.3
      },
      "mid": {
-      "n": 203,
-      "avg_excess": -0.06,
-      "hit_rate": 51.2
+      "n": 262,
+      "avg_excess": 0.15,
+      "hit_rate": 51.5
      }
     }
    },
    {
     "days": 21,
     "label": "1 månad",
-    "dates": 3,
+    "dates": 4,
     "buckets": {
      "buy": {
-      "n": 61,
-      "avg_excess": -0.74,
-      "hit_rate": 44.3
+      "n": 83,
+      "avg_excess": -1.23,
+      "hit_rate": 44.6
      },
      "low": {
-      "n": 20,
-      "avg_excess": 1.28,
-      "hit_rate": 50.0
+      "n": 52,
+      "avg_excess": 1.11,
+      "hit_rate": 51.9
      },
      "mid": {
-      "n": 25,
-      "avg_excess": 0.79,
-      "hit_rate": 52.0
+      "n": 42,
+      "avg_excess": 1.06,
+      "hit_rate": 50.0
      }
     }
    },
@@ -68,7 +68,7 @@
  "trend_backtest": {
   "months": 26,
   "first": "2024-07-31",
-  "last": "2026-10-09",
+  "last": "2026-10-12",
   "horizons": [
    {
     "days": 21,

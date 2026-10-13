@@ -26,6 +26,7 @@ category_proxies:
   "Fastigheter": {name: "Europeiska fastighetsbolag (IPRP)", tickers: ["IPRP.L"]}
   "Råvaror/ädelmetaller": {name: "Guld och silver (snitt)", tickers: ["GC=F", "SI=F"]}
   "Räntefond": {name: "Stabilitetspoängen (räntor & kredit)", source: stability}
+  "Dagligvaror": {name: "Dagligvaruaktier (XLP)", tickers: ["XLP"]}
 # Fond vars branschfördelning används som "världsindex" i ANALYS-fliken (v9.8).
 reference_fund: "0P0001ECQR.ST"   # Avanza Global
 funds:
@@ -73,3 +74,9 @@ funds:
   - {name: "AMF Räntefond Lång", ticker: "0P00000K19.ST", category: "Räntefond", asset_class: bond, isin: "SE0000739187", fee_pct: 0.13}
   - {name: "Lannebo Företagsobligationsfond A", ticker: "0P00000FUA.ST", category: "Räntefond", asset_class: bond, isin: "SE0001095506", fee_pct: 1.19}
   - {name: "SEB Företagsobligationsfond A", ticker: "0P0001H41U.ST", category: "Räntefond", asset_class: bond}
+  # --- Dagligvaror (v10.7): dagligvaru-ETF:er, olika exponering mot dagligvaruhandel (Walmart, Costco m.fl.) ---
+  - {name: "Xtrackers MSCI USA Consumer Staples UCITS ETF 1D", ticker: "XUCS.DE", category: "Dagligvaror", asset_class: equity}
+  - {name: "SPDR S&P U.S. Consumer Staples Select Sector UCITS ETF (Acc)", ticker: "ZPDS.DE", category: "Dagligvaror", asset_class: equity}
+  - {name: "Xtrackers MSCI World Consumer Staples UCITS ETF 1C", ticker: "XDWS.DE", category: "Dagligvaror", asset_class: equity}
+  - {name: "Amundi S&P World Consumer Staples Screened UCITS ETF Acc", ticker: "WELW.DE", category: "Dagligvaror", asset_class: equity}
+  - {name: "SPDR MSCI Europe Consumer Staples UCITS ETF", ticker: "SPYC.DE", category: "Dagligvaror", asset_class: equity}

@@ -449,6 +449,27 @@
   .fu-table td, .fu-table th { padding: 8px 10px; }
   .fu-table td, .fu-table td * { text-transform: none; letter-spacing: normal; }
   .fu-sub { font-size: 10.5px; color: var(--text-faint); white-space: nowrap; }
+  /* Datafärskhet i Makro (v10.8) */
+  .fresh-card { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 14px; background: var(--panel); }
+  .fresh-head { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer; list-style: none; flex-wrap: wrap; }
+  .fresh-head::-webkit-details-marker { display: none; }
+  .fresh-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; background: var(--border); }
+  .fresh-dot.good { background: var(--up); } .fresh-dot.mid { background: #e0a82e; } .fresh-dot.bad { background: var(--down); }
+  .fresh-title { font-size: 13.5px; font-weight: 600; flex: 1; min-width: 160px; }
+  .fresh-status { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--border); color: var(--text-dim); }
+  .fresh-status.good { color: var(--up); border-color: var(--up); } .fresh-status.bad { color: var(--down); border-color: var(--down); }
+  .fresh-sub { font-size: 12px; line-height: 1.5; color: var(--text-dim); padding: 0 14px 10px; }
+  .fresh-table { border-top: 1px solid var(--border); }
+  .fr-row { display: grid; grid-template-columns: minmax(150px, 1.3fr) minmax(130px, 1fr); gap: 4px 14px; padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 12.5px; }
+  .fr-row:last-child { border-bottom: none; }
+  .fr-src { font-weight: 500; line-height: 1.35; }
+  .fr-kind { display: inline-block; margin-left: 8px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .05em; padding: 1px 6px; border-radius: 4px; border: 1px solid var(--border); color: var(--text-faint); vertical-align: 1px; }
+  .fr-kind.man { color: var(--amber); border-color: var(--amber); }
+  .fr-date { font-family: 'IBM Plex Mono', monospace; font-size: 12px; text-align: right; }
+  .fr-date.bad { color: var(--down); font-weight: 600; }
+  .fr-note { grid-column: 1 / -1; font-size: 11.5px; color: var(--text-faint); line-height: 1.4; }
+  .fresh-foot { font-size: 11.5px; color: var(--text-faint); padding: 8px 14px 12px; border-top: 1px solid var(--border); }
+  @media (max-width: 520px) { .fr-row { grid-template-columns: 1fr; } .fr-date { text-align: left; } }
   .hidden-note { font-size: 12px; color: var(--text-faint); padding: 12px 18px 16px; text-align: center; }
   .fund-cat-banner .fcb-left { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
   .fund-cat-banner .fcb-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
@@ -2142,6 +2163,59 @@ function macroRateSensitivityHtml(b) {
 }
 function sg2(n) { return (n > 0 ? '+' : '') + n.toFixed(2).replace('.', ','); }
 
+// ===== Datafärskhet i Makro (v10.8) =====
+function ageDaysFrom(iso) { if (!iso) return null; const t = new Date(String(iso).slice(0, 10) + 'T12:00:00'); if (isNaN(t)) return null; const n = new Date(); n.setHours(12, 0, 0, 0); return Math.max(0, Math.round((n - t) / 86400000)); }
+function fmtDateLong(iso) { if (!iso) return '–'; const d = new Date(String(iso).slice(0, 10) + 'T12:00:00'); return `${d.getDate()} ${(window.APP_LANG === 'en' ? MON_EN : MON_SV)[d.getMonth()]} ${d.getFullYear()}`; }
+function fmtMonthYear(iso) { if (!iso) return '–'; const d = new Date(String(iso).slice(0, 10) + 'T12:00:00'); const MS = ['januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli', 'augusti', 'september', 'oktober', 'november', 'december']; const ME = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']; return `${(window.APP_LANG === 'en' ? ME : MS)[d.getMonth()]} ${d.getFullYear()}`; }
+function agoText(days) { return days == null ? '' : (days === 0 ? pfT('idag', 'today') : pfT(`${days} d sedan`, `${days} d ago`)); }
+function runTimeText(iso) {
+  const d = new Date(iso); if (isNaN(d)) return '–';
+  const hh = String(d.getHours()).padStart(2, '0'), mm = String(d.getMinutes()).padStart(2, '0');
+  return `${d.getDate()} ${(window.APP_LANG === 'en' ? MON_EN : MON_SV)[d.getMonth()]} ${hh}:${mm}`;
+}
+function macroFreshnessHtml() {
+  const D = state.data || {};
+  if (!D.generated_at) return '';
+  const b = (D.macro && D.macro.bonds) || {}, sd = b.source_dates || {};
+  const rf = D.risk_free || {}, rfd = rf.dates || {};
+  const gen = new Date(D.generated_at);
+  const hrs = Math.round((Date.now() - gen.getTime()) / 3600000);
+  // Körs vardagar – 3 dygn är normalt över en helg, längre än så är ett tecken på att något inte fungerar
+  const runLevel = hrs <= 30 ? 'good' : (hrs <= 80 ? 'mid' : 'bad');
+  const geoAges = ((D.geopolitics && D.geopolitics.factors) || []).map(f => ({ n: f.name, a: ageDaysFrom(f.updated), u: f.updated })).filter(x => x.a != null);
+  const oldestGeo = geoAges.sort((x, y) => y.a - x.a)[0], newestGeo = geoAges.slice().sort((x, y) => x.a - y.a)[0];
+  const it = D.investtech_meta || {}, itAge = ageDaysFrom(it.last_updated);
+  const oecdIso = sd.oecd || (b.extras && b.extras.eu_as_of);
+  const row = (src, kind, point, note, level) => `<div class="fr-row"><div class="fr-src">${src}<span class="fr-kind ${kind === 'auto' ? '' : 'man'}">${kind === 'auto' ? pfT('AUTOMATISK', 'AUTOMATIC') : (kind === 'calc' ? pfT('BERÄKNAS', 'CALCULATED') : pfT('MANUELL', 'MANUAL'))}</span></div><div class="fr-date ${level || ''}">${point}</div><div class="fr-note">${note}</div></div>`;
+  const stale = (a, lim) => a != null && a >= lim ? 'bad' : '';
+  const rows = [
+    row(pfT('Aktiekurser och nyckeltal (Yahoo Finance)', 'Stock prices and key figures (Yahoo Finance)'), 'auto', runTimeText(D.generated_at), pfT('Slutkurser från senaste handelsdag, hämtas vid varje körning.', 'Closing prices from the latest trading day, fetched at every run.'), ''),
+    row(pfT('Statsräntor, kreditspreadar, realränta (FRED)', 'Treasury yields, credit spreads, real yield (FRED)'), 'auto', `${fmtDateLong(sd.treasury || b.as_of)} (${agoText(ageDaysFrom(sd.treasury || b.as_of))})`, pfT('FRED publicerar med 1–2 amerikanska bankdagars fördröjning, och inte på helgdagar.', 'FRED publishes with a 1–2 US business-day delay, and not on holidays.'), stale(ageDaysFrom(sd.treasury || b.as_of), 8)),
+    row(pfT('Obligationsvolatilitet, MOVE (Yahoo Finance)', 'Bond volatility, MOVE (Yahoo Finance)'), 'auto', sd.move ? `${fmtDateLong(sd.move)} (${agoText(ageDaysFrom(sd.move))})` : '–', pfT('Föregående handelsdag.', 'Previous trading day.'), stale(ageDaysFrom(sd.move), 8)),
+    row(pfT('Tysklands, Sveriges m.fl. 10-årsräntor (OECD via FRED)', '10-year yields for Germany, Sweden etc. (OECD via FRED)'), 'auto', oecdIso ? fmtMonthYear(oecdIso) : '–', pfT('Månadsdata som släpar 6–10 veckor. Används som riskfri ränta för bolag utanför USA.', 'Monthly data that lags 6–10 weeks. Used as the risk-free rate for non-US companies.'), stale(ageDaysFrom(oecdIso), 100)),
+    row(pfT('Marknadsbredd och stabilitetspoäng', 'Market breadth and stability score'), 'calc', runTimeText(D.generated_at), pfT('Räknas om vid varje körning på de data som ovan.', 'Recalculated at every run from the data above.'), ''),
+    row(pfT('Världsläget (geopolitik)', 'World situation (geopolitics)'), 'man', oldestGeo ? pfT(`${fmtDateLong(newestGeo.u)} (nyast) – ${fmtDateLong(oldestGeo.u)} (äldst)`, `${fmtDateLong(newestGeo.u)} (newest) – ${fmtDateLong(oldestGeo.u)} (oldest)`) : '–', pfT(`Skrivs för hand och uppdateras bara när Claude gör en avstämning. Äldsta faktorn är ${oldestGeo ? oldestGeo.a : '–'} dagar gammal.`, `Written by hand and only updated when Claude does a review. The oldest factor is ${oldestGeo ? oldestGeo.a : '–'} days old.`), stale(oldestGeo && oldestGeo.a, 14)),
+    row(pfT('Investtech Topp 20', 'Investtech Top 20'), 'man', it.last_updated ? `${fmtDateLong(it.last_updated)} (${agoText(itAge)})` : '–', pfT('Listan klistras in för hand. Den påverkar poängen för bolagen på listan (+5 till +10).', 'The list is pasted in by hand. It affects the score of the companies on it (+5 to +10).'), stale(itAge, 14)),
+  ].join('');
+  const staleCount = [oldestGeo && oldestGeo.a >= 14, itAge != null && itAge >= 14].filter(Boolean).length;
+  const status = runLevel === 'good' ? pfT('Uppdaterad', 'Updated') : (runLevel === 'mid' ? pfT('Något gammal', 'A bit old') : pfT('Gammal – körningen verkar ha uteblivit', 'Old – the run seems to have been missed'));
+  const sub = pfT(`Hämtas automatiskt varje vardag (schemalagt 18:15, men GitHub startar ofta några timmar senare). Ingen körning på helger.${staleCount ? ` ${staleCount} manuell${staleCount > 1 ? 'a' : ''} källa${staleCount > 1 ? 'r' : ''} är över 14 dagar gammal${staleCount > 1 ? 'a' : ''}.` : ''}`,
+    `Fetched automatically every weekday (scheduled 18:15 Swedish time, but GitHub often starts a few hours later). No run on weekends.${staleCount ? ` ${staleCount} manual source${staleCount > 1 ? 's are' : ' is'} over 14 days old.` : ''}`);
+  return `<details class="fresh-card" data-noi18n>
+    <summary class="fresh-head"><span class="fresh-dot ${runLevel}"></span><span class="fresh-title">${pfT('Senaste körning', 'Latest run')} ${runTimeText(D.generated_at)} · ${timeAgoLocal(D.generated_at)}</span><span class="fresh-status ${runLevel}">${status}</span></summary>
+    <div class="fresh-sub">${sub}</div>
+    <div class="fresh-table">${rows}</div>
+    <div class="fresh-foot">${pfT('Sidan hämtar den senaste datan varje gång du öppnar den. Uppdatera sidan efter en körning för att se nya siffror.', 'The page fetches the latest data every time you open it. Reload the page after a run to see new figures.')}</div>
+  </details>`;
+}
+function timeAgoLocal(iso) {
+  const mins = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+  if (mins < 60) return pfT(`${mins} min sedan`, `${mins} min ago`);
+  const h = Math.round(mins / 60);
+  if (h < 48) return pfT(`${h} tim sedan`, `${h} h ago`);
+  return pfT(`${Math.round(h / 24)} dygn sedan`, `${Math.round(h / 24)} days ago`);
+}
+
 function renderMacroPanel() {
   const host = document.getElementById('macroHost');
   const data = state.data || {};
@@ -2198,7 +2272,7 @@ function renderMacroPanel() {
     : mt === 'world' ? macroGeopoliticsSectionHtml()
     : mt === 'breadth' ? macroBreadthSectionHtml() + macroInvesttechSectionHtml()
     : macroBondsHtml('stability') + ratesBlock;
-  host.innerHTML = body.trim() ? `<div class="macro-panel">${body}</div>` : '';
+  host.innerHTML = body.trim() ? `<div class="macro-panel">${macroFreshnessHtml()}${body}</div>` : '';
   wireStabHistory();
 }
 

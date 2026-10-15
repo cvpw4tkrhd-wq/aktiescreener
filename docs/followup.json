@@ -1,6 +1,6 @@
 {
- "generated_at": "2026-10-14T20:21:59.411009+00:00",
- "version": "10.7",
+ "generated_at": "2026-10-15T08:01:18.022962+00:00",
+ "version": "10.8",
  "stocks": 259,
  "live": {
   "first_date": "2026-09-03",
@@ -68,7 +68,7 @@
  "trend_backtest": {
   "months": 26,
   "first": "2024-07-31",
-  "last": "2026-10-14",
+  "last": "2026-10-15",
   "horizons": [
    {
     "days": 21,

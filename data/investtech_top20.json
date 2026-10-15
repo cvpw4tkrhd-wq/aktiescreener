@@ -1,27 +1,130 @@
 {
   "_source": "https://www.investtech.com/se/market.php?CountryID=46&p=staticPage&fn=freeArticles",
   "_methodology": "Investtechs dagliga Topp 20-lista for Stockholmsborsen, baserad pa teknisk analys pa medellang sikt (trend, stod/motstand, monster, volymutveckling, RSI) for en investeringshorisont pa 1-6 manader. Poang -100 till +100 (algoritmens egen skala, inte vart 0-100). Manuellt uppdaterad nar Claude ombeds gora en avstamning - inte automatiskt/live. Ericsson A-aktien i Investtechs lista har applicerats pa var bevakade B-aktie (samma bolag, annan aktieslag).",
-  "_last_updated": "2026-09-17",
+  "_last_updated": "2026-10-15",
   "market": "SE",
   "entries": [
-    {"ticker": "MORROW.ST", "name": "Morrow Bank", "rank": 1, "investtech_score": 98.85},
-    {"ticker": "MSAB-B.ST", "name": "Micro Systemation B", "rank": 2, "investtech_score": 98.39},
-    {"ticker": "QIIWI.ST", "name": "Qiiwi Games", "rank": 3, "investtech_score": 98.36},
-    {"ticker": "AVARDA.ST", "name": "Avarda Bank", "rank": 4, "investtech_score": 98.35},
-    {"ticker": "KAMBI.ST", "name": "Kambi Group", "rank": 5, "investtech_score": 97.60},
-    {"ticker": "BULTEN.ST", "name": "Bulten", "rank": 6, "investtech_score": 97.53},
-    {"ticker": "CYNCA.ST", "name": "Cynca Nordic", "rank": 7, "investtech_score": 97.26},
-    {"ticker": "PRISMA.ST", "name": "Prisma Properties", "rank": 9, "investtech_score": 96.96},
-    {"ticker": "HACK.ST", "name": "Hacksaw", "rank": 10, "investtech_score": 96.75},
-    {"ticker": "ATT.ST", "name": "Attendo", "rank": 11, "investtech_score": 96.68},
-    {"ticker": "FRO.OL", "name": "Frontline", "rank": 12, "investtech_score": 96.58},
-    {"ticker": "BTS-B.ST", "name": "BTS Group B", "rank": 13, "investtech_score": 96.41},
-    {"ticker": "SWED-A.ST", "name": "Swedbank A", "rank": 14, "investtech_score": 96.25},
-    {"ticker": "ORRON.ST", "name": "Orrön Energy", "rank": 15, "investtech_score": 95.97},
-    {"ticker": "HAUTO.OL", "name": "Höegh Autoliners", "rank": 16, "investtech_score": 95.66},
-    {"ticker": "FMM-B.ST", "name": "FM Mattsson", "rank": 17, "investtech_score": 95.60},
-    {"ticker": "ERIC-B.ST", "name": "Ericsson (A-aktien i original, applicerat pa B)", "rank": 18, "investtech_score": 95.54},
-    {"ticker": "KJELL.ST", "name": "Kjell Group", "rank": 19, "investtech_score": 95.37},
-    {"ticker": "SHB-A.ST", "name": "Svenska Handelsbanken A", "rank": 20, "investtech_score": 95.06}
+    {
+      "ticker": "MSAB-B.ST",
+      "name": "Micro Systemation B",
+      "rank": 1,
+      "investtech_score": 99.1
+    },
+    {
+      "ticker": "INSTAL.ST",
+      "name": "Instalco",
+      "rank": 5,
+      "investtech_score": 98.19
+    },
+    {
+      "ticker": "AVARDA.ST",
+      "name": "Avarda Bank",
+      "rank": 6,
+      "investtech_score": 98.11
+    },
+    {
+      "ticker": "ORRON.ST",
+      "name": "Orrön Energy",
+      "rank": 7,
+      "investtech_score": 98.05
+    },
+    {
+      "ticker": "DOFG.OL",
+      "name": "DOF Group",
+      "rank": 12,
+      "investtech_score": 96.39
+    },
+    {
+      "ticker": "BULTEN.ST",
+      "name": "Bulten",
+      "rank": 15,
+      "investtech_score": 95.91
+    },
+    {
+      "ticker": "CYNCA.ST",
+      "name": "Cynca Nordic",
+      "rank": 16,
+      "investtech_score": 95.88
+    },
+    {
+      "ticker": "SKA-B.ST",
+      "name": "Skanska B",
+      "rank": 17,
+      "investtech_score": 95.77
+    }
+  ],
+  "_not_in_app": [
+    {
+      "rank": 2,
+      "investtech_ticker": "SHOT",
+      "name": "Scandic Hotels Group",
+      "investtech_score": 98.79
+    },
+    {
+      "rank": 3,
+      "investtech_ticker": "BEIAB",
+      "name": "Beijer Alma B",
+      "investtech_score": 98.71
+    },
+    {
+      "rank": 4,
+      "investtech_ticker": "BTCB",
+      "name": "B Treasury Capital B",
+      "investtech_score": 98.2
+    },
+    {
+      "rank": 8,
+      "investtech_ticker": "IMPASDB",
+      "name": "Implantica",
+      "investtech_score": 97.92
+    },
+    {
+      "rank": 9,
+      "investtech_ticker": "HAYPP",
+      "name": "Haypp Group",
+      "investtech_score": 97.65
+    },
+    {
+      "rank": 10,
+      "investtech_ticker": "STORB",
+      "name": "Storskogen",
+      "investtech_score": 97.63
+    },
+    {
+      "rank": 11,
+      "investtech_ticker": "KARNELB",
+      "name": "Karnell Group B",
+      "investtech_score": 97.63
+    },
+    {
+      "rank": 13,
+      "investtech_ticker": "SMOPO",
+      "name": "Smartoptics Group",
+      "investtech_score": 96.09
+    },
+    {
+      "rank": 14,
+      "investtech_ticker": "BEAMMWB",
+      "name": "Beammwave B",
+      "investtech_score": 96.06
+    },
+    {
+      "rank": 18,
+      "investtech_ticker": "ELIC",
+      "name": "Elicera Therapeutics",
+      "investtech_score": 95.65
+    },
+    {
+      "rank": 19,
+      "investtech_ticker": "NANEXA",
+      "name": "Nanexa",
+      "investtech_score": 95.52
+    },
+    {
+      "rank": 20,
+      "investtech_ticker": "INDT",
+      "name": "Indutrade",
+      "investtech_score": 95.36
+    }
   ]
 }

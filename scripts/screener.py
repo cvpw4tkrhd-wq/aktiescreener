@@ -114,6 +114,16 @@ def load_investtech_top20():
     return {e["ticker"]: e for e in data.get("entries", [])}
 
 
+def load_investtech_meta():
+    """v10.8: när den manuella Investtech-listan senast uppdaterades och hur många bolag den har."""
+    try:
+        with open(INVESTTECH_TOP20_FILE, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return {"last_updated": data.get("_last_updated"), "count": len(data.get("entries", []))}
+    except Exception:
+        return None
+
+
 _SECTOR_RULES = []   # (sektor, vikt, faktornamn, marknader eller None = alla)
 GEO_CAP = 10          # tak för sammanlagd geopolitisk vikt per aktie (v8.8)
 
@@ -575,8 +585,12 @@ def compute_bond_dashboard():
             history[-1] = now_pt
         else:
             history.append(now_pt)
+    # v10.8: datum per källa så att appen kan visa hur färsk varje del av Makro är
+    _last = lambda k: (s.get(k)[-1][0] if s.get(k) else None)
+    source_dates = {"treasury": _last("DGS10"), "spreads": _last("BAMLH0A0HYM2"), "real_yield": _last("DFII10"),
+                    "move": _last("MOVE"), "oecd": extras.get("eu_as_of")}
     return {"as_of": s["DGS10"][-1][0], "yields": yields, "extras": extras, "categories": categories,
-            "history": history,
+            "history": history, "source_dates": source_dates,
             "stability": {"score": total, "prev_score": prev_total, "delta": delta, "trend": trend,
                           "label": label, "status": status}}, s["DGS10"]
 
@@ -2331,6 +2345,7 @@ def main():
         "macro": macro,
         "geopolitics": load_geopolitics_export(sector_weights, country_weights),
         "risk_free": load_risk_free_export(),
+        "investtech_meta": load_investtech_meta(),
         "results": results,
     }
 

@@ -14,6 +14,7 @@ eller schemalagt via GitHub Actions (.github/workflows/screener.yml)
 """
 
 import json
+import math
 import os
 import sys
 import time
@@ -1096,6 +1097,21 @@ def analyze_ticker(ticker: str):
     # Jämför forward P/E (baserat på förväntad framtida vinst) mot trailing
     # P/E (baserat på senast rapporterade vinst). Lägre forward P/E än
     # trailing = vinsttillväxt väntas. Högre = vinstnedgång väntas.
+    # v11.3: Yahoos forwardPE delar kursen (handelsvaluta) med förväntad vinst per aktie i
+    # RAPPORTVALUTAN. För bolag som redovisar i en annan valuta än de handlas i (t.ex.
+    # Medicover, Nordea och Hacksaw: euro-redovisning, kronor-handel) blir talet ungefär
+    # växelkursen för högt (Medicover: 580 i stället för cirka 52). Vid valutaskillnad räknas
+    # talet om med växelkursen, och det av de två värdena som ligger närmast bolagets
+    # trailing P/E används – redan korrekta värden lämnas därmed orörda.
+    _fin_ccy, _trade_ccy = info.get("financialCurrency"), info.get("currency")
+    if (isinstance(forward_pe, (int, float)) and forward_pe > 0 and isinstance(pe, (int, float)) and pe > 0
+            and _fin_ccy and _trade_ccy and _fin_ccy.upper() != ("GBP" if _trade_ccy == "GBp" else _trade_ccy).upper()):
+        _fx = _fx_factor(_fin_ccy, _trade_ccy)
+        if _fx and _fx > 0:
+            _cand = forward_pe / _fx
+            if abs(math.log(_cand / pe)) < abs(math.log(forward_pe / pe)):
+                forward_pe = _cand
+
     forward_pe_trend_pct = None
     if isinstance(pe, (int, float)) and isinstance(forward_pe, (int, float)) and pe > 0:
         forward_pe_trend_pct = (forward_pe - pe) / pe * 100

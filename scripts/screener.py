@@ -1097,19 +1097,19 @@ def analyze_ticker(ticker: str):
     # Jämför forward P/E (baserat på förväntad framtida vinst) mot trailing
     # P/E (baserat på senast rapporterade vinst). Lägre forward P/E än
     # trailing = vinsttillväxt väntas. Högre = vinstnedgång väntas.
-    # v11.3: Yahoos forwardPE delar kursen (handelsvaluta) med förväntad vinst per aktie i
-    # RAPPORTVALUTAN. För bolag som redovisar i en annan valuta än de handlas i (t.ex.
-    # Medicover, Nordea och Hacksaw: euro-redovisning, kronor-handel) blir talet ungefär
-    # växelkursen för högt (Medicover: 580 i stället för cirka 52). Vid valutaskillnad räknas
-    # talet om med växelkursen, och det av de två värdena som ligger närmast bolagets
-    # trailing P/E används – redan korrekta värden lämnas därmed orörda.
+    # v11.3/11.4: för vissa bolag (t.ex. Medicover, Nordea, Hacksaw: euro-rapportering, kronor-handel)
+    # anger Yahoo förväntad vinst per aktie i rapportvalutan men delar kursen i handelsvalutan, så
+    # forward P/E blir ungefär växelkursen för högt (Medicover: 580 i stället för cirka 52). För andra
+    # (t.ex. Equinor, ABB, Maersk) är värdet redan korrekt omräknat, så rättningen görs bara i
+    # uppenbara fall: stor valutaskillnad (kurs ≥ 3 eller ≤ 1/3), ett forward-tal som ligger mer än
+    # tre gånger över eller under trailing P/E, och där omräkningen ger ett rimligt värde.
     _fin_ccy, _trade_ccy = info.get("financialCurrency"), info.get("currency")
     if (isinstance(forward_pe, (int, float)) and forward_pe > 0 and isinstance(pe, (int, float)) and pe > 0
             and _fin_ccy and _trade_ccy and _fin_ccy.upper() != ("GBP" if _trade_ccy == "GBp" else _trade_ccy).upper()):
         _fx = _fx_factor(_fin_ccy, _trade_ccy)
-        if _fx and _fx > 0:
+        if _fx and (_fx >= 3 or _fx <= 1 / 3):
             _cand = forward_pe / _fx
-            if abs(math.log(_cand / pe)) < abs(math.log(forward_pe / pe)):
+            if (forward_pe / pe > 3 or forward_pe / pe < 1 / 3) and 0.25 <= _cand / pe <= 4:
                 forward_pe = _cand
 
     forward_pe_trend_pct = None

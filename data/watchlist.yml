@@ -1338,3 +1338,65 @@ stocks:
   sector: Financials
   country: Norge
   market: NO
+
+# --- Tillagda 2026-10-21 (v11.3): de tolv bolag på Investtechs Topp 20 som saknades i appen ---
+- ticker: SHOT.ST
+  name: Scandic Hotels
+  sector: Consumer
+  country: Sverige
+  market: SE
+- ticker: STOR-B.ST
+  name: Storskogen
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: BEIA-B.ST
+  name: Beijer Alma
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: HAYPP.ST
+  name: Haypp Group
+  sector: Consumer
+  country: Sverige
+  market: SE
+- ticker: MCOV-B.ST
+  name: Medicover B
+  sector: Healthcare
+  country: Sverige
+  market: SE
+- ticker: KRONA.ST
+  name: Krona Public Real Estate
+  sector: RealEstate
+  country: Sverige
+  market: SE
+- ticker: SCST.ST
+  name: Scandi Standard
+  sector: Consumer
+  country: Sverige
+  market: SE
+- ticker: IRLAB-A.ST
+  name: IRLAB Therapeutics
+  sector: Healthcare
+  country: Sverige
+  market: SE
+- ticker: LOOMIS.ST
+  name: Loomis
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: VIMIAN.ST
+  name: Vimian Group
+  sector: Healthcare
+  country: Sverige
+  market: SE
+- ticker: BEAMMW-B.ST
+  name: Beammwave B
+  sector: Semiconductors
+  country: Sverige
+  market: SE
+- ticker: AMBEA.ST
+  name: Ambea
+  sector: Healthcare
+  country: Sverige
+  market: SE

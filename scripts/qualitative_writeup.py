@@ -37,7 +37,7 @@ ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages"
 MODEL = "claude-sonnet-4-6"
 
 TOP_N = 5              # max antal nya/omgenererade skriv-ups per körning
-MIN_BUY_SCORE = 65      # hoppa över kandidater under denna poäng
+MIN_BUY_SCORE = 75      # hoppa över kandidater under denna poäng (v11.6: 65 → 75, samma som KÖP-gränsen)
 WRITEUP_MAX_AGE_DAYS = 7  # generera inte om en ticker som skrevs nyligen
 
 INVESTOR_IDENTITY = """Du är min personliga investeringsanalytiker. Tillämpa

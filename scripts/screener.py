@@ -1545,8 +1545,13 @@ def score_buy_candidate(d, extra_weight=0):
             reasons.append(f"Högt PEG-tal ({d['peg_ratio']}) – dyrt även efter hänsyn till förväntad tillväxt")
 
     if d.get("forward_pe_trend_pct") is not None:
-        if d["forward_pe_trend_pct"] < -15:
+        # v11.5: graderad – 62 % av aktierna har forward P/E minst 15 % under trailing, så en
+        # platt +8 skilde inte bolag åt. Full poäng först vid kraftig väntad vinsttillväxt.
+        if d["forward_pe_trend_pct"] < -30:
             bonus += 8
+            reasons.append(f"Forward P/E {d['forward_pe_trend_pct']:+.0f}% under historiskt P/E – vinsttillväxt väntas")
+        elif d["forward_pe_trend_pct"] < -15:
+            bonus += 4
             reasons.append(f"Forward P/E {d['forward_pe_trend_pct']:+.0f}% under historiskt P/E – vinsttillväxt väntas")
         elif d["forward_pe_trend_pct"] > 15:
             penalty += 10
@@ -1815,7 +1820,7 @@ def score_buy_candidate(d, extra_weight=0):
         penalty += -extra_weight
 
     BONUS_FULL_THRESHOLD = 25   # dessa första poängen räknas fullt ut
-    DIMINISHING_RATE = 0.4      # allt därutöver räknas bara till 40%
+    DIMINISHING_RATE = 0.5      # allt därutöver räknas bara till 50% (v11.5: 0,4 → 0,5, toppen var för hoptryckt)
     if bonus > BONUS_FULL_THRESHOLD:
         effective_bonus = BONUS_FULL_THRESHOLD + (bonus - BONUS_FULL_THRESHOLD) * DIMINISHING_RATE
     else:
@@ -1865,8 +1870,13 @@ def score_growth_candidate(d, extra_weight=0):
             reasons.append(f"Högt PEG-tal ({d['peg_ratio']}) – dyrt även efter hänsyn till förväntad tillväxt")
 
     if d.get("forward_pe_trend_pct") is not None:
-        if d["forward_pe_trend_pct"] < -15:
+        # v11.5: graderad – 62 % av aktierna har forward P/E minst 15 % under trailing, så en
+        # platt +8 skilde inte bolag åt. Full poäng först vid kraftig väntad vinsttillväxt.
+        if d["forward_pe_trend_pct"] < -30:
             bonus += 8
+            reasons.append(f"Forward P/E {d['forward_pe_trend_pct']:+.0f}% under historiskt P/E – vinsttillväxt väntas")
+        elif d["forward_pe_trend_pct"] < -15:
+            bonus += 4
             reasons.append(f"Forward P/E {d['forward_pe_trend_pct']:+.0f}% under historiskt P/E – vinsttillväxt väntas")
         elif d["forward_pe_trend_pct"] > 15:
             penalty += 10

@@ -430,16 +430,6 @@
   .sb-math { font-family: 'IBM Plex Mono', monospace; font-size: 12px; margin-top: 10px; padding: 8px 10px; background: var(--panel-alt); border-radius: 8px; }
   .sb-foot-note { font-size: 11px; color: var(--text-faint); margin-top: 6px; }
   .sb-neutral { margin-top: 8px; } .sb-neutral > summary { font-size: 12px; color: var(--text-dim); cursor: pointer; }
-  .dual-score { display: flex; flex-direction: column; gap: 5px; min-width: 128px; }
-  .ds-row { display: grid; grid-template-columns: 34px 1fr 24px; gap: 6px; align-items: center; }
-  .ds-lbl { font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: .04em; color: var(--text-faint); text-align: left; }
-  .ds-bar { position: relative; height: 7px; background: var(--panel-alt); border-radius: 4px; }
-  .ds-fill { height: 100%; border-radius: 4px; opacity: .45; }
-  .ds-buy .ds-fill { background: var(--accent, var(--amber)); } .ds-sell .ds-fill { background: var(--down); }
-  .ds-row.hit .ds-fill { opacity: 1; }
-  .ds-thr { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--text-faint); }
-  .ds-num { font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; font-weight: 700; text-align: right; }
-  .ds-buy.hit .ds-num, .ds-buy.hit .ds-lbl { color: var(--accent, var(--amber)); } .ds-sell.hit .ds-num, .ds-sell.hit .ds-lbl { color: var(--down); }
   .dr-sum-item.sum-buy { border-color: var(--accent, var(--amber)); } .dr-sum-item.sum-sell { border-color: var(--down); }
   .dr-sum-item.sum-buy .dr-sum-val { color: var(--accent, var(--amber)); } .dr-sum-item.sum-sell.hit .dr-sum-val { color: var(--down); }
   /* Nya verktyg (v10.0) */
@@ -470,6 +460,22 @@
   .fr-note { grid-column: 1 / -1; font-size: 11.5px; color: var(--text-faint); line-height: 1.4; }
   .fresh-foot { font-size: 11.5px; color: var(--text-faint); padding: 8px 14px 12px; border-top: 1px solid var(--border); }
   @media (max-width: 520px) { .fr-row { grid-template-columns: 1fr; } .fr-date { text-align: left; } }
+  /* Poängcell för innehav (v11.7) */
+  .score-pair { display: flex; align-items: center; justify-content: flex-end; gap: 12px; white-space: nowrap; }
+  .sp { display: flex; align-items: center; gap: 5px; }
+  .sp + .sp { border-left: 1px solid var(--border); padding-left: 12px; }
+  .sp-lbl { font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: .05em; color: var(--text-faint); }
+  .sp-lbl .short { display: none; }
+  .sp .score-num { width: 22px; }
+  .sp-sell:not(.hit) .score-bar > div { opacity: .45; }
+  .sp.hit .score-num { font-weight: 700; }
+  .sp-buy.hit .score-num, .sp-buy.hit .sp-lbl { color: var(--up); }
+  .sp-sell.hit .score-num, .sp-sell.hit .sp-lbl { color: var(--down); }
+  @media (max-width: 680px) {
+    .score-pair { gap: 5px; } .sp + .sp { padding-left: 5px; } .sp { gap: 3px; }
+    .sp-lbl { font-size: 8px; } .sp-lbl .full { display: none; } .sp-lbl .short { display: inline; }
+    .score-pair .score-bar { width: 20px; } .sp .score-bar-wrap { gap: 3px; } .sp .score-num { width: 18px; font-size: 12px; }
+  }
   .hidden-note { font-size: 12px; color: var(--text-faint); padding: 12px 18px 16px; text-align: center; }
   .fund-cat-banner .fcb-left { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
   .fund-cat-banner .fcb-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
@@ -2725,12 +2731,18 @@ function scoreBreakdownSections(r) {
   return sec('sb-' + kind, kind, (kind === 'growth' ? pfT('SÅ RÄKNADES TILLVÄXTPOÄNGEN', 'HOW THE GROWTH SCORE WAS CALCULATED') : pfT('SÅ RÄKNADES KÖPPOÄNGEN', 'HOW THE BUY SCORE WAS CALCULATED')) + ` · ${(kind === 'growth' ? r.growth_score : r.buy_score) ?? '–'}`, true, 'sb-buysec');
 }
 
-// Dubbel poängcell för innehav: köp och sälj lika tydligt, med egna färger
+// Poängcell för innehav (v11.7): köppoängen visas som för aktier jag inte äger (förändringspil, stapel,
+// siffra, grön vid KÖP och gul annars) och säljpoängen ligger intill på samma rad i rött.
 function dualScoreHtml(r) {
-  const b = r.buy_score, s = r.sell_score;
-  const row = (lbl, v, thr, cls, tip) => `<div class="ds-row ${cls} ${v != null && v >= thr ? 'hit' : ''}" title="${tip}">
-      <span class="ds-lbl">${lbl}</span><div class="ds-bar"><div class="ds-fill" style="width:${v ?? 0}%"></div><div class="ds-thr" style="left:${thr}%"></div></div><span class="ds-num">${v ?? '–'}</span></div>`;
-  return `<div class="dual-score">${row(pfT('KÖP', 'BUY'), b, BUY_THRESHOLD, 'ds-buy', pfT(`Köppoäng – KÖP från ${BUY_THRESHOLD} (strecket)`, `Buy score – BUY from ${BUY_THRESHOLD} (the line)`))}${row(pfT('SÄLJ', 'SELL'), s, 40, 'ds-sell', pfT('Säljpoäng – SÄLJ från 40 (strecket)', 'Sell score – SELL from 40 (the line)'))}</div>`;
+  const isGrowth = !!r.growth_candidate;
+  const b = isGrowth ? r.growth_score : r.buy_score, s = r.sell_score;
+  const rec = r.recommendation_key;
+  const buyHit = (b || 0) >= BUY_THRESHOLD;
+  const buyCls = buyHit && !(rec === 'sell' || rec === 'strong_sell' || rec === 'hold') ? 'buy' : 'hold';
+  const sellHit = (s || 0) >= 40;
+  const blk = (kind, cls, full, short, v, delta, hit, tip) => `<div class="sp ${kind} ${hit ? 'hit' : ''}" title="${tip}"><span class="sp-lbl"><span class="full">${full}</span><span class="short">${short}</span></span><div class="score-bar-wrap ${cls}">${deltaHtml(delta)}<div class="score-bar"><div style="width:${v ?? 0}%"></div></div><span class="score-num">${v ?? '–'}</span></div></div>`;
+  const buyTip = isGrowth ? pfT(`Tillväxtpoäng – KÖP från ${BUY_THRESHOLD}`, `Growth score – BUY from ${BUY_THRESHOLD}`) : pfT(`Köppoäng – KÖP från ${BUY_THRESHOLD}`, `Buy score – BUY from ${BUY_THRESHOLD}`);
+  return `<div class="score-pair">${blk('sp-buy', buyCls, pfT('KÖP', 'BUY'), pfT('K', 'B'), b, isGrowth ? null : r.buy_score_delta, buyHit, buyTip)}${blk('sp-sell', 'sell', pfT('SÄLJ', 'SELL'), 'S', s, r.sell_score_delta, sellHit, pfT('Säljpoäng – SÄLJ från 40', 'Sell score – SELL from 40'))}</div>`;
 }
 
 // ===== Nya verktyg (v10.0): rapportkalender, vinstrevideringar, relativ styrka, signaluppföljning =====
@@ -3602,7 +3614,7 @@ const MODULES_SV = [
           <div class="lbl">I appen</div>
           <table>
             <tr><td>≥75 poäng</td><td>Flaggas KÖP (om analytikerkonsensus inte säger emot — mer om det senare). Gränsen höjdes från 65 till 75 i oktober 2026, eftersom drygt var tredje aktie nått 65 och flaggan då slutade vara selektiv. Gäller både köp- och tillväxtpoängen</td></tr>
-            <tr><td>≥40 säljpoäng</td><td>Flaggas SÄLJ för innehav du äger. Under Mina innehav visas köp- och säljpoäng sida vid sida, med ett streck vid respektive gräns</td></tr>
+            <tr><td>≥40 säljpoäng</td><td>Flaggas SÄLJ för innehav du äger. Under Mina innehav visas köppoäng och säljpoäng på samma rad: köppoängen som för aktier du inte äger (grön vid KÖP) och säljpoängen intill i rött</td></tr>
             <tr><td>&lt;50 poäng</td><td>Döljs i USA/Europa/Norden/Tillväxt (bevakas fortfarande, dina innehav visas alltid)</td></tr>
           </table>
         </div>

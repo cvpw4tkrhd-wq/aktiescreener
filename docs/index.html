@@ -476,6 +476,15 @@
     .sp-lbl { font-size: 8px; } .sp-lbl .full { display: none; } .sp-lbl .short { display: inline; }
     .score-pair .score-bar { width: 20px; } .sp .score-bar-wrap { gap: 3px; } .sp .score-num { width: 18px; font-size: 12px; }
   }
+  /* Månadssnapshots (v11.8) */
+  .snap-row { display: grid; grid-template-columns: 1fr auto 62px; gap: 10px; align-items: baseline; padding: 6px 0; border-top: 1px solid var(--border); font-size: 12.5px; }
+  .snap-row:first-of-type { border-top: none; } .snap-row.clickable { cursor: pointer; }
+  .snap-nm em { font-style: normal; font-size: 10.5px; color: var(--text-faint); margin-left: 4px; }
+  .snap-sc { font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: var(--text-dim); white-space: nowrap; }
+  .snap-rt { font-family: 'IBM Plex Mono', monospace; font-size: 12px; text-align: right; white-space: nowrap; }
+  #analysisTabs { overflow-x: auto; }
+  /* Säljpoäng nära noll är bra – grönt i informationsrutan (v11.8) */
+  .dr-sum-item.sum-sell.low { border-color: var(--up); } .dr-sum-item.sum-sell.low .dr-sum-val { color: var(--up); }
   .hidden-note { font-size: 12px; color: var(--text-faint); padding: 12px 18px 16px; text-align: center; }
   .fund-cat-banner .fcb-left { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
   .fund-cat-banner .fcb-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
@@ -903,11 +912,11 @@
     /* Pris, P/E, RSI14, Volym och info-knappen ryms i detaljvyn — döljs i
        tabellen för att ge Namn, Kursmål och Poäng plats utan avklippning.
        Hela raden går fortfarande att trycka på för att öppna detaljvyn. */
-    thead th:nth-child(2), td:nth-child(2),
-    thead th:nth-child(3), td:nth-child(3),
-    thead th:nth-child(4), td:nth-child(4),
-    thead th:nth-child(5), td:nth-child(5),
-    thead th:nth-child(8), td:nth-child(8) { display: none; }
+    table:not(.fu-table) thead th:nth-child(2), table:not(.fu-table) td:nth-child(2),
+    table:not(.fu-table) thead th:nth-child(3), table:not(.fu-table) td:nth-child(3),
+    table:not(.fu-table) thead th:nth-child(4), table:not(.fu-table) td:nth-child(4),
+    table:not(.fu-table) thead th:nth-child(5), table:not(.fu-table) td:nth-child(5),
+    table:not(.fu-table) thead th:nth-child(8), table:not(.fu-table) td:nth-child(8) { display: none; }
   }
 
   @media (max-width: 400px) {
@@ -1080,6 +1089,7 @@
     <div class="tab" data-atab="sectors">BRANSCHER</div>
     <div class="tab" data-atab="companies">TOPPBOLAG</div>
     <div class="tab" data-atab="signals">SIGNALER</div>
+    <div class="tab" data-atab="snapshots">SNAPSHOTS</div>
   </div>
   <div class="panel" id="analysisPanel" style="display:none;">
     <div id="analysisUploadHost"></div>
@@ -1154,6 +1164,7 @@ const state = { data: null, tab: 'us', sort: 'score_desc', holdings: {}, holding
 
 // ===== Innehav: allt sker lokalt i webbläsaren, inget skickas till servern =====
 
+const SELL_LOW_MAX = 15;   // v11.8: säljpoäng upp till detta visas grönt i informationsrutan
 const SELL_SIGNAL_THRESHOLD = 50;
 const MAX_HISTORY_ENTRIES = 90;
 const TICKER_SUFFIXES = ['.ST', '.L', '.DE', '.US', '.OL', '.CO', '.HE', '.T', '.SS', '.SZ', '.HK', '.AS'];
@@ -2224,6 +2235,85 @@ function timeAgoLocal(iso) {
   return pfT(`${Math.round(h / 24)} dygn sedan`, `${Math.round(h / 24)} days ago`);
 }
 
+// ===== Månadssnapshots (v11.8): ANALYS → SNAPSHOTS =====
+async function loadSnapshots() {
+  if (state.snapshots !== undefined) return state.snapshots;
+  try { const res = await fetch('snapshots.json?_=' + Date.now()); state.snapshots = res.ok ? await res.json() : null; } catch (e) { state.snapshots = null; }
+  return state.snapshots;
+}
+const snapPct = v => v == null ? '–' : `${v > 0 ? '+' : ''}${fmtNum(v, 1)}%`;
+const snapCls = v => v == null ? '' : (v > 0.05 ? 'up-txt' : (v < -0.05 ? 'down-txt' : ''));
+const SNAP_LBL_EN = { Stabilt: 'Stable', Blandat: 'Mixed', Ostabilt: 'Unstable', Stressat: 'Stressed' };
+function snapLbl(l) { return l ? (window.APP_LANG === 'en' ? (SNAP_LBL_EN[l] || l) : l) : ''; }
+function snapMonthName(ym) { const [y, m] = String(ym).split('-'); return `${(window.APP_LANG === 'en' ? MON_EN : MON_SV)[+m - 1]} ${y}`; }
+function snapCompLabel(c) {
+  if (c.id === 'live') return pfT(`Senaste snapshot (${snapMonthName(c.from)}) → idag`, `Latest snapshot (${snapMonthName(c.from)}) → today`);
+  if (c.id === 'first_live') return pfT(`Första snapshot (${snapMonthName(c.from)}) → idag`, `First snapshot (${snapMonthName(c.from)}) → today`);
+  return `${snapMonthName(c.from)} → ${snapMonthName(c.to)}`;
+}
+function snapGroupTable(groups, labels, uni) {
+  const rows = groups.map(g => g.n ? `<tr><td>${labels[g.group] || g.group}</td><td class="num">${g.n}</td><td class="num"><span class="${snapCls(g.avg)}">${snapPct(g.avg)}</span></td><td class="num">${snapPct(g.median)}</td><td class="num"><span class="${snapCls(g.excess)}">${g.excess > 0 ? '+' : ''}${fmtNum(g.excess, 1)} pp</span></td><td class="num">${fmtNum(g.beat_median, 0)}%</td></tr>` : `<tr><td>${labels[g.group] || g.group}</td><td class="num">0</td><td class="num dim" colspan="4">–</td></tr>`).join('');
+  return `<div class="table-scroll"><table class="fu-table"><thead><tr><th>${pfT('Grupp vid start', 'Group at start')}</th><th class="num">${pfT('Antal', 'Count')}</th><th class="num">${pfT('Snitt', 'Average')}</th><th class="num">${pfT('Median', 'Median')}</th><th class="num">${pfT('Mot snitt', 'vs average')}</th><th class="num">${pfT('Slog medianen', 'Beat median')}</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="pf-note">${pfT('Genomsnitt för alla jämförda', 'Average of all compared')}: <b>${snapPct(uni)}</b></div>`;
+}
+function snapRows(list, kind) {
+  if (!list || !list.length) return `<div class="pf-note">${pfT('Inga.', 'None.')}</div>`;
+  return list.map(x => {
+    const open = kind === 'stock' && (state.data.results || []).some(r => r.ticker === x.t);
+    const sc = kind === 'fund' ? `${x.a} → ${x.b}${x.la && x.lb && x.la !== x.lb ? ` (${escapeHtml(x.la)} → ${escapeHtml(x.lb)})` : ''}` : `${x.a} → ${x.b}`;
+    return `<div class="snap-row ${open ? 'clickable' : ''}" ${open ? `data-open-ticker="${escapeHtml(x.t)}"` : ''}><span class="snap-nm">${escapeHtml(x.n || x.t)}${kind === 'fund' && x.c ? ` <em>${escapeHtml(x.c)}</em>` : ''}</span><span class="snap-sc">${sc}</span><span class="snap-rt ${snapCls(x.ret)}">${snapPct(x.ret)}</span></div>`;
+  }).join('');
+}
+async function renderSnapshots(host) {
+  host.innerHTML = `<div class="fund-note">${pfT('Laddar…', 'Loading…')}</div>`;
+  const S = await loadSnapshots();
+  if (!S || !S.snapshots || !S.snapshots.length) { host.innerHTML = `<div class="fund-note" data-noi18n>${pfT('Den första snapshoten tas vid nästa schemalagda körning.', 'The first snapshot is taken at the next scheduled run.')}</div>`; return; }
+  const snaps = S.snapshots, comps = S.comparisons || [];
+  const c = comps.find(x => x.id === state.snapComp) || comps[0];
+  state.snapComp = c.id;
+  const last = snaps[snaps.length - 1];
+  const nm = new Date(last.month + '-01T12:00:00'); nm.setMonth(nm.getMonth() + 1);
+  const nextYm = `${nm.getFullYear()}-${String(nm.getMonth() + 1).padStart(2, '0')}`;
+  const snapList = snaps.map(s => `${fmtDayMon(s.date)} ${s.date.slice(0, 4)}${s.kind === 'start' ? pfT(' (start)', ' (start)') : ''}`).join(' · ');
+  const sel = `<select class="iconbtn" id="snapSel" aria-label="${pfT('Välj jämförelse', 'Choose comparison')}">${comps.map(x => `<option value="${x.id}" ${x.id === c.id ? 'selected' : ''}>${snapCompLabel(x)}</option>`).join('')}</select>`;
+  const s = c.stocks, f = c.funds, m = c.macro;
+  const tile = (l, v, sub) => `<div class="pf-cell"><div class="pf-cell-l">${l}</div><div class="pf-cell-v">${v}</div>${sub ? `<div class="pf-cell-s">${sub}</div>` : ''}</div>`;
+  const dsub = c.days >= 1 ? pfT(`${fmtDayMon(c.from_date)} → ${c.to === 'live' ? pfT('idag', 'today') : fmtDayMon(c.to_date)} · ${c.days} dagar`, `${fmtDayMon(c.from_date)} → ${c.to === 'live' ? 'today' : fmtDayMon(c.to_date)} · ${c.days} days`) : '';
+  const fresh = c.days < 1 ? `<div class="pf-obs info">${pfT('Snapshoten togs idag. Jämförelsen fylls på av sig själv vid nästa körning och när nästa månads snapshot tagits.', 'The snapshot was taken today. The comparison fills in by itself at the next run and when next month\'s snapshot has been taken.')}</div>` : '';
+  const modelNote = c.model_changed ? `<div class="pf-obs info">${pfT(`Modellen ändrades mellan snapshotsen (v${c.from_version} → v${c.to_version}). En del av poängskillnaden beror därför på modellen och inte på bolagen.`, `The model changed between the snapshots (v${c.from_version} → v${c.to_version}). Part of the score difference is therefore due to the model and not the companies.`)}</div>` : '';
+  const sLabels = { 'KÖP': pfT(`KÖP (≥${S.buy_threshold || BUY_THRESHOLD})`, `BUY (≥${S.buy_threshold || BUY_THRESHOLD})`), 'MELLAN': `50–${(S.buy_threshold || BUY_THRESHOLD) - 1}`, 'LÅG': pfT('Under 50', 'Below 50') };
+  const fLabels = { Lovande: pfT('Lovande', 'Promising'), Neutral: pfT('Neutral', 'Neutral'), Svag: pfT('Svag', 'Weak') };
+  const perf = c.days >= 1;
+  const html = `
+    <div class="mp-section"><div class="mp-title">${pfT('Månadssnapshots', 'Monthly snapshots')}</div>
+      <div class="pf-note">${pfT(`Vid första körningen varje månad sparas poängen för alla aktier och fonder. Därefter jämförs de med nästa månads snapshot: hur poängen ändrats, vilka som kom in i eller lämnade KÖP och hur grupperna utvecklats i kurs. Snapshots: ${snapList}. Nästa tas vid första körningen i ${snapMonthName(nextYm)}.`, `At the first run each month the scores of all stocks and funds are saved. They are then compared with the next month's snapshot: how the scores changed, which entered or left BUY and how the groups developed in price. Snapshots: ${snapList}. The next is taken at the first run in ${snapMonthName(nextYm)}.`)}</div>
+      <div style="margin:10px 0 4px">${sel}</div>${fresh}${modelNote}
+      <div class="pf-cells">
+        ${tile(pfT('AKTIER JÄMFÖRDA', 'STOCKS COMPARED'), s.n, dsub)}
+        ${tile(pfT('SNITT POÄNGÄNDRING', 'AVG SCORE CHANGE'), `${s.avg_change > 0 ? '+' : ''}${fmtNum(s.avg_change, 1)}`, pfT(`${s.up} upp · ${s.down} ner`, `${s.up} up · ${s.down} down`))}
+        ${tile(pfT('ANTAL KÖP', 'BUY COUNT'), `${s.buy_a} → ${s.buy_b}`, pfT(`${s.entered.length} in · ${s.left.length} ut`, `${s.entered.length} in · ${s.left.length} out`))}
+        ${tile(pfT('STABILITET', 'STABILITY'), `${m.stability_a != null ? fmtNum(m.stability_a, 0) : '–'} → ${m.stability_b != null ? fmtNum(m.stability_b, 0) : '–'}`, `${snapLbl(m.label_a)} → ${snapLbl(m.label_b)}`)}
+      </div></div>
+    <div class="mp-section"><div class="mp-title">${pfT('Aktier – hur gick det för grupperna?', 'Stocks – how did the groups do?')}</div>
+      ${perf ? snapGroupTable(s.groups, sLabels, s.universe_avg_return) + (s.ic != null ? `<div class="pf-note">${pfT('Rangkorrelation mellan poäng vid start och avkastning', 'Rank correlation between score at start and return')}: <b>${s.ic > 0 ? '+' : ''}${fmtNum(s.ic, 2)}</b> ${pfT('(0 = inget samband, +1 = högre poäng gav alltid högre avkastning)', '(0 = no relationship, +1 = higher score always gave higher return)')}</div>` : '') : `<div class="pf-note">${pfT('Visas när det gått minst en dag.', 'Shown once at least a day has passed.')}</div>`}
+    </div>
+    <div class="mp-section"><div class="mp-title">${pfT('Aktier – förändringar', 'Stocks – changes')}</div>
+      <div class="mp-sub">${pfT('Nya KÖP', 'New BUY')}</div>${snapRows(s.entered, 'stock')}
+      <div class="mp-sub" style="margin-top:12px">${pfT('Lämnade KÖP', 'Left BUY')}</div>${snapRows(s.left, 'stock')}
+      <div class="mp-sub" style="margin-top:12px">${pfT('Största poänghöjningar', 'Largest score increases')}</div>${snapRows(s.top_up, 'stock')}
+      <div class="mp-sub" style="margin-top:12px">${pfT('Största poängfall', 'Largest score drops')}</div>${snapRows(s.top_down, 'stock')}
+      <div class="pf-note">${pfT('Kolumnerna är poäng vid start → poäng nu och kursutveckling mellan datumen.', 'The columns are score at start → score now and price change between the dates.')}${s.new ? pfT(` ${s.new} aktier har tillkommit i bevakningen sedan start och ingår inte.`, ` ${s.new} stocks have been added to the watchlist since the start and are not included.`) : ''}</div></div>
+    <div class="mp-section"><div class="mp-title">${pfT('Fonder', 'Funds')}</div>
+      ${perf ? snapGroupTable(f.groups, fLabels, f.universe_avg_return) + (f.ic != null ? `<div class="pf-note">${pfT('Rangkorrelation', 'Rank correlation')}: <b>${f.ic > 0 ? '+' : ''}${fmtNum(f.ic, 2)}</b></div>` : '') : ''}
+      <div class="mp-sub" style="margin-top:10px">${pfT('Största poänghöjningar', 'Largest score increases')}</div>${snapRows(f.top_up, 'fund')}
+      <div class="mp-sub" style="margin-top:12px">${pfT('Största poängfall', 'Largest score drops')}</div>${snapRows(f.top_down, 'fund')}
+      ${f.label_changes.length ? `<div class="mp-sub" style="margin-top:12px">${pfT('Bytt läge (Lovande/Neutral/Svag)', 'Changed rating (Promising/Neutral/Weak)')}</div>${snapRows(f.label_changes, 'fund')}` : ''}</div>
+    <div class="mp-caveat">${pfT('Avkastningen är total avkastning med justerade kurser (utdelningar och splittar ingår) mellan snapshotdatumen, utan avgifter och skatt. Korta perioder är brusiga: en månad säger lite om en modell, och först efter många månader går det att se om poängen hänger ihop med utvecklingen. Poängen vid snapshotdatumet kommer från den modellversion som då gällde. Inte finansiell rådgivning.', 'Return is total return with adjusted prices (dividends and splits included) between the snapshot dates, before fees and tax. Short periods are noisy: one month says little about a model, and only after many months can you see whether the scores relate to performance. The scores at the snapshot date come from the model version that applied then. Not financial advice.')}</div>`;
+  host.innerHTML = `<div class="macro-panel" data-noi18n>${html}</div>`;
+  document.getElementById('snapSel').addEventListener('change', e => { state.snapComp = e.target.value; renderSnapshots(host); });
+  host.querySelectorAll('[data-open-ticker]').forEach(el => el.addEventListener('click', () => openDrawer(el.dataset.openTicker)));
+}
+
 function renderMacroPanel() {
   const host = document.getElementById('macroHost');
   const data = state.data || {};
@@ -2386,9 +2476,24 @@ function rerenderCurrent() {
   if (state.main === 'funds') renderFunds(); else if (state.main === 'analysis') renderAnalysis(); else render();
 }
 
+// v11.8: i Mina innehav visas både köp- och säljpoäng, så "poäng" kan inte vara en enda sak – välj vilken.
+const SORT_OPTIONS_STD = [['score_desc', 'Sortera: poäng (hög→låg)'], ['pe_asc', 'Sortera: P/E (lågt→högt)'], ['rsi_asc', 'Sortera: RSI (lågt→högt)'], ['vol_desc', 'Sortera: volymavvikelse'], ['target_desc', 'Sortera: kursmål (hög→låg)']];
+const SORT_OPTIONS_HOLD = [['buy_desc', 'Sortera: köppoäng (hög→låg)'], ['sell_desc', 'Sortera: säljpoäng (hög→låg)']].concat(SORT_OPTIONS_STD.slice(1));
+function syncSortOptions() {
+  const sel = document.getElementById('sortSelect'); if (!sel) return;
+  const hold = state.tab === 'sell';
+  const opts = hold ? SORT_OPTIONS_HOLD : SORT_OPTIONS_STD;
+  const sig = opts.map(o => o[0]).join(',');
+  if (state.sort === 'score_desc' && hold) state.sort = 'buy_desc';
+  if ((state.sort === 'buy_desc' || state.sort === 'sell_desc') && !hold) state.sort = 'score_desc';
+  if (sel.dataset.sig !== sig) { sel.innerHTML = opts.map(o => `<option value="${o[0]}">${o[1]}</option>`).join(''); sel.dataset.sig = sig; }
+  sel.value = state.sort;
+}
 function sortRows(rows, key) {
   const s = [...rows];
   switch (key) {
+    case 'buy_desc': s.sort((a,b) => ((b.growth_candidate ? b.growth_score : b.buy_score) ?? 0) - ((a.growth_candidate ? a.growth_score : a.buy_score) ?? 0)); break;
+    case 'sell_desc': s.sort((a,b) => (b.sell_score ?? 0) - (a.sell_score ?? 0)); break;
     case 'pe_asc': s.sort((a,b) => (a.pe ?? 9999) - (b.pe ?? 9999)); break;
     case 'rsi_asc': s.sort((a,b) => (a.rsi14 ?? 9999) - (b.rsi14 ?? 9999)); break;
     case 'vol_desc': s.sort((a,b) => (b.volume_ratio ?? 0) - (a.volume_ratio ?? 0)); break;
@@ -2403,6 +2508,7 @@ function sortRows(rows, key) {
 
 function render() {
   if (!state.data) return;
+  syncSortOptions();
   renderUploadPanel();
   renderPendingPanel();
   let rows = state.data.results || [];
@@ -2851,7 +2957,7 @@ function drawerSummaryHtml(r) {
   return `<div class="dr-summary">
     ${box('PRIS', `${fmtNum(r.price)} <small>${r.currency || ''}</small>`, '', '')}
     ${r.is_holding
-      ? box(tab === 'growth' ? 'TILLVÄXTPOÄNG' : 'KÖPPOÄNG', (tab === 'growth' ? r.growth_score : r.buy_score) ?? '–', 'sum-buy', `KÖP från ${BUY_THRESHOLD}`) + box('SÄLJPOÄNG', r.sell_score ?? '–', 'sum-sell' + ((r.sell_score || 0) >= 40 ? ' hit' : ''), 'SÄLJ från 40')
+      ? box(tab === 'growth' ? 'TILLVÄXTPOÄNG' : 'KÖPPOÄNG', (tab === 'growth' ? r.growth_score : r.buy_score) ?? '–', 'sum-buy', `KÖP från ${BUY_THRESHOLD}`) + box('SÄLJPOÄNG', r.sell_score ?? '–', 'sum-sell' + ((r.sell_score || 0) >= 40 ? ' hit' : ((r.sell_score ?? 99) <= SELL_LOW_MAX ? ' low' : '')), 'SÄLJ från 40')
       : box(scoreLabel, score ?? '–', scoreCls, tab === 'growth' ? '' : `KÖP från ${BUY_THRESHOLD}`)}
     ${box('VÄRDERING', vTxt, vCls, v ? `${v.metric} ${v.diff_pct > 0 ? '+' : ''}${fmtNum(v.diff_pct, 0)}% mot historik` : '')}
     ${box('TREND', trTxt, trCls, r.rsi14 != null ? `RSI ${fmtNum(r.rsi14, 0)}` : '')}
@@ -3072,6 +3178,7 @@ function renderAnalysis() {
   const host = document.getElementById('analysisHost');
   const up = document.getElementById('analysisUploadHost');
   if ((state.analysisTab || 'overview') === 'signals') { up.innerHTML = ''; renderFollowup(host); return; }
+  if ((state.analysisTab || 'overview') === 'snapshots') { up.innerHTML = ''; renderSnapshots(host); return; }
   mountUploadPanel(up, 'a', true);
   const hasHold = Object.keys(state.holdings || {}).length > 0;
   if (!hasHold) { host.innerHTML = `<div class="fund-note" data-noi18n>${pfT('Ladda upp din innehavsfil ovan – samma fil som för aktier och fonder. Analysen visar hur dina aktier och fonder tillsammans fördelar sig på branscher och bolag.', 'Upload your holdings file above – the same file as for stocks and funds. The analysis shows how your stocks and funds together are spread across sectors and companies.')}</div>`; return; }
@@ -4182,7 +4289,8 @@ const MODULES_SV = [
     { id: "fondpoang", title: "Fondpoängen — hur lovande ser en fond ut just nu?", body: `<div class="analogy"><div class="lbl">Liknelse</div><p>Att välja fond är lite som att välja buss: alla bussar på samma linje (samma kategori) kör ungefär samma väg, men vissa går i tid, har låg biljettpris och en lugn förare. Fondpoängen jämför bussar på samma linje med varandra, inte en stadsbuss med ett tåg.</p></div><p>Varje fond får en poäng 0–100 som sätts ihop av fem delar. Jämförelser görs så långt det går <strong>inom samma kategori</strong> — en svensk indexfond mot andra svenska indexfonder, en räntefond mot andra räntefonder.</p><div class="in-app"><div class="lbl">I appen</div><table><tr><td>Trend (35)</td><td>Hur långt över/under SMA200 kursen ligger, om SMA200 stiger eller faller, kurs över SMA50, golden cross och RSI</td></tr><tr><td>Momentum (25)</td><td>Blandad avkastning 3/6/12 mån – hälften rankad inom kategorin, hälften mot alla jämförbara fonder</td></tr><tr><td>Riskjusterad avkastning (25)</td><td>Sharpekvot mot styrräntan och största fall senaste året</td></tr><tr><td>Avgift (10)</td><td>≤0,3 % ger full pott, över 1,5 % ger noll</td></tr><tr><td>Kategoriläge (5)</td><td>Hur kategorins marknadsindex ser ut (medvind/motvind), stabilitetspoängen för räntefonder</td></tr><tr><td>≥75 / &lt;50</td><td>Lovande / döljs i listorna</td></tr><tr><td>Banker, försäkring, värdepappersbolag, fastigheter</td><td>FCF-marginalen räknas inte – kassaflödet speglar insättningar, utlåning och fastighetsköp, inte lönsamhet</td></tr></table></div><h3 class="sub">Kategoriläge — medvind eller motvind för branschen</h3><p>Under <strong>Alla fonder</strong> visar varje kategoribanner ett eget läge 0–100: <strong>Medvind</strong> (65+), <strong>Neutralt</strong> (45–64) eller <strong>Motvind</strong> (under 45), plus pil för förändringen senaste månaden. Det mäts inte på fonderna själva utan på ett marknadsindex för kategorin – t.ex. OMXS30 för svenska indexfonder, S&amp;P 500 för USA och guld/silver för ädelmetallfonder – med trend (40), momentum (40) och risk (20). För räntefonder används stabilitetspoängen. Läget står för 5 av fondpoängens 100 poäng och visar om hela branschen har vind i ryggen just nu.</p><div class="callout-warn"><strong>Kom ihåg:</strong> fondpoängen mäter hur fonden ser ut <em>just nu</em> – trend och momentum vänder. Den säger ingenting om förvaltarens skicklighet på lång sikt och är inte finansiell rådgivning.</div>` },
     { id: "stabilitet", title: "Stabilitetsmätaren — ränte- och kreditläget i en siffra", body: `<p>Under <strong>MAKRO → STABILITET</strong> visar en mätare med nål hur stabilt ränte- och kreditläget är, från mycket instabilt (vänster) till mycket stabilt (höger). Poängen 0–100 väger ihop sex kategorier: ränterörelse, räntekurva, kredit, realränta och inflation, obligationsvolatilitet (MOVE) samt Europa och Norden.</p><p>Grafen under mätaren visar hur poängen rört sig vecka för vecka eller månad för månad. Historiken räknas fram med exakt samma formel och bara med data som fanns vid respektive datum.</p><div class="in-app"><div class="lbl">I appen</div><table><tr><td>70–100 Stabilt</td><td>+2 poäng på alla aktier vid ≥80</td></tr><tr><td>50–70 Blandat</td><td>0 till −2 poäng</td></tr><tr><td>30–50 Ostabilt</td><td>−4 till −6 poäng</td></tr><tr><td>0–30 Stressat</td><td>−8 poäng</td></tr><tr><td>Trend ±5 på en månad</td><td>±2 poäng extra</td></tr></table></div>` },
     { id: "portfolj", title: "Analys-fliken — branscher och bolag i hela portföljen", body: `<div class="analogy"><div class="lbl">Liknelse</div><p>Att äga tio fonder kan kännas som god spridning. Men om alla tio har samma äpplen i korgen har du i praktiken en korg med äpplen. Analys-fliken tittar in i korgarna och visar vad du egentligen äger, när aktier och fonder läggs ihop.</p></div><p>Fliken använder samma innehavsfil som resten av appen, med kolumnen Marknadsvärde för att räkna vikter. Allt räknas i din webbläsare och inga belopp visas, bara andelar.</p><h3 class="sub">Branscher</h3><p>Dina direkta aktier och den aktiedel som ligger i fonderna läggs ihop och delas på bransch. Ett streck visar hur marknaden som helhet ser ut (en global indexfond), så att du ser var du är över- eller undervikt. Tryck på en bransch för att se vilka aktier och fonder som bidrar.</p><h3 class="sub">Toppbolag</h3><p>Dina största bolag i hela portföljen: det du äger direkt plus det som ligger i fondernas tio största innehav. Äger du Nvidia direkt och dessutom via tre fonder ser du den samlade exponeringen och en markering <strong>ÄGS DUBBELT</strong>.</p><h3 class="sub">Översikt</h3><p>Fördelning mellan aktier, räntor och kassa, nyckeltal om koncentration, observationer i klartext och en koppling till världsläget: hur stor del av dina aktier som ligger i branscher och länder med geopolitisk motvind, och hur stor del av fonderna som ligger i kategorier med medvind eller motvind.</p><div class="callout-warn"><strong>Begränsningar:</strong> Yahoo ger bara en fonds tio största innehav, ofta 30–60 % av fonden, så bolagssiffrorna är ett golv. Fondernas innehav uppdateras sällan. Branscherna är en grov indelning där halvledare ingår i teknik. Observationerna beskriver fördelningen och är inte finansiell rådgivning.</div><div class="in-app"><div class="lbl">I appen</div><table><tr><td>30 % i en bransch</td><td>Observation om hög koncentration</td></tr><tr><td>8 procentenheter över världsindex</td><td>Observation om övervikt</td></tr><tr><td>8 % i ett bolag (minst)</td><td>Observation om enskilt stort innehav</td></tr></table></div>` },
-    { id: "signaler", title: "Signaluppföljning — fungerar poängen?", body: `<div class="analogy"><div class="lbl">Liknelse</div><p>En väderprognos blir trovärdig först när man i efterhand kontrollerat hur ofta den slog in. Signaluppföljningen gör samma sak med appens poäng: den mäter hur aktierna faktiskt utvecklades efter att de fick en viss poäng.</p></div><p>Under <strong>ANALYS → SIGNALER</strong> finns två delar. <strong>Appens köpsignaler:</strong> varje vecka delas aktierna in efter köppoäng – KÖP (75+), 50–74 och under 50 – och avkastningen efter 1 vecka, 1, 3 och 6 månader jämförs med snittet för alla bevakade aktier. Historiken började i september 2026, så de längre perioderna fylls på efter hand. <strong>Historiskt test av trenddelen:</strong> Yahoo saknar historiska nyckeltal, men trend och RSI kan räknas fram ur kurserna. Testet görs vid varje månadsskifte de senaste två åren.</p><h3 class="sub">Så läser du siffrorna</h3><p><strong>pp mot snittet</strong> visar hur mycket bättre eller sämre gruppen gick än genomsnittet. <strong>Slog medianen</strong> visar hur stor andel som gick bättre än hälften av aktierna – 50 % betyder ingen förmåga att peka ut vinnare. Ett högt snitt med en träffsäkerhet nära 50 % betyder att några få stora rörelser drar upp snittet.</p><div class="callout-warn"><strong>Begränsningar:</strong> testet använder dagens bevakningslista, så aktier som lagts till för att de gått bra kan ge en skev bild. Två år är en kort period, och bara den tekniska delen kan testas bakåt.</div><h3 class="sub">Fler verktyg i poängen</h3><p><strong>Vinstrevideringar</strong> (+3/+6 eller −3/−6): hur analytikernas prognos för årets vinst ändrats senaste 30 dagarna. <strong>Relativ styrka</strong> (±5): om aktien gått minst 15 procentenheter bättre eller sämre än sitt index senaste halvåret. <strong>Rapportkalendern</strong> påverkar inte poängen men visar när nästa rapport kommer, och varnar när Yahoo ännu inte lagt in ett nyss rapporterat kvartal.</p>` }
+    { id: "signaler", title: "Signaluppföljning — fungerar poängen?", body: `<div class="analogy"><div class="lbl">Liknelse</div><p>En väderprognos blir trovärdig först när man i efterhand kontrollerat hur ofta den slog in. Signaluppföljningen gör samma sak med appens poäng: den mäter hur aktierna faktiskt utvecklades efter att de fick en viss poäng.</p></div><p>Under <strong>ANALYS → SIGNALER</strong> finns två delar. <strong>Appens köpsignaler:</strong> varje vecka delas aktierna in efter köppoäng – KÖP (75+), 50–74 och under 50 – och avkastningen efter 1 vecka, 1, 3 och 6 månader jämförs med snittet för alla bevakade aktier. Historiken började i september 2026, så de längre perioderna fylls på efter hand. <strong>Historiskt test av trenddelen:</strong> Yahoo saknar historiska nyckeltal, men trend och RSI kan räknas fram ur kurserna. Testet görs vid varje månadsskifte de senaste två åren.</p><h3 class="sub">Så läser du siffrorna</h3><p><strong>pp mot snittet</strong> visar hur mycket bättre eller sämre gruppen gick än genomsnittet. <strong>Slog medianen</strong> visar hur stor andel som gick bättre än hälften av aktierna – 50 % betyder ingen förmåga att peka ut vinnare. Ett högt snitt med en träffsäkerhet nära 50 % betyder att några få stora rörelser drar upp snittet.</p><div class="callout-warn"><strong>Begränsningar:</strong> testet använder dagens bevakningslista, så aktier som lagts till för att de gått bra kan ge en skev bild. Två år är en kort period, och bara den tekniska delen kan testas bakåt.</div><h3 class="sub">Fler verktyg i poängen</h3><p><strong>Vinstrevideringar</strong> (+3/+6 eller −3/−6): hur analytikernas prognos för årets vinst ändrats senaste 30 dagarna. <strong>Relativ styrka</strong> (±5): om aktien gått minst 15 procentenheter bättre eller sämre än sitt index senaste halvåret. <strong>Rapportkalendern</strong> påverkar inte poängen men visar när nästa rapport kommer, och varnar när Yahoo ännu inte lagt in ett nyss rapporterat kvartal.</p>` },
+    { id: "snapshots", title: "Månadssnapshots — så följer du modellen över tid", body: `<div class="analogy"><div class="lbl">Liknelse</div><p>Att väga sig en gång säger lite. Att väga sig första dagen varje månad visar riktningen. Snapshots gör samma sak med appens poäng: de sparar läget regelbundet så att du i efterhand kan se vad som hänt.</p></div><p>Vid första körningen varje månad (den 1:a, eller första vardagen efter, eftersom körningen bara går vardagar) sparas en <strong>snapshot</strong>: poängen för alla aktier och fonder, priset, rekommendationen och makroläget. Under <strong>ANALYS → SNAPSHOTS</strong> jämförs den senaste snapshoten med idag, och varje månad med den föregående.</p><h3 class="sub">Så läser du jämförelsen</h3><p><strong>Grupper vid start:</strong> aktierna delas in efter poäng vid snapshotdatumet (KÖP, mellan, låg) och du ser hur de utvecklats i kurs sedan dess. <strong>Mot snitt</strong> visar hur mycket bättre eller sämre gruppen gick än genomsnittet av alla, och <strong>Slog medianen</strong> hur stor andel som gick bättre än hälften av aktierna (50 % betyder inget samband). <strong>Rangkorrelationen</strong> sammanfattar det i ett tal mellan −1 och +1. Under tabellen finns vilka aktier som kom in i eller lämnade KÖP, och de största poänghöjningarna och poängfallen. Samma uppdelning görs för fonderna.</p><div class="callout-warn"><strong>Tolka försiktigt:</strong> en månad är för kort för att säga något om modellen, och först efter många månader går det att se om hög poäng hänger ihop med bättre utveckling. Om modellen ändrats mellan två snapshots varnar appen, eftersom en del av poängskillnaden då beror på modellen. Aktier som lagts till i bevakningen efter starten ingår inte.</div>` }
   ]
 }
 ];

@@ -1142,6 +1142,8 @@
 </div>
 
 <script>
+// v11.6: köpgräns för aktier (tidigare 65). Fondernas kategoriläge (65+) är en annan skala och påverkas inte.
+const BUY_THRESHOLD = 75;
 const state = { data: null, tab: 'us', sort: 'score_desc', holdings: {}, holdingsUploadedAt: null, main: 'stocks', macroTab: 'stability', fundTab: 'promising', analysisTab: 'overview', funds: null };
 
 // ===== Innehav: allt sker lokalt i webbläsaren, inget skickas till servern =====
@@ -1990,17 +1992,17 @@ function macroBreadthSectionHtml() {
     const med = (fn) => { const v = medianOf(g.map(fn)); return v === null ? '–' : fmtNum(v, 1); };
     const gold = g.filter(r => r.cross_signal_20_50 === 'golden_cross').length;
     const death = g.filter(r => r.cross_signal_20_50 === 'death_cross').length;
-    const buys = g.filter(r => (r.buy_score || 0) >= 65).length;
+    const buys = g.filter(r => (r.buy_score || 0) >= BUY_THRESHOLD).length;
     return `<tr><td>${name}</td><td>${g.length}</td><td>${pct(g, r => r.above_sma200 === undefined ? undefined : r.above_sma200)}</td><td>${pct(g, r => r.above_sma50 === undefined ? undefined : r.above_sma50)}</td><td>${med(r => r.rsi14)}</td><td>${med(r => (typeof r.pe === 'number' && r.pe > 0) ? r.pe : null)}</td><td>${gold} / ${death}</td><td>${buys}</td></tr>`;
   }).join('');
   return `
     <details class="mp-section" open>
       <summary>Marknadsbredd — beräknad på dina bevakade aktier</summary>
       <div class="mp-scroll"><table class="mp-table">
-        <thead><tr><th>Marknad</th><th>Antal</th><th>Över SMA200</th><th>Över SMA50</th><th>Median RSI</th><th>Median P/E</th><th>Golden / death (20/50)</th><th>Poäng ≥65</th></tr></thead>
+        <thead><tr><th>Marknad</th><th>Antal</th><th>Över SMA200</th><th>Över SMA50</th><th>Median RSI</th><th>Median P/E</th><th>Golden / death (20/50)</th><th>Poäng ≥${BUY_THRESHOLD}</th></tr></thead>
         <tbody>${line}</tbody>
       </table></div>
-      <div class="mp-note" style="margin-top:8px;">Räknas ut i webbläsaren från samma 200 aktier som poängsätts – inte hela marknaden. Bredden säger hur många aktier som mår bra, inte bara hur index rör sig. Poäng ≥65 avser köppoängen, före analytikerkonsensusens eventuella nedgradering till HÅLL.</div>
+      <div class="mp-note" style="margin-top:8px;">Räknas ut i webbläsaren från samma 200 aktier som poängsätts – inte hela marknaden. Bredden säger hur många aktier som mår bra, inte bara hur index rör sig. Poäng ≥${BUY_THRESHOLD} avser köppoängen, före analytikerkonsensusens eventuella nedgradering till HÅLL.</div>
     </details>`;
 }
 
@@ -2700,8 +2702,8 @@ function scoreBreakdownHtml(kind, r) {
   const math = isSell
     ? pfT(`0 + ${fmtNum(up, 0)} för att sälja − ${fmtNum(Math.abs(down), 0)} emot = ${fmtNum(Math.round(raw), 0)}${shown !== Math.round(raw) ? ` → visas som ${finalScore}` : ''}. SÄLJ-flagga från 40.`,
           `0 + ${fmtNum(up, 0)} for selling − ${fmtNum(Math.abs(down), 0)} against = ${fmtNum(Math.round(raw), 0)}${shown !== Math.round(raw) ? ` → shown as ${finalScore}` : ''}. SELL flag from 40.`)
-    : pfT(`50 + ${fmtNum(up, 0)} som höjer − ${fmtNum(Math.abs(down), 0)} som sänker${damp ? ` − ${fmtNum(Math.abs(damp), 0)} dämpning av stora bonusar` : ''} = ${finalScore}. KÖP från 65.`,
-          `50 + ${fmtNum(up, 0)} raising − ${fmtNum(Math.abs(down), 0)} lowering${damp ? ` − ${fmtNum(Math.abs(damp), 0)} dampening of large bonuses` : ''} = ${finalScore}. BUY from 65.`);
+    : pfT(`50 + ${fmtNum(up, 0)} som höjer − ${fmtNum(Math.abs(down), 0)} som sänker${damp ? ` − ${fmtNum(Math.abs(damp), 0)} dämpning av stora bonusar` : ''} = ${finalScore}. KÖP från ${BUY_THRESHOLD}.`,
+          `50 + ${fmtNum(up, 0)} raising − ${fmtNum(Math.abs(down), 0)} lowering${damp ? ` − ${fmtNum(Math.abs(damp), 0)} dampening of large bonuses` : ''} = ${finalScore}. BUY from ${BUY_THRESHOLD}.`);
   const dampPct = kind === 'growth' ? 40 : 50;
   const dampNote = damp ? `<div class="sb-foot-note">${pfT(`Dämpning: bonusar över 25 poäng räknas bara till ${dampPct} %, så att toppoäng blir ovanliga. Avdrag räknas alltid fullt ut.`, `Dampening: bonuses above 25 points count only ${dampPct}%, so top scores are rare. Deductions always count in full.`)}</div>` : '';
   const neutralHtml = neutral.length ? `<details class="sb-neutral"><summary>${pfT(`Övrigt – påverkar inte poängen (${neutral.length})`, `Other – does not affect the score (${neutral.length})`)}</summary><div class="sb-items">${neutral.map(x => `<div class="sb-item"><span class="sb-pts">±0</span><span>${escapeHtml(x)}</span></div>`).join('')}</div></details>` : '';
@@ -2728,7 +2730,7 @@ function dualScoreHtml(r) {
   const b = r.buy_score, s = r.sell_score;
   const row = (lbl, v, thr, cls, tip) => `<div class="ds-row ${cls} ${v != null && v >= thr ? 'hit' : ''}" title="${tip}">
       <span class="ds-lbl">${lbl}</span><div class="ds-bar"><div class="ds-fill" style="width:${v ?? 0}%"></div><div class="ds-thr" style="left:${thr}%"></div></div><span class="ds-num">${v ?? '–'}</span></div>`;
-  return `<div class="dual-score">${row(pfT('KÖP', 'BUY'), b, 65, 'ds-buy', pfT('Köppoäng – KÖP från 65 (strecket)', 'Buy score – BUY from 65 (the line)'))}${row(pfT('SÄLJ', 'SELL'), s, 40, 'ds-sell', pfT('Säljpoäng – SÄLJ från 40 (strecket)', 'Sell score – SELL from 40 (the line)'))}</div>`;
+  return `<div class="dual-score">${row(pfT('KÖP', 'BUY'), b, BUY_THRESHOLD, 'ds-buy', pfT(`Köppoäng – KÖP från ${BUY_THRESHOLD} (strecket)`, `Buy score – BUY from ${BUY_THRESHOLD} (the line)`))}${row(pfT('SÄLJ', 'SELL'), s, 40, 'ds-sell', pfT('Säljpoäng – SÄLJ från 40 (strecket)', 'Sell score – SELL from 40 (the line)'))}</div>`;
 }
 
 // ===== Nya verktyg (v10.0): rapportkalender, vinstrevideringar, relativ styrka, signaluppföljning =====
@@ -2788,7 +2790,7 @@ async function renderFollowup(host) {
   const liveH = (L.horizons || []).filter(h => h.dates > 0);
   const liveTxt = pfT(`Varje vecka sedan ${fmtDayMon(L.first_date)} delas aktierna in efter köppoäng, och avkastningen därefter jämförs med snittet för alla ${F.stocks} bevakade aktier samma datum. Historiken är ännu kort – längre perioder fylls på automatiskt.`,
     `Every week since ${fmtDayMon(L.first_date)} the stocks are grouped by buy score, and the return afterwards is compared with the average of all ${F.stocks} watched stocks on the same date. The history is still short – longer periods fill in automatically.`);
-  const live = liveH.length ? fuTableHtml(liveH, [['buy', pfT('KÖP (≥65)', 'BUY (≥65)')], ['mid', '50–64'], ['low', pfT('Under 50', 'Below 50')]], 'buckets') : `<div class="pf-note">${pfT('För lite data ännu.', 'Not enough data yet.')}</div>`;
+  const live = liveH.length ? fuTableHtml(liveH, [['buy', pfT(`KÖP (≥${BUY_THRESHOLD})`, `BUY (≥${BUY_THRESHOLD})`)], ['mid', `50–${BUY_THRESHOLD - 1}`], ['low', pfT('Under 50', 'Below 50')]], 'buckets') : `<div class="pf-note">${pfT('För lite data ännu.', 'Not enough data yet.')}</div>`;
   const bh = B.horizons || [];
   const defs = [['pos', pfT('Positiv signal', 'Positive signal')], ['neu', pfT('Neutral', 'Neutral')], ['neg', pfT('Negativ signal', 'Negative signal')]];
   const verdict = (() => {
@@ -2822,7 +2824,7 @@ function drawerSummaryHtml(r) {
   const tab = state.tab;
   const score = tab === 'sell' ? r.sell_score : (tab === 'growth' ? r.growth_score : r.buy_score);
   const scoreLabel = tab === 'sell' ? 'SÄLJPOÄNG' : (tab === 'growth' ? 'TILLVÄXTPOÄNG' : 'KÖPPOÄNG');
-  const scoreCls = score == null ? '' : (tab === 'sell' ? (score >= 65 ? 'bad' : score < 35 ? 'good' : '') : (score >= 65 ? 'good' : score < 35 ? 'bad' : ''));
+  const scoreCls = score == null ? '' : (tab === 'sell' ? (score >= 65 ? 'bad' : score < 35 ? 'good' : '') : (score >= BUY_THRESHOLD ? 'good' : score < 35 ? 'bad' : ''));
   const v = r.valuation;
   const vMap = { cheap: ['BILLIG', 'good'], fair: ['RIMLIG', ''], expensive: ['DYR', 'bad'] };
   const [vTxt, vCls] = v ? (vMap[v.verdict] || ['–', '']) : ['–', ''];
@@ -2837,8 +2839,8 @@ function drawerSummaryHtml(r) {
   return `<div class="dr-summary">
     ${box('PRIS', `${fmtNum(r.price)} <small>${r.currency || ''}</small>`, '', '')}
     ${r.is_holding
-      ? box(tab === 'growth' ? 'TILLVÄXTPOÄNG' : 'KÖPPOÄNG', (tab === 'growth' ? r.growth_score : r.buy_score) ?? '–', 'sum-buy', 'KÖP från 65') + box('SÄLJPOÄNG', r.sell_score ?? '–', 'sum-sell' + ((r.sell_score || 0) >= 40 ? ' hit' : ''), 'SÄLJ från 40')
-      : box(scoreLabel, score ?? '–', scoreCls, tab === 'growth' ? '' : 'KÖP från 65')}
+      ? box(tab === 'growth' ? 'TILLVÄXTPOÄNG' : 'KÖPPOÄNG', (tab === 'growth' ? r.growth_score : r.buy_score) ?? '–', 'sum-buy', `KÖP från ${BUY_THRESHOLD}`) + box('SÄLJPOÄNG', r.sell_score ?? '–', 'sum-sell' + ((r.sell_score || 0) >= 40 ? ' hit' : ''), 'SÄLJ från 40')
+      : box(scoreLabel, score ?? '–', scoreCls, tab === 'growth' ? '' : `KÖP från ${BUY_THRESHOLD}`)}
     ${box('VÄRDERING', vTxt, vCls, v ? `${v.metric} ${v.diff_pct > 0 ? '+' : ''}${fmtNum(v.diff_pct, 0)}% mot historik` : '')}
     ${box('TREND', trTxt, trCls, r.rsi14 != null ? `RSI ${fmtNum(r.rsi14, 0)}` : '')}
     ${box('ANALYTIKER', rec ? (recSv[rec] || rec.toUpperCase()) : '–', recCls, r.analyst_upside_pct != null ? `mål ${r.analyst_upside_pct > 0 ? '+' : ''}${fmtNum(r.analyst_upside_pct, 0)}%` : '')}
@@ -3478,7 +3480,7 @@ function signalFlag(r) {
 
   const relevantScore = state.tab === 'growth' ? r.growth_score : r.buy_score;
   const rec = r.recommendation_key;
-  const scoreQualifiesBuy = (relevantScore || 0) >= 65;
+  const scoreQualifiesBuy = (relevantScore || 0) >= BUY_THRESHOLD;
 
   if (scoreQualifiesBuy) {
     if (rec === 'sell' || rec === 'strong_sell' || rec === 'hold') {
@@ -3599,7 +3601,7 @@ const MODULES_SV = [
         <div class="in-app">
           <div class="lbl">I appen</div>
           <table>
-            <tr><td>≥65 poäng</td><td>Flaggas KÖP (om analytikerkonsensus inte säger emot — mer om det senare)</td></tr>
+            <tr><td>≥75 poäng</td><td>Flaggas KÖP (om analytikerkonsensus inte säger emot — mer om det senare). Gränsen höjdes från 65 till 75 i oktober 2026, eftersom drygt var tredje aktie nått 65 och flaggan då slutade vara selektiv. Gäller både köp- och tillväxtpoängen</td></tr>
             <tr><td>≥40 säljpoäng</td><td>Flaggas SÄLJ för innehav du äger. Under Mina innehav visas köp- och säljpoäng sida vid sida, med ett streck vid respektive gräns</td></tr>
             <tr><td>&lt;50 poäng</td><td>Döljs i USA/Europa/Norden/Tillväxt (bevakas fortfarande, dina innehav visas alltid)</td></tr>
           </table>
@@ -4168,7 +4170,7 @@ const MODULES_SV = [
     { id: "fondpoang", title: "Fondpoängen — hur lovande ser en fond ut just nu?", body: `<div class="analogy"><div class="lbl">Liknelse</div><p>Att välja fond är lite som att välja buss: alla bussar på samma linje (samma kategori) kör ungefär samma väg, men vissa går i tid, har låg biljettpris och en lugn förare. Fondpoängen jämför bussar på samma linje med varandra, inte en stadsbuss med ett tåg.</p></div><p>Varje fond får en poäng 0–100 som sätts ihop av fem delar. Jämförelser görs så långt det går <strong>inom samma kategori</strong> — en svensk indexfond mot andra svenska indexfonder, en räntefond mot andra räntefonder.</p><div class="in-app"><div class="lbl">I appen</div><table><tr><td>Trend (35)</td><td>Hur långt över/under SMA200 kursen ligger, om SMA200 stiger eller faller, kurs över SMA50, golden cross och RSI</td></tr><tr><td>Momentum (25)</td><td>Blandad avkastning 3/6/12 mån – hälften rankad inom kategorin, hälften mot alla jämförbara fonder</td></tr><tr><td>Riskjusterad avkastning (25)</td><td>Sharpekvot mot styrräntan och största fall senaste året</td></tr><tr><td>Avgift (10)</td><td>≤0,3 % ger full pott, över 1,5 % ger noll</td></tr><tr><td>Kategoriläge (5)</td><td>Hur kategorins marknadsindex ser ut (medvind/motvind), stabilitetspoängen för räntefonder</td></tr><tr><td>≥75 / &lt;50</td><td>Lovande / döljs i listorna</td></tr><tr><td>Banker, försäkring, värdepappersbolag, fastigheter</td><td>FCF-marginalen räknas inte – kassaflödet speglar insättningar, utlåning och fastighetsköp, inte lönsamhet</td></tr></table></div><h3 class="sub">Kategoriläge — medvind eller motvind för branschen</h3><p>Under <strong>Alla fonder</strong> visar varje kategoribanner ett eget läge 0–100: <strong>Medvind</strong> (65+), <strong>Neutralt</strong> (45–64) eller <strong>Motvind</strong> (under 45), plus pil för förändringen senaste månaden. Det mäts inte på fonderna själva utan på ett marknadsindex för kategorin – t.ex. OMXS30 för svenska indexfonder, S&amp;P 500 för USA och guld/silver för ädelmetallfonder – med trend (40), momentum (40) och risk (20). För räntefonder används stabilitetspoängen. Läget står för 5 av fondpoängens 100 poäng och visar om hela branschen har vind i ryggen just nu.</p><div class="callout-warn"><strong>Kom ihåg:</strong> fondpoängen mäter hur fonden ser ut <em>just nu</em> – trend och momentum vänder. Den säger ingenting om förvaltarens skicklighet på lång sikt och är inte finansiell rådgivning.</div>` },
     { id: "stabilitet", title: "Stabilitetsmätaren — ränte- och kreditläget i en siffra", body: `<p>Under <strong>MAKRO → STABILITET</strong> visar en mätare med nål hur stabilt ränte- och kreditläget är, från mycket instabilt (vänster) till mycket stabilt (höger). Poängen 0–100 väger ihop sex kategorier: ränterörelse, räntekurva, kredit, realränta och inflation, obligationsvolatilitet (MOVE) samt Europa och Norden.</p><p>Grafen under mätaren visar hur poängen rört sig vecka för vecka eller månad för månad. Historiken räknas fram med exakt samma formel och bara med data som fanns vid respektive datum.</p><div class="in-app"><div class="lbl">I appen</div><table><tr><td>70–100 Stabilt</td><td>+2 poäng på alla aktier vid ≥80</td></tr><tr><td>50–70 Blandat</td><td>0 till −2 poäng</td></tr><tr><td>30–50 Ostabilt</td><td>−4 till −6 poäng</td></tr><tr><td>0–30 Stressat</td><td>−8 poäng</td></tr><tr><td>Trend ±5 på en månad</td><td>±2 poäng extra</td></tr></table></div>` },
     { id: "portfolj", title: "Analys-fliken — branscher och bolag i hela portföljen", body: `<div class="analogy"><div class="lbl">Liknelse</div><p>Att äga tio fonder kan kännas som god spridning. Men om alla tio har samma äpplen i korgen har du i praktiken en korg med äpplen. Analys-fliken tittar in i korgarna och visar vad du egentligen äger, när aktier och fonder läggs ihop.</p></div><p>Fliken använder samma innehavsfil som resten av appen, med kolumnen Marknadsvärde för att räkna vikter. Allt räknas i din webbläsare och inga belopp visas, bara andelar.</p><h3 class="sub">Branscher</h3><p>Dina direkta aktier och den aktiedel som ligger i fonderna läggs ihop och delas på bransch. Ett streck visar hur marknaden som helhet ser ut (en global indexfond), så att du ser var du är över- eller undervikt. Tryck på en bransch för att se vilka aktier och fonder som bidrar.</p><h3 class="sub">Toppbolag</h3><p>Dina största bolag i hela portföljen: det du äger direkt plus det som ligger i fondernas tio största innehav. Äger du Nvidia direkt och dessutom via tre fonder ser du den samlade exponeringen och en markering <strong>ÄGS DUBBELT</strong>.</p><h3 class="sub">Översikt</h3><p>Fördelning mellan aktier, räntor och kassa, nyckeltal om koncentration, observationer i klartext och en koppling till världsläget: hur stor del av dina aktier som ligger i branscher och länder med geopolitisk motvind, och hur stor del av fonderna som ligger i kategorier med medvind eller motvind.</p><div class="callout-warn"><strong>Begränsningar:</strong> Yahoo ger bara en fonds tio största innehav, ofta 30–60 % av fonden, så bolagssiffrorna är ett golv. Fondernas innehav uppdateras sällan. Branscherna är en grov indelning där halvledare ingår i teknik. Observationerna beskriver fördelningen och är inte finansiell rådgivning.</div><div class="in-app"><div class="lbl">I appen</div><table><tr><td>30 % i en bransch</td><td>Observation om hög koncentration</td></tr><tr><td>8 procentenheter över världsindex</td><td>Observation om övervikt</td></tr><tr><td>8 % i ett bolag (minst)</td><td>Observation om enskilt stort innehav</td></tr></table></div>` },
-    { id: "signaler", title: "Signaluppföljning — fungerar poängen?", body: `<div class="analogy"><div class="lbl">Liknelse</div><p>En väderprognos blir trovärdig först när man i efterhand kontrollerat hur ofta den slog in. Signaluppföljningen gör samma sak med appens poäng: den mäter hur aktierna faktiskt utvecklades efter att de fick en viss poäng.</p></div><p>Under <strong>ANALYS → SIGNALER</strong> finns två delar. <strong>Appens köpsignaler:</strong> varje vecka delas aktierna in efter köppoäng – KÖP (65+), 50–64 och under 50 – och avkastningen efter 1 vecka, 1, 3 och 6 månader jämförs med snittet för alla bevakade aktier. Historiken började i september 2026, så de längre perioderna fylls på efter hand. <strong>Historiskt test av trenddelen:</strong> Yahoo saknar historiska nyckeltal, men trend och RSI kan räknas fram ur kurserna. Testet görs vid varje månadsskifte de senaste två åren.</p><h3 class="sub">Så läser du siffrorna</h3><p><strong>pp mot snittet</strong> visar hur mycket bättre eller sämre gruppen gick än genomsnittet. <strong>Slog medianen</strong> visar hur stor andel som gick bättre än hälften av aktierna – 50 % betyder ingen förmåga att peka ut vinnare. Ett högt snitt med en träffsäkerhet nära 50 % betyder att några få stora rörelser drar upp snittet.</p><div class="callout-warn"><strong>Begränsningar:</strong> testet använder dagens bevakningslista, så aktier som lagts till för att de gått bra kan ge en skev bild. Två år är en kort period, och bara den tekniska delen kan testas bakåt.</div><h3 class="sub">Fler verktyg i poängen</h3><p><strong>Vinstrevideringar</strong> (+3/+6 eller −3/−6): hur analytikernas prognos för årets vinst ändrats senaste 30 dagarna. <strong>Relativ styrka</strong> (±5): om aktien gått minst 15 procentenheter bättre eller sämre än sitt index senaste halvåret. <strong>Rapportkalendern</strong> påverkar inte poängen men visar när nästa rapport kommer, och varnar när Yahoo ännu inte lagt in ett nyss rapporterat kvartal.</p>` }
+    { id: "signaler", title: "Signaluppföljning — fungerar poängen?", body: `<div class="analogy"><div class="lbl">Liknelse</div><p>En väderprognos blir trovärdig först när man i efterhand kontrollerat hur ofta den slog in. Signaluppföljningen gör samma sak med appens poäng: den mäter hur aktierna faktiskt utvecklades efter att de fick en viss poäng.</p></div><p>Under <strong>ANALYS → SIGNALER</strong> finns två delar. <strong>Appens köpsignaler:</strong> varje vecka delas aktierna in efter köppoäng – KÖP (75+), 50–74 och under 50 – och avkastningen efter 1 vecka, 1, 3 och 6 månader jämförs med snittet för alla bevakade aktier. Historiken började i september 2026, så de längre perioderna fylls på efter hand. <strong>Historiskt test av trenddelen:</strong> Yahoo saknar historiska nyckeltal, men trend och RSI kan räknas fram ur kurserna. Testet görs vid varje månadsskifte de senaste två åren.</p><h3 class="sub">Så läser du siffrorna</h3><p><strong>pp mot snittet</strong> visar hur mycket bättre eller sämre gruppen gick än genomsnittet. <strong>Slog medianen</strong> visar hur stor andel som gick bättre än hälften av aktierna – 50 % betyder ingen förmåga att peka ut vinnare. Ett högt snitt med en träffsäkerhet nära 50 % betyder att några få stora rörelser drar upp snittet.</p><div class="callout-warn"><strong>Begränsningar:</strong> testet använder dagens bevakningslista, så aktier som lagts till för att de gått bra kan ge en skev bild. Två år är en kort period, och bara den tekniska delen kan testas bakåt.</div><h3 class="sub">Fler verktyg i poängen</h3><p><strong>Vinstrevideringar</strong> (+3/+6 eller −3/−6): hur analytikernas prognos för årets vinst ändrats senaste 30 dagarna. <strong>Relativ styrka</strong> (±5): om aktien gått minst 15 procentenheter bättre eller sämre än sitt index senaste halvåret. <strong>Rapportkalendern</strong> påverkar inte poängen men visar när nästa rapport kommer, och varnar när Yahoo ännu inte lagt in ett nyss rapporterat kvartal.</p>` }
   ]
 }
 ];

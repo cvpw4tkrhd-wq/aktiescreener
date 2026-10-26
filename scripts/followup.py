@@ -1,7 +1,7 @@
 """Signaluppföljning (v10.0): hur har appens poäng fungerat?
 
 1. Uppföljning av köpsignaler: för varje datum i data/score_history.json delas
-   aktierna in efter köppoäng (KÖP ≥65, 50–64, under 50) och avkastningen efter
+   aktierna in efter köppoäng (KÖP ≥75, 50–74, under 50) och avkastningen efter
    1 vecka, 1, 3 och 6 månader mäts mot snittet för alla bevakade aktier samma
    datum. Historiken är ännu kort – siffrorna blir pålitligare med tiden.
 2. Historiskt test av trenddelen: Yahoo saknar historiska nyckeltal, men
@@ -28,7 +28,7 @@ HORIZONS = [(5, "1 vecka"), (21, "1 månad"), (63, "3 månader"), (126, "6 måna
 
 
 def bucket_live(score):
-    return "buy" if score >= 65 else ("mid" if score >= 50 else "low")
+    return "buy" if score >= 75 else ("mid" if score >= 50 else "low")   # v11.6: 65 → 75
 
 
 def rsi(series, n=14):

@@ -34,7 +34,7 @@ WATCHLIST_FILE = DATA_DIR / "watchlist.yml"
 SCORE_HISTORY_FILE = DATA_DIR / "score_history.json"
 OUTPUT_FILE = DOCS_DIR / "results.json"
 
-BUY_SIGNAL_THRESHOLD = 65   # köppoäng för att räknas som "aktiv köpsignal" i dagräkningen
+BUY_SIGNAL_THRESHOLD = 75   # köppoäng för att räknas som "aktiv köpsignal" i dagräkningen (v11.6: 65 → 75)
 MAX_HISTORY_ENTRIES = 400   # ca 1,5 års vardagskörningar per ticker - för framtida backtesting av poäng vs avkastning
 
 RSI_PERIOD = 14

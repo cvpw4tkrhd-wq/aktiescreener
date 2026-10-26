@@ -1,31 +1,31 @@
 {
- "generated_at": "2026-10-23T20:08:16.238539+00:00",
- "version": "11.4",
+ "generated_at": "2026-10-26T13:47:13.503776+00:00",
+ "version": "11.5",
  "stocks": 271,
  "live": {
   "first_date": "2026-09-03",
-  "last_date": "2026-10-21",
-  "observations": 1567,
+  "last_date": "2026-10-26",
+  "observations": 1838,
   "horizons": [
    {
     "days": 5,
     "label": "1 vecka",
-    "dates": 13,
+    "dates": 14,
     "buckets": {
      "buy": {
-      "n": 466,
-      "avg_excess": 0.49,
-      "hit_rate": 52.6
+      "n": 565,
+      "avg_excess": 0.37,
+      "hit_rate": 51.2
      },
      "low": {
-      "n": 503,
-      "avg_excess": -0.62,
+      "n": 583,
+      "avg_excess": -0.56,
       "hit_rate": 45.1
      },
      "mid": {
-      "n": 325,
-      "avg_excess": 0.25,
-      "hit_rate": 51.1
+      "n": 405,
+      "avg_excess": 0.3,
+      "hit_rate": 53.1
      }
     }
    },
@@ -68,7 +68,7 @@
  "trend_backtest": {
   "months": 25,
   "first": "2024-08-30",
-  "last": "2026-10-23",
+  "last": "2026-10-26",
   "horizons": [
    {
     "days": 21,

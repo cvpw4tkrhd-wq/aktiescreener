@@ -38,6 +38,10 @@ jobs:
         if: always()
         run: python scripts/followup.py || echo "Signaluppföljningen misslyckades, fortsätter ändå"
 
+      - name: Månadssnapshot och jämförelse
+        if: always()
+        run: python scripts/snapshots.py || echo "Snapshot-steget misslyckades, fortsätter ändå"
+
       - name: Generera AI-kvalitetsanalyser för toppkandidater
         if: always()
         env:
@@ -57,6 +61,8 @@ jobs:
           git add docs/results.json data/score_history.json
           [ -f docs/funds.json ] && git add docs/funds.json
           [ -f docs/followup.json ] && git add docs/followup.json
+          [ -f docs/snapshots.json ] && git add docs/snapshots.json
+          [ -d data/snapshots ] && git add data/snapshots
           [ -f debug_crash.txt ] && git add debug_crash.txt
           [ -f data/writeups.json ] && git add data/writeups.json
           git diff --cached --quiet && echo "Inga förändringar" || git commit -m "Uppdatera screenerresultat $(date -u +'%Y-%m-%d %H:%M UTC')"

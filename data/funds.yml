@@ -27,6 +27,9 @@ category_proxies:
   "Råvaror/ädelmetaller": {name: "Guld och silver (snitt)", tickers: ["GC=F", "SI=F"]}
   "Räntefond": {name: "Stabilitetspoängen (räntor & kredit)", source: stability}
   "Dagligvaror": {name: "Dagligvaruaktier (XLP)", tickers: ["XLP"]}
+  "USA sektor": {name: "S&P 500", tickers: ["^GSPC"]}
+  "Europa sektor": {name: "STOXX Europe 600", tickers: ["^STOXX"]}
+  "Norden": {name: "Nordiska index (Sverige, Danmark, Finland)", tickers: ["^OMXSPI", "^OMXC25", "^OMXH25"]}
 # Fond vars branschfördelning används som "världsindex" i ANALYS-fliken (v9.8).
 reference_fund: "0P0001ECQR.ST"   # Avanza Global
 funds:
@@ -80,3 +83,46 @@ funds:
   - {name: "Xtrackers MSCI World Consumer Staples UCITS ETF 1C", ticker: "XDWS.DE", category: "Dagligvaror", asset_class: equity}
   - {name: "Amundi S&P World Consumer Staples Screened UCITS ETF Acc", ticker: "WELW.DE", category: "Dagligvaror", asset_class: equity}
   - {name: "SPDR MSCI Europe Consumer Staples UCITS ETF", ticker: "SPYC.DE", category: "Dagligvaror", asset_class: equity}
+  # --- ETF:er (v11.9): USA, Europa och Norden. etf: true visar en ETF-märkning i appen ---
+  - {name: "Vanguard S&P 500 UCITS ETF (USD) Acc", ticker: "VUAA.DE", category: "USA", asset_class: equity, etf: true}
+  - {name: "iShares Core S&P 500 UCITS ETF USD (Acc)", ticker: "SXR8.DE", category: "USA", asset_class: equity, etf: true}
+  - {name: "iShares NASDAQ 100 UCITS ETF USD (Acc)", ticker: "SXRV.DE", category: "USA", asset_class: equity, etf: true}
+  - {name: "Xtrackers NASDAQ 100 UCITS ETF 1C", ticker: "XNAS.DE", category: "USA", asset_class: equity, etf: true}
+  - {name: "Xtrackers MSCI USA UCITS ETF 1C", ticker: "XD9U.DE", category: "USA", asset_class: equity, etf: true}
+  - {name: "iShares Edge MSCI USA Quality Factor UCITS ETF (Acc)", ticker: "QDVB.DE", category: "USA", asset_class: equity, etf: true}
+  - {name: "iShares Edge MSCI USA Momentum Factor UCITS ETF (Acc)", ticker: "QDVA.DE", category: "USA", asset_class: equity, etf: true}
+  - {name: "iShares MSCI USA Quality Dividend Advanced UCITS ETF (Dist)", ticker: "QDVD.DE", category: "USA", asset_class: equity, etf: true}
+  - {name: "iShares MSCI USA Mid-Cap Equal Weight UCITS ETF (Acc)", ticker: "QDVC.DE", category: "USA", asset_class: equity, etf: true}
+  - {name: "SPDR MSCI USA Small Cap Value Weighted UCITS ETF", ticker: "ZPRV.DE", category: "USA", asset_class: equity, etf: true}
+  - {name: "SPDR MSCI USA Value UCITS ETF", ticker: "ZPRU.DE", category: "USA", asset_class: equity, etf: true}
+  - {name: "WisdomTree US Quality Dividend Growth UCITS ETF (Acc)", ticker: "WTDM.DE", category: "USA", asset_class: equity, etf: true}
+  - {name: "iShares S&P 500 Information Technology Sector UCITS ETF (Acc)", ticker: "QDVE.DE", category: "USA sektor", asset_class: equity, etf: true}
+  - {name: "iShares S&P 500 Health Care Sector UCITS ETF (Acc)", ticker: "QDVG.DE", category: "USA sektor", asset_class: equity, etf: true}
+  - {name: "iShares S&P 500 Financials Sector UCITS ETF (Acc)", ticker: "QDVH.DE", category: "USA sektor", asset_class: equity, etf: true}
+  - {name: "iShares S&P 500 Industrials Sector UCITS ETF (Acc)", ticker: "2B7C.DE", category: "USA sektor", asset_class: equity, etf: true}
+  - {name: "Xtrackers MSCI USA Energy UCITS ETF 1D", ticker: "XUEN.DE", category: "USA sektor", asset_class: equity, etf: true}
+  - {name: "iShares Core MSCI Europe UCITS ETF EUR (Acc)", ticker: "EUNK.DE", category: "Europa", asset_class: equity, etf: true}
+  - {name: "Xtrackers STOXX Europe 600 UCITS ETF 1C", ticker: "XSX6.DE", category: "Europa", asset_class: equity, etf: true}
+  - {name: "iShares Core EURO STOXX 50 UCITS ETF EUR (Acc)", ticker: "SXRT.DE", category: "Europa", asset_class: equity, etf: true}
+  - {name: "SPDR MSCI Europe Value UCITS ETF", ticker: "ZPRW.DE", category: "Europa", asset_class: equity, etf: true}
+  - {name: "iShares Edge MSCI Europe Quality Factor UCITS ETF (Acc)", ticker: "CEMQ.DE", category: "Europa", asset_class: equity, etf: true}
+  - {name: "iShares Edge MSCI Europe Momentum Factor UCITS ETF (Acc)", ticker: "CEMR.DE", category: "Europa", asset_class: equity, etf: true}
+  - {name: "iShares Edge MSCI Europe Value Factor UCITS ETF (Acc)", ticker: "CEMS.DE", category: "Europa", asset_class: equity, etf: true}
+  - {name: "iShares MSCI Europe Quality Dividend Advanced UCITS ETF (Dist)", ticker: "QDVX.DE", category: "Europa", asset_class: equity, etf: true}
+  - {name: "Xtrackers MSCI Europe Small Cap UCITS ETF 1C", ticker: "XXSC.DE", category: "Europa", asset_class: equity, etf: true}
+  - {name: "WisdomTree Europe SmallCap Dividend UCITS ETF (Acc)", ticker: "WTD7.DE", category: "Europa", asset_class: equity, etf: true}
+  - {name: "iShares STOXX Europe 600 Health Care UCITS ETF (DE)", ticker: "EXV4.DE", category: "Europa sektor", asset_class: equity, etf: true}
+  - {name: "iShares STOXX Europe 600 Industrial Goods & Services UCITS ETF (DE)", ticker: "EXH4.DE", category: "Europa sektor", asset_class: equity, etf: true}
+  - {name: "iShares STOXX Europe 600 Technology UCITS ETF (DE)", ticker: "EXV3.DE", category: "Europa sektor", asset_class: equity, etf: true}
+  - {name: "iShares STOXX Europe 600 Insurance UCITS ETF (DE)", ticker: "EXH5.DE", category: "Europa sektor", asset_class: equity, etf: true}
+  - {name: "iShares STOXX Europe 600 Utilities UCITS ETF (DE)", ticker: "EXH9.DE", category: "Europa sektor", asset_class: equity, etf: true}
+  - {name: "iShares STOXX Europe 600 Basic Resources UCITS ETF (DE)", ticker: "EXV6.DE", category: "Europa sektor", asset_class: equity, etf: true}
+  - {name: "XACT Norden (UCITS ETF)", ticker: "XACT-NORDEN.ST", category: "Norden", asset_class: equity, etf: true}
+  - {name: "Xtrackers MSCI Nordic UCITS ETF 1D", ticker: "XDN0.DE", category: "Norden", asset_class: equity, etf: true}
+  - {name: "Xtrackers MSCI Nordic UCITS ETF 1C", ticker: "XMN1.DE", category: "Norden", asset_class: equity, etf: true}
+  - {name: "Amundi MSCI Nordic UCITS ETF - EUR (C)", ticker: "CN1G.DE", category: "Norden", asset_class: equity, etf: true}
+  - {name: "XACT Nordic High Dividend Low Volatility (UCITS ETF)", ticker: "XACTHDIV.ST", category: "Norden", asset_class: equity, etf: true}
+  - {name: "XACT Sverige (UCITS ETF)", ticker: "XACT-SVERIGE.ST", category: "Sverige index", asset_class: equity, etf: true}
+  - {name: "XACT OMXS30 ESG (UCITS ETF)", ticker: "XACT-OMXS30.ST", category: "Sverige index", asset_class: equity, etf: true}
+  - {name: "XACT Svenska Småbolag (UCITS ETF)", ticker: "XACT-SMABOLAG.ST", category: "Sverige småbolag", asset_class: equity, etf: true}
+  - {name: "XACT OMXC25 ESG (UCITS ETF)", ticker: "XACTC25.CO", category: "Norden", asset_class: equity, etf: true}

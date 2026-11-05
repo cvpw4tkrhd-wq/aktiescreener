@@ -45,7 +45,7 @@ funds:
   - {name: "SEB Swedish Value Fund A", ticker: "0P00006P9H.ST", isin: "SE0001838004", category: "Sverige", asset_class: equity, fee_pct: 1.69}
   - {name: "Spiltan Aktiefond Investmentbolag", ticker: "0P0000ULAP.ST", isin: "SE0004297927", category: "Sverige", asset_class: equity, fee_pct: 0.22}
   - {name: "Swedbank Robur Technology A", ticker: "0P00000LCG.ST", isin: "SE0000538944", category: "Tema: teknik", asset_class: equity, fee_pct: 1.38}
-  - {name: "iShares STOXX Europe 600 Banks UCITS ETF", ticker: "EXV1.DE", isin: "DE000A0F5UJ7", category: "Europa", asset_class: equity}
+  - {name: "iShares STOXX Europe 600 Banks UCITS ETF", ticker: "EXV1.DE", isin: "DE000A0F5UJ7", category: "Europa sektor", asset_class: equity, etf: true, region: "Europa"}
   - {name: "Aktiespararna Direktavkastning A", ticker: "0P00018JII.ST", isin: "SE0008321780", category: "Sverige", asset_class: equity, fee_pct: 0.33}
   - {name: "Avanza Småbolag by Skoglund", ticker: "0P0001L5HQ.ST", isin: "SE0015194618", category: "Sverige småbolag", asset_class: equity, fee_pct: 1.26}
   - {name: "DNB Global Indeks S", ticker: "0P0001Q6FC.ST", isin: "NO0010827280", category: "Global index", asset_class: equity, fee_pct: 0.21}
@@ -78,11 +78,11 @@ funds:
   - {name: "Lannebo Företagsobligationsfond A", ticker: "0P00000FUA.ST", category: "Räntefond", asset_class: bond, isin: "SE0001095506", fee_pct: 1.19}
   - {name: "SEB Företagsobligationsfond A", ticker: "0P0001H41U.ST", category: "Räntefond", asset_class: bond}
   # --- Dagligvaror (v10.7): dagligvaru-ETF:er, olika exponering mot dagligvaruhandel (Walmart, Costco m.fl.) ---
-  - {name: "Xtrackers MSCI USA Consumer Staples UCITS ETF 1D", ticker: "XUCS.DE", category: "Dagligvaror", asset_class: equity}
-  - {name: "SPDR S&P U.S. Consumer Staples Select Sector UCITS ETF (Acc)", ticker: "ZPDS.DE", category: "Dagligvaror", asset_class: equity}
-  - {name: "Xtrackers MSCI World Consumer Staples UCITS ETF 1C", ticker: "XDWS.DE", category: "Dagligvaror", asset_class: equity}
-  - {name: "Amundi S&P World Consumer Staples Screened UCITS ETF Acc", ticker: "WELW.DE", category: "Dagligvaror", asset_class: equity}
-  - {name: "SPDR MSCI Europe Consumer Staples UCITS ETF", ticker: "SPYC.DE", category: "Dagligvaror", asset_class: equity}
+  - {name: "Xtrackers MSCI USA Consumer Staples UCITS ETF 1D", ticker: "XUCS.DE", category: "Dagligvaror", asset_class: equity, etf: true, region: "USA"}
+  - {name: "SPDR S&P U.S. Consumer Staples Select Sector UCITS ETF (Acc)", ticker: "ZPDS.DE", category: "Dagligvaror", asset_class: equity, etf: true, region: "USA"}
+  - {name: "Xtrackers MSCI World Consumer Staples UCITS ETF 1C", ticker: "XDWS.DE", category: "Dagligvaror", asset_class: equity, etf: true, region: "Global"}
+  - {name: "Amundi S&P World Consumer Staples Screened UCITS ETF Acc", ticker: "WELW.DE", category: "Dagligvaror", asset_class: equity, etf: true, region: "Global"}
+  - {name: "SPDR MSCI Europe Consumer Staples UCITS ETF", ticker: "SPYC.DE", category: "Dagligvaror", asset_class: equity, etf: true, region: "Europa"}
   # --- ETF:er (v11.9): USA, Europa och Norden. etf: true visar en ETF-märkning i appen ---
   - {name: "Vanguard S&P 500 UCITS ETF (USD) Acc", ticker: "VUAA.DE", category: "USA", asset_class: equity, etf: true}
   - {name: "iShares Core S&P 500 UCITS ETF USD (Acc)", ticker: "SXR8.DE", category: "USA", asset_class: equity, etf: true}
@@ -126,3 +126,5 @@ funds:
   - {name: "XACT OMXS30 ESG (UCITS ETF)", ticker: "XACT-OMXS30.ST", category: "Sverige index", asset_class: equity, etf: true}
   - {name: "XACT Svenska Småbolag (UCITS ETF)", ticker: "XACT-SMABOLAG.ST", category: "Sverige småbolag", asset_class: equity, etf: true}
   - {name: "XACT OMXC25 ESG (UCITS ETF)", ticker: "XACTC25.CO", category: "Norden", asset_class: equity, etf: true}
+  - {name: "Xtrackers Nordic Net Zero Pathway Paris Aligned UCITS ETF 1C", ticker: "XNZN.DE", category: "Norden", asset_class: equity, etf: true, region: "Norden"}
+  - {name: "Seligson & Co OMX Helsinki 25 -indeksiosuusrahasto", ticker: "SLG-OMXH25.HE", category: "Norden", asset_class: equity, etf: true, region: "Norden"}

@@ -53,7 +53,7 @@ def load_watchlist():
         tickers.append({
             "ticker": entry["ticker"],
             "name": entry.get("name", entry["ticker"]),
-            "market": entry.get("market", "?"),
+            "market": ("NO" if entry.get("market") is False else entry.get("market", "?")),   # YAML tolkar oquotat NO som false
             "sector": entry.get("sector"),
             "country": entry.get("country"),
             "growth_candidate": entry.get("growth_candidate", False),

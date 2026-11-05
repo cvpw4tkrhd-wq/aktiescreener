@@ -146,6 +146,16 @@ def fetch_holdings(tk, cfg, lookup):
     return out
 
 
+def _region_from_category(cat):
+    """Reservvärde för region när funds.yml saknar region: (USA/Europa/Norden/Global)."""
+    c = str(cat or "")
+    if c.startswith("USA"): return "USA"
+    if c.startswith("Europa"): return "Europa"
+    if c == "Norden": return "Norden"
+    if c.startswith("Global"): return "Global"
+    return None
+
+
 def fetch_fund(cfg, rf_rates, lookup=None):
     """rf_rates: kort riskfri ränta per valuta (v8.8, tidigare 10-årsränta per land)."""
     tk = yf.Ticker(cfg["ticker"])
@@ -195,6 +205,7 @@ def fetch_fund(cfg, rf_rates, lookup=None):
         "name": cfg["name"], "ticker": cfg["ticker"], "isin": cfg.get("isin"),
         "category": cfg.get("category"), "asset_class": cfg.get("asset_class", "equity"),
         "proxy": bool(cfg.get("proxy")), "proxy_note": cfg.get("proxy_note"), "etf": bool(cfg.get("etf")),
+        "region": cfg.get("region") or _region_from_category(cfg.get("category")),
         "currency": ccy, "price": _clean(price), "as_of": str(close.index[-1].date()),
         "sma50": _clean(sma50), "sma200": _clean(sma200),
         "above_sma50": price > sma50, "above_sma200": (price > sma200) if sma200 else None,

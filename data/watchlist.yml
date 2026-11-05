@@ -1085,17 +1085,17 @@ stocks:
   name: Vår Energi
   sector: Energy
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: SUBC.OL
   name: Subsea 7
   sector: Energy
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: DNO.OL
   name: DNO
   sector: Energy
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: BAVA.CO
   name: Bavarian Nordic
   sector: Healthcare
@@ -1105,7 +1105,7 @@ stocks:
   name: SalMar
   sector: Consumer
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: KESKOB.HE
   name: Kesko
   sector: Consumer
@@ -1267,12 +1267,12 @@ stocks:
   name: Bonheur
   sector: Industrials
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: MING.OL
   name: SpareBank 1 SMN
   sector: Financials
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: EMBLA.CO
   name: Embla Medical
   sector: Healthcare
@@ -1282,7 +1282,7 @@ stocks:
   name: Sentia
   sector: Industrials
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: TRMD-A.CO
   name: TORM plc
   sector: Energy
@@ -1297,7 +1297,7 @@ stocks:
   name: DOF Group
   sector: Industrials
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: JYSK.CO
   name: Jyske Bank
   sector: Financials
@@ -1317,7 +1317,7 @@ stocks:
   name: BW LPG
   sector: Energy
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: KCR.HE
   name: Konecranes
   sector: Industrials
@@ -1327,17 +1327,17 @@ stocks:
   name: SpareBank 1 Østlandet
   sector: Financials
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: B2I.OL
   name: B2 Impact
   sector: Financials
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: NONG.OL
   name: SpareBank 1 Nord-Norge
   sector: Financials
   country: Norge
-  market: NO
+  market: 'NO'
 
 # --- Tillagda 2026-10-21 (v11.3): de tolv bolag på Investtechs Topp 20 som saknades i appen ---
 - ticker: SHOT.ST
@@ -1733,12 +1733,12 @@ stocks:
   name: Medistim
   sector: Healthcare
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: HAFNI.OL
   name: Hafnia
   sector: Industrials
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: ANOD-B.ST
   name: Addnode B
   sector: Technology
@@ -1758,12 +1758,12 @@ stocks:
   name: Klaveness Combination Carriers
   sector: Industrials
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: OET.OL
   name: Okeanis Eco Tankers
   sector: Industrials
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: VAIAS.HE
   name: Vaisala A
   sector: Technology
@@ -1773,7 +1773,7 @@ stocks:
   name: Elopak
   sector: Consumer
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: ZZ-B.ST
   name: Zinzino B
   sector: Consumer
@@ -1793,12 +1793,12 @@ stocks:
   name: Protector Forsikring
   sector: Financials
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: NORCO.OL
   name: Norconsult
   sector: Industrials
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: SPG.CO
   name: SP Group
   sector: Materials
@@ -1818,7 +1818,7 @@ stocks:
   name: Veidekke
   sector: Industrials
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: OEM-B.ST
   name: OEM International B
   sector: Industrials
@@ -1828,7 +1828,7 @@ stocks:
   name: Wallenius Wilhelmsen
   sector: Industrials
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: MYCR.ST
   name: Mycronic
   sector: Industrials
@@ -1838,7 +1838,7 @@ stocks:
   name: Atea
   sector: Technology
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: LIAB.ST
   name: Lindab International
   sector: Industrials
@@ -1858,7 +1858,7 @@ stocks:
   name: Akastor
   sector: Energy
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: LUG.ST
   name: Lundin Gold
   sector: Materials
@@ -1873,7 +1873,7 @@ stocks:
   name: Norbit
   sector: Technology
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: HTRO.ST
   name: Hexatronic
   sector: Technology
@@ -1888,22 +1888,22 @@ stocks:
   name: Link Mobility
   sector: Telecom
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: ZAP.OL
   name: Zaptec
   sector: Industrials
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: BOHUS.OL
   name: Bohus
   sector: Consumer
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: ENH.OL
   name: SED Energy
   sector: Energy
   country: Norge
-  market: NO
+  market: 'NO'
 - ticker: SUS.ST
   name: Surgical Science Sweden
   sector: Healthcare

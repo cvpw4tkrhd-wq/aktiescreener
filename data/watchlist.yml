@@ -1727,3 +1727,185 @@ stocks:
   sector: Semiconductors
   country: Nederländerna
   market: NL
+
+# --- v11.11: nya nordiska bolag (Stockholm, Oslo, Köpenhamn, Helsingfors; marknadsvärde över ca 3 mdr SEK), köppoäng ≥75 vid screening 2026-11-05 ---
+- ticker: MEDI.OL
+  name: Medistim
+  sector: Healthcare
+  country: Norge
+  market: NO
+- ticker: HAFNI.OL
+  name: Hafnia
+  sector: Industrials
+  country: Norge
+  market: NO
+- ticker: ANOD-B.ST
+  name: Addnode B
+  sector: Technology
+  country: Sverige
+  market: SE
+- ticker: ENITY.ST
+  name: Enity
+  sector: Financials
+  country: Sverige
+  market: SE
+- ticker: STG.CO
+  name: Scandinavian Tobacco
+  sector: Consumer
+  country: Danmark
+  market: DK
+- ticker: KCC.OL
+  name: Klaveness Combination Carriers
+  sector: Industrials
+  country: Norge
+  market: NO
+- ticker: OET.OL
+  name: Okeanis Eco Tankers
+  sector: Industrials
+  country: Norge
+  market: NO
+- ticker: VAIAS.HE
+  name: Vaisala A
+  sector: Technology
+  country: Finland
+  market: FI
+- ticker: ELO.OL
+  name: Elopak
+  sector: Consumer
+  country: Norge
+  market: NO
+- ticker: ZZ-B.ST
+  name: Zinzino B
+  sector: Consumer
+  country: Sverige
+  market: SE
+- ticker: BRAV.ST
+  name: Bravida
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: BIOG-B.ST
+  name: BioGaia B
+  sector: Healthcare
+  country: Sverige
+  market: SE
+- ticker: PROT.OL
+  name: Protector Forsikring
+  sector: Financials
+  country: Norge
+  market: NO
+- ticker: NORCO.OL
+  name: Norconsult
+  sector: Industrials
+  country: Norge
+  market: NO
+- ticker: SPG.CO
+  name: SP Group
+  sector: Materials
+  country: Danmark
+  market: DK
+- ticker: RVRC.ST
+  name: RVRC
+  sector: Consumer
+  country: Sverige
+  market: SE
+- ticker: REJL-B.ST
+  name: Rejlers B
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: VEI.OL
+  name: Veidekke
+  sector: Industrials
+  country: Norge
+  market: NO
+- ticker: OEM-B.ST
+  name: OEM International B
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: WAWI.OL
+  name: Wallenius Wilhelmsen
+  sector: Industrials
+  country: Norge
+  market: NO
+- ticker: MYCR.ST
+  name: Mycronic
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: ATEA.OL
+  name: Atea
+  sector: Technology
+  country: Norge
+  market: NO
+- ticker: LIAB.ST
+  name: Lindab International
+  sector: Industrials
+  country: Sverige
+  market: SE
+- ticker: HEM.ST
+  name: Hemnet
+  sector: Technology
+  country: Sverige
+  market: SE
+- ticker: NREST.ST
+  name: Nordrest
+  sector: Consumer
+  country: Sverige
+  market: SE
+- ticker: AKAST.OL
+  name: Akastor
+  sector: Energy
+  country: Norge
+  market: NO
+- ticker: LUG.ST
+  name: Lundin Gold
+  sector: Materials
+  country: Sverige
+  market: SE
+- ticker: NETC.CO
+  name: Netcompany
+  sector: Technology
+  country: Danmark
+  market: DK
+- ticker: NORBT.OL
+  name: Norbit
+  sector: Technology
+  country: Norge
+  market: NO
+- ticker: HTRO.ST
+  name: Hexatronic
+  sector: Technology
+  country: Sverige
+  market: SE
+- ticker: MCAP.ST
+  name: MedCap
+  sector: Healthcare
+  country: Sverige
+  market: SE
+- ticker: LINK.OL
+  name: Link Mobility
+  sector: Telecom
+  country: Norge
+  market: NO
+- ticker: ZAP.OL
+  name: Zaptec
+  sector: Industrials
+  country: Norge
+  market: NO
+- ticker: BOHUS.OL
+  name: Bohus
+  sector: Consumer
+  country: Norge
+  market: NO
+- ticker: ENH.OL
+  name: SED Energy
+  sector: Energy
+  country: Norge
+  market: NO
+- ticker: SUS.ST
+  name: Surgical Science Sweden
+  sector: Healthcare
+  country: Sverige
+  market: SE

@@ -1400,3 +1400,330 @@ stocks:
   sector: Healthcare
   country: Sverige
   market: SE
+
+# --- Tillagda 2026-11-04 (v11.9): bredsökning i USA och Europa – köpvärda nu och intressanta framöver ---
+- ticker: ADSK
+  name: Autodesk
+  sector: Technology
+  country: USA
+  market: US
+- ticker: DVN
+  name: Devon Energy
+  sector: Energy
+  country: USA
+  market: US
+- ticker: ZBRA
+  name: Zebra Technologies
+  sector: Technology
+  country: USA
+  market: US
+- ticker: APH
+  name: Amphenol
+  sector: Technology
+  country: USA
+  market: US
+- ticker: OXY
+  name: Occidental Petroleum
+  sector: Energy
+  country: USA
+  market: US
+- ticker: TEL
+  name: TE Connectivity
+  sector: Technology
+  country: USA
+  market: US
+- ticker: BR
+  name: Broadridge Financial Solutions
+  sector: Industrials
+  country: USA
+  market: US
+- ticker: AIG
+  name: American International
+  sector: Financials
+  country: USA
+  market: US
+- ticker: MPC
+  name: Marathon Petroleum
+  sector: Energy
+  country: USA
+  market: US
+- ticker: COF
+  name: Capital One
+  sector: Financials
+  country: USA
+  market: US
+- ticker: CTSH
+  name: Cognizant
+  sector: Technology
+  country: USA
+  market: US
+- ticker: FIS
+  name: Fidelity National Information Services
+  sector: Financials
+  country: USA
+  market: US
+- ticker: SYF
+  name: Synchrony Financial
+  sector: Financials
+  country: USA
+  market: US
+- ticker: DXCM
+  name: Dexcom
+  sector: Healthcare
+  country: USA
+  market: US
+- ticker: EXPE
+  name: Expedia
+  sector: Consumer
+  country: USA
+  market: US
+- ticker: TDY
+  name: Teledyne Technologies
+  sector: Technology
+  country: USA
+  market: US
+- ticker: PSX
+  name: Phillips 66
+  sector: Energy
+  country: USA
+  market: US
+- ticker: HIG
+  name: Hartford (The)
+  sector: Financials
+  country: USA
+  market: US
+- ticker: FOXA
+  name: Fox Corporation (Class A)
+  sector: Technology
+  country: USA
+  market: US
+- ticker: UNP
+  name: Union Pacific
+  sector: Industrials
+  country: USA
+  market: US
+- ticker: STT
+  name: State Street
+  sector: Financials
+  country: USA
+  market: US
+- ticker: CVS
+  name: CVS Health
+  sector: Healthcare
+  country: USA
+  market: US
+- ticker: LDOS
+  name: Leidos
+  sector: Industrials
+  country: USA
+  market: US
+- ticker: AMCR
+  name: Amcor
+  sector: Materials
+  country: USA
+  market: US
+- ticker: BGEO.L
+  name: Lion Finance Group
+  sector: Financials
+  country: Storbritannien
+  market: GB
+- ticker: III.L
+  name: 3i Group Ord
+  sector: Financials
+  country: Storbritannien
+  market: GB
+- ticker: HIK.L
+  name: Hikma Pharmaceuticals
+  sector: Healthcare
+  country: Storbritannien
+  market: GB
+- ticker: JD.L
+  name: JD Sports Fashion
+  sector: Consumer
+  country: Storbritannien
+  market: GB
+- ticker: SCT.L
+  name: Softcat
+  sector: Technology
+  country: Storbritannien
+  market: GB
+- ticker: STAN.L
+  name: Standard Chartered
+  sector: Financials
+  country: Storbritannien
+  market: GB
+- ticker: LSEG.L
+  name: London Stock Exchange Group
+  sector: Financials
+  country: Storbritannien
+  market: GB
+- ticker: HWDN.L
+  name: Howden Joinery Group
+  sector: Consumer
+  country: Storbritannien
+  market: GB
+- ticker: RI.PA
+  name: Pernod Ricard
+  sector: Consumer
+  country: Frankrike
+  market: FR
+- ticker: CAP.PA
+  name: Capgemini
+  sector: Technology
+  country: Frankrike
+  market: FR
+- ticker: TE.PA
+  name: Technip Energies
+  sector: Energy
+  country: Frankrike
+  market: FR
+- ticker: GLE.PA
+  name: Société Générale Société anonyme
+  sector: Financials
+  country: Frankrike
+  market: FR
+- ticker: GTT.PA
+  name: Gaztransport & Technigaz
+  sector: Energy
+  country: Frankrike
+  market: FR
+- ticker: MC.PA
+  name: LVMH Moët Hennessy - Louis Vuitton, Société Européenne
+  sector: Consumer
+  country: Frankrike
+  market: FR
+- ticker: EVD.DE
+  name: CTS Eventim
+  sector: Technology
+  country: Tyskland
+  market: DE
+- ticker: NEM.DE
+  name: Nemetschek
+  sector: Technology
+  country: Tyskland
+  market: DE
+- ticker: FPE3.DE
+  name: Fuchs
+  sector: Materials
+  country: Tyskland
+  market: DE
+- ticker: RAA.DE
+  name: RATIONAL Aktiengesellschaft
+  sector: Industrials
+  country: Tyskland
+  market: DE
+- ticker: G24.DE
+  name: Scout24
+  sector: Technology
+  country: Tyskland
+  market: DE
+- ticker: ADYEN.AS
+  name: Adyen
+  sector: Technology
+  country: Nederländerna
+  market: NL
+- ticker: AIR.PA
+  name: Airbus
+  sector: Industrials
+  country: Nederländerna
+  market: NL
+- ticker: VPK.AS
+  name: Koninklijke Vopak
+  sector: Energy
+  country: Nederländerna
+  market: NL
+- ticker: PRX.AS
+  name: Prosus
+  sector: Consumer
+  country: Nederländerna
+  market: NL
+- ticker: ABN.AS
+  name: ABN AMRO Bank
+  sector: Financials
+  country: Nederländerna
+  market: NL
+- ticker: LOGN.SW
+  name: Logitech International
+  sector: Technology
+  country: Schweiz
+  market: CH
+- ticker: CFR.SW
+  name: Compagnie Financière Richemont
+  sector: Consumer
+  country: Schweiz
+  market: CH
+- ticker: UBSG.SW
+  name: UBS Group
+  sector: Financials
+  country: Schweiz
+  market: CH
+- ticker: SQN.SW
+  name: Swissquote Group Holding
+  sector: Financials
+  country: Schweiz
+  market: CH
+- ticker: SIKA.SW
+  name: Sika
+  sector: Materials
+  country: Schweiz
+  market: CH
+- ticker: ACGL
+  name: Arch Capital
+  sector: Financials
+  country: USA
+  market: US
+- ticker: HWM
+  name: Howmet Aerospace
+  sector: Industrials
+  country: USA
+  market: US
+- ticker: ALLE
+  name: Allegion
+  sector: Industrials
+  country: USA
+  market: US
+- ticker: WSM
+  name: Williams-Sonoma
+  sector: Consumer
+  country: USA
+  market: US
+- ticker: ADP
+  name: Automatic Data Processing
+  sector: Industrials
+  country: USA
+  market: US
+- ticker: WTW
+  name: Willis Towers Watson
+  sector: Financials
+  country: USA
+  market: US
+- ticker: NTAP
+  name: NetApp
+  sector: Technology
+  country: USA
+  market: US
+- ticker: RS1.L
+  name: RS Group
+  sector: Industrials
+  country: Storbritannien
+  market: GB
+- ticker: MET
+  name: MetLife
+  sector: Financials
+  country: USA
+  market: US
+- ticker: IPN.PA
+  name: Ipsen
+  sector: Healthcare
+  country: Frankrike
+  market: FR
+- ticker: AMUN.PA
+  name: Amundi
+  sector: Financials
+  country: Frankrike
+  market: FR
+- ticker: ASM.AS
+  name: ASM International NV
+  sector: Semiconductors
+  country: Nederländerna
+  market: NL

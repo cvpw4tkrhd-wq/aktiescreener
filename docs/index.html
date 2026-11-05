@@ -2997,7 +2997,7 @@ function fundRowHtml(f, owned) {
   const trend = f.above_sma50 && f.above_sma200 ? ['▲', 'up-txt', 'Över SMA50 och SMA200']
     : (f.above_sma50 === false && f.above_sma200 === false ? ['▼', 'down-txt', 'Under SMA50 och SMA200'] : ['►', 'dim', 'Blandad trend']);
   return `<tr data-fund="${escapeHtml(f.ticker)}">
-    <td class="name"><div class="name-line">${escapeHtml(f.name)}${owned ? '<span class="mkt-badge days-badge" title="Finns bland dina innehav">MIN</span>' : ''}${f.proxy ? '<span class="mkt-badge" title="Kursdata från en närliggande andelsklass/systerfond">ERSÄTTARE</span>' : ''}</div><span class="tkr">${escapeHtml(f.category || '')} · ${FUND_CLASS_SV[f.asset_class] || ''}</span></td>
+    <td class="name"><div class="name-line">${escapeHtml(f.name)}${owned ? '<span class="mkt-badge days-badge" title="Finns bland dina innehav">MIN</span>' : ''}${f.proxy ? '<span class="mkt-badge" title="Kursdata från en närliggande andelsklass/systerfond">ERSÄTTARE</span>' : ''}${f.etf ? '<span class="mkt-badge" title="Börshandlad fond (ETF)">ETF</span>' : ''}</div><span class="tkr">${escapeHtml(f.category || '')} · ${FUND_CLASS_SV[f.asset_class] || ''}</span></td>
     <td class="num" title="${trend[2]}"><span class="${trend[1]}" style="font-size:14px">${trend[0]}</span></td>
     <td class="num">${pctHtml(f.ret_3m)}</td>
     <td class="num">${pctHtml(f.ret_1y)}</td>

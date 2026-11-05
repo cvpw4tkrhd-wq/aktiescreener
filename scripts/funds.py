@@ -194,7 +194,7 @@ def fetch_fund(cfg, rf_rates, lookup=None):
         **extra,
         "name": cfg["name"], "ticker": cfg["ticker"], "isin": cfg.get("isin"),
         "category": cfg.get("category"), "asset_class": cfg.get("asset_class", "equity"),
-        "proxy": bool(cfg.get("proxy")), "proxy_note": cfg.get("proxy_note"),
+        "proxy": bool(cfg.get("proxy")), "proxy_note": cfg.get("proxy_note"), "etf": bool(cfg.get("etf")),
         "currency": ccy, "price": _clean(price), "as_of": str(close.index[-1].date()),
         "sma50": _clean(sma50), "sma200": _clean(sma200),
         "above_sma50": price > sma50, "above_sma200": (price > sma200) if sma200 else None,

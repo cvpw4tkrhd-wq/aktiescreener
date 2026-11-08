@@ -471,6 +471,7 @@
   .sp.hit .score-num { font-weight: 700; }
   .sp-buy.hit .score-num, .sp-buy.hit .sp-lbl { color: var(--up); }
   .sp-sell.hit .score-num, .sp-sell.hit .sp-lbl { color: var(--down); }
+  .sp-sell.low .score-num, .sp-sell.low .sp-lbl { color: var(--up); }   /* v11.14: säljpoäng <=15 grön även i tabellen */
   @media (max-width: 680px) {
     .score-pair { gap: 5px; } .sp + .sp { padding-left: 5px; } .sp { gap: 3px; }
     .sp-lbl { font-size: 8px; } .sp-lbl .full { display: none; } .sp-lbl .short { display: inline; }
@@ -2846,9 +2847,10 @@ function dualScoreHtml(r) {
   const buyHit = (b || 0) >= BUY_THRESHOLD;
   const buyCls = buyHit && !(rec === 'sell' || rec === 'strong_sell' || rec === 'hold') ? 'buy' : 'hold';
   const sellHit = (s || 0) >= 40;
+  const sellLow = !sellHit && s != null && s <= SELL_LOW_MAX;
   const blk = (kind, cls, full, short, v, delta, hit, tip) => `<div class="sp ${kind} ${hit ? 'hit' : ''}" title="${tip}"><span class="sp-lbl"><span class="full">${full}</span><span class="short">${short}</span></span><div class="score-bar-wrap ${cls}">${deltaHtml(delta)}<div class="score-bar"><div style="width:${v ?? 0}%"></div></div><span class="score-num">${v ?? '–'}</span></div></div>`;
   const buyTip = isGrowth ? pfT(`Tillväxtpoäng – KÖP från ${BUY_THRESHOLD}`, `Growth score – BUY from ${BUY_THRESHOLD}`) : pfT(`Köppoäng – KÖP från ${BUY_THRESHOLD}`, `Buy score – BUY from ${BUY_THRESHOLD}`);
-  return `<div class="score-pair">${blk('sp-buy', buyCls, pfT('KÖP', 'BUY'), pfT('K', 'B'), b, isGrowth ? null : r.buy_score_delta, buyHit, buyTip)}${blk('sp-sell', 'sell', pfT('SÄLJ', 'SELL'), 'S', s, r.sell_score_delta, sellHit, pfT('Säljpoäng – SÄLJ från 40', 'Sell score – SELL from 40'))}</div>`;
+  return `<div class="score-pair">${blk('sp-buy', buyCls, pfT('KÖP', 'BUY'), pfT('K', 'B'), b, isGrowth ? null : r.buy_score_delta, buyHit, buyTip)}${blk('sp-sell' + (sellLow ? ' low' : ''), 'sell', pfT('SÄLJ', 'SELL'), 'S', s, r.sell_score_delta, sellHit, sellLow ? pfT(`Säljpoäng – låg (≤${SELL_LOW_MAX}), SÄLJ från 40`, `Sell score – low (≤${SELL_LOW_MAX}), SELL from 40`) : pfT('Säljpoäng – SÄLJ från 40', 'Sell score – SELL from 40'))}</div>`;
 }
 
 // ===== Nya verktyg (v10.0): rapportkalender, vinstrevideringar, relativ styrka, signaluppföljning =====

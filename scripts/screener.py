@@ -911,6 +911,20 @@ def report_info(tk, info):
         return None
 
 
+VOLUME_BONUS_MIN_SEK = 20_000_000   # v11.16: volymbonusen kräver minst så här hög daglig omsättning (SEK)
+
+
+def liquidity_sek(d):
+    """Genomsnittlig daglig omsättning omräknad till SEK (None om valutan inte kan räknas om)."""
+    adv, cur = d.get("avg_dollar_volume"), d.get("currency")
+    if adv is None or not cur:
+        return None
+    if cur == "GBp":
+        adv, cur = adv / 100.0, "GBP"
+    f = _fx_factor(cur, "SEK")
+    return adv * f if f else None
+
+
 def analyst_support_factor(n):
     """v11.15: hur mycket analytikerstöd (konsensus och kursmål) får räknas som bonus utifrån antalet
     analytiker: minst 5 = full vikt, 3-4 = hälften, färre än 3 = ingen poäng. Straff påverkas inte."""
@@ -1593,8 +1607,12 @@ def score_buy_candidate(d, extra_weight=0):
         reasons.append("Pris under både SMA50 och SMA200 (nedåttrend)")
 
     if d["volume_ratio"] and d["volume_ratio"] > 2:
-        bonus += 7
-        reasons.append(f"Kraftigt förhöjd volym ({d['volume_ratio']}x snitt) – möjlig större rörelse")
+        _liq = liquidity_sek(d)
+        if _liq is not None and _liq >= VOLUME_BONUS_MIN_SEK:
+            bonus += 7
+            reasons.append(f"Kraftigt förhöjd volym ({d['volume_ratio']}x snitt) – möjlig större rörelse")
+        else:
+            reasons.append(f"Kraftigt förhöjd volym ({d['volume_ratio']}x snitt) – ingen poäng, låg daglig omsättning")
 
     rec = d.get("recommendation_key")
     _af, _an = analyst_support_factor(d.get("num_analysts")), analyst_support_note(d.get("num_analysts"))
@@ -1926,8 +1944,12 @@ def score_growth_candidate(d, extra_weight=0):
         reasons.append("Pris under både SMA50 och SMA200 (nedåttrend)")
 
     if d["volume_ratio"] and d["volume_ratio"] > 2:
-        bonus += 12
-        reasons.append(f"Kraftigt förhöjd volym ({d['volume_ratio']}x snitt) – momentumsignal, möjligt genombrott")
+        _liq = liquidity_sek(d)
+        if _liq is not None and _liq >= VOLUME_BONUS_MIN_SEK:
+            bonus += 12
+            reasons.append(f"Kraftigt förhöjd volym ({d['volume_ratio']}x snitt) – momentumsignal, möjligt genombrott")
+        else:
+            reasons.append(f"Kraftigt förhöjd volym ({d['volume_ratio']}x snitt) – ingen poäng, låg daglig omsättning")
 
     rec = d.get("recommendation_key")
     _af, _an = analyst_support_factor(d.get("num_analysts")), analyst_support_note(d.get("num_analysts"))
@@ -2291,6 +2313,11 @@ def main():
                                      "rs_6m": round(d["ret_6m_pct"] - idx["r6"], 1), "idx_6m": idx["r6"], "idx_3m": idx["r3"]}
             rs_w, rs_note = rel_strength_weight(d["rel_strength"])
             rev_w, rev_note = (0, None) if d["investment_company"] else eps_revision_weight(d.get("eps_revisions"))
+            if rev_w:   # v11.16: prognosändringar från få analytiker väger mindre (samma faktor som analytikerbonusen)
+                _rf = analyst_support_factor(d.get("num_analysts"))
+                if _rf < 1:
+                    rev_w = (1 if rev_w > 0 else -1) * int(abs(rev_w) * _rf + 0.5)
+                    rev_note = rev_note + analyst_support_note(d.get("num_analysts"))
             d["valuation_weight"] = valuation_w
             total_extra = sector_weight + country_weight + investtech_weight + macro_weight + valuation_w + rate_w + rs_w + rev_w
             buy_score, buy_reasons = score_buy_candidate(d, extra_weight=total_extra)
@@ -2300,8 +2327,8 @@ def main():
                 growth_reasons.append(txt, sign=sg, pts=pt)
             for w_, n_ in ((rate_w, rate_note), (rs_w, rs_note), (rev_w, rev_note)):
                 if n_:
-                    buy_reasons.append(n_, sign=1 if w_ > 0 else -1, pts=w_)
-                    growth_reasons.append(n_, sign=1 if w_ > 0 else -1, pts=w_)
+                    buy_reasons.append(n_, sign=1 if w_ > 0 else (-1 if w_ < 0 else 0), pts=w_)
+                    growth_reasons.append(n_, sign=1 if w_ > 0 else (-1 if w_ < 0 else 0), pts=w_)
 
             geopolitics_note = None
             if sector_weight:

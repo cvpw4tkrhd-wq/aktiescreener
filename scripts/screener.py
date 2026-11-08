@@ -911,15 +911,28 @@ def report_info(tk, info):
         return None
 
 
+def analyst_support_factor(n):
+    """v11.15: hur mycket analytikerstöd (konsensus och kursmål) får räknas som bonus utifrån antalet
+    analytiker: minst 5 = full vikt, 3-4 = hälften, färre än 3 = ingen poäng. Straff påverkas inte."""
+    n = n or 0
+    return 1.0 if n >= 5 else (0.5 if n >= 3 else 0.0)
+
+
+def analyst_support_note(n):
+    f = analyst_support_factor(n)
+    return "" if f >= 1 else (" – få analytiker, halv vikt" if f > 0 else " – för få analytiker, ingen poäng")
+
+
 def eps_revision_weight(rev):
     """±3/±6 poäng utifrån hur årets vinstprognos ändrats senaste 30 dagarna."""
     if not rev:
         return 0, None
     c, up, dn = rev.get("chg_30d_pct"), rev.get("up_30d") or 0, rev.get("down_30d") or 0
     cnt = f"{up} höjningar, {dn} sänkningar"
-    if (c is not None and c >= 3) or (up - dn >= 3 and up >= 2 * max(dn, 1)):
+    # v11.15: antalsregeln får inte gälla när procentändringen går åt motsatt håll (t.ex. 13 höjningar men -2,6 %)
+    if (c is not None and c >= 3) or ((c is None or c >= 0) and up - dn >= 3 and up >= 2 * max(dn, 1)):
         return 6, f"Vinstprognoserna höjs kraftigt: årets förväntade vinst per aktie {c:+.1f} % senaste 30 dagarna ({cnt})" if c is not None else f"Vinstprognoserna höjs kraftigt senaste 30 dagarna ({cnt})"
-    if (c is not None and c <= -3) or (dn - up >= 3 and dn >= 2 * max(up, 1)):
+    if (c is not None and c <= -3) or ((c is None or c <= 0) and dn - up >= 3 and dn >= 2 * max(up, 1)):
         return -6, f"Vinstprognoserna sänks kraftigt: årets förväntade vinst per aktie {c:+.1f} % senaste 30 dagarna ({cnt})" if c is not None else f"Vinstprognoserna sänks kraftigt senaste 30 dagarna ({cnt})"
     if c is not None and c >= 1:
         return 3, f"Vinstprognoserna höjs: årets förväntade vinst per aktie {c:+.1f} % senaste 30 dagarna ({cnt})"
@@ -1584,12 +1597,13 @@ def score_buy_candidate(d, extra_weight=0):
         reasons.append(f"Kraftigt förhöjd volym ({d['volume_ratio']}x snitt) – möjlig större rörelse")
 
     rec = d.get("recommendation_key")
+    _af, _an = analyst_support_factor(d.get("num_analysts")), analyst_support_note(d.get("num_analysts"))
     if rec == "strong_buy":
-        bonus += 18
-        reasons.append(f"Analytikerkonsensus: starkt köp ({d.get('num_analysts') or '?'} analytiker)")
+        bonus += round(18 * _af)
+        reasons.append(f"Analytikerkonsensus: starkt köp ({d.get('num_analysts') or '?'} analytiker){_an}")
     elif rec == "buy":
-        bonus += 12
-        reasons.append(f"Analytikerkonsensus: köp ({d.get('num_analysts') or '?'} analytiker)")
+        bonus += round(12 * _af)
+        reasons.append(f"Analytikerkonsensus: köp ({d.get('num_analysts') or '?'} analytiker){_an}")
     elif rec == "hold":
         penalty += 5
         reasons.append(f"Analytikerkonsensus: håll ({d.get('num_analysts') or '?'} analytiker) – analytikerna ser varken tydlig upp- eller nedsida")
@@ -1606,8 +1620,8 @@ def score_buy_candidate(d, extra_weight=0):
     upside = d.get("analyst_upside_pct")
     if upside is not None:
         if upside > 15:
-            bonus += 8
-            reasons.append(f"Analytikernas kursmål {upside:+.0f}% över dagens pris")
+            bonus += round(8 * _af)
+            reasons.append(f"Analytikernas kursmål {upside:+.0f}% över dagens pris{_an}")
         elif upside < -10:
             penalty += 10
             reasons.append(f"Analytikernas kursmål {upside:+.0f}% under dagens pris")
@@ -1916,12 +1930,13 @@ def score_growth_candidate(d, extra_weight=0):
         reasons.append(f"Kraftigt förhöjd volym ({d['volume_ratio']}x snitt) – momentumsignal, möjligt genombrott")
 
     rec = d.get("recommendation_key")
+    _af, _an = analyst_support_factor(d.get("num_analysts")), analyst_support_note(d.get("num_analysts"))
     if rec == "strong_buy":
-        bonus += 18
-        reasons.append(f"Analytikerkonsensus: starkt köp ({d.get('num_analysts') or '?'} analytiker)")
+        bonus += round(18 * _af)
+        reasons.append(f"Analytikerkonsensus: starkt köp ({d.get('num_analysts') or '?'} analytiker){_an}")
     elif rec == "buy":
-        bonus += 12
-        reasons.append(f"Analytikerkonsensus: köp ({d.get('num_analysts') or '?'} analytiker)")
+        bonus += round(12 * _af)
+        reasons.append(f"Analytikerkonsensus: köp ({d.get('num_analysts') or '?'} analytiker){_an}")
     elif rec == "hold":
         penalty += 5
         reasons.append(f"Analytikerkonsensus: håll ({d.get('num_analysts') or '?'} analytiker)")
@@ -1940,8 +1955,8 @@ def score_growth_candidate(d, extra_weight=0):
     upside = d.get("analyst_upside_pct")
     if upside is not None:
         if upside > 15:
-            bonus += 10
-            reasons.append(f"Analytikernas kursmål {upside:+.0f}% över dagens pris")
+            bonus += round(10 * _af)
+            reasons.append(f"Analytikernas kursmål {upside:+.0f}% över dagens pris{_an}")
         elif upside < -10:
             penalty += 10
             reasons.append(f"Analytikernas kursmål {upside:+.0f}% under dagens pris")

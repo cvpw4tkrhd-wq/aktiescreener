@@ -1909,3 +1909,35 @@ stocks:
   sector: Healthcare
   country: Sverige
   market: SE
+
+# --- v11.18: tillväxtkandidater (analyserade 2026-11-09, growth-poäng utan volymbonus 84/71/61/61/57) ---
+- ticker: FROG
+  name: JFrog
+  sector: Technology
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: FLY
+  name: Firefly Aerospace
+  sector: Industrials
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: LASR
+  name: nLIGHT
+  sector: Semiconductors
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: TMDX
+  name: TransMedics
+  sector: Healthcare
+  country: USA
+  market: US
+  growth_candidate: true
+- ticker: KRMN
+  name: Karman Holdings
+  sector: Industrials
+  country: USA
+  market: US
+  growth_candidate: true

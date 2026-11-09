@@ -993,6 +993,27 @@ def earnings_stability(tk):
         return None
 
 
+VAL_CAP_POS_CYC = 10   # v11.17: lägre värderingstak för cykliska bolag med mycket ojämn vinst
+
+
+def cyclical_earnings_risk(d):
+    """v11.17: 0 = normalt. 1 = cyklisk sektor (energi, råvaror, halvledare) där vinsten föll minst 30 % på ett år.
+    2 = cyklisk sektor med fall på minst 50 % eller förlustår. Intäkts- och marginalförbättringar i sådana bolag
+    speglar ofta konjunktur- eller råvarucykeln snarare än varaktig tillväxt, och låga multiplar sitter på toppvinster."""
+    if d.get("sector") not in CYCLICAL_SECTORS:
+        return 0
+    es = d.get("earnings_stability") or {}
+    w = es.get("worst_yoy_pct")
+    if es.get("loss_years") or (w is not None and w <= -50):
+        return 2
+    if w is not None and w <= -30:
+        return 1
+    return 0
+
+
+_CYC_NOTE = " – halv vikt: cyklisk bransch med ojämn vinst, förbättringen följer ofta cykeln"
+
+
 def stability_points(es, sector):
     """Poäng för vinststabilitet. Större utslag för cykliska sektorer."""
     if not es:
@@ -1705,16 +1726,18 @@ def score_buy_candidate(d, extra_weight=0):
 
     if d.get("revenue_growth_yoy_pct") is not None:
         if d["revenue_growth_yoy_pct"] > 15:
-            bonus += 8
-            reasons.append(f"Stark intäktstillväxt ({d['revenue_growth_yoy_pct']:+.0f}% mot samma kvartal förra året)")
+            _cr = cyclical_earnings_risk(d)
+            bonus += 4 if _cr else 8
+            reasons.append(f"Stark intäktstillväxt ({d['revenue_growth_yoy_pct']:+.0f}% mot samma kvartal förra året)" + (_CYC_NOTE if _cr else ""))
         elif d["revenue_growth_yoy_pct"] < -5:
             penalty += 8
             reasons.append(f"Krympande intäkter ({d['revenue_growth_yoy_pct']:+.0f}% mot samma kvartal förra året)")
 
     if d.get("operating_margin_trend_pp") is not None:
         if d["operating_margin_trend_pp"] > 3:
-            bonus += 8
-            reasons.append(f"Förbättrad rörelsemarginal ({d['operating_margin_trend_pp']:+.1f} procentenheter mot samma kvartal förra året)")
+            _cr = cyclical_earnings_risk(d)
+            bonus += 4 if _cr else 8
+            reasons.append(f"Förbättrad rörelsemarginal ({d['operating_margin_trend_pp']:+.1f} procentenheter mot samma kvartal förra året)" + (_CYC_NOTE if _cr else ""))
         elif d["operating_margin_trend_pp"] < -3:
             penalty += 8
             reasons.append(f"Försämrad rörelsemarginal ({d['operating_margin_trend_pp']:+.1f} procentenheter mot samma kvartal förra året)")
@@ -1839,9 +1862,10 @@ def score_buy_candidate(d, extra_weight=0):
     # v9.9: värderingstak – P/E, PEG, forward P/E, P/B, riskpremie och utdelning
     # mäter delvis samma sak. Sammanlagt högst +VAL_CAP_POS / -VAL_CAP_NEG poäng.
     val_net = sum(pt for txt, pt in zip(reasons, reasons.points) if is_valuation_reason(txt))
-    if val_net > VAL_CAP_POS:
-        bonus -= (val_net - VAL_CAP_POS)
-        reasons.append(f"Värderingstak: värderingssignalerna summerar till +{val_net:.0f}, begränsas till +{VAL_CAP_POS}")
+    _cap = VAL_CAP_POS_CYC if cyclical_earnings_risk(d) == 2 else VAL_CAP_POS
+    if val_net > _cap:
+        bonus -= (val_net - _cap)
+        reasons.append(f"Värderingstak: värderingssignalerna summerar till +{val_net:.0f}, begränsas till +{_cap}" + (" (lägre tak: cyklisk bransch med mycket ojämn vinst, låga multiplar sitter på toppvinster)" if _cap != VAL_CAP_POS else ""))
     elif val_net < -VAL_CAP_NEG:
         penalty -= (-VAL_CAP_NEG - val_net)
         reasons.append(f"Värderingstak: värderingssignalerna summerar till {val_net:.0f}, begränsas till -{VAL_CAP_NEG}")
@@ -2021,16 +2045,18 @@ def score_growth_candidate(d, extra_weight=0):
 
     if d.get("revenue_growth_yoy_pct") is not None:
         if d["revenue_growth_yoy_pct"] > 15:
-            bonus += 16
-            reasons.append(f"Stark intäktstillväxt ({d['revenue_growth_yoy_pct']:+.0f}% mot samma kvartal förra året)")
+            _cr = cyclical_earnings_risk(d)
+            bonus += 8 if _cr else 16
+            reasons.append(f"Stark intäktstillväxt ({d['revenue_growth_yoy_pct']:+.0f}% mot samma kvartal förra året)" + (_CYC_NOTE if _cr else ""))
         elif d["revenue_growth_yoy_pct"] < -5:
             penalty += 12
             reasons.append(f"Krympande intäkter ({d['revenue_growth_yoy_pct']:+.0f}% mot samma kvartal förra året) – varningstecken för ett bolag som ska växa")
 
     if d.get("operating_margin_trend_pp") is not None:
         if d["operating_margin_trend_pp"] > 3:
-            bonus += 14
-            reasons.append(f"Förbättrad rörelsemarginal ({d['operating_margin_trend_pp']:+.1f} procentenheter mot samma kvartal förra året) – tecken på skalbarhet")
+            _cr = cyclical_earnings_risk(d)
+            bonus += 7 if _cr else 14
+            reasons.append(f"Förbättrad rörelsemarginal ({d['operating_margin_trend_pp']:+.1f} procentenheter mot samma kvartal förra året) – tecken på skalbarhet" + (_CYC_NOTE if _cr else ""))
         elif d["operating_margin_trend_pp"] < -3:
             penalty += 10
             reasons.append(f"Försämrad rörelsemarginal ({d['operating_margin_trend_pp']:+.1f} procentenheter mot samma kvartal förra året)")
@@ -2100,9 +2126,10 @@ def score_growth_candidate(d, extra_weight=0):
     # v9.9: värderingstak – P/E, PEG, forward P/E, P/B, riskpremie och utdelning
     # mäter delvis samma sak. Sammanlagt högst +VAL_CAP_POS / -VAL_CAP_NEG poäng.
     val_net = sum(pt for txt, pt in zip(reasons, reasons.points) if is_valuation_reason(txt))
-    if val_net > VAL_CAP_POS:
-        bonus -= (val_net - VAL_CAP_POS)
-        reasons.append(f"Värderingstak: värderingssignalerna summerar till +{val_net:.0f}, begränsas till +{VAL_CAP_POS}")
+    _cap = VAL_CAP_POS_CYC if cyclical_earnings_risk(d) == 2 else VAL_CAP_POS
+    if val_net > _cap:
+        bonus -= (val_net - _cap)
+        reasons.append(f"Värderingstak: värderingssignalerna summerar till +{val_net:.0f}, begränsas till +{_cap}" + (" (lägre tak: cyklisk bransch med mycket ojämn vinst, låga multiplar sitter på toppvinster)" if _cap != VAL_CAP_POS else ""))
     elif val_net < -VAL_CAP_NEG:
         penalty -= (-VAL_CAP_NEG - val_net)
         reasons.append(f"Värderingstak: värderingssignalerna summerar till {val_net:.0f}, begränsas till -{VAL_CAP_NEG}")

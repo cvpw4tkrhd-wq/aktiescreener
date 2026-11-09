@@ -103,6 +103,11 @@
   }
   #themeBtn { display: inline-flex; align-items: center; justify-content: center; padding: 7px 10px; }
   #themeBtn svg { width: 16px; height: 16px; display: block; }
+  #refreshBtn { display: inline-flex; align-items: center; justify-content: center; padding: 7px 10px; }
+  #refreshBtn svg { width: 16px; height: 16px; display: block; }
+  #refreshBtn.spin svg { animation: refreshSpin .8s linear infinite; }
+  #refreshBtn:disabled { opacity: .7; cursor: default; }
+  @keyframes refreshSpin { to { transform: rotate(360deg); } }
 
   .tabs {
     display: flex;
@@ -1055,6 +1060,7 @@
       <div class="controls-group">
         <button class="iconbtn" id="langBtn" type="button" style="font-weight:600;min-width:40px">EN</button>
         <button class="iconbtn" id="themeBtn" type="button" title="Byt tema" aria-label="Byt tema"></button>
+        <button class="iconbtn" id="refreshBtn" type="button" title="Uppdatera data" aria-label="Uppdatera data"></button>
       </div>
     </div>
   </header>
@@ -1631,6 +1637,36 @@ if (!THEME_ORDER.includes(savedTheme)) savedTheme = 'apple'; // t.ex. borttagna 
 applyTheme(savedTheme);
 themeBtn.addEventListener('click', () => {
   applyTheme(document.body.getAttribute('data-theme') === 'apple' ? 'terminal' : 'apple');
+});
+
+// Uppdatera-knapp (v11.17): hämtar färsk data utan att tappa flik eller scrollposition. Har en ny version
+// publicerats laddas hela sidan om (med cache-bust) så att även själva appen blir ny.
+const refreshBtn = document.getElementById('refreshBtn');
+const ICON_REFRESH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>';
+const ICON_CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+refreshBtn.innerHTML = ICON_REFRESH;
+let refreshing = false;
+refreshBtn.addEventListener('click', async () => {
+  if (refreshing) return;
+  refreshing = true;
+  refreshBtn.disabled = true;
+  refreshBtn.classList.add('spin');
+  const prevVersion = state.data && state.data.version;
+  try {
+    const res = await fetch('results.json?_=' + Date.now(), { cache: 'no-store' });
+    if (res.ok) {
+      const d = await res.json();
+      if (prevVersion && d.version && String(d.version) !== String(prevVersion)) {
+        location.replace(location.pathname + '?_=' + Date.now() + location.hash);
+        return;
+      }
+    }
+  } catch (e) { /* offline eller fel – försök ladda om data ändå nedan */ }
+  try { await load(); } catch (e) { /* load() visar själv ett felmeddelande */ }
+  refreshBtn.classList.remove('spin');
+  refreshBtn.disabled = false;
+  refreshBtn.innerHTML = ICON_CHECK;
+  setTimeout(() => { refreshBtn.innerHTML = ICON_REFRESH; refreshing = false; }, 1200);
 });
 
 document.querySelectorAll('#tabsRow .tab').forEach(el => {

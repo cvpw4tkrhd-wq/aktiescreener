@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-16T15:11:47Z",
-  "price_date": "2026-11-16",
+  "generated_at": "2026-11-23T17:39:53Z",
+  "price_date": "2026-11-23",
   "ranking_year": 2025,
   "buy_year": 2026,
   "universe_size": 503,
@@ -12,8 +12,8 @@
       "sector": "Information Technology",
       "ret_prev_year_pct": 283.7,
       "base_price": 172.09,
-      "price": 278.41,
-      "ytd_pct": 61.8,
+      "price": 301.06,
+      "ytd_pct": 74.9,
       "rank": 1
     },
     {
@@ -22,8 +22,8 @@
       "sector": "Information Technology",
       "ret_prev_year_pct": 240.2,
       "base_price": 285.25,
-      "price": 722.3,
-      "ytd_pct": 153.2,
+      "price": 709.11,
+      "ytd_pct": 148.6,
       "rank": 2
     },
     {
@@ -32,8 +32,8 @@
       "sector": "Information Technology",
       "ret_prev_year_pct": 225.3,
       "base_price": 274.71,
-      "price": 495.1,
-      "ytd_pct": 80.2,
+      "price": 523.47,
+      "ytd_pct": 90.6,
       "rank": 3
     },
     {
@@ -42,8 +42,8 @@
       "sector": "Financials",
       "ret_prev_year_pct": 203.5,
       "base_price": 113.1,
-      "price": 74.24,
-      "ytd_pct": -34.4,
+      "price": 67.76,
+      "ytd_pct": -40.1,
       "rank": 4
     },
     {

@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-25T00:58:22.996661+00:00",
+ "generated_at": "2026-11-26T00:33:57.685450+00:00",
  "version": "11.18",
  "stocks": 377,
  "live": {
@@ -14,18 +14,18 @@
     "buckets": {
      "buy": {
       "n": 738,
-      "avg_excess": 0.3,
-      "hit_rate": 49.3
+      "avg_excess": 0.32,
+      "hit_rate": 49.2
      },
      "low": {
       "n": 916,
-      "avg_excess": -0.95,
+      "avg_excess": -0.93,
       "hit_rate": 45.9
      },
      "mid": {
       "n": 1308,
-      "avg_excess": 0.49,
-      "hit_rate": 52.3
+      "avg_excess": 0.47,
+      "hit_rate": 52.4
      }
     }
    },
@@ -36,8 +36,8 @@
     "buckets": {
      "buy": {
       "n": 349,
-      "avg_excess": 0.48,
-      "hit_rate": 47.0
+      "avg_excess": 0.44,
+      "hit_rate": 47.6
      },
      "low": {
       "n": 667,
@@ -46,8 +46,8 @@
      },
      "mid": {
       "n": 820,
-      "avg_excess": 2.17,
-      "hit_rate": 54.5
+      "avg_excess": 2.19,
+      "hit_rate": 54.4
      }
     }
    },
@@ -68,7 +68,7 @@
  "trend_backtest": {
   "months": 25,
   "first": "2024-09-30",
-  "last": "2026-11-24",
+  "last": "2026-11-25",
   "horizons": [
    {
     "days": 21,
